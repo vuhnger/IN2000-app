@@ -58,7 +58,7 @@ fun OsmMapView() {
 
 fun MapView.setupMapView(ctx: Context) {
     // Set the base layer to OpenStreetMap
-    setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
+    setTileSource(TileSourceFactory.MAPNIK)
     //setBuiltInZoomControls(true)
     setMultiTouchControls(true)
     // Set the minimum and maximum zoom levels
@@ -71,7 +71,7 @@ fun MapView.addTileOverlay(ctx: Context) {
     val tileSource = XYTileSource(
         "OpenSeaMap",
         1, 18, 256, ".png",
-        arrayOf("http://tiles.openseamap.org/seamark/")
+        arrayOf("http://t1.openseamap.org/seamark/")
     )
     val provider = MapTileProviderBasic(ctx).apply {
         this.tileSource = tileSource

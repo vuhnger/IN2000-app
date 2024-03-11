@@ -49,6 +49,8 @@ android {
     }
 }
 
+
+
 dependencies {
     implementation ("androidx.core:core-ktx:1.12.0")
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
@@ -71,4 +73,20 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Navigate app
+    val nav_version = "2.7.6"
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // Get images from web with Coil
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // json stuff
+    val ktor_version = "2.3.8"
+
+    implementation("io.ktor:ktor-client-android:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-gson:$ktor_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+
 }

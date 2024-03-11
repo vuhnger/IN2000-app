@@ -58,7 +58,7 @@ fun OsmMapView() {
 
 fun MapView.setupMapView(ctx: Context) {
     // Set the base layer to OpenStreetMap
-    setTileSource(TileSourceFactory.MAPNIK)
+    setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
     //setBuiltInZoomControls(true)
     setMultiTouchControls(true)
     // Set the minimum and maximum zoom levels

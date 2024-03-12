@@ -27,11 +27,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.ui.map.OsmMapView
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     Scaffold(
         bottomBar = { BottomBarWithIcons() }
     ) { innerPadding ->

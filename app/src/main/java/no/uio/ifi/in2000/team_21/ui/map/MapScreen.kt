@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.MotionEvent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -37,6 +38,9 @@ import org.osmdroid.views.overlay.TilesOverlay
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import androidx.compose.runtime.livedata.observeAsState
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
+import no.uio.ifi.in2000.team_21.model.MultiPolygon
+import no.uio.ifi.in2000.team_21.model.Polygon as MyPolygon
+import no.uio.ifi.in2000.team_21.model.Properties
 
 
 @Composable
@@ -216,21 +220,34 @@ fun MapView.addMapClickListener() {
 
 // Alert overlay from metAlerts
 fun MapView.addAlertOverlay(feature: Feature, context: Context) {
-    feature.geometry.coordinates.firstOrNull()?.let { polygonCoordinates ->
-        val geoPoints = polygonCoordinates.map { coord ->
-            GeoPoint(coord[1], coord[0])
+    when (val geometry = feature.geometry) {
+        is MyPolygon -> {
+            // Directly add the overlay for Polygon
+            geometry.coordinates.forEach { polygonCoordinates ->
+                addPolygonOverlay(polygonCoordinates, feature.properties)
+            }
         }
-
-        val polygon = Polygon().apply {
-            points = geoPoints
-            fillColor = Color.argb(50, 255, 0, 0)
-            title = feature.properties.title
+        is MultiPolygon -> {
+            // For each polygon in MultiPolygon, add the overlay
+            geometry.coordinates.forEach { multiPolygonCoordinates ->
+                multiPolygonCoordinates.forEach { polygonCoordinates ->
+                    addPolygonOverlay(polygonCoordinates, feature.properties)
+                }
+            }
         }
-
-        // Show details when clicked on
-        polygon.relatedObject = feature.properties
-
-        overlays.add(polygon)
-
     }
+}
+
+private fun MapView.addPolygonOverlay(polygonCoordinates: List<List<Double>>, properties: Properties) {
+    val geoPoints = polygonCoordinates.flatMap { coord ->
+        listOf(GeoPoint(coord[1], coord[0]))
+    }
+
+    val polygon = Polygon().apply {
+        points = geoPoints
+        fillColor = Color.argb(50, 255, 0, 0)
+        title = properties.title
+    }
+
+    overlays.add(polygon)
 }

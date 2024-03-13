@@ -1,6 +1,14 @@
 package no.uio.ifi.in2000.team_21.model
 
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonContentPolymorphicSerializer
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import java.io.Serial
 
 /* Data fra endepunktet.
 * Kan tilpasses, om det er behov for å hente flere felt
@@ -54,11 +62,22 @@ data class Feature(
     val `when`: When
 )
 
+@Serializable(with = GeometrySerializer::class)
+sealed class Geometry{
+    abstract val type: String
+}
+
 @Serializable
-data class Geometry(
-    val coordinates: List<List<List<Double>>>,              // Koordinatene følger (mest sannsynlig) fra venstre til høyre fra "laveste" punkt (lager en femkant (eller annen polygon))
-    val type: String
-)
+data class Polygon(
+    override val type: String = "Polygon",
+    val coordinates: List<List<List<Double>>>
+) : Geometry()
+
+@Serializable
+data class MultiPolygon(
+    override val type: String = "MultiPolygon",
+    val coordinates: List<List<List<List<Double>>>>
+) : Geometry()
 
 @Serializable
 data class Properties(
@@ -99,3 +118,21 @@ data class Resource(
     val mimeType: String,
     val uri: String
 )
+
+
+// Serializer for Geometry to handle Polygon and MultiPolygon
+object GeometrySerializer : JsonContentPolymorphicSerializer<Geometry>(Geometry::class) {
+    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out Geometry> {
+        val coordinatesElement = element.jsonObject["coordinates"] ?: throw SerializationException("Coordinates not found")
+
+        // Check if the first element of the coordinates array is an array of arrays
+        // This would indicate a MultiPolygon
+        val isMultiPolygon = coordinatesElement.jsonArray.firstOrNull()?.let {
+            it is JsonArray && it.jsonArray.firstOrNull()?.let { inner ->
+                inner is JsonArray && inner.jsonArray.firstOrNull() is JsonArray
+            } == true
+        } ?: false
+
+        return if (isMultiPolygon) MultiPolygon.serializer() else Polygon.serializer()
+    }
+}

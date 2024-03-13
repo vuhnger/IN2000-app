@@ -12,12 +12,15 @@ import android.view.MotionEvent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import no.uio.ifi.in2000.team_21.data.OilRigViewModel
+import no.uio.ifi.in2000.team_21.model.Feature
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.MapTileProviderBasic
@@ -28,14 +31,24 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
+import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.ScaleBarOverlay
 import org.osmdroid.views.overlay.TilesOverlay
 import org.osmdroid.views.overlay.compass.CompassOverlay
+import androidx.compose.runtime.livedata.observeAsState
+import no.uio.ifi.in2000.team_21.model.AlertsInfo
+
 
 @Composable
 fun OsmMapView() {
     val context = LocalContext.current
     val viewModel: OilRigViewModel = viewModel()
+    val alertsViewModel: AlertsViewModel = viewModel()
+    val alerts by alertsViewModel.alerts.observeAsState()
+
+    LaunchedEffect(Unit) {
+        alertsViewModel.fetchAlerts(AlertsInfo())
+    }
 
     AndroidView(modifier = Modifier
         .fillMaxSize()
@@ -51,6 +64,11 @@ fun OsmMapView() {
                 addButtonOverlay()
                 addScaleBarOverlay()
                 setInitialMapView()
+
+                // metAlerts
+                alerts?.features?.forEach { feature ->
+                    addAlertOverlay(feature, context)
+                }
             }
         }
     )
@@ -194,4 +212,26 @@ fun MapView.addMapClickListener() {
 
     val overlay = MapEventsOverlay(receiver)
     overlays.add(overlay)
+}
+
+// Alert overlay from metAlerts
+fun MapView.addAlertOverlay(feature: Feature, context: Context) {
+    feature.geometry.coordinates.firstOrNull()?.let { polygonCoordinates ->
+        val geoPoints = polygonCoordinates.map { coord ->
+            GeoPoint(coord[1], coord[0])
+        }
+
+        val polygon = Polygon().apply {
+            points = geoPoints
+            fillColor = Color.argb(50, 255, 0, 0)
+            title = feature.properties.title
+        }
+
+        // Show details when clicked on
+        //polygon.infoWindow = BasicInfoWindow(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, this)
+        polygon.relatedObject = feature.properties
+
+        overlays.add(polygon)
+
+    }
 }

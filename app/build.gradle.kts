@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.10"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.23"
 }
 
 android {
@@ -69,13 +69,13 @@ dependencies {
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
     implementation ("org.slf4j:slf4j-simple:1.7.30")
     implementation ("androidx.compose.material:material:1.6.3")
-    implementation("org.osmdroid:osmdroid-android:6.1.14")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
+
     // Ktor 8)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("org.jetbrains.kotlin:kotlin-serialization:1.9.23")
     implementation("io.ktor:ktor-serialization-gson:2.3.8")
     implementation("io.ktor:ktor-client-core:2.3.8")
     implementation("io.ktor:ktor-client-cio:2.3.8")
@@ -84,10 +84,7 @@ dependencies {
     implementation ("io.ktor:ktor-client-core-jvm:2.3.8")
     implementation ("io.ktor:ktor-client-cio-jvm:2.3.8")
     implementation ("io.ktor:ktor-client-content-negotiation-jvm:2.3.8")
-    implementation ("io.ktor:ktor-serialization-kotlinx-json-jvm:2.0.0")
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation("io.ktor:ktor-client-android:$2.3.8")
-    implementation("io.ktor:ktor-serialization-gson:$2.3.8")
+    implementation ("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.8")
 
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
@@ -101,11 +98,16 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling:1.6.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.3")
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.3")
+
 
     // Navigate app
     val nav_version = "2.7.6"
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-
+    // Logging
+    implementation("io.ktor:ktor-client-logging:2.3.8")
 }
+
+apply(plugin = "org.jetbrains.kotlin.plugin.serialization")

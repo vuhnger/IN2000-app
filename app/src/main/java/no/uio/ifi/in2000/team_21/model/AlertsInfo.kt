@@ -8,16 +8,16 @@ import kotlinx.serialization.Serializable
 
 // Parametere til API'en.
 data class AlertsInfo(
-    val cap: String?,                // Retrieve CAP XML message with given guid
-    val lang: String,                // Output language "no" or "en"
-    val event: String?,              // Filter by CAP eventType
-    val incidentName: String?,       // Filter by incident
-    val geographicDomain: String?,   // Filter by land or marine
-    val county: String?,             // fylke
-    val lat: Double?,                // latitude
-    val lon: Double?,                // longitude
-    val period: String?,             // Only used with /archive method
-    val sort: String,                // area, event, incidentName, t_onset, t_published, type
+    val cap: String? = null,                // Retrieve CAP XML message with given guid
+    val lang: String = "en",                // Output language "no" or "en"
+    val event: String? = null,              // Filter by CAP eventType
+    val incidentName: String? = null,       // Filter by incident
+    val geographicDomain: String? = null,   // Filter by land or marine
+    val county: String? = null,             // fylke
+    val lat: Double? = null,                // latitude
+    val lon: Double? = null,                // longitude
+    val period: String? = null,             // Only used with /archive method
+    val sort: String = "event",                // area, event, incidentName, t_onset, t_published, type
 )
 
 /*
@@ -62,30 +62,30 @@ data class Geometry(
 
 @Serializable
 data class Properties(
-    val MunicipalityId: String,
-    val administrativeId: String,
-    val area: String,
-    val awarenessResponse: String,
-    val awarenessSeriousness: String,
-    val awareness_level: String,
-    val awareness_type: String,
-    val certainty: String,
-    val consequences: String,
-    val county: List<String>,
-    val description: String,
-    val event: String,
-    val eventAwarenessName: String,
-    val eventEndingTime: String,
-    val geographicDomain: String,
-    val id: String,
-    val incidentName: String,
-    val instruction: String,
-    //val resources: List<Resource>,
-    val riskMatrixColor: String,
-    val severity: String,
-    val title: String,
-    val triggerLevel: String,
-    val type: String
+    val MunicipalityId: String? = null,
+    val administrativeId: String? = null,
+    val area: String? = null,
+    val awarenessResponse: String? = null,
+    val awarenessSeriousness: String? = null,
+    val awareness_level: String? = null,
+    val awareness_type: String? = null,
+    val certainty: String? = null,
+    val consequences: String? = null,
+    val county: List<String>? = null,
+    val description: String? = null,
+    val event: String? = null,
+    val eventAwarenessName: String? = null,
+    val eventEndingTime: String? = null,
+    val geographicDomain: String? = null,
+    val id: String? = null,
+    val incidentName: String? = null,
+    val instruction: String? = null,
+    val resources: List<Resource>? = null,
+    val riskMatrixColor: String? = null,
+    val severity: String? = null,
+    val title: String? = null,
+    val triggerLevel: String? = null,
+    val type: String? = null
 )
 
 @Serializable

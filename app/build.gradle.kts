@@ -85,6 +85,7 @@ dependencies {
     implementation ("io.ktor:ktor-client-cio-jvm:2.3.8")
     implementation ("io.ktor:ktor-client-content-negotiation-jvm:2.3.8")
     implementation ("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.8")
+    implementation("io.ktor:ktor-client-logging:2.3.8")
 
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
@@ -105,9 +106,6 @@ dependencies {
     // Navigate app
     val nav_version = "2.7.6"
     implementation("androidx.navigation:navigation-compose:$nav_version")
-
-    // Logging
-    implementation("io.ktor:ktor-client-logging:2.3.8")
 }
 
 apply(plugin = "org.jetbrains.kotlin.plugin.serialization")

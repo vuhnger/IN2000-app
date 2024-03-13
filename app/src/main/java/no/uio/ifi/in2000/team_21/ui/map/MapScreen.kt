@@ -228,7 +228,6 @@ fun MapView.addAlertOverlay(feature: Feature, context: Context) {
         }
 
         // Show details when clicked on
-        //polygon.infoWindow = BasicInfoWindow(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, this)
         polygon.relatedObject = feature.properties
 
         overlays.add(polygon)

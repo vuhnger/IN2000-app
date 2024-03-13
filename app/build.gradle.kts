@@ -66,13 +66,10 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation ("androidx.core:core-ktx:1.12.0")
-
-    // Dependencies til OSM-droid for OpenSeaMap
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
     implementation ("org.slf4j:slf4j-simple:1.7.30")
     implementation ("androidx.compose.material:material:1.6.3")
     implementation("org.osmdroid:osmdroid-android:6.1.14")
-
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -89,7 +86,7 @@ dependencies {
     implementation ("io.ktor:ktor-client-content-negotiation-jvm:2.3.8")
     implementation ("io.ktor:ktor-serialization-kotlinx-json-jvm:2.0.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    //implementation("io.ktor:ktor-client-android:$2.3.8") denne lagde feil for oss 12.03.24
+    implementation("io.ktor:ktor-client-android:$2.3.8")
     implementation("io.ktor:ktor-serialization-gson:$2.3.8")
 
     // ViewModel
@@ -109,8 +106,6 @@ dependencies {
     // Navigate app
     val nav_version = "2.7.6"
     implementation("androidx.navigation:navigation-compose:$nav_version")
-
-    // Manglende dependencies
 
 
 }

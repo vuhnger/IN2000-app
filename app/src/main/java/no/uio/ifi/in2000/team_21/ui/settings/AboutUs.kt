@@ -1,7 +1,7 @@
 package no.uio.ifi.in2000.team_21.ui.settings
 
 
-import android.util.Log
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,20 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 @ExperimentalMaterial3Api
-fun AboutUsScreen(navController: NavController) {
-
-    val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
-
-    Log.d(
-        FUNCTION_NAME,
-        "called"
-    )
+fun AboutUsScreen(navController: NavController = rememberNavController()) {
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Om oss") },
@@ -71,12 +62,6 @@ fun OmOssCard(
     //Legge til parameter om oss
     navn: String
 ) {
-
-    Log.d(
-        "",
-        ""
-    )
-
     Card(
         modifier = Modifier
             .size(width = 135.dp, height = 135.dp)
@@ -96,5 +81,5 @@ fun OmOssCard(
 @Preview
 @Composable
 fun AboutUsScreenTest(){
-    AboutUsScreen(navController = rememberNavController())
+    AboutUsScreen()
 }

@@ -86,7 +86,6 @@ dependencies {
     implementation ("io.ktor:ktor-client-content-negotiation-jvm:2.3.8")
     implementation ("io.ktor:ktor-serialization-kotlinx-json-jvm:2.0.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation("io.ktor:ktor-client-android:$2.3.8")
     implementation("io.ktor:ktor-serialization-gson:$2.3.8")
 
     // ViewModel

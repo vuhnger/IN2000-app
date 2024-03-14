@@ -37,10 +37,13 @@ import org.osmdroid.views.overlay.ScaleBarOverlay
 import org.osmdroid.views.overlay.TilesOverlay
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.MultiPolygon
 import no.uio.ifi.in2000.team_21.model.Polygon as MyPolygon
 import no.uio.ifi.in2000.team_21.model.Properties
+import org.osmdroid.views.overlay.infowindow.BasicInfoWindow
 
 
 @Composable
@@ -50,8 +53,18 @@ fun OsmMapView() {
     val alertsViewModel: AlertsViewModel = viewModel()
     val alerts by alertsViewModel.alerts.observeAsState()
 
+    val mapViewState = remember { mutableStateOf<MapView?>(null)}
+
     LaunchedEffect(Unit) {
         alertsViewModel.fetchAlerts(AlertsInfo())
+    }
+
+    LaunchedEffect(alerts) {
+        mapViewState.value?.overlays?.clear()
+        alerts?.features?.forEach { feature ->
+            mapViewState.value?.addAlertOverlay(feature, context)
+        }
+        mapViewState.value?.invalidate()
     }
 
     AndroidView(modifier = Modifier
@@ -70,9 +83,7 @@ fun OsmMapView() {
                 setInitialMapView()
 
                 // metAlerts
-                alerts?.features?.forEach { feature ->
-                    addAlertOverlay(feature, context)
-                }
+                mapViewState.value = this
             }
         }
     )
@@ -247,6 +258,7 @@ private fun MapView.addPolygonOverlay(polygonCoordinates: List<List<Double>>, pr
         points = geoPoints
         fillColor = Color.argb(50, 255, 0, 0)
         title = properties.title
+        infoWindow = BasicInfoWindow(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, this@addPolygonOverlay)
     }
 
     overlays.add(polygon)

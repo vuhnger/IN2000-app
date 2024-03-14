@@ -116,6 +116,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
     implementation("io.ktor:ktor-client-logging:2.3.8")
+    implementation("com.github.MKergall:osmbonuspack:6.9.0")
 }
 
 

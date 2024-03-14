@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.team_21.ui.settings
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,7 +39,16 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-fun SettingScreen(navController: NavController = rememberNavController()) {
+fun SettingScreen(navController: NavController) {
+
+    val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
+
+    Log.d(
+        FUNCTION_NAME,
+        "called"
+    )
+
+    var checked by remember { mutableStateOf(true) } //13.03 Må flyttes til en global ui-state
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Innstillinger")})},
@@ -85,7 +95,6 @@ fun SettingScreen(navController: NavController = rememberNavController()) {
 
                         )
                 )
-                var checked by remember { mutableStateOf(true) }
 
                 Switch(
                     checked = checked,
@@ -95,7 +104,10 @@ fun SettingScreen(navController: NavController = rememberNavController()) {
                     modifier = Modifier
                         .width(52.dp)
                         .height(32.dp)
-                        .background(color = Color(0xFF6750A4), shape = RoundedCornerShape(size = 100.dp))
+                        .background(
+                            color = Color(0xFF6750A4),
+                            shape = RoundedCornerShape(size = 100.dp)
+                        )
                         .padding(start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)
                 )
             }
@@ -148,5 +160,5 @@ fun SettingScreen(navController: NavController = rememberNavController()) {
 @Preview
 @Composable
 fun SettingScreenTest() {
-    SettingScreen()
+    SettingScreen(navController = rememberNavController())
 }

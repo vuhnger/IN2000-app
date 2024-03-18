@@ -46,8 +46,18 @@ import no.uio.ifi.in2000.team_21.model.Properties
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow
 
 
+/** Constants for initialize of MapView */
+object OsmMapViewConstants {
+    val BOTTOM_PADDING = 56.dp
+}
+
+
+/** Sets up the OpenStreetmMap view */
 @Composable
 fun OsmMapView() {
+
+    Log.d("MAPVIEW", "Setting up OsMapView...")
+
     val context = LocalContext.current
     val viewModel: OilRigViewModel = viewModel()
     val alertsViewModel: AlertsViewModel = viewModel()
@@ -67,21 +77,30 @@ fun OsmMapView() {
         mapViewState.value?.invalidate()
     }
 
-    AndroidView(modifier = Modifier
-        .fillMaxSize()
-        .padding(bottom = 56.dp),
+    AndroidView(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = OsmMapViewConstants.BOTTOM_PADDING),
         factory = { ctx ->
-            Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
+            Configuration.getInstance().load(ctx,
+                PreferenceManager.getDefaultSharedPreferences(ctx))
             MapView(ctx).apply {
-                setupMapView(ctx)
+                setupMapView()
+                Log.d("MAPVIEW", "MapView setup completed.")
                 addTileOverlay(ctx)
+                Log.d("MAPVIEW", "Tile overlay added.")
                 addMapClickListener()
+                Log.d("MAPVIEW", "Map click listener added.")
                 addOilRigMarkers(viewModel)
+                Log.d("MAPVIEW", "Oil rig markers added.")
                 addCompassOverlay(context)
+                Log.d("MAPVIEW", "Compass overlay added.")
                 addButtonOverlay()
+                Log.d("MAPVIEW", "Button overlay added.")
                 addScaleBarOverlay()
+                Log.d("MAPVIEW", "Scale bar overlay added.")
                 setInitialMapView()
-
+                Log.d("MAPVIEW", "Initial map view set.")
                 // metAlerts
                 mapViewState.value = this
             }
@@ -89,47 +108,122 @@ fun OsmMapView() {
     )
 }
 
-fun MapView.setupMapView(ctx: Context) {
-    // Set the base layer to OpenStreetMap
-    setTileSource(TileSourceFactory.MAPNIK)
-    //setBuiltInZoomControls(true)
-    setMultiTouchControls(true)
-    // Set the minimum and maximum zoom levels
-    setMinZoomLevel(7.0)
-    setMaxZoomLevel(20.0)
+/** Constants for MapView setup */
+object MapViewConstants {
+    const val MIN_ZOOM_LEVEL = 7.0
+    const val MAX_ZOOM_LEVEL = 20.0
 }
 
+/** Initialize setup for MapView with given settings. */
+fun MapView.setupMapView() {
+    Log.d("MAPVIEW_SETUP", "Setting up MapView...")
+
+    // Set the base layer to OpenStreetMap
+    setTileSource(TileSourceFactory.MAPNIK)
+    Log.d("MAPVIEW_SETUP", "Tile layer set to OpenStreetMap.")
+
+    // Enable multi touch controls
+    setMultiTouchControls(true)
+    Log.d("MAPVIEW_SETUP_MAPVIEW", "Multi touch controls on.")
+
+    // Set the minimum and maximum zoom levels
+    minZoomLevel = MapViewConstants.MIN_ZOOM_LEVEL
+    maxZoomLevel = MapViewConstants.MAX_ZOOM_LEVEL
+
+    Log.d("MAPVIEW_SETUP", "Zoom levels set to min: ${MapViewConstants.MIN_ZOOM_LEVEL}, max: ${MapViewConstants.MAX_ZOOM_LEVEL}.")
+
+    Log.d("MAPVIEW_SETUP", "MapView setup completed.")
+}
+
+/** Constants for TileOverlay setup */
+object TileOverlayConstants {
+    const val TILE_SOURCE_NAME = "OpenSeaMap"
+    const val MIN_ZOOM = 1
+    const val MAX_ZOOM = 18
+    const val TILE_SIZE = 256
+    const val TILE_EXTENSION = ".png"
+    val TILE_SOURCE_URL = arrayOf("http://tiles.openseamap.org/seamark/")
+}
+
+/** Adds a tile overlay to the MapView.  */
 fun MapView.addTileOverlay(ctx: Context) {
-    // Add OpenSeaMap as an overlay
+    Log.d("MAPVIEW_ADD_TILE_OVERLAY", "Adding tile overlay...")
+
+    // Create a new XYTileSource instance
     val tileSource = XYTileSource(
-        "OpenSeaMap",
-        1, 18, 256, ".png",
-        arrayOf("http://t1.openseamap.org/seamark/")
+        TileOverlayConstants.TILE_SOURCE_NAME,
+        TileOverlayConstants.MIN_ZOOM,
+        TileOverlayConstants.MAX_ZOOM,
+        TileOverlayConstants.TILE_SIZE,
+        TileOverlayConstants.TILE_EXTENSION,
+        TileOverlayConstants.TILE_SOURCE_URL,
     )
+
+    Log.d("MAPVIEW_ADD_TILE_OVERLAY", "Tile source created.")
+
+    // Make a new MapTileProvider instance and sets the tile source
     val provider = MapTileProviderBasic(ctx).apply {
         this.tileSource = tileSource
     }
+
+    Log.d("MAPVIEW_ADD_TILE_OVERLAY", "Tile provider created and tile source set.")
+
+    // Create a new TilesOverlay instance and add it to the overlay manager
     val overlay = TilesOverlay(provider, ctx)
     overlayManager.add(overlay)
+
+    Log.d("MAPVIEW_ADD_TILE_OVERLAY", "Tile overlay created and added to overlay manager.")
+
+    Log.d("MAPVIEW_ADD_TILE_OVERLAY", "Tile overlay setup completed.")
 }
 
+/**
+ * Adds oil rig markers to the MapView.
+ *
+ *  @param viewModel The ViewModel that provides the oil rig data.
+ * */
 fun MapView.addOilRigMarkers(viewModel: OilRigViewModel) {
+
+    Log.d("MAPVIEW_ADD_OIL-RIG_MARKERS", "Adding oil rig markers...")
+
     // Get the oil rig markers from the ViewModel
     val oilRigMarkers = viewModel.initializeRigs(this)
+
+    Log.d("MAPVIEW_ADD_OIL-RIG_MARKERS", "Oil rig markers initialized.")
+
     // Add the markers to the map overlay
     overlayManager.addAll(oilRigMarkers)
+
+    Log.d("MAPVIEW_ADD_OIL-RIG_MARKERS", "Oil rig markers added to overlay manager.")
+
+    Log.d("MAPVIEW_ADD_OIL-RIG_MARKERS", "Oil rig markers setup completed.")
 }
 
+// Compass constants
+object CompassConstants {
+    const val COMPASS_CENTER_X = 40f
+    const val COMPASS_CENTER_Y = 670f
+}
 
 fun MapView.addCompassOverlay(context: Context) {
+    Log.d("MAPVIEW_ADD_COMPASS_OVERLAY", "Adding compass overlay...")
+
     // Create a new CompassOverlay instance
     val compassOverlay = CompassOverlay(context, this)
+
     // Enable the compass
     compassOverlay.enableCompass()
+
     // Set the compass to the bottom left
-    compassOverlay.setCompassCenter(40f, 670f)
+    compassOverlay.setCompassCenter(
+        CompassConstants.COMPASS_CENTER_X,
+        CompassConstants.COMPASS_CENTER_Y,
+    )
+
     // Add the compass overlay to the map
     overlays.add(compassOverlay)
+
+    Log.d("MAPVIEW_ADD_COMPASS_OVERLAY", "Compass overlay added successfully.")
 }
 
 fun MapView.addButtonOverlay() {
@@ -165,68 +259,120 @@ fun MapView.addButtonOverlay() {
     overlays.add(buttonOverlay)
 }
 
+/** Adds a scale bar overlay to the MapView. */
 fun MapView.addScaleBarOverlay() {
-    // Create a new ScaleBarOverlay
+    Log.d("MAPVIEW_ADD_SCALE_BAR_OVERLAY", "Adding scale bar overlay...")
+
+    // Create a new ScaleBarOverlay instance
     val scaleBarOverlay = ScaleBarOverlay(this)
+
     // Set the alignment of the scale bar
-    scaleBarOverlay.setAlignBottom(true) // Top
-    scaleBarOverlay.setAlignRight(true) // Right
+    scaleBarOverlay.setAlignBottom(true)
+    scaleBarOverlay.setAlignRight(true)
+
     overlays.add(scaleBarOverlay)
+
+    Log.d("MAPVIEW_ADD_SCALE_BAR_OVERLAY", "Scale bar overlay added.")
+
 }
 
+/**
+ * Constants for initial MapView setup
+ * Start point set to Bergen, Norway
+ * */
+object InitialMapViewMapConstants {
+    const val INITIAL_LAT = 60.39
+    const val INITIAL_LON = 5.32
+    const val INITIAL_ZOOM = 0.0
+    const val DELAY_MILLIS = 1000L
+}
+
+/** Sets the initial view of the MapView. */
 fun MapView.setInitialMapView() {
+    Log.d("MAPVIEW_SET_INITIAL_MAPVIEW", "Setting initial MapView...")
+
     Handler(Looper.getMainLooper()).postDelayed({
         // Center point to Bergen, Norway
-        controller.setCenter(GeoPoint(60.3913, 5.3221))
-        controller.setZoom(0.0)
+        controller.setCenter(GeoPoint(InitialMapViewMapConstants.INITIAL_LAT, InitialMapViewMapConstants.INITIAL_LON))
+
+        controller.setZoom(InitialMapViewMapConstants.INITIAL_ZOOM)
         postInvalidate()
-    }, 1000)
+
+        Log.d("MAPVIEW_SET_INITIAL_MAPVIEW", "Initial MapView set.")
+
+    }, InitialMapViewMapConstants.DELAY_MILLIS)
 }
 
+/**
+ * Adds a map click listener to the MapView.
+ */
 fun MapView.addMapClickListener() {
+    Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER", "Adding map click listener...")
+
     val receiver = object : MapEventsReceiver {
         var lastUserMarker: Marker? = null
 
         override fun singleTapConfirmedHelper(p: GeoPoint): Boolean {
-            val point = this@addMapClickListener.getProjection().toPixels(p, null)
+            Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER", "Single click confirmed.")
 
-            val e = MotionEvent.obtain(
-                SystemClock.uptimeMillis(),
-                SystemClock.uptimeMillis(),
-                MotionEvent.ACTION_UP,
-                point.x.toFloat(),
-                point.y.toFloat(),
-                0
-            )
-
-            for (overlay in overlays) {
-                if (overlay is Marker && overlay.hitTest(e, this@addMapClickListener)) {
-                    return true
-                }
+            if (isMarkerClicked(p)) {
+                return true
             }
 
             lastUserMarker?.let { overlays.remove(it) }
 
-            val marker = Marker(this@addMapClickListener)
-            marker.position = p
-            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            marker.title = "Lat: ${p.latitude}, Lon: ${p.longitude}"
-            overlays.add(marker)
-
-            lastUserMarker = marker
-
-            invalidate()
+            lastUserMarker = addMarker(p)
 
             return true
         }
 
         override fun longPressHelper(p: GeoPoint): Boolean {
+            Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER", "Long click detected.")
             return false
         }
     }
+    overlays.add(MapEventsOverlay(receiver))
 
-    val overlay = MapEventsOverlay(receiver)
-    overlays.add(overlay)
+    Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER", "Map click listener added.")
+}
+   
+private fun MapView.isMarkerClicked(p: GeoPoint): Boolean {
+    Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_IS_MARKER_CLICKED", "Checking if marker is clicked...")
+
+    val point = this.getProjection().toPixels(p, null)
+    val e = MotionEvent.obtain(
+        SystemClock.uptimeMillis(),
+        SystemClock.uptimeMillis(),
+        MotionEvent.ACTION_UP,
+        point.x.toFloat(),
+        point.y.toFloat(),
+        0
+    )
+
+    val isMarkerClicked = overlays.any { it is Marker && it.hitTest(e, this) }
+
+    Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_IS_MARKER_CLICKED", "Marker clicked: $isMarkerClicked")
+
+    return isMarkerClicked
+}
+
+private fun MapView.addMarker(p: GeoPoint): Marker {
+    Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_ADD_MARKER", "Adding marker...")
+
+    val marker = Marker(this).apply {
+        position = p
+        setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        title = "Lat: ${String.format("%.2f", p.latitude)}, Lon: ${String.format("%.2f", p.longitude)}"
+    }
+
+    overlays.add(marker)
+
+    Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_ADD_MARKER", "Marker added at Lat: ${String.format("%.2f", p.latitude)}, Lon: ${String.format("%.2f", p.longitude)}.")
+    
+    //val overlay = MapEventsOverlay(receiver)
+    //overlays.add(overlay)
+    
+    return marker    
 }
 
 // Alert overlay from metAlerts
@@ -262,4 +408,5 @@ private fun MapView.addPolygonOverlay(polygonCoordinates: List<List<Double>>, pr
     }
 
     overlays.add(polygon)
+
 }

@@ -24,8 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-
-
+import no.uio.ifi.in2000.team_21.APP_ROUTES
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +41,7 @@ fun AboutUsScreen(navController: NavController) {
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Om oss") },
-            navigationIcon = { IconButton(onClick = { navController.navigate("InnstillingerScreen") })
+            navigationIcon = { IconButton(onClick = { navController.navigate(APP_ROUTES.SETTING_SCREEN) })
             {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,

@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import no.uio.ifi.in2000.team_21.APP_ROUTES
 import no.uio.ifi.in2000.team_21.ui.map.OsmMapView
 
 
@@ -48,7 +49,7 @@ fun HomeScreen(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     SOSButton(onClick = {  })
-                    SettingsButton(onClick = {  })
+                    SettingsButton(onClick = { navController.navigate(APP_ROUTES.SETTING_SCREEN) })
                 }
             }
         }

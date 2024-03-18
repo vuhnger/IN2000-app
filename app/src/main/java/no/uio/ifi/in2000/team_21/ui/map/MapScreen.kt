@@ -335,7 +335,7 @@ fun MapView.addMapClickListener() {
 
     Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER", "Map click listener added.")
 }
-   
+
 private fun MapView.isMarkerClicked(p: GeoPoint): Boolean {
     Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_IS_MARKER_CLICKED", "Checking if marker is clicked...")
 
@@ -408,5 +408,4 @@ private fun MapView.addPolygonOverlay(polygonCoordinates: List<List<Double>>, pr
     }
 
     overlays.add(polygon)
-
 }

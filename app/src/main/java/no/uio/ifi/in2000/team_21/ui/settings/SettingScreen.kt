@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import no.uio.ifi.in2000.team_21.APP_ROUTES
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -145,7 +146,7 @@ fun SettingScreen(navController: NavController) {
                     )
                 )
 
-                IconButton(onClick = { navController.navigate("OmOssScreen") }) //Her vil den ikke navogate
+                IconButton(onClick = { navController.navigate(APP_ROUTES.ABOUT_US_SCREEN) }) //Her vil den ikke navogate
                 {
                     Icon(
                         contentDescription = "Om oss",

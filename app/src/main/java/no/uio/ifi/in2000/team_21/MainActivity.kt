@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost // Riktig import av navhost
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreenTest
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
+import androidx.compose.ui.res.stringResource
 
 // Vi legger strenger i dette objektet fremfor å hardkode de inn i appen. Disse skal senere flyttes til StringResources.
 public object APP_ROUTES{
@@ -51,7 +52,7 @@ fun App(){
 
     NavHost(
         navController = navController,
-        startDestination = APP_ROUTES.HOME
+        startDestination = APP_ROUTES.SETTING_SCREEN
     ){
 
         composable(APP_ROUTES.HOME){

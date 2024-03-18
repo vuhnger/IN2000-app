@@ -56,7 +56,7 @@ fun OsmMapView() {
             Configuration.getInstance().load(ctx,
                 PreferenceManager.getDefaultSharedPreferences(ctx))
             MapView(ctx).apply {
-                setupMapView(ctx)
+                setupMapView()
                 Log.d("MAPVIEW", "MapView setup completed.")
                 addTileOverlay(ctx)
                 Log.d("MAPVIEW", "Tile overlay added.")
@@ -84,7 +84,7 @@ object MapViewConstants {
 }
 
 /** Initialize setup for MapView with given settings. */
-fun MapView.setupMapView(ctx: Context) {
+fun MapView.setupMapView() {
     Log.d("MAPVIEW_SETUP", "Setting up MapView...")
 
     // Set the base layer to OpenStreetMap

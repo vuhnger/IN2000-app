@@ -13,12 +13,15 @@ import android.view.MotionEvent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import no.uio.ifi.in2000.team_21.data.OilRigViewModel
+import no.uio.ifi.in2000.team_21.model.Feature
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.MapTileProviderBasic
@@ -29,9 +32,19 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
+import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.ScaleBarOverlay
 import org.osmdroid.views.overlay.TilesOverlay
 import org.osmdroid.views.overlay.compass.CompassOverlay
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import no.uio.ifi.in2000.team_21.model.AlertsInfo
+import no.uio.ifi.in2000.team_21.model.MultiPolygon
+import no.uio.ifi.in2000.team_21.model.Polygon as MyPolygon
+import no.uio.ifi.in2000.team_21.model.Properties
+import org.osmdroid.views.overlay.infowindow.BasicInfoWindow
+
 
 /** Constants for initialize of MapView */
 object OsmMapViewConstants {
@@ -47,6 +60,22 @@ fun OsmMapView() {
 
     val context = LocalContext.current
     val viewModel: OilRigViewModel = viewModel()
+    val alertsViewModel: AlertsViewModel = viewModel()
+    val alerts by alertsViewModel.alerts.observeAsState()
+
+    val mapViewState = remember { mutableStateOf<MapView?>(null)}
+
+    LaunchedEffect(Unit) {
+        alertsViewModel.fetchAlerts(AlertsInfo())
+    }
+
+    LaunchedEffect(alerts) {
+        mapViewState.value?.overlays?.clear()
+        alerts?.features?.forEach { feature ->
+            mapViewState.value?.addAlertOverlay(feature, context)
+        }
+        mapViewState.value?.invalidate()
+    }
 
     AndroidView(
         modifier = Modifier
@@ -72,6 +101,8 @@ fun OsmMapView() {
                 Log.d("MAPVIEW", "Scale bar overlay added.")
                 setInitialMapView()
                 Log.d("MAPVIEW", "Initial map view set.")
+                // metAlerts
+                mapViewState.value = this
             }
         }
     )
@@ -300,12 +331,11 @@ fun MapView.addMapClickListener() {
             return false
         }
     }
-
     overlays.add(MapEventsOverlay(receiver))
 
     Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER", "Map click listener added.")
 }
-
+   
 private fun MapView.isMarkerClicked(p: GeoPoint): Boolean {
     Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_IS_MARKER_CLICKED", "Checking if marker is clicked...")
 
@@ -338,6 +368,45 @@ private fun MapView.addMarker(p: GeoPoint): Marker {
     overlays.add(marker)
 
     Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_ADD_MARKER", "Marker added at Lat: ${String.format("%.2f", p.latitude)}, Lon: ${String.format("%.2f", p.longitude)}.")
+    
+    //val overlay = MapEventsOverlay(receiver)
+    //overlays.add(overlay)
+    
+    return marker    
+}
 
-    return marker
+// Alert overlay from metAlerts
+fun MapView.addAlertOverlay(feature: Feature, context: Context) {
+    when (val geometry = feature.geometry) {
+        is MyPolygon -> {
+            // Directly add the overlay for Polygon
+            geometry.coordinates.forEach { polygonCoordinates ->
+                addPolygonOverlay(polygonCoordinates, feature.properties)
+            }
+        }
+        is MultiPolygon -> {
+            // For each polygon in MultiPolygon, add the overlay
+            geometry.coordinates.forEach { multiPolygonCoordinates ->
+                multiPolygonCoordinates.forEach { polygonCoordinates ->
+                    addPolygonOverlay(polygonCoordinates, feature.properties)
+                }
+            }
+        }
+    }
+}
+
+private fun MapView.addPolygonOverlay(polygonCoordinates: List<List<Double>>, properties: Properties) {
+    val geoPoints = polygonCoordinates.flatMap { coord ->
+        listOf(GeoPoint(coord[1], coord[0]))
+    }
+
+    val polygon = Polygon().apply {
+        points = geoPoints
+        fillColor = Color.argb(50, 255, 0, 0)
+        title = properties.title
+        infoWindow = BasicInfoWindow(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, this@addPolygonOverlay)
+    }
+
+    overlays.add(polygon)
+
 }

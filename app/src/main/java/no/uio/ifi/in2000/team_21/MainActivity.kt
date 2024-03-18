@@ -52,7 +52,7 @@ fun App(){
 
     NavHost(
         navController = navController,
-        startDestination = APP_ROUTES.SETTING_SCREEN
+        startDestination = APP_ROUTES.HOME
     ){
 
         composable(APP_ROUTES.HOME){

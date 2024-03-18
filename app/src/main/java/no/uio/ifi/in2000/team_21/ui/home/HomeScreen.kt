@@ -87,7 +87,7 @@ fun BottomBarWithIcons() {
         backgroundColor = Color.White,
         elevation = 8.dp
     ) {
-        repeat(5) { index ->
+        repeat(1) { index ->
             BottomNavigationItem(
                 icon = {
                     Box(

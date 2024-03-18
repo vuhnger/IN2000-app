@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -52,7 +53,23 @@ fun SettingScreen(navController: NavController) {
     var checked by remember { mutableStateOf(true) } //13.03 Må flyttes til en global ui-state
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Innstillinger")})},
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Innstillinger"
+                    )
+                },
+                        navigationIcon = { IconButton(onClick = { navController.navigate(APP_ROUTES.HOME) })
+                        {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Tilbake"
+                            )
+                        }
+                        }
+            )
+                 },
         modifier = Modifier
             .width(360.dp)
             .height(800.dp)

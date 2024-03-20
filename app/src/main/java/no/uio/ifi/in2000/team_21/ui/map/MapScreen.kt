@@ -51,21 +51,36 @@ fun OsmMapView() {
     val context = LocalContext.current
     val viewModel: OilRigViewModel = viewModel()
     val alertsViewModel: AlertsViewModel = viewModel()
-    val alerts by alertsViewModel.alerts.observeAsState()
+    //val alerts by alertsViewModel.alerts.observeAsState()
+    val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
 
     val mapViewState = remember { mutableStateOf<MapView?>(null)}
 
+    // Predefined location (because we don't have geolocation yet) in Bergen
+    val predefinedLocation = GeoPoint(60.3913, 5.3221)
+    val radius = 100.0 // 50 Kilometres
+
     LaunchedEffect(Unit) {
-        alertsViewModel.fetchAlerts(AlertsInfo())
+        //alertsViewModel.fetchAlerts(AlertsInfo())
+        alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, radius)
     }
 
-    LaunchedEffect(alerts) {
+    LaunchedEffect(filteredFeatures) {
+        val mapView = mapViewState.value
+        mapView?.overlays?.clear()
+        filteredFeatures?.forEach { feature ->
+            mapView?.addAlertOverlay(feature, context)
+        }
+        mapViewState.value?.invalidate()
+    }
+
+    /*LaunchedEffect(alerts) {
         mapViewState.value?.overlays?.clear()
         alerts?.features?.forEach { feature ->
             mapViewState.value?.addAlertOverlay(feature, context)
         }
         mapViewState.value?.invalidate()
-    }
+    }*/
 
     AndroidView(modifier = Modifier
         .fillMaxSize()

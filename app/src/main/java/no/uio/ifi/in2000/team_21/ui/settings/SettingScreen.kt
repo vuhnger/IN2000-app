@@ -79,15 +79,13 @@ fun SettingScreen(navController: NavController) {
             modifier = Modifier
                 .padding(innerPadding)
         ){
-            //Spacer(modifier = Modifier.padding(29.dp))
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .width(302.dp)// skulle egt være 302 her
+                    .width(302.dp)
                     .height(56.dp)
                     .padding(start = 29.dp)
-                    //.padding(start = 16.dp, top = 16.dp, end = 24.dp, bottom = 16.dp)
                     .background(
                         color = Color(0xFFECE6F0),
                         shape = RoundedCornerShape(size = 100.dp)
@@ -134,10 +132,9 @@ fun SettingScreen(navController: NavController) {
                 horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .width(302.dp)// skulle egt være 302 her
+                    .width(302.dp)
                     .height(56.dp)
                     .padding(start = 29.dp)
-                    //.padding(start = 16.dp, top = 16.dp, end = 24.dp, bottom = 16.dp)
                     .background(
                         color = Color(0xFFECE6F0),
                         shape = RoundedCornerShape(size = 100.dp)
@@ -163,7 +160,7 @@ fun SettingScreen(navController: NavController) {
                     )
                 )
 
-                IconButton(onClick = { navController.navigate(APP_ROUTES.ABOUT_US_SCREEN) }) //Her vil den ikke navogate
+                IconButton(onClick = { navController.navigate(APP_ROUTES.ABOUT_US_SCREEN) })
                 {
                     Icon(
                         contentDescription = "Om oss",

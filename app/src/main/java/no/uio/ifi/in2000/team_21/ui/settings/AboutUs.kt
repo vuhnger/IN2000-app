@@ -33,6 +33,7 @@ import no.uio.ifi.in2000.team_21.APP_ROUTES
 fun AboutUsScreen(navController: NavController) {
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
+    val names = listOf<String>("Joachim", "Jonas", "Kaja", "Mari", "Sebastian", "Victor")
 
     Log.d(
         FUNCTION_NAME,
@@ -55,8 +56,8 @@ fun AboutUsScreen(navController: NavController) {
         LazyVerticalGrid(
             columns = GridCells.FixedSize(145.dp),
             content = {
-                items(6) {
-                    OmOssCard("Mari")
+                items(names.size) {
+                    AboutUsCard(names[it])
                 }
             },
             modifier = Modifier
@@ -66,14 +67,14 @@ fun AboutUsScreen(navController: NavController) {
     }
 }
 @Composable
-fun OmOssCard(
+fun AboutUsCard(
     //Legge til parameter om oss
-    navn: String
+    name: String
 ) {
 
     Log.d(
-        "",
-        ""
+        "AboutUsCard",
+        "Created card with $name"
     )
 
     Card(
@@ -87,7 +88,7 @@ fun OmOssCard(
     ){
         //Innhold i kortet
         Column() {
-            Text(text = navn)
+            Text(text = name)
         }
     }
 }

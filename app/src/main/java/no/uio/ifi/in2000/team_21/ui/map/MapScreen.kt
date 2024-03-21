@@ -10,10 +10,16 @@ import android.os.SystemClock
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.MotionEvent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,11 +45,14 @@ import org.osmdroid.views.overlay.compass.CompassOverlay
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.rotate
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.MultiPolygon
 import no.uio.ifi.in2000.team_21.model.Polygon as MyPolygon
 import no.uio.ifi.in2000.team_21.model.Properties
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow
+import kotlin.math.cos
+import kotlin.math.sin
 
 
 @Composable
@@ -58,12 +67,16 @@ fun OsmMapView() {
 
     // Predefined location (because we don't have geolocation yet) in Bergen
     val predefinedLocation = GeoPoint(60.3913, 5.3221)
-    val radius = 100.0 // 50 Kilometres
+    val radius = remember { mutableStateOf(500.0) } // Default "search" radius for alerts
 
-    LaunchedEffect(Unit) {
+    /*LaunchedEffect(radius.value) {
         //alertsViewModel.fetchAlerts(AlertsInfo())
-        alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, radius)
-    }
+        //alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, radius.value)
+        mapViewState.value?.let { mapView ->
+            mapView.updateSearchArea(predefinedLocation, radius.value)
+            alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, radius.value)
+        }
+    }*/
 
     LaunchedEffect(filteredFeatures) {
         val mapView = mapViewState.value
@@ -71,7 +84,7 @@ fun OsmMapView() {
         filteredFeatures?.forEach { feature ->
             mapView?.addAlertOverlay(feature, context)
         }
-        mapViewState.value?.invalidate()
+        //mapViewState.value?.invalidate()
     }
 
     /*LaunchedEffect(alerts) {
@@ -82,26 +95,38 @@ fun OsmMapView() {
         mapViewState.value?.invalidate()
     }*/
 
-    AndroidView(modifier = Modifier
-        .fillMaxSize()
-        .padding(bottom = 56.dp),
-        factory = { ctx ->
-            Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
-            MapView(ctx).apply {
-                setupMapView(ctx)
-                addTileOverlay(ctx)
-                addMapClickListener()
-                addOilRigMarkers(viewModel)
-                addCompassOverlay(context)
-                addButtonOverlay()
-                addScaleBarOverlay()
-                setInitialMapView()
+    Box(modifier = Modifier.fillMaxSize()) {
+        AndroidView(modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 56.dp),
+            factory = { ctx ->
+                Configuration.getInstance()
+                    .load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
+                MapView(ctx).apply {
+                    setupMapView(ctx)
+                    addTileOverlay(ctx)
+                    addMapClickListener()
+                    addOilRigMarkers(viewModel)
+                    addCompassOverlay(context)
+                    addButtonOverlay()
+                    addScaleBarOverlay()
+                    setInitialMapView()
 
-                // metAlerts
-                mapViewState.value = this
+                    // metAlerts
+                    mapViewState.value = this
+                }
             }
-        }
-    )
+        )
+        RadiusSelector(
+            radius = radius,
+            onRadiusChange = { newRadius ->
+                alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, newRadius)
+                mapViewState.value?.updateSearchArea(predefinedLocation, newRadius)
+                Log.d("RadiusSelector", "${mapViewState.value}")
+            },
+            mapView = mapViewState.value
+        )
+    }
 }
 
 fun MapView.setupMapView(ctx: Context) {
@@ -110,7 +135,7 @@ fun MapView.setupMapView(ctx: Context) {
     //setBuiltInZoomControls(true)
     setMultiTouchControls(true)
     // Set the minimum and maximum zoom levels
-    setMinZoomLevel(7.0)
+    setMinZoomLevel(5.0)
     setMaxZoomLevel(20.0)
 }
 
@@ -277,4 +302,57 @@ private fun MapView.addPolygonOverlay(polygonCoordinates: List<List<Double>>, pr
     }
 
     overlays.add(polygon)
+}
+
+@Composable
+fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Unit, mapView: MapView?) {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Slider(
+            value = radius.value.toFloat(),
+            onValueChange = { newValue ->
+                radius.value = newValue.toDouble()
+                mapView?.updateSearchArea(GeoPoint(60.3913, 5.3221), radius.value) // Replace Geopoint with geolocation when available
+            },
+            onValueChangeFinished = {
+                onRadiusChange(radius.value)
+            },
+            valueRange = 1f..5000f,
+            modifier = Modifier.rotate(-90f)
+        )
+    }
+}
+
+var searchAreaOverlay: Polygon? = null // Peker til search sirkelen, så den kan fjernes på "value change", for å forhindre stacking av sirkler.
+fun MapView.updateSearchArea(center: GeoPoint, radius: Double) {
+
+    searchAreaOverlay?.let { overlays.remove(it) }
+
+    val circlePoints = ArrayList<GeoPoint>()        // Må lage egen sirkel :( En plugin hadde vært bedre om noen finner
+    val totalPoints = 100
+    for (i in 0 until totalPoints) {
+        val angle = Math.toRadians((i * (360.0 / totalPoints)))
+        val dx = radius * cos(angle)
+        val dy = radius * sin(angle)
+        val point = GeoPoint(center.latitude + (dy / 111.3199), center.longitude + (dx / (cos(Math.toRadians(center.latitude)) * 111.3199)))
+        circlePoints.add(point)
+    }
+
+    Log.d("updateSearchArea", "Total Circle Points: ${circlePoints.size}, First point: ${circlePoints.firstOrNull()}")
+
+    val polygon = Polygon(this).apply {
+        points = circlePoints
+        fillColor = Color.argb(25, 0, 25, 90)
+        strokeColor = Color.BLUE
+        strokeWidth = 1f
+    }
+
+    searchAreaOverlay = polygon
+
+    overlays.add(polygon)
+    invalidate()
 }

@@ -28,7 +28,7 @@ class AlertsRepository(private val dataSource: AlertsDataSource) {
     }
 
     private fun haversine(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
-        val R = 6372.8 // Radius in kilometres
+        val R = 6372.8 // Radius in kilometres (of the earth)
         val l1 = Math.toRadians(lat1)
         val l2 = Math.toRadians(lat2)
         val deltaLat = Math.toRadians(lat2 - lat1)
@@ -53,7 +53,6 @@ class AlertsRepository(private val dataSource: AlertsDataSource) {
                 } else {
                     null
                 }
-                else -> null
             }
 
             firstCoordinate?.let { coords ->

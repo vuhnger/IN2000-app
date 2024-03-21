@@ -13,9 +13,13 @@ import android.view.MotionEvent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +49,7 @@ import org.osmdroid.views.overlay.compass.CompassOverlay
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.MultiPolygon
@@ -117,15 +122,21 @@ fun OsmMapView() {
                 }
             }
         )
-        RadiusSelector(
-            radius = radius,
-            onRadiusChange = { newRadius ->
-                alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, newRadius)
-                mapViewState.value?.updateSearchArea(predefinedLocation, newRadius)
-                Log.d("RadiusSelector", "${mapViewState.value}")
-            },
-            mapView = mapViewState.value
-        )
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 40.dp)
+        ) {
+            RadiusSelector(
+                radius = radius,
+                onRadiusChange = { newRadius ->
+                    alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, newRadius)
+                    mapViewState.value?.updateSearchArea(predefinedLocation, newRadius)
+                    Log.d("RadiusSelector", "${mapViewState.value}")
+                },
+                mapView = mapViewState.value
+            )
+        }
     }
 }
 
@@ -306,25 +317,20 @@ private fun MapView.addPolygonOverlay(polygonCoordinates: List<List<Double>>, pr
 
 @Composable
 fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Unit, mapView: MapView?) {
-    Column(
+    Slider(
+        value = radius.value.toFloat(),
+        onValueChange = { newValue ->
+            radius.value = newValue.toDouble()
+            mapView?.updateSearchArea(GeoPoint(60.3913, 5.3221), radius.value) // Replace Geopoint with geolocation when available
+            },
+        onValueChangeFinished = {
+            onRadiusChange(radius.value)
+        },
+        valueRange = 1f..2500f,
         modifier = Modifier
-            .fillMaxHeight()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
-        Slider(
-            value = radius.value.toFloat(),
-            onValueChange = { newValue ->
-                radius.value = newValue.toDouble()
-                mapView?.updateSearchArea(GeoPoint(60.3913, 5.3221), radius.value) // Replace Geopoint with geolocation when available
-            },
-            onValueChangeFinished = {
-                onRadiusChange(radius.value)
-            },
-            valueRange = 1f..5000f,
-            modifier = Modifier.rotate(-90f)
-        )
-    }
+            .fillMaxWidth()
+            .padding(24.dp)
+    )
 }
 
 var searchAreaOverlay: Polygon? = null // Peker til search sirkelen, så den kan fjernes på "value change", for å forhindre stacking av sirkler.

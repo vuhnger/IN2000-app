@@ -14,7 +14,6 @@ import kotlin.math.sqrt
 
 class AlertsRepository(private val dataSource: AlertsDataSource) {
     suspend fun fetchAlerts(parameters: AlertsInfo): Alert? {
-        // Vet ikke om det er behov for noe ekstra manipulering av data enda, men det gjøres her.
         return dataSource.fetchAlerts(parameters)
     }
 
@@ -23,7 +22,7 @@ class AlertsRepository(private val dataSource: AlertsDataSource) {
         val allFeatures = alertsResponse?.features ?: return null
 
         return filterAlertsByRadius(allFeatures, userLocation, radius).also { filteredFeatures ->
-
+            // ?
         }
     }
 

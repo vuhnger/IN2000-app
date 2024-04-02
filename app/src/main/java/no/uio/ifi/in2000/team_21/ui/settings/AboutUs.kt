@@ -33,7 +33,7 @@ import no.uio.ifi.in2000.team_21.APP_ROUTES
 fun AboutUsScreen(navController: NavController) {
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
-    val names = listOf<String>("Joachim", "Jonas", "Kaja", "Mari", "Sebastian", "Victor")
+    val names = listOf("Joachim", "Jonas", "Kaja", "Mari", "Sebastian", "Victor")
 
     Log.d(
         FUNCTION_NAME,

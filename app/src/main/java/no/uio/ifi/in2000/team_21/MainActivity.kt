@@ -25,6 +25,7 @@ public object APP_ROUTES{
     const val MAP_SCREEN = "map"
     const val SETTING_SCREEN = "settings"
     const val ABOUT_US_SCREEN = "aboutUS"
+    const val ADD_ACTIVITY = "addActivity"
 }
 
 class MainActivity : ComponentActivity() {

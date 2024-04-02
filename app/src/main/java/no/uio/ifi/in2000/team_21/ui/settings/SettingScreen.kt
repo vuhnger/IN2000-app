@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -82,7 +83,6 @@ fun SettingScreen(navController: NavController) {
                 .padding(30.dp)
         ) {
             Row(
-                //horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -95,20 +95,16 @@ fun SettingScreen(navController: NavController) {
 
             ) {
                 Text(
-
                     modifier = Modifier
                         .width(190.dp)
                         .height(20.dp),
-                        //.padding(start = 15.dp),
                     text = "Darkmode",
-
 
                     style = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(500),
-                        color = Color(0xFF49454F),
+                        color = Color(0xFF191D2B),
                         letterSpacing = 0.1.sp,
                         )
                 )
@@ -155,7 +151,7 @@ fun SettingScreen(navController: NavController) {
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
                         fontWeight = FontWeight(500),
-                        color = Color(0xFF49454F),
+                        color = Color(0xFF191D2B),
                         letterSpacing = 0.1.sp,
                     )
                 )
@@ -166,12 +162,57 @@ fun SettingScreen(navController: NavController) {
                     onClick = {
                         navController.navigate(APP_ROUTES.ABOUT_US_SCREEN)
                     }
-                    //modifier = Modifier
-                      //  .padding(end = 16.dp)
                 ) {
                     Icon(
                         contentDescription = "Om oss",
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        tint = Color(0xFF191D2B)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.padding(6.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .background(
+                        color = Color(0xFFDEE4F8),
+                        shape = RoundedCornerShape(size = 100.dp)
+                    )
+                    .padding(start = 25.dp, end = 25.dp)
+
+            ) {
+                Text(
+
+                    modifier = Modifier
+                        .width(190.dp)
+                        .height(20.dp),
+                    text = "Legg til aktivitet",
+
+
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        lineHeight = 20.sp,
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFF191D2B),
+                        letterSpacing = 0.1.sp,
+                    )
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                IconButton(
+                    onClick = {
+                        navController.navigate(APP_ROUTES.ADD_ACTIVITY)
+                    }
+                ) {
+                    Icon(
+                        contentDescription = "Om oss",
+                        imageVector =  Icons.Default.Add,
+                        tint = Color(0xFF191D2B)
                     )
                 }
             }

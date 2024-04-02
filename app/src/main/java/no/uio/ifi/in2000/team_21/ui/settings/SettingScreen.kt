@@ -74,8 +74,6 @@ fun SettingScreen(navController: NavController) {
             )
                  },
         modifier = Modifier
-            //.width(360.dp)
-            //.height(800.dp)
             .background(color = Color(0xFFF7F8FF))
     ){innerPadding ->
         Column(
@@ -83,9 +81,8 @@ fun SettingScreen(navController: NavController) {
                 .padding(innerPadding)
                 .padding(30.dp)
         ) {
-
             Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                //horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -94,7 +91,8 @@ fun SettingScreen(navController: NavController) {
                         color = Color(0xFFDEE4F8),
                         shape = RoundedCornerShape(size = 100.dp)
                     )
-                    .padding(start = 15.dp, end = 15.dp)
+                    .padding(start = 25.dp, end = 25.dp)
+
             ) {
                 Text(
 
@@ -112,9 +110,10 @@ fun SettingScreen(navController: NavController) {
                         fontWeight = FontWeight(500),
                         color = Color(0xFF49454F),
                         letterSpacing = 0.1.sp,
-
                         )
                 )
+
+                Spacer(modifier = Modifier.weight(1f))
 
                 Switch(
                     checked = checked,
@@ -125,55 +124,50 @@ fun SettingScreen(navController: NavController) {
                         .width(52.dp)
                         .height(32.dp)
                         .background(
-                            color = Color(0xFF6750A4),
+                            color = Color(0xFF5058A4),
                             shape = RoundedCornerShape(size = 100.dp)
                         )
-                        .padding(start = 5.dp)
+                        .padding(start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)
                 )
             }
 
-
             Spacer(modifier = Modifier.padding(6.dp))
 
-
             Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    //.padding(start = 29.dp)
                     .background(
                         color = Color(0xFFDEE4F8),
                         shape = RoundedCornerShape(size = 100.dp)
                     )
+                    .padding(start = 25.dp, end = 25.dp)
             ) {
                 Text(
 
                     modifier = Modifier
                         .width(206.dp)
-                        .height(20.dp)
-                        .padding(start = 16.dp),
+                        .height(20.dp),
                     text = "Om oss",
 
-
-                    // M3/label/large
                     style = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(500),
                         color = Color(0xFF49454F),
                         letterSpacing = 0.1.sp,
                     )
                 )
 
+                Spacer(modifier = Modifier.weight(1f))
+
                 IconButton(
                     onClick = {
                         navController.navigate(APP_ROUTES.ABOUT_US_SCREEN)
-                    },
-                    modifier = Modifier
-                        .padding(end = 16.dp)
+                    }
+                    //modifier = Modifier
+                      //  .padding(end = 16.dp)
                 ) {
                     Icon(
                         contentDescription = "Om oss",

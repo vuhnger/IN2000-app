@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mapbox.mapboxsdk.geometry.LatLng
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.container.RepositoryContainer
 import no.uio.ifi.in2000.team_21.data.AlertsRepository
 import no.uio.ifi.in2000.team_21.model.Alert
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Feature
-import org.osmdroid.util.GeoPoint
 
 class AlertsViewModel(private val repository: AlertsRepository = RepositoryContainer.alertsRepository) : ViewModel() {
     private val _alerts = MutableLiveData<Alert?>() // GeoJSON String
@@ -26,7 +26,7 @@ class AlertsViewModel(private val repository: AlertsRepository = RepositoryConta
         }
     }
 
-    fun fetchAndFilterAlerts(parameters: AlertsInfo, userLocation: GeoPoint, radius: Double) {
+    fun fetchAndFilterAlerts(parameters: AlertsInfo, userLocation: LatLng, radius: Double) {
         viewModelScope.launch {
             _filteredFeatures.value = repository.fetchAndFilterAlerts(parameters, userLocation, radius)
         }

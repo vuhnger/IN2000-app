@@ -1,113 +1,102 @@
 package no.uio.ifi.in2000.team_21.ui.map
 
-//import org.osmdroid.views.MapView
+import android.content.Context
+import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.Point
+import com.mapbox.geojson.Polygon
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
-
-
-/*
-@Composable
-fun OsmMapView() {
-    val context = LocalContext.current
-    val viewModel: OilRigViewModel = viewModel()
-    val alertsViewModel: AlertsViewModel = viewModel()
-    //val alerts by alertsViewModel.alerts.observeAsState()
-    val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
-    val locationManager = remember { LocationManager(context) }
-    val mapViewState = remember { mutableStateOf<MapView?>(null)}
-    val userLocation = remember { mutableStateOf<Location?>(null)}
-
-    // Predefined location (because we don't have geolocation yet) in Bergen
-    val predefinedLocation = GeoPoint(60.3913, 5.3221)
-    val radius = remember { mutableStateOf(500.0) } // Default "search" radius for alerts
-
-    val locationUpdateListener = remember {
-        object : LocationListener {
-            override fun onLocationChanged(p0: Location) {
-                userLocation.value = p0
-            }
-        }
-    }
-
-    DisposableEffect(context) {
-        locationManager.startLocationUpdates(locationUpdateListener)
-        onDispose {
-            locationManager.stopLocationUpdates(locationUpdateListener)
-        }
-    }
-
-    LaunchedEffect(userLocation.value) {
-        userLocation.value?.let { location ->
-            mapViewState.value?.let { mapView ->
-                updateUserLocation(mapView, location)
-            }
-        }
-    }
-
-    LaunchedEffect(filteredFeatures) {
-        val mapView = mapViewState.value
-        mapView?.overlays?.clear()
-        filteredFeatures?.forEach { feature ->
-            mapView?.addAlertOverlay(feature, context)
-        }
-        //mapViewState.value?.invalidate()
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        AndroidView(modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 56.dp),
-            factory = { ctx ->
-                Configuration.getInstance()
-                    .load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
-                MapView(ctx).apply {
-                    setupMapView(ctx)
-                    addTileOverlay(ctx)
-                    addMapClickListener()
-                    addOilRigMarkers(viewModel)
-                    addCompassOverlay(context)
-                    addButtonOverlay()
-                    addScaleBarOverlay()
-                    setInitialMapView()
-
-                    // metAlerts
-                    mapViewState.value = this
-                }
-            }
-        )
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 40.dp)
-        ) {
-            RadiusSelector(
-                radius = radius,
-                onRadiusChange = { newRadius ->
-                    alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, newRadius)
-                    mapViewState.value?.updateSearchArea(predefinedLocation, newRadius)
-                    Log.d("RadiusSelector", "${mapViewState.value}")
-                },
-                mapView = mapViewState.value
-            )
-        }
-    }
-}*/
+import com.mapbox.mapboxsdk.style.layers.FillLayer
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
+import no.uio.ifi.in2000.team_21.container.MapBoxDataTransformer.convertFeaturesToFeatureCollection
+import no.uio.ifi.in2000.team_21.model.AlertsInfo
+import kotlin.math.cos
+import kotlin.math.sin
+import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
 
 @Composable
 fun MapboxMapView() {
     val context = LocalContext.current
+    val mapView = rememberMapViewWithLifecycle(context)
+    val mapboxMapState = remember { mutableStateOf<MapboxMap?>(null) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val alertsViewModel: AlertsViewModel = viewModel()
+    val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
+    val radius = remember { mutableStateOf(500.0) }
+    // Predefined location, replace with geolocation when added
+    val predefinedLocation = LatLng(60.3913, 5.3221)
+
+    AndroidView({ mapView }, Modifier.fillMaxSize()) { mapView ->
+        mapView.getMapAsync { mapboxMap ->
+            mapboxMapState.value = mapboxMap
+            mapboxMap.setStyle(Style.MAPBOX_STREETS) { style ->
+                // additional map setup can be done here
+            }
+
+            // Start position on launch
+            mapboxMap.cameraPosition = CameraPosition.Builder()
+                .target(LatLng(60.3913, 5.3221)) // Bergen
+                .zoom(10.0)
+                .build()
+        }
+    }
+
+    // Alerts
+    LaunchedEffect(filteredFeatures) {
+        filteredFeatures?.let { features ->
+            mapView.getMapAsync { mapboxMap ->
+                mapboxMap.addAlertOverlay(features)
+            }
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 40.dp)
+    ) {
+        RadiusSelector(
+            radius = radius,
+            onRadiusChange = { newRadius ->
+                // Your existing logic
+                alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, newRadius)
+                mapboxMapState.value?.updateSearchArea(predefinedLocation, newRadius)
+                Log.d("RadiusSelector", "${mapboxMapState.value}")
+            },
+            mapboxMap = mapboxMapState.value
+        )
+    }
+
+}
+
+@Composable
+fun rememberMapViewWithLifecycle(context: Context): MapView {
     val mapView = remember {
         MapView(context).apply {
             onCreate(null)
@@ -134,215 +123,79 @@ fun MapboxMapView() {
         }
     }
 
-    AndroidView({ mapView }, Modifier.fillMaxSize()) {
-        mapView.getMapAsync { mapboxMap ->
-            mapboxMap.setStyle(Style.MAPBOX_STREETS) { style ->
-                // Ready to add overlays and interact with the map
-            }
-
-            val initialPosition = CameraPosition.Builder()
-                .target(LatLng(60.3913, 5.3221)) // Bergen
-                .zoom(10.0)
-                .build()
-
-            mapboxMap.cameraPosition = initialPosition
-        }
-    }
+    return mapView
 }
-
-/*
-fun MapView.setupMapView(ctx: Context) {
-    // Set the base layer to OpenStreetMap
-    setTileSource(TileSourceFactory.MAPNIK)
-    //setBuiltInZoomControls(true)
-    setMultiTouchControls(true)
-    // Set the minimum and maximum zoom levels
-    setMinZoomLevel(6.0)
-    setMaxZoomLevel(20.0)
-}
-
-
-fun MapView.addTileOverlay(ctx: Context) {
-    // Add OpenSeaMap as an overlay
-    val tileSource = XYTileSource(
-        "OpenSeaMap",
-        1, 18, 256, ".png",
-        arrayOf("http://t1.openseamap.org/seamark/")
-    )
-    val provider = MapTileProviderBasic(ctx).apply {
-        this.tileSource = tileSource
-    }
-    val overlay = TilesOverlay(provider, ctx)
-    overlayManager.add(overlay)
-}
-
-fun MapView.addOilRigMarkers(viewModel: OilRigViewModel) {
-    // Get the oil rig markers from the ViewModel
-    val oilRigMarkers = viewModel.initializeRigs(this)
-    // Add the markers to the map overlay
-    overlayManager.addAll(oilRigMarkers)
-}
-
-
-fun MapView.addCompassOverlay(context: Context) {
-    // Create a new CompassOverlay instance
-    val compassOverlay = CompassOverlay(context, this)
-    // Enable the compass
-    compassOverlay.enableCompass()
-    // Set the compass to the bottom left
-    compassOverlay.setCompassCenter(40f, 670f)
-    // Add the compass overlay to the map
-    overlays.add(compassOverlay)
-}
-
-fun MapView.addButtonOverlay() {
-    // Create a custom Overlay for the button
-    val buttonOverlay = object : Overlay() {
-        override fun draw(canvas: Canvas, mapView: MapView, shadow: Boolean) {
-            val paint = Paint()
-            paint.color = Color.BLUE
-            paint.textSize = 50f
-            val buttonText = "Center"
-            val textWidth = paint.measureText(buttonText)
-            val x = canvas.width - textWidth - 50
-            canvas.drawText(buttonText, x, 50f, paint)
-        }
-
-        override fun onSingleTapConfirmed(e: MotionEvent?, mapView: MapView?): Boolean {
-            // Check if the tap is within the bounds of the button
-            val buttonLeft = mapView?.width?.minus(200) ?: 0
-            val buttonRight = mapView?.width ?: 0
-            val buttonTop = 0
-            val buttonBottom = 100
-
-            if (e != null && e.x > buttonLeft && e.x < buttonRight && e.y > buttonTop && e.y < buttonBottom) {
-                // The button was clicked, center the map to the start point
-                mapView?.controller?.setCenter(GeoPoint(60.3913, 5.3221))
-                mapView?.controller?.setZoom(0.0)
-                return true
-            }
-            return false
-        }
-    }
-
-    overlays.add(buttonOverlay)
-}
-
-fun MapView.addScaleBarOverlay() {
-    // Create a new ScaleBarOverlay
-    val scaleBarOverlay = ScaleBarOverlay(this)
-    // Set the alignment of the scale bar
-    scaleBarOverlay.setAlignBottom(true) // Top
-    scaleBarOverlay.setAlignRight(true) // Right
-    overlays.add(scaleBarOverlay)
-}
-
-fun MapView.setInitialMapView() {
-    Handler(Looper.getMainLooper()).postDelayed({
-        // Center point to Bergen, Norway
-        controller.setCenter(GeoPoint(60.3913, 5.3221))
-        controller.setZoom(0.0)
-        postInvalidate()
-    }, 1000)
-}
-
-fun MapView.addMapClickListener() {
-    val receiver = object : MapEventsReceiver {
-        var lastUserMarker: Marker? = null
-
-        override fun singleTapConfirmedHelper(p: GeoPoint): Boolean {
-            val point = this@addMapClickListener.getProjection().toPixels(p, null)
-
-            val e = MotionEvent.obtain(
-                SystemClock.uptimeMillis(),
-                SystemClock.uptimeMillis(),
-                MotionEvent.ACTION_UP,
-                point.x.toFloat(),
-                point.y.toFloat(),
-                0
-            )
-
-            for (overlay in overlays) {
-                if (overlay is Marker && overlay.hitTest(e, this@addMapClickListener)) {
-                    return true
-                }
-            }
-
-            lastUserMarker?.let { overlays.remove(it) }
-
-            val marker = Marker(this@addMapClickListener)
-            marker.position = p
-            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            marker.title = "Lat: ${p.latitude}, Lon: ${p.longitude}"
-            overlays.add(marker)
-
-            lastUserMarker = marker
-
-            invalidate()
-
-            return true
-        }
-
-        override fun longPressHelper(p: GeoPoint): Boolean {
-            return false
-        }
-    }
-
-    val overlay = MapEventsOverlay(receiver)
-    overlays.add(overlay)
-}
-
- */
 
 // Alert overlay from metAlerts
+fun MapboxMap.addAlertOverlay(myFeatures: List<MyFeature>) {
+    val featureCollection = convertFeaturesToFeatureCollection(myFeatures)
+    val sourceId = "alerts-source"
+    val fillLayerId = "alerts-fill-layer"
 
-
-
-/*
-fun MapView.addAlertOverlay(feature: Feature, context: Context) {
-    when (val geometry = feature.geometry) {
-        is MyPolygon -> {
-            // Directly add the overlay for Polygon
-            geometry.coordinates.forEach { polygonCoordinates ->
-                addPolygonOverlay(polygonCoordinates, feature.properties)
-            }
+    getStyle { style ->
+        if (style.getSource(sourceId) != null) {
+            (style.getSourceAs<GeoJsonSource>(sourceId))?.setGeoJson(featureCollection)
+        } else {
+            val geoJsonSource = GeoJsonSource(sourceId, featureCollection)
+            style.addSource(geoJsonSource)
         }
-        is MultiPolygon -> {
-            // For each polygon in MultiPolygon, add the overlay
-            geometry.coordinates.forEach { multiPolygonCoordinates ->
-                multiPolygonCoordinates.forEach { polygonCoordinates ->
-                    addPolygonOverlay(polygonCoordinates, feature.properties)
-                }
-            }
+
+        if (style.getLayer(fillLayerId) == null) {
+            val fillLayer = FillLayer(fillLayerId, sourceId).withProperties(
+                PropertyFactory.fillColor("red"), // Vil gjerne erstatte dette med farge fra farevarsel, men dataen der er litt ustabil.
+                PropertyFactory.fillOpacity(0.5f)
+            )
+            style.addLayer(fillLayer)
         }
     }
 }
 
-private fun MapView.addPolygonOverlay(polygonCoordinates: List<List<Double>>, properties: Properties) {
-    val geoPoints = polygonCoordinates.flatMap { coord ->
-        listOf(GeoPoint(coord[1], coord[0]))
+fun MapboxMap.updateSearchArea(center: LatLng, radiusKm: Double) {
+    val radiusM = radiusKm * 1000
+
+    val circlePoints = mutableListOf<Point>()
+    val steps = 64
+    val distanceX = radiusM / (111320 * cos(Math.toRadians(center.latitude)))
+    val distanceY = radiusM / 110540
+
+    for (i in 0 until steps) {
+        val theta = (i.toDouble() / steps) * (2 * Math.PI)
+        val x = distanceX * cos(theta)
+        val y = distanceY * sin(theta)
+        circlePoints.add(Point.fromLngLat(center.longitude + x, center.latitude + y))
     }
 
-    val polygon = Polygon().apply {
-        points = geoPoints
-        fillColor = Color.argb(50, 255, 0, 0)
-        title = properties.title
-        infoWindow = BasicInfoWindow(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, this@addPolygonOverlay)
-    }
+    val polygon = Polygon.fromLngLats(listOf(circlePoints))
+    val sourceId = "search-area-source"
 
-    overlays.add(polygon)
+    this.getStyle { style ->
+        if (style.getSource(sourceId) != null) {
+            (style.getSourceAs<GeoJsonSource>(sourceId))?.setGeoJson(polygon)
+        } else {
+            val geoJsonSource = GeoJsonSource(sourceId, polygon)
+            style.addSource(geoJsonSource)
+
+            val fillLayer = FillLayer("search-area-layer", sourceId).withProperties(
+                PropertyFactory.fillColor("blue"),
+                PropertyFactory.fillOpacity(0.5f)
+            )
+            style.addLayer(fillLayer)
+        }
+    }
 }
 
 @Composable
-fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Unit, mapView: MapView?) {
+fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Unit, mapboxMap: MapboxMap?) {
     Slider(
         value = radius.value.toFloat(),
         onValueChange = { newValue ->
             radius.value = newValue.toDouble()
-            mapView?.updateSearchArea(GeoPoint(60.3913, 5.3221), radius.value) // Replace Geopoint with geolocation when available
-            },
+            val center = LatLng(60.3913, 5.3221) // Replace with geolocation when available
+            mapboxMap?.updateSearchArea(center, radius.value)
+        },
         onValueChangeFinished = {
             onRadiusChange(radius.value)
+            mapboxMap?.clearSearchArea()
         },
         valueRange = 1f..2500f,
         modifier = Modifier
@@ -351,49 +204,9 @@ fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Uni
     )
 }
 
-var searchAreaOverlay: Polygon? = null // Peker til search sirkelen, så den kan fjernes på "value change", for å forhindre stacking av sirkler.
-fun MapView.updateSearchArea(center: GeoPoint, radius: Double) {
-
-    searchAreaOverlay?.let { overlays.remove(it) }
-
-    val circlePoints = ArrayList<GeoPoint>()        // Må lage egen sirkel :( En plugin hadde vært bedre om noen finner
-    val totalPoints = 100
-    for (i in 0 until totalPoints) {
-        val angle = Math.toRadians((i * (360.0 / totalPoints)))
-        val dx = radius * cos(angle)
-        val dy = radius * sin(angle)
-        val point = GeoPoint(center.latitude + (dy / 111.3199), center.longitude + (dx / (cos(Math.toRadians(center.latitude)) * 111.3199)))
-        circlePoints.add(point)
+fun MapboxMap.clearSearchArea() {
+    getStyle { style ->
+        val sourceId = "search-area-source"
+        (style.getSourceAs<GeoJsonSource>(sourceId))?.setGeoJson(FeatureCollection.fromFeatures(emptyList()))
     }
-
-    Log.d("updateSearchArea", "Total Circle Points: ${circlePoints.size}, First point: ${circlePoints.firstOrNull()}")
-
-    val polygon = Polygon(this).apply {
-        points = circlePoints
-        fillColor = Color.argb(25, 0, 25, 90)
-        strokeColor = Color.BLUE
-        strokeWidth = 1f
-    }
-
-    searchAreaOverlay = polygon
-
-    overlays.add(polygon)
-    invalidate()
 }
-
-private var userLocationOverlay: Overlay? = null    // Peker til posisjon så den kan fjernes ved posisjonsoppdatering
-
-private fun updateUserLocation(mapView: MapView, location: Location) {
-    userLocationOverlay?.let { mapView.overlays.remove(it) }
-
-    val userLocationOverlay = Marker(mapView).apply {
-        position = GeoPoint(location.latitude, location.longitude)
-        Log.d("UPDATE USER LOCATION", "User location: ${location.latitude}, ${location.longitude}")
-        setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-    }
-
-    mapView.overlays.add(userLocationOverlay)
-    mapView.invalidate()
-}
-
-*/

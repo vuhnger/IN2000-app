@@ -9,15 +9,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
-import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.compose.NavHost // Riktig import av navhost
-import no.uio.ifi.in2000.team_21.container.RepositoryContainer
+import com.mapbox.mapboxsdk.Mapbox
+import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
-import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreenTest
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
+import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 
 // Vi legger strenger i dette objektet fremfor å hardkode de inn i appen. Disse skal senere flyttes til StringResources.
 public object APP_ROUTES{
@@ -30,6 +29,7 @@ public object APP_ROUTES{
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Mapbox.getInstance(applicationContext, "pk.eyJ1Ijoiandob2xtYm8iLCJhIjoiY2x1MDQ0MHg2MDYxNjJrdDR4eTAwanVhOSJ9.UJ531h6BwXp56LYSIOxwFQ")
         setContent {
             Team21Theme {
                 // A surface container using the 'background' color from the theme

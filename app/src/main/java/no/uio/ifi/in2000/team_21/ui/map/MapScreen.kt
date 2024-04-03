@@ -1,66 +1,21 @@
 package no.uio.ifi.in2000.team_21.ui.map
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.location.Location
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
-import android.preference.PreferenceManager
-import android.util.Log
-import android.view.MotionEvent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+//import org.osmdroid.views.MapView
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.viewmodel.compose.viewModel
-import no.uio.ifi.in2000.team_21.data.OilRigViewModel
-import no.uio.ifi.in2000.team_21.model.Feature
-import org.osmdroid.config.Configuration
-import org.osmdroid.events.MapEventsReceiver
-import org.osmdroid.tileprovider.MapTileProviderBasic
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.tileprovider.tilesource.XYTileSource
-import org.osmdroid.util.GeoPoint
-//import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.MapEventsOverlay
-import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.Overlay
-import org.osmdroid.views.overlay.Polygon
-import org.osmdroid.views.overlay.ScaleBarOverlay
-import org.osmdroid.views.overlay.TilesOverlay
-import org.osmdroid.views.overlay.compass.CompassOverlay
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import com.google.android.gms.location.LocationListener
-import no.uio.ifi.in2000.team_21.data.LocationManager
-import no.uio.ifi.in2000.team_21.model.AlertsInfo
-import no.uio.ifi.in2000.team_21.model.MultiPolygon
-import no.uio.ifi.in2000.team_21.model.Polygon as MyPolygon
-import no.uio.ifi.in2000.team_21.model.Properties
-import org.osmdroid.views.overlay.infowindow.BasicInfoWindow
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
-import kotlin.math.cos
-import kotlin.math.sin
+
 
 /*
 @Composable
@@ -153,31 +108,49 @@ fun OsmMapView() {
 @Composable
 fun MapboxMapView() {
     val context = LocalContext.current
-    val alertsViewModel: AlertsViewModel = viewModel()
-    //val alerts by alertsViewModel.alerts.observeAsState()
-    val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
-    val locationManager = remember { LocationManager(context) }
-    val mapViewState = rememberMapViewWithLifecycle()
-    val userLocation = remember { mutableStateOf<Location?>(null)}
+    val mapView = remember {
+        MapView(context).apply {
+            onCreate(null)
+        }
+    }
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    AndroidView(factory = { ctx ->
-        MapView(ctx).also { mapView ->
-            mapView.getMapAsync { mapboxMap ->
-                // Configure your map appearance here
-                mapboxMap.setStyle(Style.MAPBOX_STREETS) {
-                    // Ready to add overlays and interact with the map
-                }
-
-                // Example to center the map
-                mapboxMap.cameraPosition = CameraPosition.Builder()
-                    .target(LatLng(60.3913, 5.3221)) // Example: Bergen
-                    .zoom(10.0)
-                    .build()
+    DisposableEffect(lifecycleOwner) {
+        val lifecycle = lifecycleOwner.lifecycle
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_START -> mapView.onStart()
+                Lifecycle.Event.ON_RESUME -> mapView.onResume()
+                Lifecycle.Event.ON_PAUSE -> mapView.onPause()
+                Lifecycle.Event.ON_STOP -> mapView.onStop()
+                Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
+                else -> {}
             }
         }
-    }, modifier = Modifier.fillMaxSize())
+        lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycle.removeObserver(observer)
+        }
+    }
+
+    AndroidView({ mapView }, Modifier.fillMaxSize()) {
+        mapView.getMapAsync { mapboxMap ->
+            mapboxMap.setStyle(Style.MAPBOX_STREETS) { style ->
+                // Ready to add overlays and interact with the map
+            }
+
+            val initialPosition = CameraPosition.Builder()
+                .target(LatLng(60.3913, 5.3221)) // Bergen
+                .zoom(10.0)
+                .build()
+
+            mapboxMap.cameraPosition = initialPosition
+        }
+    }
 }
 
+/*
 fun MapView.setupMapView(ctx: Context) {
     // Set the base layer to OpenStreetMap
     setTileSource(TileSourceFactory.MAPNIK)
@@ -187,6 +160,7 @@ fun MapView.setupMapView(ctx: Context) {
     setMinZoomLevel(6.0)
     setMaxZoomLevel(20.0)
 }
+
 
 fun MapView.addTileOverlay(ctx: Context) {
     // Add OpenSeaMap as an overlay
@@ -318,7 +292,13 @@ fun MapView.addMapClickListener() {
     overlays.add(overlay)
 }
 
+ */
+
 // Alert overlay from metAlerts
+
+
+
+/*
 fun MapView.addAlertOverlay(feature: Feature, context: Context) {
     when (val geometry = feature.geometry) {
         is MyPolygon -> {
@@ -415,3 +395,5 @@ private fun updateUserLocation(mapView: MapView, location: Location) {
     mapView.overlays.add(userLocationOverlay)
     mapView.invalidate()
 }
+
+*/

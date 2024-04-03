@@ -2,11 +2,21 @@ package no.uio.ifi.in2000.team_21.ui.settings
 
 
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -18,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,10 +62,12 @@ fun AboutUsScreen(navController: NavController) {
             }
             }
         )
-        }
+        },
+                modifier = Modifier
+                .background(color = Color(0xFFF7F8FF))
     ) { innerPadding ->
         LazyVerticalGrid(
-            columns = GridCells.FixedSize(145.dp),
+            columns = GridCells.Fixed(2),
             content = {
                 items(names.size) {
                     AboutUsCard(names[it])
@@ -62,7 +75,7 @@ fun AboutUsScreen(navController: NavController) {
             },
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(start = 15.dp)
+                .padding(15.dp)
         )
     }
 }
@@ -79,15 +92,15 @@ fun AboutUsCard(
 
     Card(
         modifier = Modifier
-            .size(width = 135.dp, height = 135.dp)
-            .padding(15.dp),
-        colors =
-        CardDefaults.cardColors(
-            containerColor = Color(0xFFE8DEF8),
-        )
+            .fillMaxWidth()
+            .height(200.dp)
+            .padding(15.dp)
+            .background(color = Color(0xFF00145D), shape = RoundedCornerShape(12.dp))
+            .border(width = 2.dp, color = Color(0xFF5062A4.toInt()), shape = RoundedCornerShape(12.dp))
     ){
-        //Innhold i kortet
-        Column() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Text(text = name)
         }
     }
@@ -98,3 +111,4 @@ fun AboutUsCard(
 fun AboutUsScreenTest(){
     AboutUsScreen(navController = rememberNavController())
 }
+

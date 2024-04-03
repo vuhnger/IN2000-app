@@ -35,7 +35,7 @@ import org.osmdroid.tileprovider.MapTileProviderBasic
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
+//import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
@@ -153,7 +153,12 @@ fun OsmMapView() {
 @Composable
 fun MapboxMapView() {
     val context = LocalContext.current
-    // Initialize your view models and states here
+    val alertsViewModel: AlertsViewModel = viewModel()
+    //val alerts by alertsViewModel.alerts.observeAsState()
+    val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
+    val locationManager = remember { LocationManager(context) }
+    val mapViewState = rememberMapViewWithLifecycle()
+    val userLocation = remember { mutableStateOf<Location?>(null)}
 
     AndroidView(factory = { ctx ->
         MapView(ctx).also { mapView ->

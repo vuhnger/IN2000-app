@@ -14,6 +14,7 @@ import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost // Riktig import av navhost
+import no.uio.ifi.in2000.team_21.container.RepositoryContainer
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreenTest
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen

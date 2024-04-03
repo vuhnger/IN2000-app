@@ -4,24 +4,21 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.location.Location
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.MotionEvent
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.Slider
+import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -50,16 +47,22 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.rotate
+import com.google.android.gms.location.LocationListener
+import no.uio.ifi.in2000.team_21.data.LocationManager
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.MultiPolygon
 import no.uio.ifi.in2000.team_21.model.Polygon as MyPolygon
 import no.uio.ifi.in2000.team_21.model.Properties
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow
+import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import kotlin.math.cos
 import kotlin.math.sin
 
-
+/*
 @Composable
 fun OsmMapView() {
     val context = LocalContext.current
@@ -67,21 +70,36 @@ fun OsmMapView() {
     val alertsViewModel: AlertsViewModel = viewModel()
     //val alerts by alertsViewModel.alerts.observeAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
-
+    val locationManager = remember { LocationManager(context) }
     val mapViewState = remember { mutableStateOf<MapView?>(null)}
+    val userLocation = remember { mutableStateOf<Location?>(null)}
 
     // Predefined location (because we don't have geolocation yet) in Bergen
     val predefinedLocation = GeoPoint(60.3913, 5.3221)
     val radius = remember { mutableStateOf(500.0) } // Default "search" radius for alerts
 
-    /*LaunchedEffect(radius.value) {
-        //alertsViewModel.fetchAlerts(AlertsInfo())
-        //alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, radius.value)
-        mapViewState.value?.let { mapView ->
-            mapView.updateSearchArea(predefinedLocation, radius.value)
-            alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, radius.value)
+    val locationUpdateListener = remember {
+        object : LocationListener {
+            override fun onLocationChanged(p0: Location) {
+                userLocation.value = p0
+            }
         }
-    }*/
+    }
+
+    DisposableEffect(context) {
+        locationManager.startLocationUpdates(locationUpdateListener)
+        onDispose {
+            locationManager.stopLocationUpdates(locationUpdateListener)
+        }
+    }
+
+    LaunchedEffect(userLocation.value) {
+        userLocation.value?.let { location ->
+            mapViewState.value?.let { mapView ->
+                updateUserLocation(mapView, location)
+            }
+        }
+    }
 
     LaunchedEffect(filteredFeatures) {
         val mapView = mapViewState.value
@@ -91,14 +109,6 @@ fun OsmMapView() {
         }
         //mapViewState.value?.invalidate()
     }
-
-    /*LaunchedEffect(alerts) {
-        mapViewState.value?.overlays?.clear()
-        alerts?.features?.forEach { feature ->
-            mapViewState.value?.addAlertOverlay(feature, context)
-        }
-        mapViewState.value?.invalidate()
-    }*/
 
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(modifier = Modifier
@@ -138,6 +148,29 @@ fun OsmMapView() {
             )
         }
     }
+}*/
+
+@Composable
+fun MapboxMapView() {
+    val context = LocalContext.current
+    // Initialize your view models and states here
+
+    AndroidView(factory = { ctx ->
+        MapView(ctx).also { mapView ->
+            mapView.getMapAsync { mapboxMap ->
+                // Configure your map appearance here
+                mapboxMap.setStyle(Style.MAPBOX_STREETS) {
+                    // Ready to add overlays and interact with the map
+                }
+
+                // Example to center the map
+                mapboxMap.cameraPosition = CameraPosition.Builder()
+                    .target(LatLng(60.3913, 5.3221)) // Example: Bergen
+                    .zoom(10.0)
+                    .build()
+            }
+        }
+    }, modifier = Modifier.fillMaxSize())
 }
 
 fun MapView.setupMapView(ctx: Context) {
@@ -146,7 +179,7 @@ fun MapView.setupMapView(ctx: Context) {
     //setBuiltInZoomControls(true)
     setMultiTouchControls(true)
     // Set the minimum and maximum zoom levels
-    setMinZoomLevel(5.0)
+    setMinZoomLevel(6.0)
     setMaxZoomLevel(20.0)
 }
 
@@ -361,4 +394,19 @@ fun MapView.updateSearchArea(center: GeoPoint, radius: Double) {
 
     overlays.add(polygon)
     invalidate()
+}
+
+private var userLocationOverlay: Overlay? = null    // Peker til posisjon så den kan fjernes ved posisjonsoppdatering
+
+private fun updateUserLocation(mapView: MapView, location: Location) {
+    userLocationOverlay?.let { mapView.overlays.remove(it) }
+
+    val userLocationOverlay = Marker(mapView).apply {
+        position = GeoPoint(location.latitude, location.longitude)
+        Log.d("UPDATE USER LOCATION", "User location: ${location.latitude}, ${location.longitude}")
+        setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+    }
+
+    mapView.overlays.add(userLocationOverlay)
+    mapView.invalidate()
 }

@@ -177,7 +177,7 @@ fun MapboxMap.updateSearchArea(center: LatLng, radiusKm: Double) {
 
             val fillLayer = FillLayer("search-area-layer", sourceId).withProperties(
                 PropertyFactory.fillColor("blue"),
-                PropertyFactory.fillOpacity(0.5f)
+                PropertyFactory.fillOpacity(0.3f)
             )
             style.addLayer(fillLayer)
         }

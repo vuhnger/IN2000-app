@@ -95,8 +95,13 @@ fun AboutUsCard(
             .fillMaxWidth()
             .height(200.dp)
             .padding(15.dp)
-            .background(color = Color(0xFF00145D), shape = RoundedCornerShape(12.dp))
-            .border(width = 2.dp, color = Color(0xFF5062A4.toInt()), shape = RoundedCornerShape(12.dp))
+            //.background(color = Color(0xFF00145D), shape = RoundedCornerShape(12.dp))
+            .border(
+                width = 2.dp,
+                color = Color(0xFF5062A4.toInt()),
+                shape = RoundedCornerShape(12.dp)
+            ),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF00145D))
     ){
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

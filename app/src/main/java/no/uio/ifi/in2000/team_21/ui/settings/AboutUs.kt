@@ -57,14 +57,15 @@ fun AboutUsScreen(navController: NavController) {
         FUNCTION_NAME,
         "called"
     )
-//Legg til farger her mari i topbar, så skal det være good.
+//Her vil jeg egt ha pil uten den horisontale streken, får d ikke til.
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Om oss") },
-            navigationIcon = { IconButton(onClick = { navController.navigate(APP_ROUTES.SETTING_SCREEN) })
+        topBar = { TopAppBar(title = { Text("Om oss", color = Color(0xFF00145D))},
+            navigationIcon = { IconButton(onClick = { navController.navigate(APP_ROUTES.SETTING_SCREEN) },)
             {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Tilbake"
+                    contentDescription = "Tilbake",
+                    tint = Color(0xFF00145D)
                 )
             }
             }

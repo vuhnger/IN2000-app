@@ -112,10 +112,9 @@ dependencies {
     val nav_version = "2.7.6"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("io.ktor:ktor-client-logging:2.3.8")
-    implementation("com.github.MKergall:osmbonuspack:6.9.0")
 
     // Location
-    implementation("com.google.android.gms:play-services-location:21.2.0")
+    //implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 }
 

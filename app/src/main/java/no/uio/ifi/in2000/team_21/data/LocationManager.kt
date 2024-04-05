@@ -1,5 +1,5 @@
 package no.uio.ifi.in2000.team_21.data
-
+/*
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
@@ -47,3 +47,5 @@ class LocationManager(context: Context) {
         fusedLocationClient.removeLocationUpdates(locationUpdateListener)
     }
 }
+
+ */

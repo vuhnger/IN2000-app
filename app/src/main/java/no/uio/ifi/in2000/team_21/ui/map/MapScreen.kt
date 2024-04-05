@@ -1,7 +1,10 @@
 package no.uio.ifi.in2000.team_21.ui.map
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +26,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.gson.Gson
+import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.Polygon
@@ -36,6 +41,10 @@ import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import no.uio.ifi.in2000.team_21.container.MapBoxDataTransformer.convertFeaturesToFeatureCollection
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
+import no.uio.ifi.in2000.team_21.model.Properties
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.math.cos
 import kotlin.math.sin
 import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
@@ -71,7 +80,7 @@ fun MapboxMapView() {
     LaunchedEffect(filteredFeatures) {
         filteredFeatures?.let { features ->
             mapView.getMapAsync { mapboxMap ->
-                mapboxMap.addAlertOverlay(features)
+                mapboxMap.addAlertOverlay(context, features)
             }
         }
     }
@@ -84,7 +93,6 @@ fun MapboxMapView() {
         RadiusSelector(
             radius = radius,
             onRadiusChange = { newRadius ->
-                // Your existing logic
                 alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, newRadius)
                 mapboxMapState.value?.updateSearchArea(predefinedLocation, newRadius)
                 Log.d("RadiusSelector", "${mapboxMapState.value}")
@@ -127,7 +135,8 @@ fun rememberMapViewWithLifecycle(context: Context): MapView {
 }
 
 // Alert overlay from metAlerts
-fun MapboxMap.addAlertOverlay(myFeatures: List<MyFeature>) {
+@RequiresApi(Build.VERSION_CODES.O)
+fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
     val featureCollection = convertFeaturesToFeatureCollection(myFeatures)
     val sourceId = "alerts-source"
     val fillLayerId = "alerts-fill-layer"
@@ -146,6 +155,24 @@ fun MapboxMap.addAlertOverlay(myFeatures: List<MyFeature>) {
                 PropertyFactory.fillOpacity(0.5f)
             )
             style.addLayer(fillLayer)
+        }
+
+        addOnMapClickListener { point ->
+            val screenPoint = projection.toScreenLocation(point)
+            val features = queryRenderedFeatures(screenPoint, fillLayerId)
+
+            if (features.isNotEmpty()) {
+                val selectedFeature = features.first()
+
+                val properties = parseFeatureProperties(selectedFeature)
+
+                if (properties != null) {
+                    showAlertDialog(context, properties)
+                }
+
+                return@addOnMapClickListener true
+            }
+            false
         }
     }
 }
@@ -210,3 +237,58 @@ fun MapboxMap.clearSearchArea() {
         (style.getSourceAs<GeoJsonSource>(sourceId))?.setGeoJson(FeatureCollection.fromFeatures(emptyList()))
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun showAlertDialog(context: Context, properties: Properties) {
+    val message = createAlertMessage(properties.title ?: "N/A", properties)
+    AlertDialog.Builder(context)
+        .setTitle("Alert details")
+        .setMessage(message)
+        .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+        .create()
+        .show()
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun createAlertMessage(title: String, properties: Properties): String {
+    val event = title.substringBefore(",") // Grab the first element in 'title' (Event)
+    val eventEndingTimeFormatted = formatEventEndingTime(properties.eventEndingTime)
+
+    return buildString {
+        append("Event: $event\n")
+        append("Severity: ${properties.severity ?: "N/A"}\n")
+        append("Area: ${properties.area ?: "N/A"}\n")
+        append("Description: ${properties.description ?: "N/A"}\n")
+        append("Instruction: ${properties.instruction ?: "N/A"}\n")
+        append("Ending: $eventEndingTimeFormatted")
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun formatEventEndingTime(eventEndingTime: String?): String {
+    return if (eventEndingTime != null) {
+        try {
+            val parser = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+            val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy 'at' HH:mm 'UTC'", Locale.getDefault())
+            val parsedDate = ZonedDateTime.parse(eventEndingTime, parser)
+            parsedDate.format(formatter)
+        } catch (e: Exception) {
+            "N/A"
+        }
+    } else {
+        "N/A"
+    }
+}
+
+fun parseFeatureProperties(feature: Feature): Properties? {
+    feature.properties()?.let { propertiesMap ->
+        // Convert the Map to a JSON string
+        val propertiesJson = Gson().toJson(propertiesMap)
+        Log.d("PARSE_PROPERTIES", "Feature Properties JSON: $propertiesJson")
+        // Parse the JSON string into the Properties class
+        return Gson().fromJson(propertiesJson, Properties::class.java)
+    }
+    return null
+}
+
+// Log.d("PARSE_PROPERTIES", "Feature Properties JSON: $propertiesJson")

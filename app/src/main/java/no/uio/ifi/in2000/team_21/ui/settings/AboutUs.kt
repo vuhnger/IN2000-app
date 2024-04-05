@@ -31,11 +31,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.APP_ROUTES
+import no.uio.ifi.in2000.team_21.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +57,7 @@ fun AboutUsScreen(navController: NavController) {
         FUNCTION_NAME,
         "called"
     )
-
+//Legg til farger her mari i topbar, så skal det være good.
     Scaffold(
         topBar = { TopAppBar(title = { Text("Om oss") },
             navigationIcon = { IconButton(onClick = { navController.navigate(APP_ROUTES.SETTING_SCREEN) })
@@ -95,18 +102,33 @@ fun AboutUsCard(
             .fillMaxWidth()
             .height(200.dp)
             .padding(15.dp)
-            //.background(color = Color(0xFF00145D), shape = RoundedCornerShape(12.dp))
             .border(
                 width = 2.dp,
                 color = Color(0xFF5062A4.toInt()),
                 shape = RoundedCornerShape(12.dp)
             ),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF00145D))
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFDDE4FF))
     ){
         Column(
+            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(15.dp)
         ) {
-            Text(text = name)
+            Text(
+                text = name,
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    lineHeight = 16.sp,
+                    fontWeight = FontWeight(500),
+                    color = Color(0xFF00145D),
+                    textAlign = TextAlign.Center,
+                    letterSpacing = 0.5.sp,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(16.dp)
+            )
         }
     }
 }

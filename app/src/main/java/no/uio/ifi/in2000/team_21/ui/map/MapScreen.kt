@@ -1,9 +1,7 @@
 package no.uio.ifi.in2000.team_21.ui.map
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,9 +40,6 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import no.uio.ifi.in2000.team_21.container.MapBoxDataTransformer.convertFeaturesToFeatureCollection
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import kotlin.math.cos
 import kotlin.math.sin
 import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
@@ -71,7 +66,7 @@ fun MapboxMapView() {
             // Start position on launch
             mapboxMap.cameraPosition = CameraPosition.Builder()
                 .target(LatLng(60.3913, 5.3221)) // Bergen
-                .zoom(10.0)
+                .zoom(5.0)
                 .build()
         }
     }
@@ -79,6 +74,7 @@ fun MapboxMapView() {
     // Alerts
     LaunchedEffect(filteredFeatures) {
         filteredFeatures?.let { features ->
+            Log.d("UI Display", "Displaying Features: ${features.map { it.properties }.joinToString()}")
             mapView.getMapAsync { mapboxMap ->
                 mapboxMap.addAlertOverlay(context, features)
             }
@@ -135,7 +131,6 @@ fun rememberMapViewWithLifecycle(context: Context): MapView {
 }
 
 // Alert overlay from metAlerts
-@RequiresApi(Build.VERSION_CODES.O)
 fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
     val featureCollection = convertFeaturesToFeatureCollection(myFeatures)
     val sourceId = "alerts-source"
@@ -164,9 +159,9 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
             if (features.isNotEmpty()) {
                 val selectedFeature = features.first()
 
-                val properties = parseFeatureProperties(selectedFeature)
+                val selectedFeatureProperties = parseFeatureProperties(selectedFeature)
 
-                if (properties != null) {
+                selectedFeatureProperties?.let { properties ->
                     showAlertDialog(context, properties)
                 }
 
@@ -238,7 +233,6 @@ fun MapboxMap.clearSearchArea() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun showAlertDialog(context: Context, properties: Properties) {
     val message = createAlertMessage(properties.title ?: "N/A", properties)
     AlertDialog.Builder(context)
@@ -249,10 +243,8 @@ fun showAlertDialog(context: Context, properties: Properties) {
         .show()
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun createAlertMessage(title: String, properties: Properties): String {
     val event = title.substringBefore(",") // Grab the first element in 'title' (Event)
-    val eventEndingTimeFormatted = formatEventEndingTime(properties.eventEndingTime)
 
     return buildString {
         append("Event: $event\n")
@@ -260,35 +252,15 @@ fun createAlertMessage(title: String, properties: Properties): String {
         append("Area: ${properties.area ?: "N/A"}\n")
         append("Description: ${properties.description ?: "N/A"}\n")
         append("Instruction: ${properties.instruction ?: "N/A"}\n")
-        append("Ending: $eventEndingTimeFormatted")
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun formatEventEndingTime(eventEndingTime: String?): String {
-    return if (eventEndingTime != null) {
-        try {
-            val parser = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-            val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy 'at' HH:mm 'UTC'", Locale.getDefault())
-            val parsedDate = ZonedDateTime.parse(eventEndingTime, parser)
-            parsedDate.format(formatter)
-        } catch (e: Exception) {
-            "N/A"
-        }
-    } else {
-        "N/A"
+        append("Ending: ${properties.eventEndingTime ?: "N/A"}\n") // Funker ikke atm, må formatteres.
     }
 }
 
 fun parseFeatureProperties(feature: Feature): Properties? {
     feature.properties()?.let { propertiesMap ->
-        // Convert the Map to a JSON string
         val propertiesJson = Gson().toJson(propertiesMap)
         Log.d("PARSE_PROPERTIES", "Feature Properties JSON: $propertiesJson")
-        // Parse the JSON string into the Properties class
         return Gson().fromJson(propertiesJson, Properties::class.java)
     }
     return null
 }
-
-// Log.d("PARSE_PROPERTIES", "Feature Properties JSON: $propertiesJson")

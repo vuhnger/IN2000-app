@@ -27,6 +27,13 @@ object MapBoxDataTransformer {
         val polygon = Polygon.fromLngLats(listOf(outerRingCoordinates))
         return Feature.fromGeometry(polygon).also { feature ->
             feature.addStringProperty("title", properties.title ?: "")
+            feature.addStringProperty("severity", properties.severity ?: "")
+            feature.addStringProperty("area", properties.area ?: "")
+            feature.addStringProperty("description", properties.description ?: "")
+            feature.addStringProperty("instruction", properties.instruction ?: "")
+            feature.addStringProperty("End time", properties.eventEndingTime ?: "")
+            feature.addStringProperty("Risk Color", properties.riskMatrixColor ?: "")
+            // Kan legge til flere properties her
         }
     }
 

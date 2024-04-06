@@ -29,6 +29,7 @@ class AlertsViewModel(private val repository: AlertsRepository = RepositoryConta
     fun fetchAndFilterAlerts(parameters: AlertsInfo, userLocation: LatLng, radius: Double) {
         viewModelScope.launch {
             _filteredFeatures.value = repository.fetchAndFilterAlerts(parameters, userLocation, radius)
+            //Log.d("Pre-UI Update", "Filtered Features: ${_filteredFeatures.value?.joinToString { it.properties?.title.orEmpty() }}")
         }
     }
 }

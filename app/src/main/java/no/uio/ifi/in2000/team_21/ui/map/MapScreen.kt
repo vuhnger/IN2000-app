@@ -43,7 +43,7 @@ import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.Polygon
-import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
 import com.mapbox.mapboxsdk.location.LocationComponentOptions
@@ -73,6 +73,7 @@ fun MapboxMapView() {
     val radius = remember { mutableStateOf(500.0) }
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     var userLocation by remember { mutableStateOf(LatLng()) }
+    var cameraInitialized by remember { mutableStateOf(false)}
 
     LocationPermissionRequest(onPermissionGranted = {
         val locationRequest = LocationRequest.create().apply {
@@ -86,6 +87,11 @@ fun MapboxMapView() {
             override fun onLocationResult(p0: LocationResult) {
                 for (location in p0.locations) {
                     userLocation = LatLng(location.latitude, location.longitude)
+                    // Zoom into user on launch
+                    if (!cameraInitialized && userLocation.latitude != 0.0 && userLocation.longitude != 0.0) {
+                        mapboxMapState.value?.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 10.0))
+                        cameraInitialized = true
+                    }
                 }
             }
         }
@@ -118,10 +124,10 @@ fun MapboxMapView() {
 
                 locationComponent.renderMode = RenderMode.COMPASS
             }
-            mapboxMap.cameraPosition = CameraPosition.Builder()
+            /*mapboxMap.cameraPosition = CameraPosition.Builder()
                 .target(userLocation)
                 .zoom(5.0)
-                .build()
+                .build()*/
         }
     }
 
@@ -192,19 +198,30 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
     val fillLayerId = "alerts-fill-layer"
 
     getStyle { style ->
-        if (style.getSource(sourceId) != null) {
-            (style.getSourceAs<GeoJsonSource>(sourceId))?.setGeoJson(featureCollection)
-        } else {
+        if (style.getSource(sourceId) == null) {
             val geoJsonSource = GeoJsonSource(sourceId, featureCollection)
             style.addSource(geoJsonSource)
+        } else {
+            (style.getSourceAs<GeoJsonSource>(sourceId))?.setGeoJson(featureCollection)
         }
 
         if (style.getLayer(fillLayerId) == null) {
             val fillLayer = FillLayer(fillLayerId, sourceId).withProperties(
-                PropertyFactory.fillColor("red"), // Vil gjerne erstatte dette med farge fra farevarsel, men dataen der er litt ustabil.
-                PropertyFactory.fillOpacity(0.5f)
+                // Default color set to red, in case no matrixColor is found
+                PropertyFactory.fillColor("red")
             )
             style.addLayer(fillLayer)
+        }
+
+        myFeatures.firstOrNull()?.properties?.riskMatrixColor?.let { matrixColor ->
+            val fillColor = when(matrixColor.lowercase()) {
+                "red" -> "rgba(202, 0, 42, 0.5)"
+                "yellow" -> "rgba(255, 176, 66, 0.5)"
+                "green" -> "rgba(85, 107, 47, 0.5)"
+                else -> "rgba(255, 0, 0, 0.5)" // Default color if riskMatricColor not defined
+            }
+            val fillLayer = style.getLayerAs<FillLayer>(fillLayerId)
+            fillLayer?.setProperties(PropertyFactory.fillColor(fillColor))
         }
 
         addOnMapClickListener { point ->

@@ -1,6 +1,9 @@
 package no.uio.ifi.in2000.team_21.ui.map
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.Box
@@ -16,14 +19,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
@@ -31,6 +45,10 @@ import com.mapbox.geojson.Point
 import com.mapbox.geojson.Polygon
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
+import com.mapbox.mapboxsdk.location.LocationComponentOptions
+import com.mapbox.mapboxsdk.location.modes.CameraMode
+import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
@@ -53,19 +71,55 @@ fun MapboxMapView() {
     val alertsViewModel: AlertsViewModel = viewModel()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
     val radius = remember { mutableStateOf(500.0) }
-    // Predefined location, replace with geolocation when added
-    val predefinedLocation = LatLng(60.3913, 5.3221)
+    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+    var userLocation by remember { mutableStateOf(LatLng()) }
+
+    LocationPermissionRequest(onPermissionGranted = {
+        val locationRequest = LocationRequest.create().apply {
+            interval = 10000 // Update interval in milliseconds
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+
+        }
+
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                for (location in p0.locations) {
+                    userLocation = LatLng(location.latitude, location.longitude)
+                }
+            }
+        }
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        }
+    })
 
     AndroidView({ mapView }, Modifier.fillMaxSize()) { mapView ->
         mapView.getMapAsync { mapboxMap ->
             mapboxMapState.value = mapboxMap
             mapboxMap.setStyle(Style.MAPBOX_STREETS) { style ->
-                // additional map setup can be done here
-            }
+                val customLocationComponentOptions = LocationComponentOptions.builder(context)
+                    .trackingGesturesManagement(true)
+                    .accuracyColor(ContextCompat.getColor(context, com.mapbox.mapboxsdk.R.color.mapbox_blue))
+                    .build()
 
-            // Start position on launch
+                val locationComponentActivationOptions = LocationComponentActivationOptions.builder(context, style)
+                    .locationComponentOptions(customLocationComponentOptions)
+                    .build()
+
+                val locationComponent = mapboxMap.locationComponent
+
+                locationComponent.activateLocationComponent(locationComponentActivationOptions)
+
+                locationComponent.isLocationComponentEnabled = true
+
+                locationComponent.cameraMode = CameraMode.TRACKING
+
+                locationComponent.renderMode = RenderMode.COMPASS
+            }
             mapboxMap.cameraPosition = CameraPosition.Builder()
-                .target(LatLng(60.3913, 5.3221)) // Bergen
+                .target(userLocation)
                 .zoom(5.0)
                 .build()
         }
@@ -89,11 +143,12 @@ fun MapboxMapView() {
         RadiusSelector(
             radius = radius,
             onRadiusChange = { newRadius ->
-                alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), predefinedLocation, newRadius)
-                mapboxMapState.value?.updateSearchArea(predefinedLocation, newRadius)
+                alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), userLocation, newRadius)
+                mapboxMapState.value?.updateSearchArea(userLocation, newRadius)
                 Log.d("RadiusSelector", "${mapboxMapState.value}")
             },
-            mapboxMap = mapboxMapState.value
+            mapboxMap = mapboxMapState.value,
+            centerLocation = userLocation
         )
     }
 
@@ -207,13 +262,12 @@ fun MapboxMap.updateSearchArea(center: LatLng, radiusKm: Double) {
 }
 
 @Composable
-fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Unit, mapboxMap: MapboxMap?) {
+fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Unit, mapboxMap: MapboxMap?, centerLocation: LatLng) {
     Slider(
         value = radius.value.toFloat(),
         onValueChange = { newValue ->
             radius.value = newValue.toDouble()
-            val center = LatLng(60.3913, 5.3221) // Replace with geolocation when available
-            mapboxMap?.updateSearchArea(center, radius.value)
+            mapboxMap?.updateSearchArea(centerLocation, radius.value)
         },
         onValueChangeFinished = {
             onRadiusChange(radius.value)
@@ -263,4 +317,20 @@ fun parseFeatureProperties(feature: Feature): Properties? {
         return Gson().fromJson(propertiesJson, Properties::class.java)
     }
     return null
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
+    val locationPermissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
+
+    LaunchedEffect(key1 = locationPermissionState.permission) {
+        if (locationPermissionState.status.isGranted) {
+            onPermissionGranted()
+        } else if (!locationPermissionState.status.shouldShowRationale) {
+            // If permission is not granted and rationale should not be shown, request permission
+            locationPermissionState.launchPermissionRequest()
+        }
+        // Case where showRationale
+    }
 }

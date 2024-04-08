@@ -9,15 +9,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
-import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.compose.NavHost // Riktig import av navhost
+import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
-import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreenTest
+import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
-import androidx.compose.ui.res.stringResource
+import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 
 // Vi legger strenger i dette objektet fremfor å hardkode de inn i appen. Disse skal senere flyttes til StringResources.
 public object APP_ROUTES{
@@ -66,6 +65,10 @@ fun App(){
 
         composable(APP_ROUTES.ABOUT_US_SCREEN){
             AboutUsScreen(navController = navController)
+        }
+
+        composable(APP_ROUTES.ADD_ACTIVITY){
+            AddActivityScreen(navController = navController)
         }
 
     }

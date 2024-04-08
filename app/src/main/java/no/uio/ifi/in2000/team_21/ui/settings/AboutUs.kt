@@ -105,10 +105,10 @@ fun AboutUsCard(
             .padding(15.dp)
             .border(
                 width = 2.dp,
-                color = Color(0xFF5062A4.toInt()),
+                color = Color(0xFFEBEFFF.toInt()),
                 shape = RoundedCornerShape(12.dp)
             ),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFDDE4FF))
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFBCCBFF))
     ){
         Column(
             verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterVertically),

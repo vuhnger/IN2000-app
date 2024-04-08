@@ -88,7 +88,7 @@ fun SettingScreen(navController: NavController) {
                     .fillMaxWidth()
                     .height(56.dp)
                     .background(
-                        color = Color(0xFFDEE4F8),
+                        color = Color(0xFFEBEFFF),
                         shape = RoundedCornerShape(size = 100.dp)
                     )
                     .padding(start = 25.dp, end = 25.dp)
@@ -135,7 +135,7 @@ fun SettingScreen(navController: NavController) {
                     .fillMaxWidth()
                     .height(56.dp)
                     .background(
-                        color = Color(0xFFDEE4F8),
+                        color = Color(0xFFEBEFFF),
                         shape = RoundedCornerShape(size = 100.dp)
                     )
                     .padding(start = 25.dp, end = 25.dp)
@@ -179,7 +179,7 @@ fun SettingScreen(navController: NavController) {
                     .fillMaxWidth()
                     .height(56.dp)
                     .background(
-                        color = Color(0xFFDEE4F8),
+                        color = Color(0xFFEBEFFF),
                         shape = RoundedCornerShape(size = 100.dp)
                     )
                     .padding(start = 25.dp, end = 25.dp)

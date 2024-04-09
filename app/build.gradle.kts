@@ -114,6 +114,13 @@ dependencies {
 
     implementation("io.ktor:ktor-client-logging:2.3.8")
     implementation("com.github.MKergall:osmbonuspack:6.9.0")
+
+    // Gson og sånn
+    implementation("io.ktor:ktor-client-core:1.6.7") // Use the latest version
+    implementation("io.ktor:ktor-client-cio:1.6.7")
+    implementation("io.ktor:ktor-client-json:1.6.7")
+    implementation("io.ktor:ktor-client-serialization-jvm:1.6.7")
+    implementation("com.google.code.gson:gson:2.8.8") // Gson library
 }
 
 

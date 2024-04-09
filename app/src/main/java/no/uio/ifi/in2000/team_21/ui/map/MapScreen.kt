@@ -335,7 +335,7 @@ fun MapView.addMapClickListener() {
 
     Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER", "Map click listener added.")
 }
-   
+
 private fun MapView.isMarkerClicked(p: GeoPoint): Boolean {
     Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_IS_MARKER_CLICKED", "Checking if marker is clicked...")
 
@@ -368,11 +368,11 @@ private fun MapView.addMarker(p: GeoPoint): Marker {
     overlays.add(marker)
 
     Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_ADD_MARKER", "Marker added at Lat: ${String.format("%.2f", p.latitude)}, Lon: ${String.format("%.2f", p.longitude)}.")
-    
+
     //val overlay = MapEventsOverlay(receiver)
     //overlays.add(overlay)
-    
-    return marker    
+
+    return marker
 }
 
 // Alert overlay from metAlerts

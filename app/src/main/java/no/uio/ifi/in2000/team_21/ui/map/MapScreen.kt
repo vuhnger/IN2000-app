@@ -299,6 +299,16 @@ fun MapboxMap.clearSearchArea() {
     }
 }
 
+fun showAlertDialog(context: Context, properties: Properties) {
+    val message = createAlertMessage(properties.title ?: "N/A", properties)
+    AlertDialog.Builder(context)
+        .setTitle("Alert details")
+        .setMessage(message)
+        .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+        .create()
+        .show()
+}
+
 fun createAlertMessage(title: String, properties: Properties): String {
     val event = title.substringBefore(",") // Grab the first element in 'title' (Event)
 

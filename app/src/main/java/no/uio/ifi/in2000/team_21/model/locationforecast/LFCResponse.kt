@@ -1,8 +1,9 @@
 package no.uio.ifi.in2000.team_21.model.locationforecast
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
-
+@Serializable
 data class LFCResponse (
 
     @SerializedName("type"       ) var type       : String?     = null,
@@ -10,7 +11,7 @@ data class LFCResponse (
     @SerializedName("properties" ) var properties : LFCProperties? = LFCProperties()
 
 )
-
+@Serializable
 data class LFCData (
 
     @SerializedName("instant"       ) var instant     : LFCInstant?     = LFCInstant(),
@@ -19,7 +20,7 @@ data class LFCData (
     @SerializedName("next_6_hours"  ) var next6Hours  : LFCNext6Hours?  = LFCNext6Hours()
 
 )
-
+@Serializable
 data class LFCDetails (
 
     @SerializedName("air_temperature_max"          ) var airTemperatureMax          : Double? = null,
@@ -30,41 +31,41 @@ data class LFCDetails (
     @SerializedName("probability_of_precipitation" ) var probabilityOfPrecipitation : Int?    = null
 
 )
-
+@Serializable
 data class LFCGeometry (
 
     @SerializedName("type"        ) var type        : String?        = null,
-    @SerializedName("coordinates" ) var coordinates : ArrayList<Int> = arrayListOf()
+    @SerializedName("coordinates" ) var coordinates : ArrayList<Double> = arrayListOf()
 
 )
-
+@Serializable
 data class LFCInstant (
 
     @SerializedName("details" ) var details : LFCDetails? = LFCDetails()
 
 )
-
+@Serializable
 data class LFCMeta (
 
     @SerializedName("updated_at" ) var updatedAt : String? = null,
     @SerializedName("units"      ) var units     : LFCUnits?  = LFCUnits()
 
 )
-
+@Serializable
 data class LFCNext1Hours (
 
     @SerializedName("summary" ) var summary : LFCSummary? = LFCSummary(),
     @SerializedName("details" ) var details : LFCDetails? = LFCDetails()
 
 )
-
+@Serializable
 data class LFCNext6Hours (
 
     @SerializedName("summary" ) var summary : LFCSummary? = LFCSummary(),
     @SerializedName("details" ) var details : LFCDetails? = LFCDetails()
 
 )
-
+@Serializable
 data class LFCNext12Hours (
 
     @SerializedName("summary" ) var summary : LFCSummary? = LFCSummary(),
@@ -72,26 +73,27 @@ data class LFCNext12Hours (
 
 )
 
+@Serializable
 data class LFCProperties (
 
     @SerializedName("meta"       ) var meta       : LFCMeta?                 = LFCMeta(),
     @SerializedName("timeseries" ) var timeseries : ArrayList<LFCTimeseries> = arrayListOf()
 
 )
-
+@Serializable
 data class LFCSummary (
 
     @SerializedName("symbol_code" ) var symbolCode : String? = null
 
 )
-
+@Serializable
 data class LFCTimeseries (
 
     @SerializedName("time" ) var time : String? = null,
     @SerializedName("data" ) var data : LFCData?   = LFCData()
 
 )
-
+@Serializable
 data class LFCUnits (
 
     @SerializedName("air_pressure_at_sea_level"     ) var airPressureAtSeaLevel      : String? = null,

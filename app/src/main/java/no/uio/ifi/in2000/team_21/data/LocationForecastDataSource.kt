@@ -9,21 +9,32 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import no.uio.ifi.in2000.team_21.model.locationforecast.LFCResponse
 
 open class LocationForecastDataSource {
 
     private val url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60.10&lon=10"
 
+    @OptIn(ExperimentalSerializationApi::class)
     private val client = HttpClient() {
         install(ContentNegotiation) {
-            json()
+            json(
+                Json {
+                    explicitNulls = false
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                }
+            )
         }
         install(Logging){
             level = LogLevel.BODY
         }
     }
 
-    suspend fun fetchForecast(): HttpResponse? {
+    suspend fun fetchForecast(): LFCResponse? {
 
         val response: HttpResponse = client.get(url)
 
@@ -38,7 +49,7 @@ open class LocationForecastDataSource {
         * */
 
         return if (response.status.value in 200..299) {
-            response.body<HttpResponse?>()
+            response.body()
         }
         else{
              null

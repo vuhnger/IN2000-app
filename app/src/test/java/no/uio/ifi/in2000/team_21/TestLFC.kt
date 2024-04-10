@@ -5,6 +5,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.util.InternalAPI
 import kotlinx.coroutines.runBlocking
 import no.uio.ifi.in2000.team_21.data.LocationForecastDataSource
+import no.uio.ifi.in2000.team_21.model.locationforecast.LFCResponse
 import org.junit.Test
 
 
@@ -14,9 +15,9 @@ class TestLFCResponse(private val datasource: LocationForecastDataSource) {
     suspend fun fetchForecast() {
         try {
             // Call the fetch function from the datasource
-            val forecast = datasource.fetchForecast()
-            if (forecast != null) {
-                //println("Fetched forecast: ${forecast.bodyAsText()}")
+            val forecast: LFCResponse? = datasource.fetchForecast()
+            if (forecast != null){
+                println(forecast.geometry)
             }
         } catch (e: Exception) {
             println("Error fetching forecast: $e")

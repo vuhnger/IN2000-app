@@ -2,8 +2,6 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,13 +21,15 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import no.uio.ifi.in2000.team_21.APP_ROUTES
-import no.uio.ifi.in2000.team_21.ui.map.OsmMapView
 
 
 @Composable
@@ -38,7 +38,7 @@ fun HomeScreen(navController: NavController) {
         bottomBar = { BottomBarWithIcons() }
     ) { innerPadding ->
         Box {
-            OsmMapView().apply {
+            MapboxMapView().apply {
                 Modifier.padding(innerPadding)
             }
             Column {

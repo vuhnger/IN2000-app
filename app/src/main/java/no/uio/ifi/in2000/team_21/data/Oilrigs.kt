@@ -57,5 +57,4 @@ val IVAR_AASEN = Oilrig(
 val listOilrigs = listOf(
     EKOFISK, TROLL_A, SNORRE, STATFJORD, GULLFAKS, OSEBERG, SLEIPNER, IVAR_AASEN,
 )
-
 */

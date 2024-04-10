@@ -62,6 +62,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
 
+
 @Composable
 fun MapboxMapView() {
     val context = LocalContext.current
@@ -124,10 +125,6 @@ fun MapboxMapView() {
 
                 locationComponent.renderMode = RenderMode.COMPASS
             }
-            /*mapboxMap.cameraPosition = CameraPosition.Builder()
-                .target(userLocation)
-                .zoom(5.0)
-                .build()*/
         }
     }
 
@@ -157,7 +154,6 @@ fun MapboxMapView() {
             centerLocation = userLocation
         )
     }
-
 }
 
 @Composable
@@ -218,7 +214,7 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
                 "red" -> "rgba(202, 0, 42, 0.5)"
                 "yellow" -> "rgba(255, 176, 66, 0.5)"
                 "green" -> "rgba(85, 107, 47, 0.5)"
-                else -> "rgba(255, 0, 0, 0.5)" // Default color if riskMatricColor not defined
+                else -> "rgba(255, 0, 0, 0.5)" // Default color if riskMatrixColor not defined
             }
             val fillLayer = style.getLayerAs<FillLayer>(fillLayerId)
             fillLayer?.setProperties(PropertyFactory.fillColor(fillColor))
@@ -246,7 +242,6 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
 
 fun MapboxMap.updateSearchArea(center: LatLng, radiusKm: Double) {
     val radiusM = radiusKm * 1000
-
     val circlePoints = mutableListOf<Point>()
     val steps = 64
     val distanceX = radiusM / (111320 * cos(Math.toRadians(center.latitude)))

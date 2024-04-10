@@ -11,11 +11,18 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import no.uio.ifi.in2000.team_21.model.locationforecast.LFCResponse
+import no.uio.ifi.in2000.team_21.model.locationforecast.Response
 
 open class LocationForecastDataSource {
 
-    private val url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60.10&lon=10"
+    private val lat: Double = 60.1
+    private val lon: Double = 5.0
+    private val altitude = 460
+
+    private val url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?" +
+            "lat=$lat" +
+            "&lon=$lon" +
+            "&altitude=$altitude"
 
     @OptIn(ExperimentalSerializationApi::class)
     private val client = HttpClient() {
@@ -34,7 +41,7 @@ open class LocationForecastDataSource {
         }
     }
 
-    suspend fun fetchForecast(): LFCResponse? {
+    suspend fun fetchForecast(): Response? {
 
         val response: HttpResponse = client.get(url)
 

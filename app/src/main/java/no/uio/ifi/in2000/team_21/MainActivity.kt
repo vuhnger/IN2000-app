@@ -9,17 +9,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost // Riktig import av navhost
-import kotlinx.coroutines.runBlocking
-import no.uio.ifi.in2000.team_21.data.LocationForecastDataSource
-import no.uio.ifi.in2000.team_21.model.locationforecast.LFCResponse
+import no.uio.ifi.in2000.team_21.ui.map.WeatherIcon
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
-import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreenTest
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 
 // Vi legger strenger i dette objektet fremfor å hardkode de inn i appen. Disse skal senere flyttes til StringResources.
@@ -41,6 +37,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                    //App()
+                    WeatherIcon(element = "heavysleet.png")
                 }
             }
         }

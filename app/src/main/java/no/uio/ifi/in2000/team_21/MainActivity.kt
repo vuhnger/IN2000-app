@@ -14,6 +14,8 @@ import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost // Riktig import av navhost
+import no.uio.ifi.in2000.team_21.data.LocationForecastDataSource
+import no.uio.ifi.in2000.team_21.ui.home.drawImages
 import no.uio.ifi.in2000.team_21.ui.map.WeatherIcon
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
@@ -36,8 +38,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                   //App()
-                    WeatherIcon(element = "heavysleet.png")
+                    drawImages()
                 }
             }
         }

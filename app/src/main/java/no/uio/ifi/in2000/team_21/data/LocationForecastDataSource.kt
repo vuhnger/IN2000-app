@@ -15,9 +15,9 @@ import no.uio.ifi.in2000.team_21.model.locationforecast.Response
 
 open class LocationForecastDataSource {
 
-    private val lat: Double = 60.1
-    private val lon: Double = 5.0
-    private val altitude = 460
+    private val lat: Double = 59.94
+    private val lon: Double = 10.71
+    private val altitude = 100
 
     private val url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?" +
             "lat=$lat" +

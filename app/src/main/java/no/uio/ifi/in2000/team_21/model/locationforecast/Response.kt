@@ -36,10 +36,8 @@ data class Meta (
 
 @Serializable
 data class Timeseries (
-
     @SerializedName("time" ) var time : String? = null,
     @SerializedName("data" ) var data : Data?   = Data()
-
 )
 
 @Serializable
@@ -103,16 +101,14 @@ data class Next12Hours (
 
 @Serializable
 data class Data (
-
     @SerializedName("instant"       ) var instant     : Instant?     = Instant(),
     @SerializedName("next_12_hours" ) var next_12_hours : Next12Hours? = Next12Hours(),
     @SerializedName("next_1_hours"  ) var next_1_hours  : Next1Hours?  = Next1Hours(),
     @SerializedName("next_6_hours"  ) var next_6_hours  : Next6Hours?  = Next6Hours()
-
 )
+
 @Serializable
 data class Details (
-
     @SerializedName("air_temperature_max"          ) var air_temperature_max          : Double? = null,
     @SerializedName("air_temperature_min"          ) var air_temperature_min          : Double? = null,
     @SerializedName("precipitation_amount"         ) var precipitation_amount        : Double? = null,
@@ -124,9 +120,7 @@ data class Details (
 
 @Serializable
 data class Summary (
-
     @SerializedName("symbol_code" ) var symbol_code : String? = null
-
 )
 
 

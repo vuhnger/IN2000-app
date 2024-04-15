@@ -35,12 +35,10 @@ data class Alert(
     val event: String,
     val severity: String
 )
-
 @Serializable
 data class AlertsResponse(
     val features: List<Feature>
 )
-
 @Serializable
 data class Feature(
     val properties: Alert

@@ -12,10 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+
+import androidx.navigation.compose.NavHost // Riktig import av navhost
+import no.uio.ifi.in2000.team_21.ui.home.drawImages
+import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
+
 import com.mapbox.mapboxsdk.Mapbox
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
+
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 
@@ -54,7 +60,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                   App()
+                    drawImages()
                 }
             }
         }

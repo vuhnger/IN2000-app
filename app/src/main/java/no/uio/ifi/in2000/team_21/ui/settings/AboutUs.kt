@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.team_21.APP_ROUTES
 import no.uio.ifi.in2000.team_21.R
+import no.uio.ifi.in2000.team_21.Screen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +51,14 @@ import no.uio.ifi.in2000.team_21.R
 fun AboutUsScreen(navController: NavController) {
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
-    val names = listOf("Joachim", "Jonas", "Kaja", "Mari", "Sebastian", "Victor")
+    val names = listOf(
+        "Joachim Haasted",
+        "Jonas Holmboe",
+        "Kaja Stenen",
+        "Mari Stenbranden",
+        "Sebastian Hareide",
+        "Victor Uhnger"
+    )
 
     Log.d(
         FUNCTION_NAME,
@@ -60,7 +67,12 @@ fun AboutUsScreen(navController: NavController) {
 //Her vil jeg egt ha pil uten den horisontale streken, får d ikke til.
     Scaffold(
         topBar = { TopAppBar(title = { Text("Om oss", color = Color(0xFF00145D))},
-            navigationIcon = { IconButton(onClick = { navController.navigate(APP_ROUTES.SETTING_SCREEN) },)
+            navigationIcon = {
+                IconButton(
+                    onClick = {
+                        navController.navigate(route = Screen.AboutUsScreen.route)
+                              }
+                    )
             {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,

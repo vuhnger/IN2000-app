@@ -28,8 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
-import no.uio.ifi.in2000.team_21.APP_ROUTES
 
 
 @Composable
@@ -49,7 +49,13 @@ fun HomeScreen(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     SOSButton(onClick = {  })
-                    SettingsButton(onClick = { navController.navigate(APP_ROUTES.SETTING_SCREEN) })
+                    SettingsButton(
+                        onClick = {
+                            navController.navigate(
+                                route = Screen.SettingScreen.route
+                            )
+                        }
+                    )
                 }
             }
         }

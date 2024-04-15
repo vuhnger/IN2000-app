@@ -13,6 +13,9 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
 
     // Timeseries er værmeldinger
     suspend fun fetchTimeseries(): ArrayList<Timeseries>? {
+
+        Log.d("FORECAST_REPO","fetching timeseries.")
+
         return dataSource.fetchForecast()?.properties?.timeseries
     }
 
@@ -20,7 +23,7 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
         val timeseries = fetchTimeseries()
         val icons = ArrayList<String>()
 
-        Log.d("LOCATION_REPO", "timeseries: ${timeseries?.size}")
+        Log.d("FORECAST_REPO", "timeseries size: ${timeseries?.size}")
 
         timeseries?.forEach { timeseries ->
             timeseries.data?.next_1_hours?.summary?.symbol_code?.let { symbolCode ->

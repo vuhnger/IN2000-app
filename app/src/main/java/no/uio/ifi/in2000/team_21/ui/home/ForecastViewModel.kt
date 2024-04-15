@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.data.LocationForecastDataRepository
+import no.uio.ifi.in2000.team_21.model.locationforecast.Response
 
 class ForecastViewModel : ViewModel() {
 
@@ -18,6 +19,10 @@ class ForecastViewModel : ViewModel() {
         listOf<String>()
     )
 
+    var forecasts by mutableStateOf(
+        Response
+    )
+
     fun fetchIcons() {
         viewModelScope.launch {
             val response = repository.fetchImageIcons()
@@ -26,7 +31,14 @@ class ForecastViewModel : ViewModel() {
         }
     }
 
+    fun fetchForecast(){
+        viewModelScope.launch {
+            val response = repository.fetchForecast()
+        }
+    }
+
     init {
         fetchIcons()
+        fetchForecast()
     }
 }

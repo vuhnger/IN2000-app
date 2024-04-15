@@ -25,6 +25,21 @@ sealed class Screen(val route: String){
     object SettingScreen: Screen(route = "SettingScreen")
     object AboutUsScreen: Screen(route = "AboutUsScreen")
     object AddActivitiyScreen: Screen(route = "AddActivityScreen")
+
+    // Funksjonen bygger en streng av argumenter som kan sendes med et kall på navigate til en skjerm.
+    // Dersom du bruker funksjonen, erstatt:
+    // navController.navigate(Screen.ExampleScreen.route)
+    // med:
+    // navController.navigate(Screen.ExampleScreen.withArgs([ExampleArgs]))
+    fun withArgs(vararg args: String): String{
+        return buildString {
+            append(route)
+            args.forEach {
+             arg -> append("/$arg")
+            }
+        }
+    }
+
 }
 
 

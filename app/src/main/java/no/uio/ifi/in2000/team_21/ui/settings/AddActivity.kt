@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.team_21.APP_ROUTES
+import no.uio.ifi.in2000.team_21.Screen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,7 +55,7 @@ fun AddActivityScreen(navController: NavController) {
             navigationIcon = {
                 IconButton(
                     onClick = {
-                        navController.navigate(APP_ROUTES.SETTING_SCREEN)
+                        navController.navigate(Screen.SettingScreen.route)
                     }
                 ) {
                     Icon(

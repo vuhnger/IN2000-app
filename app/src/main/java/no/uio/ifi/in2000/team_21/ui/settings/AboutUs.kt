@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.team_21.APP_ROUTES
 import no.uio.ifi.in2000.team_21.R
+import no.uio.ifi.in2000.team_21.Screen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +60,7 @@ fun AboutUsScreen(navController: NavController) {
 //Her vil jeg egt ha pil uten den horisontale streken, får d ikke til.
     Scaffold(
         topBar = { TopAppBar(title = { Text("Om oss", color = Color(0xFF00145D))},
-            navigationIcon = { IconButton(onClick = { navController.navigate(APP_ROUTES.SETTING_SCREEN) },)
+            navigationIcon = { IconButton(onClick = { navController.navigate(Screen.AboutUsScreen.route) },)
             {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,

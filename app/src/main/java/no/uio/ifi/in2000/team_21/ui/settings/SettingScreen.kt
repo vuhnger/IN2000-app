@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.team_21.APP_ROUTES
+import no.uio.ifi.in2000.team_21.Screen
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +64,7 @@ fun SettingScreen(navController: NavController) {
                         "Innstillinger"
                     )
                 },
-                        navigationIcon = { IconButton(onClick = { navController.navigate(APP_ROUTES.HOME) })
+                        navigationIcon = { IconButton(onClick = { navController.navigate(Screen.HomeScreen.route) })
                         {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -160,7 +160,7 @@ fun SettingScreen(navController: NavController) {
 
                 IconButton(
                     onClick = {
-                        navController.navigate(APP_ROUTES.ABOUT_US_SCREEN)
+                        navController.navigate(Screen.AboutUsScreen.route)
                     }
                 ) {
                     Icon(
@@ -206,7 +206,7 @@ fun SettingScreen(navController: NavController) {
 
                 IconButton(
                     onClick = {
-                        navController.navigate(APP_ROUTES.ADD_ACTIVITY)
+                        navController.navigate(Screen.AddActivitiyScreen.route)
                     }
                 ) {
                     Icon(

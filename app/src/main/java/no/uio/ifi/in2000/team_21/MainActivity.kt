@@ -73,19 +73,19 @@ fun App(){
     ){
 
         composable(Screen.HomeScreen.route){
-            HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)
+            entry -> HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)
         }
 
         composable(Screen.SettingScreen.route){
-            SettingScreen(navController = navController)
+            entry -> SettingScreen(navController = navController)
         }
 
         composable(Screen.AboutUsScreen.route){
-            AboutUsScreen(navController = navController)
+            entry -> AboutUsScreen(navController = navController)
         }
 
         composable(Screen.AddActivitiyScreen.route){
-            AddActivityScreen(navController = navController)
+            entry -> AddActivityScreen(navController = navController)
         }
 
     }

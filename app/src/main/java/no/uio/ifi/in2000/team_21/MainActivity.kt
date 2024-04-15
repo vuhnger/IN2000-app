@@ -19,14 +19,14 @@ import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 
-// Vi legger strenger i dette objektet fremfor å hardkode de inn i appen. Disse skal senere flyttes til StringResources.
-public object APP_ROUTES{
-    const val HOME = "home"
-    const val MAP_SCREEN = "map"
-    const val SETTING_SCREEN = "settings"
-    const val ABOUT_US_SCREEN = "aboutUS"
-    const val ADD_ACTIVITY = "addActivity"
+sealed class Screen(val route: String){
+    object HomeScreen: Screen(route = "HomeScreen")
+    object MapScreen: Screen(route = "MapScreen")
+    object SettingScreen: Screen(route = "SettingScreen")
+    object AboutUsScreen: Screen(route = "AboutUsScreen")
+    object AddActivitiyScreen: Screen(route = "AddActivityScreen")
 }
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,22 +54,22 @@ fun App(){
 
     NavHost(
         navController = navController,
-        startDestination = APP_ROUTES.HOME
+        startDestination = Screen.HomeScreen.route
     ){
 
-        composable(APP_ROUTES.HOME){
+        composable(Screen.HomeScreen.route){
             HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)
         }
 
-        composable(APP_ROUTES.SETTING_SCREEN){
+        composable(Screen.SettingScreen.route){
             SettingScreen(navController = navController)
         }
 
-        composable(APP_ROUTES.ABOUT_US_SCREEN){
+        composable(Screen.AboutUsScreen.route){
             AboutUsScreen(navController = navController)
         }
 
-        composable(APP_ROUTES.ADD_ACTIVITY){
+        composable(Screen.AddActivitiyScreen.route){
             AddActivityScreen(navController = navController)
         }
 

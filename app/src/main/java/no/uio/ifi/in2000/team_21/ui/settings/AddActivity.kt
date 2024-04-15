@@ -55,7 +55,7 @@ fun AddActivityScreen(navController: NavController) {
             navigationIcon = {
                 IconButton(
                     onClick = {
-                        navController.navigate(Screen.SettingScreen.route)
+                        navController.navigate(route = Screen.SettingScreen.route)
                     }
                 ) {
                     Icon(

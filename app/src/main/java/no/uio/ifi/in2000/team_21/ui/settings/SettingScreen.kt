@@ -64,7 +64,12 @@ fun SettingScreen(navController: NavController) {
                         "Innstillinger"
                     )
                 },
-                        navigationIcon = { IconButton(onClick = { navController.navigate(Screen.HomeScreen.route) })
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    navController.navigate(route = Screen.HomeScreen.route)
+                                }
+                            )
                         {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -160,7 +165,7 @@ fun SettingScreen(navController: NavController) {
 
                 IconButton(
                     onClick = {
-                        navController.navigate(Screen.AboutUsScreen.route)
+                        navController.navigate(route = Screen.AboutUsScreen.route)
                     }
                 ) {
                     Icon(
@@ -206,7 +211,7 @@ fun SettingScreen(navController: NavController) {
 
                 IconButton(
                     onClick = {
-                        navController.navigate(Screen.AddActivitiyScreen.route)
+                        navController.navigate(route = Screen.AddActivitiyScreen.route)
                     }
                 ) {
                     Icon(

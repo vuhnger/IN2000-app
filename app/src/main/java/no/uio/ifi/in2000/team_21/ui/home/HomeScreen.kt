@@ -49,7 +49,13 @@ fun HomeScreen(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     SOSButton(onClick = {  })
-                    SettingsButton(onClick = { navController.navigate(Screen.SettingScreen.route) })
+                    SettingsButton(
+                        onClick = {
+                            navController.navigate(
+                                route = Screen.SettingScreen.route
+                            )
+                        }
+                    )
                 }
             }
         }

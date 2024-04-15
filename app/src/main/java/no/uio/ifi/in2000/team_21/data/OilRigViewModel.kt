@@ -11,7 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModel
 import no.uio.ifi.in2000.team_21.R
 
-
+/*
 class OilRigViewModel : ViewModel() {
 
     fun initializeRigs(mapView: MapView): List<Marker> {
@@ -44,3 +44,4 @@ class OilRigViewModel : ViewModel() {
         return markers
     }
 }
+ */

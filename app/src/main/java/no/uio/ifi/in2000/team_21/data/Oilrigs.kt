@@ -1,5 +1,5 @@
 package no.uio.ifi.in2000.team_21.data
-
+/*
 data class Oilrig(
     val name: String,
     val latitude: Double,
@@ -57,4 +57,4 @@ val IVAR_AASEN = Oilrig(
 val listOilrigs = listOf(
     EKOFISK, TROLL_A, SNORRE, STATFJORD, GULLFAKS, OSEBERG, SLEIPNER, IVAR_AASEN,
 )
-
+*/

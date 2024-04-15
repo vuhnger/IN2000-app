@@ -9,26 +9,50 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
-import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+
 import androidx.navigation.compose.NavHost // Riktig import av navhost
 import no.uio.ifi.in2000.team_21.ui.home.drawImages
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
-import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 
-// Vi legger strenger i dette objektet fremfor å hardkode de inn i appen. Disse skal senere flyttes til StringResources.
-public object APP_ROUTES{
-    const val HOME = "home"
-    const val MAP_SCREEN = "map"
-    const val SETTING_SCREEN = "settings"
-    const val ABOUT_US_SCREEN = "aboutUS"
+import com.mapbox.mapboxsdk.Mapbox
+import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
+import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
+import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
+
+import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
+import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
+
+sealed class Screen(val route: String){
+    object HomeScreen: Screen(route = "HomeScreen")
+    object MapScreen: Screen(route = "MapScreen")
+    object SettingScreen: Screen(route = "SettingScreen")
+    object AboutUsScreen: Screen(route = "AboutUsScreen")
+    object AddActivitiyScreen: Screen(route = "AddActivityScreen")
+
+    // Funksjonen bygger en streng av argumenter som kan sendes med et kall på navigate til en skjerm.
+    // Dersom du bruker funksjonen, erstatt:
+    // navController.navigate(Screen.ExampleScreen.route)
+    // med:
+    // navController.navigate(Screen.ExampleScreen.withArgs([ExampleArgs]))
+    fun withArgs(vararg args: String): String{
+        return buildString {
+            append(route)
+            args.forEach {
+             arg -> append("/$arg")
+            }
+        }
+    }
+
 }
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Mapbox.getInstance(applicationContext, "pk.eyJ1Ijoiandob2xtYm8iLCJhIjoiY2x1MDQ0MHg2MDYxNjJrdDR4eTAwanVhOSJ9.UJ531h6BwXp56LYSIOxwFQ")
         setContent {
             Team21Theme {
                 // A surface container using the 'background' color from the theme
@@ -51,19 +75,23 @@ fun App(){
 
     NavHost(
         navController = navController,
-        startDestination = APP_ROUTES.HOME
+        startDestination = Screen.HomeScreen.route
     ){
 
-        composable(APP_ROUTES.HOME){
-            HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)
+        composable(Screen.HomeScreen.route){
+            entry -> HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)
         }
 
-        composable(APP_ROUTES.SETTING_SCREEN){
-            SettingScreen(navController = navController)
+        composable(Screen.SettingScreen.route){
+            entry -> SettingScreen(navController = navController)
         }
 
-        composable(APP_ROUTES.ABOUT_US_SCREEN){
-            AboutUsScreen(navController = navController)
+        composable(Screen.AboutUsScreen.route){
+            entry -> AboutUsScreen(navController = navController)
+        }
+
+        composable(Screen.AddActivitiyScreen.route){
+            entry -> AddActivityScreen(navController = navController)
         }
 
     }

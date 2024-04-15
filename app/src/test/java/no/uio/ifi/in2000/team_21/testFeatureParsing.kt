@@ -1,13 +1,14 @@
 package no.uio.ifi.in2000.team_21
 
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import no.uio.ifi.in2000.team_21.model.Alert
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import no.uio.ifi.in2000.team_21.model.Feature
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class SerializationTest{
+class FeatureParsingTest {
     @Test
-    fun testSerialization() {
+    fun testFeatureParsing() {
         val jsonSnippet = """
             {
               "features": [
@@ -40,15 +41,19 @@ class SerializationTest{
               "lastChange": "2024-03-09T10:00:00Z",
               "type": "TestType"
             }
-        """
-        val json = Json { ignoreUnknownKeys = true }
+        """.trimIndent()
 
-        // Deserialize JSON to Kotlin object
-        val alert: Alert = json.decodeFromString(jsonSnippet)
-        println("Deserialized object: $alert")
+        val gson = Gson()
+        val featureListType = object : TypeToken<List<Feature>>() {}.type
+        val features: List<Feature> = gson.fromJson(jsonSnippet, featureListType)
 
-        // Serialize Kotlin object back to JSON
-        val jsonString = json.encodeToString(alert)
-        println("Serialized JSON: $jsonString")
+        val firstFeatureProperties = features.first().properties
+        assertEquals("Test Area", firstFeatureProperties.area)
+        assertEquals("Test Event", firstFeatureProperties.event)
+        assertEquals("Moderate", firstFeatureProperties.severity)
+        assertEquals("Description here.", firstFeatureProperties.description)
+        assertEquals("2024-03-12T23:00:00+00:00", firstFeatureProperties.eventEndingTime)
+
+        // Additional assertions ..
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -160,6 +161,90 @@ fun SettingScreen(navController: NavController) {
                         )
                         .padding(start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)
                 )
+            }
+
+            Spacer(modifier = Modifier.padding(6.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(168.dp)
+                    .background(
+                        color = containerLight,
+                        shape = RoundedCornerShape(size = 20.dp)
+                    )
+                    .padding(start = 25.dp, end = 25.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text(
+
+                        modifier = Modifier
+                            .width(206.dp)
+                            .height(20.dp),
+                        text = "Venners aktivitet",
+
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 20.sp,
+                            fontWeight = FontWeight(500),
+                            color = onContainerLight,
+                            letterSpacing = 0.1.sp,
+                        )
+                    )
+                }
+                HorizontalDivider(
+                    color = profileLight
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text(
+
+                        modifier = Modifier
+                            .width(206.dp)
+                            .height(20.dp),
+                        text = "Mine aktiviteter",
+
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 20.sp,
+                            fontWeight = FontWeight(500),
+                            color = onContainerLight,
+                            letterSpacing = 0.1.sp,
+                        )
+                    )
+                }
+                HorizontalDivider(
+                    color = profileLight
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text(
+
+                        modifier = Modifier
+                            .width(206.dp)
+                            .height(20.dp),
+                        text = "Trofeskap",
+
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 20.sp,
+                            fontWeight = FontWeight(500),
+                            color = onContainerLight,
+                            letterSpacing = 0.1.sp,
+                        )
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.padding(6.dp))

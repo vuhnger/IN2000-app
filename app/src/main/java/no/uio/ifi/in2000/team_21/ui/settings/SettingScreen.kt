@@ -22,8 +22,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +43,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
+import no.uio.ifi.in2000.team_21.ui.theme.containerLight
+import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
+import no.uio.ifi.in2000.team_21.ui.theme.profileLight
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,25 +83,42 @@ fun SettingScreen(navController: NavController) {
                                 contentDescription = "Tilbake"
                             )
                         }
-                        }
+                        },
+                colors = TopAppBarDefaults.topAppBarColors(backgroundLight)
             )
                  },
-        modifier = Modifier
-            .background(color = Color(0xFFF7F8FF))
+        containerColor = backgroundLight
     ){innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(30.dp)
+                .padding(15.dp)
         ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .background(
+                        color = containerLight,
+                        shape = RoundedCornerShape(size = 20.dp)
+                    )
+                    .padding(start = 25.dp, end = 25.dp)
+
+            ) {
+
+            }
+
+            Spacer(modifier = Modifier.padding(6.dp))
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
                     .background(
-                        color = Color(0xFFEBEFFF),
-                        shape = RoundedCornerShape(size = 100.dp)
+                        color = containerLight,
+                        shape = RoundedCornerShape(size = 20.dp)
                     )
                     .padding(start = 25.dp, end = 25.dp)
 
@@ -109,7 +133,7 @@ fun SettingScreen(navController: NavController) {
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
                         fontWeight = FontWeight(500),
-                        color = Color(0xFF191D2B),
+                        color = onContainerLight,
                         letterSpacing = 0.1.sp,
                         )
                 )
@@ -121,11 +145,17 @@ fun SettingScreen(navController: NavController) {
                     onCheckedChange = {
                         checked = it
                     },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = backgroundLight,
+                        checkedTrackColor = onContainerLight,
+                        //uncheckedThumbColor = onContainerLight,
+                        //uncheckedTrackColor = profileLight
+                    ),
                     modifier = Modifier
                         .width(52.dp)
                         .height(32.dp)
                         .background(
-                            color = Color(0xFF5058A4),
+                            color = onContainerLight,
                             shape = RoundedCornerShape(size = 100.dp)
                         )
                         .padding(start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)
@@ -140,8 +170,8 @@ fun SettingScreen(navController: NavController) {
                     .fillMaxWidth()
                     .height(56.dp)
                     .background(
-                        color = Color(0xFFEBEFFF),
-                        shape = RoundedCornerShape(size = 100.dp)
+                        color = containerLight,
+                        shape = RoundedCornerShape(size = 20.dp)
                     )
                     .padding(start = 25.dp, end = 25.dp)
             ) {
@@ -156,7 +186,7 @@ fun SettingScreen(navController: NavController) {
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
                         fontWeight = FontWeight(500),
-                        color = Color(0xFF191D2B),
+                        color = onContainerLight,
                         letterSpacing = 0.1.sp,
                     )
                 )
@@ -171,7 +201,7 @@ fun SettingScreen(navController: NavController) {
                     Icon(
                         contentDescription = "Om oss",
                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        tint = Color(0xFF191D2B)
+                        tint = onContainerLight
                     )
                 }
             }
@@ -184,8 +214,8 @@ fun SettingScreen(navController: NavController) {
                     .fillMaxWidth()
                     .height(56.dp)
                     .background(
-                        color = Color(0xFFEBEFFF),
-                        shape = RoundedCornerShape(size = 100.dp)
+                        color = containerLight,
+                        shape = RoundedCornerShape(size = 20.dp)
                     )
                     .padding(start = 25.dp, end = 25.dp)
 
@@ -202,7 +232,7 @@ fun SettingScreen(navController: NavController) {
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
                         fontWeight = FontWeight(500),
-                        color = Color(0xFF191D2B),
+                        color = onContainerLight,
                         letterSpacing = 0.1.sp,
                     )
                 )
@@ -217,7 +247,7 @@ fun SettingScreen(navController: NavController) {
                     Icon(
                         contentDescription = "Om oss",
                         imageVector =  Icons.Default.Add,
-                        tint = Color(0xFF191D2B)
+                        tint = onContainerLight
                     )
                 }
             }

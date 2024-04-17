@@ -299,20 +299,6 @@ fun MapboxMap.clearSearchArea() {
     }
 }
 
-
-private fun MapView.isMarkerClicked(p: GeoPoint): Boolean {
-    Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_IS_MARKER_CLICKED", "Checking if marker is clicked...")
-
-    val point = this.getProjection().toPixels(p, null)
-    val e = MotionEvent.obtain(
-        SystemClock.uptimeMillis(),
-        SystemClock.uptimeMillis(),
-        MotionEvent.ACTION_UP,
-        point.x.toFloat(),
-        point.y.toFloat(),
-        0
-    )
-
 fun showAlertDialog(context: Context, properties: Properties) {
     val message = createAlertMessage(properties.title ?: "N/A", properties)
     AlertDialog.Builder(context)
@@ -334,17 +320,6 @@ fun createAlertMessage(title: String, properties: Properties): String {
         append("Instruction: ${properties.instruction ?: "N/A"}\n")
         append("Ending: ${properties.eventEndingTime ?: "N/A"}\n") // Funker ikke atm, må formatteres.
     }
-
-
-    overlays.add(marker)
-
-    Log.d("MAPVIEW_ADD_MAP_CLICK_LISTENER_ADD_MARKER", "Marker added at Lat: ${String.format("%.2f", p.latitude)}, Lon: ${String.format("%.2f", p.longitude)}.")
-
-    //val overlay = MapEventsOverlay(receiver)
-    //overlays.add(overlay)
-
-    return marker
-
 }
 
 fun parseFeatureProperties(feature: Feature): Properties? {

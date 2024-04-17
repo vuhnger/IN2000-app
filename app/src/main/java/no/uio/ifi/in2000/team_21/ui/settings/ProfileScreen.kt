@@ -119,7 +119,9 @@ fun ProfileScreen (navController: NavController) {
                 },
                 colors = OutlinedTextFieldDefaults.colors(
 
-                )
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
             )
             OutlinedTextField(
                 value = name,
@@ -128,7 +130,9 @@ fun ProfileScreen (navController: NavController) {
                 },
                 colors = OutlinedTextFieldDefaults.colors(
 
-                )
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
             )
             OutlinedTextField(
                 value = name,
@@ -137,7 +141,9 @@ fun ProfileScreen (navController: NavController) {
                 },
                 colors = OutlinedTextFieldDefaults.colors(
 
-                )
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
             )
             OutlinedTextField(
                 value = name,
@@ -146,7 +152,9 @@ fun ProfileScreen (navController: NavController) {
                 },
                 colors = OutlinedTextFieldDefaults.colors(
 
-                )
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
             )
 
             //Save button
@@ -191,15 +199,15 @@ fun EditProfileImage(){
             disabledContentColor = profileLight
         ),
         modifier = Modifier
-            .size(60.dp)
+            .size(100.dp)
             .clickable { launcher.launch("Image/*") } // når den er trykket kommer den som firkant, må endres.
     ){
         Image(painter = painter,
             contentDescription = null,
             modifier = Modifier
                 .wrapContentSize()
-                .padding(15.dp)
-                .size(30.dp)
+                .padding(20.dp)
+                .size(60.dp)
                 .clip(CircleShape),
                 //.clickable { },
             contentScale = ContentScale.Crop

@@ -1,7 +1,11 @@
 package no.uio.ifi.in2000.team_21.ui.settings
 
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -124,6 +128,12 @@ fun EditProfileImage(){
         painterResource(id = image.value.toInt())
     }
 
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri.let { image.value = it.toString() }
+    }
+
     Card(
         shape = CircleShape,
         elevation = cardElevation(
@@ -137,7 +147,7 @@ fun EditProfileImage(){
         ),
         modifier = Modifier
             .size(60.dp)
-            .clickable { }
+            .clickable { launcher.launch("Image/*") } // når den er trykket kommer den som firkant, må endres.
     ){
         Image(painter = painter,
             contentDescription = null,

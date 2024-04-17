@@ -43,6 +43,7 @@ import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.MultiPolygon
 import no.uio.ifi.in2000.team_21.model.Polygon as MyPolygon
 import no.uio.ifi.in2000.team_21.model.Properties
+import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow
 
 
@@ -101,6 +102,7 @@ fun OsmMapView() {
                 Log.d("MAPVIEW", "Scale bar overlay added.")
                 setInitialMapView()
                 Log.d("MAPVIEW", "Initial map view set.")
+
                 // metAlerts
                 mapViewState.value = this
             }
@@ -176,6 +178,8 @@ fun MapView.addTileOverlay(ctx: Context) {
 
     Log.d("MAPVIEW_ADD_TILE_OVERLAY", "Tile overlay setup completed.")
 }
+
+
 
 /**
  * Adds oil rig markers to the MapView.

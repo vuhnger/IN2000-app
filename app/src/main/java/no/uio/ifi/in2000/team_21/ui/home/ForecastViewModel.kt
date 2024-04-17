@@ -56,7 +56,6 @@ class ForecastViewModel: ViewModel() {
         }
     }
 
-
     fun getTodaysIcons() {
         viewModelScope.launch {
             try {

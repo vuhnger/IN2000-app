@@ -5,23 +5,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.data.LocationForecastDataRepository
+import no.uio.ifi.in2000.team_21.model.locationforecast.Response
 import no.uio.ifi.in2000.team_21.model.locationforecast.Timeseries
 
 class ForecastViewModel: ViewModel() {
 
     private val repository: LocationForecastDataRepository = LocationForecastDataRepository()
-    private var instance: ForecastViewModel? = null
 
-    fun getInstance(): ForecastViewModel {
-        if (instance != null){
-            instance = ForecastViewModel()
-        }
-        return instance!!
-    }
+    private var _forecasts: MutableLiveData<Response?> = MutableLiveData()
+    val forecasts: LiveData<Response?> get() = _forecasts
 
     // Private mutable LiveData for icons
     var icons by mutableStateOf(
@@ -47,6 +45,7 @@ class ForecastViewModel: ViewModel() {
     fun fetchForecast(){
         viewModelScope.launch {
             val response = repository.fetchForecast()
+            _forecasts.value = response
         }
     }
 

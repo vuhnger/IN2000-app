@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.team_21.data
 
 
+import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -15,14 +16,11 @@ import no.uio.ifi.in2000.team_21.model.locationforecast.Response
 
 open class LocationForecastDataSource {
 
-
     private var lat: Double = 52.5200
     private var lon: Double = 13.4050
     private val altitude = 100
 
-    private val url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?" +
-            "lat=$lat" +
-            "&lon=$lon"
+    private val url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?"
 
     @OptIn(ExperimentalSerializationApi::class)
     private val client = HttpClient() {
@@ -41,19 +39,18 @@ open class LocationForecastDataSource {
         }
     }
 
-    suspend fun fetchForecast(): Response? {
+    suspend fun fetchForecast(lat: Double = 52.52, long: Double = 13.405): Response? {
 
-        val response: HttpResponse = client.get(url)
+        val response: HttpResponse = client.get(
+            url+
+                    "lat=$lat" +
+                    "&lon=$lon"
+        )
 
-
-        /*
-        *
         Log.d(
             "LFC_DATA_SOURCE",
             "fetchForecast() returned code ${response.status.value}"
         )
-        *
-        * */
 
         return if (response.status.value in 200..299) {
             response.body()

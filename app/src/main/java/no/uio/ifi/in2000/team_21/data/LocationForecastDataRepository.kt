@@ -8,7 +8,6 @@ class LocationForecastDataRepository(
     private val dataSource: LocationForecastDataSource = LocationForecastDataSource()
 ) {
 
-
     suspend fun fetchForecast(): Response? {
         return dataSource.fetchForecast()
     }

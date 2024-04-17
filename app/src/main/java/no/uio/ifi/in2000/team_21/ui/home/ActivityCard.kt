@@ -113,7 +113,9 @@ fun ActivityCard(
     }
 }
 @Composable
-fun ActivityCardGrid(activities: List<ActivityInfo>) {
+fun ActivityCardGrid(
+    activities: List<ActivityInfo>
+) {
     // Define the layout of the grid, specifying that it should have two columns
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), // Fixed number of columns (2 in this case)

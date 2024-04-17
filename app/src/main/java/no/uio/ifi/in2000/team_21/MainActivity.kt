@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.team_21
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -12,9 +13,20 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mapbox.mapboxsdk.Mapbox
-import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
+
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
+
+
+import com.mapbox.mapboxsdk.Mapbox
+import no.uio.ifi.in2000.team_21.ui.home.ActivityCard
+import no.uio.ifi.in2000.team_21.ui.home.ActivityCardGrid
+import no.uio.ifi.in2000.team_21.ui.home.ActivityInfo
+import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
+import no.uio.ifi.in2000.team_21.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
@@ -44,9 +56,12 @@ sealed class Screen(val route: String){
 
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Mapbox.getInstance(applicationContext, "pk.eyJ1Ijoiandob2xtYm8iLCJhIjoiY2x1MDQ0MHg2MDYxNjJrdDR4eTAwanVhOSJ9.UJ531h6BwXp56LYSIOxwFQ")
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         setContent {
             Team21Theme {
                 // A surface container using the 'background' color from the theme
@@ -54,12 +69,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    App()
+
+                    ActivityCardGrid(
+                        activities = HomeScreenViewModel().cards
+                    )
+
                 }
             }
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

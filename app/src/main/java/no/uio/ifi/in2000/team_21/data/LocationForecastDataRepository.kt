@@ -4,7 +4,9 @@ import android.util.Log
 import no.uio.ifi.in2000.team_21.model.locationforecast.Response
 import no.uio.ifi.in2000.team_21.model.locationforecast.Timeseries
 
-class LocationForecastDataRepository(private val dataSource: LocationForecastDataSource = LocationForecastDataSource()) {
+class LocationForecastDataRepository(
+    private val dataSource: LocationForecastDataSource = LocationForecastDataSource()
+) {
 
 
     suspend fun fetchForecast(): Response? {
@@ -27,13 +29,17 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
 
         timeseries?.forEach { timeseries ->
             timeseries.data?.next_1_hours?.summary?.symbol_code?.let { symbolCode ->
-                println(symbolCode)
+                //println(symbolCode)
                 // Add only if symbolCode is not null
                 icons.add(symbolCode)
             }
         }
         Log.d("LOCATION_REPO","fetched ${icons.size} icons")
         return icons
+    }
+
+    suspend fun fetchNearestForecast(): Timeseries? {
+        return fetchForecast()?.properties?.timeseries?.first()
     }
 
 }

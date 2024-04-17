@@ -240,6 +240,17 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
     }
 }
 
+fun showAlertDialog(context: Context, properties: Properties){
+    val message = createAlertMessage(properties.title ?: "N/A", properties)
+
+    AlertDialog.Builder(context)
+        .setTitle("Alert details")
+        .setMessage(message)
+        .setPositiveButton("OK") {dialog, _ -> dialog.dismiss()}
+        .create()
+        .show()
+}
+
 fun MapboxMap.updateSearchArea(center: LatLng, radiusKm: Double) {
     val radiusM = radiusKm * 1000
     val circlePoints = mutableListOf<Point>()
@@ -308,6 +319,7 @@ fun showAlertDialog(context: Context, properties: Properties) {
         .create()
         .show()
 }
+
 
 fun createAlertMessage(title: String, properties: Properties): String {
     val event = title.substringBefore(",") // Grab the first element in 'title' (Event)

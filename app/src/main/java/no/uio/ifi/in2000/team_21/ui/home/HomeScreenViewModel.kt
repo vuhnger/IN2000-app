@@ -1,36 +1,17 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-import android.util.Log
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.data.LocationForecastDataRepository
-import no.uio.ifi.in2000.team_21.model.Activity
-import no.uio.ifi.in2000.team_21.model.Fishing
 
 class HomeScreenViewModel : ViewModel() {
 
     private val forecastViewModel = ForecastViewModel()
 
     init{
-        forecastViewModel.fetchForecast()
-        Log.d("HOMESCREEN_VIEWMODEL","constructor")
+        forecastViewModel.getTodaysIcons()
     }
-
-    val activities: List<Activity> = listOf<Activity>(
-        Fishing(
-            name = "Fishing",
-            description = "Fishing",
-            imageId = R.drawable.fisking_stock,
-            air_temperature = forecastViewModel.forecasts.value?.properties?.timeseries?.first()?.data?.instant?.details?.air_temperature,
-            air_temperature_unit = forecastViewModel.forecasts.value?.properties?.meta?.units?.air_temperature,
-            sea_water_temperature = 0.0,
-            sea_water_temperature_unit = "celsuis",
-            sea_water_speed = 0.0,
-            sea_surface_wave_height = 0.0,
-            icons = forecastViewModel.todaysIcons,
-        )
-    )
 
     val cards = listOf<ActivityInfo>(
         ActivityInfo(

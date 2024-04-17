@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.team_21
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +21,10 @@ import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 
 
 import com.mapbox.mapboxsdk.Mapbox
+import no.uio.ifi.in2000.team_21.ui.home.ActivityCard
 import no.uio.ifi.in2000.team_21.ui.home.ActivityCardGrid
+import no.uio.ifi.in2000.team_21.ui.home.ActivityInfo
+import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
@@ -67,7 +71,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     ActivityCardGrid(
-                        activities = HomeScreenViewModel().activities
+                        activities = HomeScreenViewModel().cards
                     )
 
                 }

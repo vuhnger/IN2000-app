@@ -4,23 +4,27 @@ import androidx.compose.runtime.Composable
 import io.ktor.util.InternalAPI
 import kotlinx.coroutines.runBlocking
 import no.uio.ifi.in2000.team_21.data.LocationForecastDataSource
+import no.uio.ifi.in2000.team_21.ui.home.drawImages
 import org.junit.Test
 
 
 class TestLFCResponse(private val datasource: LocationForecastDataSource = LocationForecastDataSource()) {
+    @OptIn(InternalAPI::class)
     suspend fun fetchForecast() {
         try {
-            println("FETCHING FORECAST...")
-            val forecast = datasource.TESTfetchForecast()
+
+            val forecast = datasource.fetchForecast()
+        } catch (e: Exception) {
+            println("Error fetching forecast: $e")
+        }
+
+        try {
+            val forecast = datasource.fetchForecast()
             if (forecast != null){
                 println("Timeseries count: ${forecast.properties?.timeseries?.size}")
-            }else{
-                println("FORECAST: $forecast")
             }
-        }catch (e: RuntimeException){
-            println("RTE: ${e.message}")
         }catch (e: Exception){
-            println(e.message)
+            println("Error in data format: $e")
         }
     }
 }

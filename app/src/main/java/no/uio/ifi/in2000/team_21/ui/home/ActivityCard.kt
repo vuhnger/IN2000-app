@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -24,7 +25,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.Icon
-import no.uio.ifi.in2000.team_21.model.Activity
 
 data class ActivityInfo(
     val name: String,
@@ -38,7 +38,7 @@ data class ActivityInfo(
 )
 @Composable
 fun ActivityCard(
-    activity: Activity
+    activity: ActivityInfo
 ) {
     // Determine the aspect ratio for your image. For instance, 16:9 would be 16f / 9f.
     val aspectRatio = 4f / 2f // Replace with your image's aspect ratio
@@ -95,8 +95,8 @@ fun ActivityCard(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(horizontal = 8.dp) // Halved padding
             ) {
-                if (activity.icons?.isNotEmpty() == true) {
-                    activity.icons?.forEach { icon ->
+                if (activity.icons.isNotEmpty()) {
+                    activity.icons.forEach { icon ->
                         WeatherIcon(element = icon, size = 30)
                         Spacer(modifier = Modifier.width(4.dp)) // Halved space width
                     }
@@ -114,7 +114,7 @@ fun ActivityCard(
 }
 @Composable
 fun ActivityCardGrid(
-    activities: List<Activity>
+    activities: List<ActivityInfo>
 ) {
     // Define the layout of the grid, specifying that it should have two columns
     LazyVerticalGrid(

@@ -30,11 +30,8 @@ class ForecastViewModel: ViewModel() {
         listOf<String>()
     )
 
-    var nearestForecast by mutableStateOf(
-        Timeseries
-    )
-
     fun fetchIcons() {
+        Log.d("FORECAST_VIEWMODEL","fetch all icons")
         viewModelScope.launch {
             val response = repository.fetchImageIcons()
             // Update LiveData with the new list
@@ -43,19 +40,25 @@ class ForecastViewModel: ViewModel() {
     }
 
     fun fetchForecast(){
+        Log.d("FORECAST_VIEWMODEL","fetch all forecasts")
         viewModelScope.launch {
+
+            Log.d("FORECAST_VIEWMODEL","fetching forecast from $repository")
             val response = repository.fetchForecast()
+            Log.d("FORECAST_VIEWMODEL","reponse = $response")
             _forecasts.value = response
         }
     }
 
     fun fetchNearestForecast() {
+        Log.d("FORECAST_VIEWMODEL","most recent icons")
         viewModelScope.launch {
             val response = repository.fetchNearestForecast()
         }
     }
 
     fun getTodaysIcons() {
+        Log.d("FORECAST_VIEWMODEL","todays icons")
         viewModelScope.launch {
             try {
                 val forecast = repository.fetchForecast()  // Assuming this fetches the JSON data
@@ -80,9 +83,8 @@ class ForecastViewModel: ViewModel() {
     }
 
     init {
-        //fetchIcons()
-        //fetchForecast()
-        //fetchNearestForecast()
-        getTodaysIcons()
+        Log.d("FORECAST_VIEWMODEL","constructor")
+        fetchForecast()
     }
+
 }

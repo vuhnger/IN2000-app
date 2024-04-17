@@ -111,7 +111,8 @@ fun ProfileScreen (navController: NavController) {
                 .fillMaxWidth()
         ){
             EditProfileImage()
-            
+
+            //Name textField
             OutlinedTextField(
                 value = name,
                 onValueChange = {
@@ -122,7 +123,10 @@ fun ProfileScreen (navController: NavController) {
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(top = 40.dp)
             )
+
+            //Hobby textField
             OutlinedTextField(
                 value = name,
                 onValueChange = {
@@ -133,7 +137,10 @@ fun ProfileScreen (navController: NavController) {
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(top = 40.dp)
             )
+
+            //Username textField
             OutlinedTextField(
                 value = name,
                 onValueChange = {
@@ -144,7 +151,10 @@ fun ProfileScreen (navController: NavController) {
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(top = 40.dp)
             )
+
+            //Password textField
             OutlinedTextField(
                 value = name,
                 onValueChange = {
@@ -155,13 +165,16 @@ fun ProfileScreen (navController: NavController) {
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(top = 40.dp)
             )
 
             //Save button
             OutlinedButton(
                 onClick = {
                     notification.value = "Profil oppdatert"
-                }
+                },
+                modifier = Modifier
+                    .padding(top = 40.dp)
             ) {
                 Text("Lagre")
             }
@@ -199,7 +212,7 @@ fun EditProfileImage(){
             disabledContentColor = profileLight
         ),
         modifier = Modifier
-            .size(100.dp)
+            .size(120.dp)
             .clickable { launcher.launch("Image/*") } // når den er trykket kommer den som firkant, må endres.
     ){
         Image(painter = painter,
@@ -207,7 +220,7 @@ fun EditProfileImage(){
             modifier = Modifier
                 .wrapContentSize()
                 .padding(20.dp)
-                .size(60.dp)
+                .size(80.dp)
                 .clip(CircleShape),
                 //.clickable { },
             contentScale = ContentScale.Crop

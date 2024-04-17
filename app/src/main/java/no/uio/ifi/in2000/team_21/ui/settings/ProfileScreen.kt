@@ -24,6 +24,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -59,6 +61,7 @@ fun ProfileScreen (navController: NavController) {
     val notification = rememberSaveable { mutableStateOf("") }
     var name by rememberSaveable { mutableStateOf("Navn") }
     var username by rememberSaveable { mutableStateOf("Brukernavn") }
+    var password by rememberSaveable { mutableStateOf("Passord") }
 
     if (notification.value.isNotEmpty()) {
         Toast.makeText(LocalContext.current, notification.value, Toast.LENGTH_LONG).show()
@@ -108,6 +111,44 @@ fun ProfileScreen (navController: NavController) {
                 .fillMaxWidth()
         ){
             EditProfileImage()
+            
+            OutlinedTextField(
+                value = name,
+                onValueChange = {
+                    name = it
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+
+                )
+            )
+            OutlinedTextField(
+                value = name,
+                onValueChange = {
+                    name = it
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+
+                )
+            )
+            OutlinedTextField(
+                value = name,
+                onValueChange = {
+                    name = it
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+
+                )
+            )
+            OutlinedTextField(
+                value = name,
+                onValueChange = {
+                    name = it
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+
+                )
+            )
+
             //Save button
             OutlinedButton(
                 onClick = {

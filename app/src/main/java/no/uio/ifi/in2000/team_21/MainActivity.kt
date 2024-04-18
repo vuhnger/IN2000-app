@@ -1,9 +1,9 @@
 package no.uio.ifi.in2000.team_21
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -16,9 +16,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost // Riktig import av navhost
 import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.home.LocationForcastViewModel
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
-import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreenTest
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
+import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 
 // Vi legger strenger i dette objektet fremfor å hardkode de inn i appen. Disse skal senere flyttes til StringResources.
 public object APP_ROUTES{
@@ -39,18 +40,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                   TestOcean()
+                   App()
                 }
             }
         }
     }
 }
 
-
-fun TestOcean() {
-    val viewModel = OceanForecastViewModel()
-    viewModel.fetchOceanForecastResponse()
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

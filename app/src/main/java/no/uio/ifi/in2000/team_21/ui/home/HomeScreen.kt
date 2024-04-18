@@ -1,104 +1,90 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.ui.draw.clip
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import no.uio.ifi.in2000.team_21.ui.map.OsmMapView
+@Composable
+fun WeatherCard(temperature: String, highLowTemp: String, weatherCondition: String) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column (
+            modifier = Modifier
+            .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Min posisjon", style = MaterialTheme.typography.headlineMedium )
+            Spacer(Modifier.height(4.dp))
+            Text("Oslo", style = MaterialTheme.typography.labelSmall)
+            Spacer(Modifier.height(16.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                /*Icon(/* ... */) */
+                 Text(temperature, style = MaterialTheme.typography.labelLarge)
+            }
+            Spacer(Modifier.height(4.dp))
+            Text(weatherCondition, style = MaterialTheme.typography.labelSmall)
+            Spacer(Modifier.height(4.dp))
+            Text(highLowTemp, style = MaterialTheme.typography.labelSmall)
+        }
+    }
+}
 
+@Composable
+fun ActivityFavorites(activities: List<Activity>) {
+    Column(modifier = Modifier.padding(8.dp)) {
+        Text("Favoritter", style = MaterialTheme.typography.headlineMedium)
+        Spacer(Modifier.height(8.dp))
+        Row(horizontalArrangement = Arrangement.SpaceBetween) {
+            activities.forEach {activity ->
+                ActivityIcon(activity)
+            }
+        }
+    }
+}
+@Composable
+fun ActivityIcon(activity: Activity) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        /*Icon(/* ... */) */
+        /*Text(activity.name)*/
+        Text("Aktivitet")
 
+    }
+}
 @Composable
 fun HomeScreen(navController: NavController) {
-    Scaffold(
-        bottomBar = { BottomBarWithIcons() }
-    ) { innerPadding ->
-        Box {
-            OsmMapView().apply {
-                Modifier.padding(innerPadding)
-            }
-            Column {
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    SOSButton(onClick = {  })
-                    SettingsButton(onClick = {  })
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun SOSButton(onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors( Color.Red),
+    Column(
         modifier = Modifier
-            .size(70.dp)
-            .clip(RoundedCornerShape(20.dp))
+            .width(360.dp)
+            .height(50.dp)
+            .background(color = Color(0xFFF7F8FF))
     ) {
-        Text(
-            text = "SOS",
-            color = Color.White,
-            fontSize = 18.sp
+        Text(text = "Hjem")
+        Text(text = "Kart")
+
+        WeatherCard(
+            temperature = "14°",
+            highLowTemp = "H:16° L:3°",
+            weatherCondition = "Skyfritt"
         )
-    }
-}
-
-@Composable
-fun SettingsButton(onClick: () -> Unit) {
-    IconButton(onClick = onClick) {
-        Icon(Icons.Filled.Settings, contentDescription = "Settings")
-    }
-}
-
-@Composable
-fun BottomBarWithIcons() {
-    BottomNavigation(
-        modifier = Modifier.height(56.dp),
-        backgroundColor = Color.White,
-        elevation = 8.dp
-    ) {
-        repeat(5) { index ->
-            BottomNavigationItem(
-                icon = {
-                    Box(
-                        Modifier
-                            .size(24.dp)
-                            .background(Color.Gray, CircleShape)
-                    )
-                },
-                label = { Text("Icon $index") },
-                selected = false,
-                onClick = {  }
-            )
-        }
     }
 }

@@ -22,6 +22,8 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -84,11 +86,12 @@ fun SettingScreen(navController: NavController) {
                     navigationIcon = {
                         IconButton(
                             onClick = {
-                                navController.navigate(route = Screen.HomeScreen.route)
+                                navController.popBackStack()
                             }
                         ) {
                             Icon(
-                                contentDescription = "Tilbake",                              imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                contentDescription = "Tilbake",
+                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                                 tint = onContainerLight,
                                 modifier = Modifier
                                     .size(30.dp)
@@ -156,14 +159,17 @@ fun SettingScreen(navController: NavController) {
 //Profile
 @Composable
 fun ProfileCard(navController: NavController){
-    Card(onClick = {}, modifier = Modifier
-        .fillMaxWidth()
-        .height(80.dp),
+    Card(
+        onClick = {},
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp),
         colors = CardColors(
             contentColor = containerLight,
             containerColor = containerLight,
             disabledContainerColor = containerLight,
-            disabledContentColor = containerLight)
+            disabledContentColor = containerLight
+        )
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically,

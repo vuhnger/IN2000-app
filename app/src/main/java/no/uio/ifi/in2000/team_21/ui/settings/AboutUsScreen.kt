@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +44,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,20 +66,23 @@ fun AboutUsScreen(navController: NavController) {
         FUNCTION_NAME,
         "called"
     )
-//Her vil jeg egt ha pil uten den horisontale streken, får d ikke til.
+
     Scaffold(
         topBar = { TopAppBar(title = { Text("Om oss", color = Color(0xFF00145D))},
             navigationIcon = {
                 IconButton(
                     onClick = {
-                        navController.navigate(route = Screen.AboutUsScreen.route)
-                              }
-                    )
+                        navController.popBackStack()
+
+                    }
+                )
             {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Tilbake",
-                    tint = Color(0xFF00145D)
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    tint = onContainerLight,
+                    modifier = Modifier
+                        .size(30.dp)
                 )
             }
             }

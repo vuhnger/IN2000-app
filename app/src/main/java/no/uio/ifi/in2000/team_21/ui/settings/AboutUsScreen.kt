@@ -44,7 +44,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
+import no.uio.ifi.in2000.team_21.ui.theme.containerLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
+import no.uio.ifi.in2000.team_21.ui.theme.profileLight
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +60,7 @@ fun AboutUsScreen(navController: NavController) {
         "Joachim Haasted",
         "Jonas Holmboe",
         "Kaja Stenen",
-        "Mari Stenbranden",
+        "Mari Stenbrenden",
         "Sebastian Hareide",
         "Victor Uhnger"
     )
@@ -68,28 +71,33 @@ fun AboutUsScreen(navController: NavController) {
     )
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Om oss", color = Color(0xFF00145D))},
-            navigationIcon = {
-                IconButton(
-                    onClick = {
-                        navController.popBackStack()
-
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Om oss",
+                        color = onContainerLight
+                    )
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    ) {
+                        Icon(
+                            contentDescription = "Tilbake",
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                            tint = onContainerLight,
+                            modifier = Modifier
+                                .size(30.dp)
+                        )
                     }
-                )
-            {
-                Icon(
-                    contentDescription = "Tilbake",
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                    tint = onContainerLight,
-                    modifier = Modifier
-                        .size(30.dp)
-                )
-            }
-            }
-        )
+                }
+            )
         },
-                modifier = Modifier
-                .background(color = Color(0xFFF7F8FF))
+        modifier = Modifier
+            .background(color = backgroundLight)
     ) { innerPadding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -122,10 +130,10 @@ fun AboutUsCard(
             .padding(15.dp)
             .border(
                 width = 2.dp,
-                color = Color(0xFFBCCBFF.toInt()),
+                color = profileLight,
                 shape = RoundedCornerShape(12.dp)
             ),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFEBEFFF))
+        colors = CardDefaults.cardColors(containerLight)
     ){
         Column(
             verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterVertically),
@@ -139,7 +147,7 @@ fun AboutUsCard(
                     fontSize = 14.sp,
                     lineHeight = 16.sp,
                     fontWeight = FontWeight(500),
-                    color = Color(0xFF00145D),
+                    color = onContainerLight,
                     textAlign = TextAlign.Center,
                     letterSpacing = 0.5.sp,
                 ),

@@ -164,12 +164,8 @@ fun ProfileCard(navController: NavController){
         modifier = Modifier
             .fillMaxWidth()
             .height(80.dp),
-        colors = CardColors(
-            contentColor = containerLight,
-            containerColor = containerLight,
-            disabledContainerColor = containerLight,
-            disabledContentColor = containerLight
-        )
+        colors = CardDefaults.cardColors(containerLight)
+
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -226,11 +222,7 @@ fun DarkModeCard(navController: NavController, checked: MutableState<Boolean>){
             .clickable { }
             .fillMaxWidth()
             .height(56.dp),
-        colors = CardColors(
-            contentColor = containerLight,
-            containerColor = containerLight,
-            disabledContainerColor = containerLight,
-            disabledContentColor = containerLight)
+        colors = CardDefaults.cardColors(containerLight)
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -287,11 +279,7 @@ fun AllSettingsCard(navController: NavController, mainText: String, onClick:()->
             .clickable { }
             .fillMaxWidth()
             .height(56.dp),
-        colors = CardColors(
-            contentColor = containerLight,
-            containerColor = containerLight,
-            disabledContainerColor = containerLight,
-            disabledContentColor = containerLight)
+        colors = CardDefaults.cardColors(containerLight)
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -329,11 +317,7 @@ fun HistorySettings(navController: NavController){
             //.clickable { }
             .fillMaxWidth()
             .height(168.dp),
-        colors = CardColors(
-            contentColor = containerLight,
-            containerColor = containerLight,
-            disabledContainerColor = containerLight,
-            disabledContentColor = containerLight)
+        colors = CardDefaults.cardColors(containerLight)
     ){ Column (){
         //Friends
         AllSettingsCard(navController,
@@ -376,11 +360,7 @@ fun SettingsGroupCard(navController: NavController){
             .clickable { }
             .fillMaxWidth()
             .height(112.dp),
-        colors = CardColors(
-            contentColor = containerLight,
-            containerColor = containerLight,
-            disabledContainerColor = containerLight,
-            disabledContentColor = containerLight)
+        colors = CardDefaults.cardColors(containerLight)
     ){Column{
         //Notifications
         AllSettingsCard(navController,
@@ -418,12 +398,7 @@ fun ProfileImage(){
     
     Card(
         shape = CircleShape,
-        colors = CardColors(
-            contentColor = profileLight,
-            containerColor = profileLight,
-            disabledContainerColor = profileLight,
-            disabledContentColor = profileLight
-        ),
+        colors = CardDefaults.cardColors(profileLight),
         modifier = Modifier
             .size(60.dp)
     ){

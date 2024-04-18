@@ -1,7 +1,9 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,14 +23,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.ui.tooling.preview.Preview
+import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.model.Activity
+import no.uio.ifi.in2000.team_21.model.Kayaking
 
 @Composable
 fun ActivityCard(
@@ -86,9 +93,8 @@ fun ActivityCard(
                 )
             }
             Text(
-                text = "I dag er forholdene ${"INSERT ADJECTIVE"} for ${activity.type.lowercase()}."
-                        + "\nDe neste 1, 6 og 12 timene:",
-                fontSize = 8.sp, // Halved font size
+                text = "Forholdene i dag oppsummert: ",
+                fontSize = 8.sp,
                 modifier = Modifier
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             )
@@ -102,13 +108,20 @@ fun ActivityCard(
                         Spacer(modifier = Modifier.width(4.dp))
                     }
                 }else{ // TODO: Finne plassholder for ikoner
-                    repeat(3){
-                        WeatherIcon(element = "cloudy", size = 30)
-                        Spacer(modifier = Modifier.width(4.dp))
-                    }
+                    WeatherIcon(element = "fair_day", size = 30)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    WeatherIcon(element = "cloudy", size = 30)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    WeatherIcon(element = "clearsky_day", size = 30)
+                    Spacer(modifier = Modifier.width(4.dp))
                 }
             }
-
+            Text(
+                text = "I dag er forholdene ${"INSERT ADJECTIVE"} for ${activity.type.lowercase()}.",
+                fontSize = 8.sp, // Halved font size
+                modifier = Modifier
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            )
             Row(
                 horizontalArrangement = Arrangement.Absolute.Right,
                 modifier = Modifier
@@ -137,9 +150,21 @@ fun ActivityCard(
 
 @Composable
 fun ActivityCardSmall(
-    activity: Activity
+    activity: Activity = Kayaking(
+        air_temperature = 10.0,
+        air_temperature_unit = R.string.celsius.toString(),
+        sea_water_temperature = 2.0,
+        sea_water_temperature_unit = "celsius",
+        sea_water_speed = 3.0,
+        sea_surface_wave_height = 0.5
+    )
 ){
-
+    Icon(
+        imageVector = Icons.Rounded.AccountCircle,
+        contentDescription = "",
+        modifier = Modifier
+            .clickable {  }
+    )
 }
 
 @Composable

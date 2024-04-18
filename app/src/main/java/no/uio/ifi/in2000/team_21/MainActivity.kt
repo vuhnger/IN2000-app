@@ -19,6 +19,7 @@ import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import com.mapbox.mapboxsdk.Mapbox
 import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivityCardGrid
+import no.uio.ifi.in2000.team_21.ui.home.ActivityCardSmall
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
@@ -61,10 +62,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    //ActivityCardSmall()
                     val activitiesViewModel: ActivitiesViewModel = ActivitiesViewModel()
-                    ActivityCardGrid(
-                        activities = activitiesViewModel.activityUIstate.activities
-                    )
+                    ActivityCardGrid(activities = activitiesViewModel.activityUIstate.activities)
                 }
             }
         }

@@ -1,5 +1,4 @@
 package no.uio.ifi.in2000.team_21.ui.home
-
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -71,6 +72,34 @@ fun ActivityIcon(activity: Activity) {
     }
 }
 @Composable
+fun RecommendationSection(recommendations: List<Activity>) {
+    Column(modifier = Modifier.padding(8.dp)) {
+        Text("Anbefaling", style = MaterialTheme.typography.headlineMedium)
+        Spacer(Modifier.height(8.dp))
+        LazyRow {
+            this.items(recommendations){ recommendation ->
+                ActivityCard(recommendation)
+
+            }
+
+            }
+        }
+
+    }
+@Composable
+fun ActivityCard(activity: Activity) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(120.dp)
+            .height(120.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        // Activity card logic.
+    }
+}
+
+@Composable
 fun HomeScreen(navController: NavController) {
     Column(
         modifier = Modifier
@@ -86,5 +115,7 @@ fun HomeScreen(navController: NavController) {
             highLowTemp = "H:16° L:3°",
             weatherCondition = "Skyfritt"
         )
+        ActivityFavorites(activities = listOf())
+        RecommendationSection(recommendations = listOf())
     }
 }

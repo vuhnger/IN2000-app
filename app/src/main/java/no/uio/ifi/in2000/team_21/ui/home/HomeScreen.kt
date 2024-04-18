@@ -15,12 +15,33 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+
+// Top bar implementation, to work as a component to be used through all screens.
+// Dataclass to define each tab in the navbar
+data class TopNavItem(val title: String, val icon: @Composable (() -> Unit)? = null)
+
+@Composable
+fun TopBar(
+    items : List<TopNavItem>,
+    currentSelection: Int,
+    onItemSelected: (Int) -> Unit
+
+) {
+    TopAppBar(
+        title = { Text("") },
+        backgroundColor = Color(0xFFF7F8FF)),
+
+    )
+}
+
+
 @Composable
 fun WeatherCard(temperature: String, highLowTemp: String, weatherCondition: String) {
     Card(

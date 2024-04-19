@@ -39,6 +39,10 @@ class AlertsDataSource {
         Log.d("ALERTS_DATA_SOURCE", "AlertsDataSource.fetchAlerts() HTTPS status: ${response.status}")
 
         return if (response.status.value in 200..299) {
+            val alert: Alert? = response.body<Alert?>()
+            /*alert?.features?.forEach { feature ->
+                Log.d("ALERTS_DATA_SOURCE", "Feature: ${feature.type}, Properties: ${feature.properties}")
+            }*/
             response.body<Alert?>()
         } else {
             println("Error: ${response.status.value}")

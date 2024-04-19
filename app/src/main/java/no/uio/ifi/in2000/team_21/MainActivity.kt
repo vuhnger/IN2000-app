@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.team_21
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+
+import androidx.navigation.compose.NavHost // Riktig import av navhost
+import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.home.LocationForcastViewModel
+import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
+import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
+import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
+
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
@@ -45,6 +54,7 @@ sealed class Screen(val route: String){
             }
         }
     }
+
 
 }
 

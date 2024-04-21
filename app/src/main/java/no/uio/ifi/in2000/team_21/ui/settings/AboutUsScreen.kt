@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -49,7 +50,12 @@ import no.uio.ifi.in2000.team_21.ui.theme.containerLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.theme.profileLight
 
-
+data class TeamMember(
+    val name: String,
+    val age: Int,
+    val personality: String,
+    val studyProgramme: String,
+)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ExperimentalMaterial3Api
@@ -57,12 +63,12 @@ fun AboutUsScreen(navController: NavController) {
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
     val names = listOf(
-        "Joachim Haasted",
-        "Jonas Holmboe",
-        "Kaja Stenen",
-        "Mari Stenbrenden",
-        "Sebastian Hareide",
-        "Victor Uhnger"
+        TeamMember("Joachim Haasted", 23, "hmm", "Informatikk: programmering og systemarkitektur") ,
+        TeamMember("Jonas Holmboe", 21, "hmm", "Informatikk: programmering og systemarkitektur"),
+        TeamMember("Kaja Stenen", 23, "ESTJ-A", "Informatikk: design, bruk og interaksjon"),
+        TeamMember("Mari Stenbrenden", 22, "ESFP-A", "Informatikk: design, bruk og interaksjon"),
+        TeamMember("Sebastian Hareide", 21, "ENFJ-T", "Informatikk: programmering og systemarkitektur"),
+        TeamMember("Victor Uhnger", 22, "INTJ-A", "Informatikk: språkteknologi")
     )
 
     Log.d(
@@ -102,8 +108,8 @@ fun AboutUsScreen(navController: NavController) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             content = {
-                items(names.size) {
-                    AboutUsCard(names[it])
+                items(names) {teamMember ->
+                    AboutUsCard(teamMember = teamMember)
                 }
             },
             modifier = Modifier
@@ -113,19 +119,13 @@ fun AboutUsScreen(navController: NavController) {
     }
 }
 @Composable
-fun AboutUsCard(
-    //Legge til parameter om oss
-    name: String
-) {
-
+fun AboutUsCard(teamMember: TeamMember){
     Log.d(
         "AboutUsCard",
-        "Created card with $name"
+        "Created card with ${teamMember.name}"
     )
-
     Card(
         modifier = Modifier
-            .fillMaxWidth()
             .height(200.dp)
             .padding(15.dp)
             .border(
@@ -142,7 +142,7 @@ fun AboutUsCard(
                 .padding(15.dp)
         ) {
             Text(
-                text = name,
+                text = teamMember.name,
                 style = TextStyle(
                     fontSize = 14.sp,
                     lineHeight = 16.sp,
@@ -154,6 +154,37 @@ fun AboutUsCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(16.dp)
+            )
+            Text(
+                text = teamMember.age.toString(),
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    color = onContainerLight,
+                    textAlign = TextAlign.Center,
+                ),
+                modifier = Modifier
+                    .padding(top = 15.dp)
+            )
+            Text(
+                text = teamMember.personality,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    color = onContainerLight,
+                    textAlign = TextAlign.Center,
+                ),
+                modifier = Modifier
+                    .padding(top = 15.dp)
+            )
+            Text(
+                text = teamMember.studyProgramme,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    color = onContainerLight,
+                    textAlign = TextAlign.Center,
+                ),
+                modifier = Modifier
+                    .padding(top = 15.dp)
+
             )
         }
     }

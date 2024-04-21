@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.team_21.ui.settings
 
 import android.annotation.SuppressLint
+import android.app.Notification
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -217,8 +218,8 @@ fun ProfileCard(navController: NavController, onClick: () -> Unit){
 @Composable
 fun DarkModeCard(navController: NavController, checked: MutableState<Boolean>){
     Card(modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
+        .fillMaxWidth()
+        .height(56.dp),
         colors = CardDefaults.cardColors(containerLight)
     ){
         Row(
@@ -408,6 +409,7 @@ fun ProfileImage(){
         )
     }
 }
+
 
 @Preview
 @Composable

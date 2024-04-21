@@ -109,7 +109,9 @@ fun SettingScreen(navController: NavController) {
                 .padding(innerPadding)
         ){
             //Profile
-            ProfileCard(navController)
+            ProfileCard(navController){
+                navController.navigate(Screen.ProfileScreen.route)
+            }
             Spacer(modifier = Modifier.padding(6.dp))
 
 
@@ -158,13 +160,13 @@ fun SettingScreen(navController: NavController) {
 
 //Profile
 @Composable
-fun ProfileCard(navController: NavController){
+fun ProfileCard(navController: NavController, onClick: () -> Unit){
     Card(
-        onClick = {},
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .height(80.dp),
-        colors = CardDefaults.cardColors(containerLight)
+        colors = CardDefaults.cardColors (containerLight)
 
     ){
         Row(
@@ -175,6 +177,7 @@ fun ProfileCard(navController: NavController){
         ) {
             ProfileImage()
             Column {
+                //sende med navn fra profileScreen
                 Text(
                     modifier = Modifier
                         .width(190.dp)
@@ -190,6 +193,7 @@ fun ProfileCard(navController: NavController){
                         letterSpacing = 0.1.sp
                     )
                 )
+                //sende med hobby fra profileScreen
                 Text(
                     modifier = Modifier
                         .width(190.dp)

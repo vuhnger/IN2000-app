@@ -8,12 +8,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 import androidx.navigation.compose.NavHost // Riktig import av navhost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import no.uio.ifi.in2000.team_21.ui.home.drawImages
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 
@@ -21,6 +25,7 @@ import com.mapbox.mapboxsdk.Mapbox
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
+import no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen
 
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
@@ -31,6 +36,7 @@ sealed class Screen(val route: String){
     object SettingScreen: Screen(route = "SettingScreen")
     object AboutUsScreen: Screen(route = "AboutUsScreen")
     object AddActivitiyScreen: Screen(route = "AddActivityScreen")
+    object ProfileScreen: Screen(route = "ProfileScreen")
 
     // Funksjonen bygger en streng av argumenter som kan sendes med et kall på navigate til en skjerm.
     // Dersom du bruker funksjonen, erstatt:
@@ -48,7 +54,6 @@ sealed class Screen(val route: String){
 
 }
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +66,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     drawImages()
+                    App()
                 }
             }
         }
@@ -75,25 +81,27 @@ fun App(){
 
     NavHost(
         navController = navController,
-        startDestination = Screen.HomeScreen.route
+        startDestination = Screen.SettingScreen.route
+        // startDestination = Screen.HomeScreen.route
     ){
 
         composable(Screen.HomeScreen.route){
-            entry -> HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)
+            HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)
         }
 
         composable(Screen.SettingScreen.route){
-            entry -> SettingScreen(navController = navController)
+            SettingScreen(navController = navController)
         }
 
         composable(Screen.AboutUsScreen.route){
-            entry -> AboutUsScreen(navController = navController)
+            AboutUsScreen(navController = navController)
         }
 
         composable(Screen.AddActivitiyScreen.route){
-            entry -> AddActivityScreen(navController = navController)
+            AddActivityScreen(navController = navController)
         }
-
+        composable(Screen.ProfileScreen.route){
+            ProfileScreen(navController = navController)
+        }
     }
-
 }

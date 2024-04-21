@@ -25,9 +25,14 @@ import com.mapbox.mapboxsdk.Mapbox
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
+import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
+import no.uio.ifi.in2000.team_21.ui.settings.FriendsActivityScreen
+import no.uio.ifi.in2000.team_21.ui.settings.MyActivityScreen
+import no.uio.ifi.in2000.team_21.ui.settings.NotificationScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen
 
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
+import no.uio.ifi.in2000.team_21.ui.settings.ThrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 
 sealed class Screen(val route: String){
@@ -37,6 +42,11 @@ sealed class Screen(val route: String){
     object AboutUsScreen: Screen(route = "AboutUsScreen")
     object AddActivitiyScreen: Screen(route = "AddActivityScreen")
     object ProfileScreen: Screen(route = "ProfileScreen")
+    object FriendsActivityScreen: Screen(route = "FriendsActivityScreen")
+    object MyActivityScreen: Screen(route = "MyActivityScreen")
+    object ThrophyWallScreen: Screen(route = "ThrophyWallScreen")
+    object NotificationScreen: Screen(route = "NotificationScreen")
+    object ContactsScreen: Screen(route = "ContactsScreen")
 
     // Funksjonen bygger en streng av argumenter som kan sendes med et kall på navigate til en skjerm.
     // Dersom du bruker funksjonen, erstatt:
@@ -102,6 +112,21 @@ fun App(){
         }
         composable(Screen.ProfileScreen.route){
             ProfileScreen(navController = navController)
+        }
+        composable(Screen.FriendsActivityScreen.route){
+            FriendsActivityScreen(navController = navController)
+        }
+        composable(Screen.MyActivityScreen.route){
+            MyActivityScreen(navController = navController)
+        }
+        composable(Screen.ThrophyWallScreen.route){
+            ThrophyWallScreen(navController = navController)
+        }
+        composable(Screen.NotificationScreen.route){
+            NotificationScreen(navController = navController)
+        }
+        composable(Screen.ContactsScreen.route){
+            ContactsScreen(navController = navController)
         }
     }
 }

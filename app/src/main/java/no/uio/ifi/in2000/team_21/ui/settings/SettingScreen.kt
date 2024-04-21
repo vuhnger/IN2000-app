@@ -109,18 +109,14 @@ fun SettingScreen(navController: NavController) {
                 .padding(innerPadding)
         ){
             //Profile
-            ProfileCard(navController){
-                navController.navigate(Screen.ProfileScreen.route)
-            }
+            ProfileCard(navController, onClick = { navController.navigate(Screen.ProfileScreen.route)})
             Spacer(modifier = Modifier.padding(6.dp))
-
 
             //Darkmode
             DarkModeCard(navController,
                 checked = remember {mutableStateOf(checked)}
             )
             Spacer(modifier = Modifier.padding(6.dp))
-
 
             //All activities
             AllSettingsCard(navController,
@@ -130,20 +126,19 @@ fun SettingScreen(navController: NavController) {
                 }
             )
             Spacer(modifier = Modifier.padding(6.dp))
+
             //History
             HistorySettings(navController)
             Spacer(modifier = Modifier.padding(6.dp))
-
 
             //Settings
             SettingsGroupCard(navController)
             Spacer(modifier = Modifier.padding(6.dp))
 
-
             AllSettingsCard(navController,
                 mainText = "Om oss",
                 onClick = {
-                    //handle event
+                    navController.navigate(Screen.AboutUsScreen.route)
                 }
             )
             Spacer(modifier = Modifier.padding(6.dp))
@@ -221,9 +216,7 @@ fun ProfileCard(navController: NavController, onClick: () -> Unit){
 //DarkMode
 @Composable
 fun DarkModeCard(navController: NavController, checked: MutableState<Boolean>){
-    Card(onClick = {},
-        modifier = Modifier
-            .clickable { }
+    Card(modifier = Modifier
             .fillMaxWidth()
             .height(56.dp),
         colors = CardDefaults.cardColors(containerLight)
@@ -276,9 +269,7 @@ fun DarkModeCard(navController: NavController, checked: MutableState<Boolean>){
 @Composable
 fun AllSettingsCard(navController: NavController, mainText: String, onClick:()->Unit){
     Card(
-        onClick = {
-            onClick()
-        },
+        onClick = onClick,
         modifier = Modifier
             .clickable { }
             .fillMaxWidth()
@@ -327,7 +318,7 @@ fun HistorySettings(navController: NavController){
         AllSettingsCard(navController,
             mainText = "Venners aktivitet",
             onClick = {
-                //handle event
+                navController.navigate(Screen.FriendsActivityScreen.route)
             }
         )
         HorizontalDivider(
@@ -339,7 +330,7 @@ fun HistorySettings(navController: NavController){
         AllSettingsCard(navController,
             mainText = "Min aktivitet",
             onClick = {
-                //handle event
+                navController.navigate(Screen.MyActivityScreen.route)
             }
         )
         HorizontalDivider(
@@ -351,7 +342,7 @@ fun HistorySettings(navController: NavController){
         AllSettingsCard(navController,
             mainText = "Trofeskap",
             onClick = {
-                //handle event
+                navController.navigate(Screen.ThrophyWallScreen.route)
             }
         )
     }}
@@ -370,7 +361,7 @@ fun SettingsGroupCard(navController: NavController){
         AllSettingsCard(navController,
             mainText = "Varslinger",
             onClick = {
-                //handle event
+                navController.navigate(Screen.NotificationScreen.route)
             }
         )
         HorizontalDivider(
@@ -382,7 +373,7 @@ fun SettingsGroupCard(navController: NavController){
         AllSettingsCard(navController,
             mainText = "Kontakter",
             onClick = {
-                //handle event
+                navController.navigate(Screen.ContactsScreen.route)
             }
         )
     } }

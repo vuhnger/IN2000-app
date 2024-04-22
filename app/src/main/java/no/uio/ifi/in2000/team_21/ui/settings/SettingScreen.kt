@@ -343,7 +343,7 @@ fun HistorySettings(navController: NavController){
         AllSettingsCard(navController,
             mainText = "Trofeskap",
             onClick = {
-                navController.navigate(Screen.ThrophyWallScreen.route)
+                navController.navigate(Screen.TrophyWallScreen.route)
             }
         )
     }}

@@ -32,7 +32,7 @@ import no.uio.ifi.in2000.team_21.ui.settings.NotificationScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen
 
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
-import no.uio.ifi.in2000.team_21.ui.settings.ThrophyWallScreen
+import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 
 sealed class Screen(val route: String){
@@ -44,7 +44,7 @@ sealed class Screen(val route: String){
     object ProfileScreen: Screen(route = "ProfileScreen")
     object FriendsActivityScreen: Screen(route = "FriendsActivityScreen")
     object MyActivityScreen: Screen(route = "MyActivityScreen")
-    object ThrophyWallScreen: Screen(route = "ThrophyWallScreen")
+    object TrophyWallScreen: Screen(route = "TrophyWallScreen")
     object NotificationScreen: Screen(route = "NotificationScreen")
     object ContactsScreen: Screen(route = "ContactsScreen")
 
@@ -119,8 +119,8 @@ fun App(){
         composable(Screen.MyActivityScreen.route){
             MyActivityScreen(navController = navController)
         }
-        composable(Screen.ThrophyWallScreen.route){
-            ThrophyWallScreen(navController = navController)
+        composable(Screen.TrophyWallScreen.route){
+            TrophyWallScreen(navController = navController)
         }
         composable(Screen.NotificationScreen.route){
             NotificationScreen(navController = navController)

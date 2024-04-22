@@ -3,7 +3,6 @@ package no.uio.ifi.in2000.team_21.ui.settings
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,7 +31,7 @@ import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-fun ThrophyWallScreen(navController: NavController) {
+fun TrophyWallScreen(navController: NavController) {
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
 
@@ -84,6 +83,6 @@ fun ThrophyWallScreen(navController: NavController) {
 }
 @Preview
 @Composable
-fun ThrophyWallScreenTest() {
-    ThrophyWallScreen(navController = rememberNavController())
+fun TrophyWallScreenTest() {
+    TrophyWallScreen(navController = rememberNavController())
 }

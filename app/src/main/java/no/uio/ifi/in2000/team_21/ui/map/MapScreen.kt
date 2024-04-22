@@ -65,10 +65,6 @@ import kotlin.math.sin
 import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
 
 /** Constants for initialize of MapView */
-object OsmMapViewConstants {
-    val BOTTOM_PADDING = 56.dp
-}
-
 
 @Composable
 fun MapboxMapView() {
@@ -91,34 +87,6 @@ fun MapboxMapView() {
 
         }
 
-
-    AndroidView(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = OsmMapViewConstants.BOTTOM_PADDING),
-        factory = { ctx ->
-            Configuration.getInstance().load(ctx,
-                PreferenceManager.getDefaultSharedPreferences(ctx))
-            MapView(ctx).apply {
-                setupMapView()
-                Log.d("MAPVIEW", "MapView setup completed.")
-                addTileOverlay(ctx)
-                Log.d("MAPVIEW", "Tile overlay added.")
-                addMapClickListener()
-                Log.d("MAPVIEW", "Map click listener added.")
-                addOilRigMarkers(viewModel)
-                Log.d("MAPVIEW", "Oil rig markers added.")
-                addCompassOverlay(context)
-                Log.d("MAPVIEW", "Compass overlay added.")
-                addButtonOverlay()
-                Log.d("MAPVIEW", "Button overlay added.")
-                addScaleBarOverlay()
-                Log.d("MAPVIEW", "Scale bar overlay added.")
-                setInitialMapView()
-                Log.d("MAPVIEW", "Initial map view set.")
-
-                // metAlerts
-                mapViewState.value = this
 
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
@@ -192,28 +160,6 @@ fun MapboxMapView() {
         )
     }
 }
-
-
-
-
-/**
- * Adds oil rig markers to the MapView.
- *
- *  @param viewModel The ViewModel that provides the oil rig data.
- * */
-fun MapView.addOilRigMarkers(viewModel: OilRigViewModel) {
-
-    Log.d("MAPVIEW_ADD_OIL-RIG_MARKERS", "Adding oil rig markers...")
-
-    // Get the oil rig markers from the ViewModel
-    val oilRigMarkers = viewModel.initializeRigs(this)
-
-    Log.d("MAPVIEW_ADD_OIL-RIG_MARKERS", "Oil rig markers initialized.")
-
-    // Add the markers to the map overlay
-    overlayManager.addAll(oilRigMarkers)
-
-    Log.d("MAPVIEW_ADD_OIL-RIG_MARKERS", "Oil rig markers added to overlay manager.")
 
 @Composable
 fun rememberMapViewWithLifecycle(context: Context): MapView {

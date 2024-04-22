@@ -29,7 +29,6 @@ import com.mapbox.mapboxsdk.Mapbox
 import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivityCardGrid
 import no.uio.ifi.in2000.team_21.ui.home.ActivityCardSmall
-import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
@@ -74,7 +73,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //ActivityCardSmall()
                     val activitiesViewModel: ActivitiesViewModel = ActivitiesViewModel()
-                    ActivityCardGrid(activities = activitiesViewModel.activityUIstate.activities)
+                    ActivityCardGrid(
+                        activities = activitiesViewModel.activityUIstate.activities,
+                        activitiesViewModel = activitiesViewModel
+                    )
                 }
             }
         }
@@ -94,7 +96,7 @@ fun App(){
     ){
 
         composable(Screen.HomeScreen.route){
-            entry -> HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)
+            //entry -> HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)
         }
 
         composable(Screen.SettingScreen.route){

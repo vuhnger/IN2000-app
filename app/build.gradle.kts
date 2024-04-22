@@ -126,7 +126,6 @@ dependencies {
     // Location
     implementation("com.google.android.gms:play-services-location:20.0.0") // DENNE MÅ VÆRE 20.0.0 TIL TROSS FOR NYERE VERSJONER!!!!
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
-
 }
 
 

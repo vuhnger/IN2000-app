@@ -39,7 +39,8 @@ import no.uio.ifi.in2000.team_21.model.Kayaking
 
 @Composable
 fun ActivityCard(
-    activity : Activity
+    activity : Activity,
+    viewModel: ActivitiesViewModel
 ) {
     val aspectRatio = 4f / 2f
     Card(
@@ -77,6 +78,7 @@ fun ActivityCard(
                         .fillMaxWidth(0.2f)
                         .clickable {
                             // TODO: Legg til aktivitet i favoritter
+                            viewModel.addFavorite(activity)
                         }
                 )
             }
@@ -117,7 +119,7 @@ fun ActivityCard(
                 }
             }
             Text(
-                text = "I dag er forholdene ${"INSERT ADJECTIVE"} for ${activity.type.lowercase()}.",
+                text = "I dag er forholdene ${activity.isReccomended()} for ${activity.type.lowercase()}.",
                 fontSize = 8.sp, // Halved font size
                 modifier = Modifier
                     .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -169,7 +171,8 @@ fun ActivityCardSmall(
 
 @Composable
 fun ActivityCardGrid(
-    activities: List<Activity>
+    activities: List<Activity>,
+    activitiesViewModel: ActivitiesViewModel
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -178,7 +181,7 @@ fun ActivityCardGrid(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(activities) { activity ->
-            ActivityCard(activity = activity)
+            ActivityCard(activity = activity, viewModel = activitiesViewModel)
         }
     }
 }

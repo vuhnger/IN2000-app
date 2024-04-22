@@ -4,19 +4,29 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.graphics.Color.parseColor
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -27,10 +37,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -71,6 +87,7 @@ import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
 import no.uio.ifi.in2000.team_21.model.locationforecast.Timeseries
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.home.WeatherIcon
 import kotlin.math.cos
 import kotlin.math.sin
 import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
@@ -154,7 +171,7 @@ fun MapboxMapView() {
                         locationComponent.renderMode = RenderMode.COMPASS
 
                         // Marker handling
-                        val customIcon = BitmapFactory.decodeResource(context.resources, R.drawable.pointer2)
+                        val customIcon = BitmapFactory.decodeResource(context.resources, R.drawable.pointer)
                         style.addImage("custom-marker", customIcon)
 
                         val markerSource = GeoJsonSource("marker-source")
@@ -410,29 +427,10 @@ fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
 
 @Composable
 fun BottomSheetContent(timeseries: List<Timeseries>?) {
-    var selectedPeriod by remember { mutableStateOf("instant") }
-
-    val selectedForecast = timeseries?.firstOrNull()?.data?.let { data ->
-        when (selectedPeriod) {
-            "instant" -> data.instant?.details
-            "next_1_hours" -> data.next_1_hours?.details
-            "next_6_hours" -> data.next_6_hours?.details
-            "next_12_hours" -> data.next_12_hours?.details
-            else -> null
-        }
-    }
-
-    //val icon = when (selectedPeriod) {
-
-    //}
-}
-
-/*
-timeseries?.firstOrNull()?.let { series ->
-        val currentDetails = series.data?.instant?.details
-        val nextHoursDetails = series.data?.next_1_hours?.details
-        val next6HoursDetails = series.data?.next_6_hours?.details
-        val next12HoursSummary = series.data?.next_12_hours?.summary
+    timeseries?.firstOrNull()?.let { series ->
+        val currentDetails = series.data?.instant
+        val nextHoursDetails = series.data?.next_1_hours
+        val next6HoursDetails = series.data?.next_6_hours
 
         Column(
             modifier = Modifier
@@ -440,29 +438,69 @@ timeseries?.firstOrNull()?.let { series ->
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            /*Text("Været nå:", style = MaterialTheme.typography.h6)
-            currentDetails?.let {
-                Text("Temperatur: ${it.air_temperature}°")
-                Text("Nedbør: ${nextHoursDetails?.precipitation_amount}")
-                Text("Vind: ${it.wind_speed} m/s")
-            }*/
             Text("Været nå:", style = MaterialTheme.typography.h6)
-            currentDetails?.let {
-
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                currentDetails?.let {
+                    WeatherIcon(element = nextHoursDetails?.summary?.symbol_code)
+                    Text("${it.details?.air_temperature}°", color = Color.Red, fontSize = 30.sp)
+                    Text(buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = Color.Blue, fontSize = 30.sp)) {
+                            append("${nextHoursDetails?.details?.precipitation_amount}")
+                        }
+                        withStyle(style = SpanStyle(color = Color.Blue, fontSize = 10.sp)) {
+                            append(" mm")
+                        }
+                    })
+                    //Text("${it.details?.wind_speed} m/s")
+                    Text(buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = "#00145D".color, fontSize = 30.sp)) {
+                            append("${it.details?.wind_speed}")
+                        }
+                        withStyle(style = SpanStyle(color = "#00145D".color, fontSize = 10.sp)) {
+                            append(" m/s")
+                        }
+                    })
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text("Været neste 6 timene:", style = MaterialTheme.typography.h6)
-            next6HoursDetails?.let {
-                Text("Temperatur: ${it.air_temperature_min}°C - ${it.air_temperature_max}°C")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            next12HoursSummary?.let {
-                Text("Været neste 12 timene:", style = MaterialTheme.typography.h6)
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                next6HoursDetails?.let {
+                    WeatherIcon(element = it.summary?.symbol_code)
+                    Text("${it.details?.air_temperature_min} - ${it.details?.air_temperature_max}°", color = Color.Red, fontSize = 25.sp)
+                    Text(buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = Color.Blue, fontSize = 25.sp)) {
+                            append("${it.details?.precipitation_amount}")
+                        }
+                        withStyle(style = SpanStyle(color = Color.Blue, fontSize = 10.sp)) {
+                            append(" mm")
+                        }
+                    })
+                    Text(buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = "#00145D".color, fontSize = 25.sp)) {
+                            append("${it.details?.probability_of_precipitation}")
+                        }
+                        withStyle(style = SpanStyle(color = "#00145D".color, fontSize = 10.sp)) {
+                            append(" %")
+                        }
+                    })
+                }
             }
         }
     }
- */
+}
+
+
+// Function to simplify the process of applying hex colors.
+val String.color
+    get() = Color(parseColor(this))

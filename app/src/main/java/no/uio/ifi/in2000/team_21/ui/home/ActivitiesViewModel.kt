@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -17,7 +18,7 @@ import no.uio.ifi.in2000.team_21.model.Waterskiing
 
 data class ActivitiesUIState(
     val activities: List<Activity>,
-    val favorites: List<Activity>
+    val favorites: MutableList<Activity>
 )
 
 class ActivitiesViewModel(
@@ -26,7 +27,7 @@ class ActivitiesViewModel(
 
     var activityUIstate by mutableStateOf(
         ActivitiesUIState(
-            activities = listOf(
+            activities = mutableListOf(
                 Kayaking(
                     air_temperature = 10.0,
                     air_temperature_unit = R.string.celsius.toString(),
@@ -68,21 +69,30 @@ class ActivitiesViewModel(
                     sea_surface_wave_height = 0.5
                 )
             ),
-            favorites = listOf(
-
-            )
+            favorites = mutableListOf()
         )
     )
         private set
 
     // TODO: Lage konstruktør som henter værdata
 
+    fun addFavorite(activity: Activity){
+
+        activityUIstate.favorites.add(activity)
+
+        Log.d(
+            "ACTIVITY_VIEW_MODEL",
+            "favorites: ${activityUIstate.favorites}"
+        )
+
+    }
+
     fun getWeatherData(){
         viewModelScope.launch {
             // TODO: Hent relevant værdata og legg det i kortene
 
             activityUIstate = activityUIstate.copy(
-                activities = listOf() // TODO: Oppdater aktivitetene med værdata i
+                activities = mutableListOf()// TODO: Oppdater aktivitetene med værdata i
             )
 
         }

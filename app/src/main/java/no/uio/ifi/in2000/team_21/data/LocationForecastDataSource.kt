@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.team_21.data
 
-import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -63,4 +62,19 @@ open class LocationForecastDataSource {
              null
         }
     }
+
+    suspend fun fetchForecastForLocation(lat: Double, lon: Double): Response? {
+         val url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?" +
+                "lat=$lat" +
+                "&lon=$lon"
+
+        val response: HttpResponse = client.get(url)
+
+        return if (response.status.value in 200..299) {
+            response.body()
+        } else {
+            null
+        }
+    }
+
 }

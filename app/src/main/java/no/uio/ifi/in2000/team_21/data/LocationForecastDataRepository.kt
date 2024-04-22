@@ -36,4 +36,8 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
         return icons
     }
 
+    suspend fun fetchWeatherDataForLocation(lat: Double, lon: Double): List<Timeseries>? {
+        return dataSource.fetchForecastForLocation(lat, lon)?.properties?.timeseries
+    }
+
 }

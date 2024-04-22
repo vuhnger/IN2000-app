@@ -109,13 +109,14 @@ data class Data (
 
 @Serializable
 data class Details (
+    @SerializedName("air_temperature"              ) var air_temperature         : Double? = null,
     @SerializedName("air_temperature_max"          ) var air_temperature_max          : Double? = null,
     @SerializedName("air_temperature_min"          ) var air_temperature_min          : Double? = null,
     @SerializedName("precipitation_amount"         ) var precipitation_amount        : Double? = null,
     @SerializedName("precipitation_amount_max"     ) var precipitation_amount_max     : Double? = null,
     @SerializedName("precipitation_amount_min"     ) var precipitation_amount_min     : Double? = null,
-    @SerializedName("probability_of_precipitation" ) var probability_of_precipitation : Double?    = null
-
+    @SerializedName("probability_of_precipitation" ) var probability_of_precipitation : Double?    = null,
+    @SerializedName("wind_speed"                   ) var wind_speed                  : String? = null
 )
 
 @Serializable

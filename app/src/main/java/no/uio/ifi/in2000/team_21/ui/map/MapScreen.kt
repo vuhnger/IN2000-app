@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.team_21.ui.map
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
@@ -10,6 +11,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -19,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -53,16 +60,23 @@ import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.layers.FillLayer
+import com.mapbox.mapboxsdk.style.layers.Property
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
+import kotlinx.coroutines.launch
+import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.container.MapBoxDataTransformer.convertFeaturesToFeatureCollection
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
+import no.uio.ifi.in2000.team_21.model.locationforecast.Timeseries
+import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
 import kotlin.math.cos
 import kotlin.math.sin
 import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
 
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun MapboxMapView() {
     val context = LocalContext.current
@@ -75,6 +89,11 @@ fun MapboxMapView() {
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     var userLocation by remember { mutableStateOf(LatLng()) }
     var cameraInitialized by remember { mutableStateOf(false)}
+    var currentMarkerSource by remember { mutableStateOf<GeoJsonSource?>(null)}
+    val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
+    val selectedLocationWeatherData = remember { mutableStateOf<List<Timeseries>?>(null)}
+    val forecastViewModel: ForecastViewModel = viewModel()
 
     LocationPermissionRequest(onPermissionGranted = {
         val locationRequest = LocationRequest.create().apply {
@@ -102,57 +121,96 @@ fun MapboxMapView() {
         }
     })
 
-    AndroidView({ mapView }, Modifier.fillMaxSize()) { mapView ->
-        mapView.getMapAsync { mapboxMap ->
-            mapboxMapState.value = mapboxMap
-            mapboxMap.setStyle(Style.MAPBOX_STREETS) { style ->
-                val customLocationComponentOptions = LocationComponentOptions.builder(context)
-                    .trackingGesturesManagement(true)
-                    .accuracyColor(ContextCompat.getColor(context, com.mapbox.mapboxsdk.R.color.mapbox_blue))
-                    .build()
-
-                val locationComponentActivationOptions = LocationComponentActivationOptions.builder(context, style)
-                    .locationComponentOptions(customLocationComponentOptions)
-                    .build()
-
-                val locationComponent = mapboxMap.locationComponent
-
-                locationComponent.activateLocationComponent(locationComponentActivationOptions)
-
-                locationComponent.isLocationComponentEnabled = true
-
-                locationComponent.cameraMode = CameraMode.TRACKING
-
-                locationComponent.renderMode = RenderMode.COMPASS
-            }
+    ModalBottomSheetLayout(
+        sheetState = bottomSheetState,
+        sheetContent = {
+            BottomSheetContent(timeseries = forecastViewModel.selectedLocationWeatherData.value)
         }
-    }
-
-    // Alerts
-    LaunchedEffect(filteredFeatures) {
-        filteredFeatures?.let { features ->
-            Log.d("UI Display", "Displaying Features: ${features.map { it.properties }.joinToString()}")
-            mapView.getMapAsync { mapboxMap ->
-                mapboxMap.addAlertOverlay(context, features)
-            }
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 40.dp)
     ) {
-        RadiusSelector(
-            radius = radius,
-            onRadiusChange = { newRadius ->
-                alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), userLocation, newRadius)
-                mapboxMapState.value?.updateSearchArea(userLocation, newRadius)
-                Log.d("RadiusSelector", "${mapboxMapState.value}")
-            },
-            mapboxMap = mapboxMapState.value,
-            centerLocation = userLocation
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 40.dp)
+        ) {
+            AndroidView({ mapView }, Modifier.fillMaxSize()) { mapView ->
+                mapView.getMapAsync { mapboxMap ->
+                    mapboxMapState.value = mapboxMap
+                    mapboxMap.setStyle(Style.MAPBOX_STREETS) { style ->
+                        val customLocationComponentOptions = LocationComponentOptions.builder(context)
+                            .trackingGesturesManagement(true)
+                            .accuracyColor(ContextCompat.getColor(context, com.mapbox.mapboxsdk.R.color.mapbox_blue))
+                            .build()
+
+                        val locationComponentActivationOptions = LocationComponentActivationOptions.builder(context, style)
+                            .locationComponentOptions(customLocationComponentOptions)
+                            .build()
+
+                        val locationComponent = mapboxMap.locationComponent
+
+                        locationComponent.activateLocationComponent(locationComponentActivationOptions)
+
+                        locationComponent.isLocationComponentEnabled = true
+                        locationComponent.cameraMode = CameraMode.TRACKING
+                        locationComponent.renderMode = RenderMode.COMPASS
+
+                        // Marker handling
+                        val customIcon = BitmapFactory.decodeResource(context.resources, R.drawable.pointer2)
+                        style.addImage("custom-marker", customIcon)
+
+                        val markerSource = GeoJsonSource("marker-source")
+                        style.addSource(markerSource)
+                        currentMarkerSource = markerSource
+
+                        style.addLayer(SymbolLayer("marker-layer", "marker-source").withProperties(
+                            PropertyFactory.iconImage("custom-marker"),
+                            PropertyFactory.iconAnchor(Property.ICON_ANCHOR_BOTTOM),
+                            PropertyFactory.iconSize(0.05f),
+                            PropertyFactory.iconAllowOverlap(true),
+                            PropertyFactory.iconIgnorePlacement(true)
+                        ))
+
+                        mapboxMap.addOnMapClickListener { point ->
+                            val screenPoint = mapboxMap.projection.toScreenLocation(point)
+                            val features = mapboxMap.queryRenderedFeatures(screenPoint, "alerts-fill-layer")
+
+                            if (features.isNotEmpty()) {
+                                val selectedFeature = features.first()
+                                val selectedFeatureProperties = parseFeatureProperties(selectedFeature)
+                                selectedFeatureProperties?.let { properties ->
+                                    showAlertDialog(context, properties)
+                                }
+                            } else {
+                                val feature = Feature.fromGeometry(Point.fromLngLat(point.longitude, point.latitude))
+                                currentMarkerSource?.setGeoJson(FeatureCollection.fromFeatures(arrayOf(feature)))
+                                forecastViewModel.fetchWeatherForLocation(point.latitude, point.longitude)
+                                coroutineScope.launch { bottomSheetState.show() }
+                            }
+                            true
+                        }
+                    }
+                }
+            }
+
+            LaunchedEffect(filteredFeatures) {
+                filteredFeatures?.let { features ->
+                    Log.d("UI Display", "Displaying Features: ${features.map { it.properties }.joinToString()}")
+                    mapView.getMapAsync { mapboxMap ->
+                        mapboxMap.addAlertOverlay(context, features)
+                    }
+                }
+            }
+
+            RadiusSelector(
+                radius = radius,
+                onRadiusChange = { newRadius ->
+                    alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), userLocation, newRadius)
+                    mapboxMapState.value?.updateSearchArea(userLocation, newRadius)
+                    Log.d("RadiusSelector", "${mapboxMapState.value}")
+                },
+                mapboxMap = mapboxMapState.value,
+                centerLocation = userLocation
+            )
+        }
     }
 }
 
@@ -219,24 +277,27 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
             val fillLayer = style.getLayerAs<FillLayer>(fillLayerId)
             fillLayer?.setProperties(PropertyFactory.fillColor(fillColor))
         }
-
+/*
         addOnMapClickListener { point ->
             val screenPoint = projection.toScreenLocation(point)
             val features = queryRenderedFeatures(screenPoint, fillLayerId)
 
             if (features.isNotEmpty()) {
                 val selectedFeature = features.first()
-
                 val selectedFeatureProperties = parseFeatureProperties(selectedFeature)
-
                 selectedFeatureProperties?.let { properties ->
                     showAlertDialog(context, properties)
+                    Log.d("MAPSCREEN_ALERT", "Alert clicked: ${properties.title}")
                 }
-
-                return@addOnMapClickListener true
+            } else {
+                val markerSource = getStyle()?.getSourceAs<GeoJsonSource>("marker-source")
+                val feature = Feature.fromGeometry(Point.fromLngLat(point.longitude, point.latitude))
+                markerSource?.setGeoJson(FeatureCollection.fromFeatures(arrayOf(feature)))
+                Log.d("MAPSCREEN_MARKER", "Marker placed on: ${point.longitude}, ${point.latitude}")
             }
-            false
+            true
         }
+ */
     }
 }
 
@@ -346,3 +407,62 @@ fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
         // Case where showRationale
     }
 }
+
+@Composable
+fun BottomSheetContent(timeseries: List<Timeseries>?) {
+    var selectedPeriod by remember { mutableStateOf("instant") }
+
+    val selectedForecast = timeseries?.firstOrNull()?.data?.let { data ->
+        when (selectedPeriod) {
+            "instant" -> data.instant?.details
+            "next_1_hours" -> data.next_1_hours?.details
+            "next_6_hours" -> data.next_6_hours?.details
+            "next_12_hours" -> data.next_12_hours?.details
+            else -> null
+        }
+    }
+
+    //val icon = when (selectedPeriod) {
+
+    //}
+}
+
+/*
+timeseries?.firstOrNull()?.let { series ->
+        val currentDetails = series.data?.instant?.details
+        val nextHoursDetails = series.data?.next_1_hours?.details
+        val next6HoursDetails = series.data?.next_6_hours?.details
+        val next12HoursSummary = series.data?.next_12_hours?.summary
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            /*Text("Været nå:", style = MaterialTheme.typography.h6)
+            currentDetails?.let {
+                Text("Temperatur: ${it.air_temperature}°")
+                Text("Nedbør: ${nextHoursDetails?.precipitation_amount}")
+                Text("Vind: ${it.wind_speed} m/s")
+            }*/
+            Text("Været nå:", style = MaterialTheme.typography.h6)
+            currentDetails?.let {
+
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text("Været neste 6 timene:", style = MaterialTheme.typography.h6)
+            next6HoursDetails?.let {
+                Text("Temperatur: ${it.air_temperature_min}°C - ${it.air_temperature_max}°C")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            next12HoursSummary?.let {
+                Text("Været neste 12 timene:", style = MaterialTheme.typography.h6)
+            }
+        }
+    }
+ */

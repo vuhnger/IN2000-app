@@ -58,10 +58,13 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import no.uio.ifi.in2000.team_21.container.MapBoxDataTransformer.convertFeaturesToFeatureCollection
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
+import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
+import org.osmdroid.views.overlay.infowindow.BasicInfoWindow
 import kotlin.math.cos
 import kotlin.math.sin
 import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
 
+/** Constants for initialize of MapView */
 
 @Composable
 fun MapboxMapView() {
@@ -84,6 +87,7 @@ fun MapboxMapView() {
 
         }
 
+
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 for (location in p0.locations) {
@@ -94,6 +98,7 @@ fun MapboxMapView() {
                         cameraInitialized = true
                     }
                 }
+
             }
         }
 
@@ -178,6 +183,7 @@ fun rememberMapViewWithLifecycle(context: Context): MapView {
             }
         }
         lifecycle.addObserver(observer)
+
 
         onDispose {
             lifecycle.removeObserver(observer)
@@ -308,6 +314,7 @@ fun showAlertDialog(context: Context, properties: Properties) {
         .create()
         .show()
 }
+
 
 fun createAlertMessage(title: String, properties: Properties): String {
     val event = title.substringBefore(",") // Grab the first element in 'title' (Event)

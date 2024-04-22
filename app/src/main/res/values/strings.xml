@@ -3,4 +3,5 @@
     <string name="home_screen_route">HOME_SCREEN</string>
     <string name="settings_screen_route">SETTINGS_SCREEN</string>
     <string name="about_us_screen_route">ABOUT_US_SCREEN</string>
+    <string name="celsius">celsius</string>
 </resources>

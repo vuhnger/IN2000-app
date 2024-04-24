@@ -1,20 +1,22 @@
 package no.uio.ifi.in2000.team_21.data.database
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 
+@Dao
 interface LocationDao {
     @Query("SELECT * FROM locations")
-    fun getAll(): List<UserMarker>
+    suspend fun getAll(): List<UserMarkerEntity>
 
     @Insert
-    fun insert(vararg locations: UserMarker)
+    suspend fun insert(vararg locations: UserMarkerEntity)
 
     @Update
-    fun update(location: UserMarker)
+    suspend fun update(location: UserMarkerEntity)
 
     @Delete
-    fun delete(location: UserMarker)
+    suspend fun delete(location: UserMarkerEntity)
 }

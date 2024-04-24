@@ -1,12 +1,15 @@
 package no.uio.ifi.in2000.team_21.ui.map
 
 import android.Manifest
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.Color.parseColor
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,6 +69,8 @@ import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.Polygon
+import com.mapbox.mapboxsdk.annotations.Marker
+import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
@@ -83,9 +88,12 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.container.MapBoxDataTransformer.convertFeaturesToFeatureCollection
+import no.uio.ifi.in2000.team_21.container.UserMarkerViewModelFactory
+import no.uio.ifi.in2000.team_21.data.database.UserMarkerEntity
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
 import no.uio.ifi.in2000.team_21.model.locationforecast.Timeseries
+import no.uio.ifi.in2000.team_21.ui.UserMarkerViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.WeatherIcon
 import kotlin.math.cos
@@ -111,6 +119,9 @@ fun MapboxMapView() {
     val coroutineScope = rememberCoroutineScope()
     val selectedLocationWeatherData = remember { mutableStateOf<List<Timeseries>?>(null)}
     val forecastViewModel: ForecastViewModel = viewModel()
+    val application = LocalContext.current.applicationContext as Application
+    val userMarkerViewModel: UserMarkerViewModel = viewModel(factory = UserMarkerViewModelFactory(application))
+    var currentBottomSheetContent: @Composable (() -> Unit)? = null
 
     LocationPermissionRequest(onPermissionGranted = {
         val locationRequest = LocationRequest.create().apply {
@@ -141,7 +152,9 @@ fun MapboxMapView() {
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
-            BottomSheetContent(timeseries = forecastViewModel.selectedLocationWeatherData.value)
+            BottomSheetContent(
+                timeseries = forecastViewModel.selectedLocationWeatherData.value
+            )
         }
     ) {
         Box(
@@ -152,6 +165,9 @@ fun MapboxMapView() {
             AndroidView({ mapView }, Modifier.fillMaxSize()) { mapView ->
                 mapView.getMapAsync { mapboxMap ->
                     mapboxMapState.value = mapboxMap
+                    userMarkerViewModel.loadSavedMarkers { savedMarkers ->
+                        displaySavedMarkers(savedMarkers, mapboxMap, userMarkerViewModel)
+                    }
                     mapboxMap.setStyle(Style.MAPBOX_STREETS) { style ->
                         val customLocationComponentOptions = LocationComponentOptions.builder(context)
                             .trackingGesturesManagement(true)
@@ -200,8 +216,15 @@ fun MapboxMapView() {
                                 val feature = Feature.fromGeometry(Point.fromLngLat(point.longitude, point.latitude))
                                 currentMarkerSource?.setGeoJson(FeatureCollection.fromFeatures(arrayOf(feature)))
                                 forecastViewModel.fetchWeatherForLocation(point.latitude, point.longitude)
-                                coroutineScope.launch { bottomSheetState.show() }
+                                coroutineScope.launch {
+                                    bottomSheetState.show()
+                                }
                             }
+                            true
+                        }
+                        mapboxMap.addOnMapLongClickListener { point ->
+                            showSaveLocationDialog(context, point, userMarkerViewModel, mapboxMap)
+
                             true
                         }
                     }
@@ -426,7 +449,9 @@ fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
 }
 
 @Composable
-fun BottomSheetContent(timeseries: List<Timeseries>?) {
+fun BottomSheetContent(
+    timeseries: List<Timeseries>?,
+) {
     timeseries?.firstOrNull()?.let { series ->
         val currentDetails = series.data?.instant
         val nextHoursDetails = series.data?.next_1_hours
@@ -500,6 +525,43 @@ fun BottomSheetContent(timeseries: List<Timeseries>?) {
     }
 }
 
+fun showSaveLocationDialog(context: Context, point: LatLng, viewModel: UserMarkerViewModel, map: MapboxMap) {
+    val dialogView = LayoutInflater.from(context).inflate(R.layout.save_location_dialog, null)
+    val editTextName = dialogView.findViewById<EditText>(R.id.editTextLocationName)
+
+    AlertDialog.Builder(context)
+        .setTitle("Save Location")
+        .setView(dialogView)
+        .setPositiveButton("Save") { dialog, _ ->
+            val name = editTextName.text.toString()
+            saveLocation(name, point, viewModel, map)
+            dialog.dismiss()
+        }
+        .setNegativeButton("Cancel") { dialog, _ ->
+            dialog.cancel()
+        }
+        .show()
+}
+
+val markersMap = mutableMapOf<String, Marker>()
+fun saveLocation(name: String, point: LatLng, viewModel: UserMarkerViewModel, map: MapboxMap) {
+    val marker = map.addMarker(MarkerOptions().position(point).title(name))
+    // Store the marker with a unique identifier, perhaps using the name and coordinates
+    markersMap["${point.latitude}_${point.longitude}"] = marker
+    viewModel.saveUserLocation(UserMarkerEntity(name = name, latitude = point.latitude, longitude = point.longitude))
+}
+
+fun displaySavedMarkers(savedLocations: List<UserMarkerEntity>, mapboxMap: MapboxMap, userMarkerViewModel: UserMarkerViewModel) {
+    savedLocations.forEach { location ->
+        val markerOptions = MarkerOptions()
+            .position(LatLng(location.latitude, location.longitude))
+            .title(location.name)
+        val marker = mapboxMap.addMarker(markerOptions)
+        // Assuming `marker` has an id or some unique identifier you can use
+        //location.mapboxMarkerId = marker.id.toString()
+        userMarkerViewModel.updateUserLocation(location) // Update your entity with the marker ID
+    }
+}
 
 // Function to simplify the process of applying hex colors.
 val String.color

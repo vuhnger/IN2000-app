@@ -12,10 +12,12 @@ object DatabaseBuilder {
             val instance = Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java,
-                "app_database"
-            ).build()
+                "app_database")
+                .fallbackToDestructiveMigration() // Use this during development or if data preservation is not necessary
+                .build()
             INSTANCE = instance
             instance
         }
     }
+
 }

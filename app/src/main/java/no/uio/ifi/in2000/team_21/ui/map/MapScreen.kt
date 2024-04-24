@@ -1,10 +1,27 @@
 package no.uio.ifi.in2000.team_21.ui.map
 
+/*
+import com.mapbox.mapboxsdk.annotations.Marker
+import com.mapbox.mapboxsdk.annotations.MarkerOptions
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
+import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
+import com.mapbox.mapboxsdk.location.LocationComponentOptions
+import com.mapbox.mapboxsdk.location.modes.CameraMode
+import com.mapbox.mapboxsdk.location.modes.RenderMode
+import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.mapboxsdk.style.layers.FillLayer
+import com.mapbox.mapboxsdk.style.layers.Property
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
+*/
 import android.Manifest
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.graphics.Color.parseColor
 import android.os.Looper
 import android.util.Log
@@ -25,6 +42,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,9 +70,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -65,31 +80,37 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
-import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.Polygon
-import com.mapbox.mapboxsdk.annotations.Marker
-import com.mapbox.mapboxsdk.annotations.MarkerOptions
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
-import com.mapbox.mapboxsdk.location.LocationComponentOptions
-import com.mapbox.mapboxsdk.location.modes.CameraMode
-import com.mapbox.mapboxsdk.location.modes.RenderMode
-import com.mapbox.mapboxsdk.maps.MapView
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.style.layers.FillLayer
-import com.mapbox.mapboxsdk.style.layers.Property
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.QueriedRenderedFeature
+import com.mapbox.maps.RenderedQueryGeometry
+import com.mapbox.maps.RenderedQueryOptions
+import com.mapbox.maps.ScreenCoordinate
+import com.mapbox.maps.Style
+import com.mapbox.maps.extension.style.expressions.generated.Expression
+import com.mapbox.maps.extension.style.layers.addLayer
+import com.mapbox.maps.extension.style.layers.generated.FillLayer
+import com.mapbox.maps.extension.style.layers.generated.fillLayer
+import com.mapbox.maps.extension.style.layers.getLayer
+import com.mapbox.maps.extension.style.layers.getLayerAs
+import com.mapbox.maps.extension.style.sources.addSource
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
+import com.mapbox.maps.extension.style.sources.getSourceAs
+import com.mapbox.maps.plugin.gestures.addOnMapClickListener
+import com.mapbox.maps.plugin.gestures.addOnMapLongClickListener
+import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
+import com.mapbox.maps.plugin.locationcomponent.location
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.container.MapBoxDataTransformer.convertFeaturesToFeatureCollection
 import no.uio.ifi.in2000.team_21.container.UserMarkerViewModelFactory
-import no.uio.ifi.in2000.team_21.data.database.UserMarkerEntity
+import no.uio.ifi.in2000.team_21.data.database.MapAnnotationHelper
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
 import no.uio.ifi.in2000.team_21.model.locationforecast.Timeseries
@@ -106,22 +127,23 @@ import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
 fun MapboxMapView() {
     val context = LocalContext.current
     val mapView = rememberMapViewWithLifecycle(context)
+    val mapboxMap = mapView.mapboxMap
     val mapboxMapState = remember { mutableStateOf<MapboxMap?>(null) }
     val lifecycleOwner = LocalLifecycleOwner.current
     val alertsViewModel: AlertsViewModel = viewModel()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
+    val annotationHelper = remember { MapAnnotationHelper(mapView) }
     val radius = remember { mutableStateOf(500.0) }
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-    var userLocation by remember { mutableStateOf(LatLng()) }
+    var userLocation by remember { mutableStateOf(Point.fromLngLat(0.0, 0.0)) }
     var cameraInitialized by remember { mutableStateOf(false)}
-    var currentMarkerSource by remember { mutableStateOf<GeoJsonSource?>(null)}
+    //var currentMarkerSource by remember { mutableStateOf<GeoJsonSource?>(null)}
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val selectedLocationWeatherData = remember { mutableStateOf<List<Timeseries>?>(null)}
     val forecastViewModel: ForecastViewModel = viewModel()
     val application = LocalContext.current.applicationContext as Application
     val userMarkerViewModel: UserMarkerViewModel = viewModel(factory = UserMarkerViewModelFactory(application))
-    var currentBottomSheetContent: @Composable (() -> Unit)? = null
 
     LocationPermissionRequest(onPermissionGranted = {
         val locationRequest = LocationRequest.create().apply {
@@ -132,12 +154,12 @@ fun MapboxMapView() {
         }
 
         val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(p0: LocationResult) {
-                for (location in p0.locations) {
-                    userLocation = LatLng(location.latitude, location.longitude)
-                    // Zoom into user on launch
-                    if (!cameraInitialized && userLocation.latitude != 0.0 && userLocation.longitude != 0.0) {
-                        mapboxMapState.value?.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 10.0))
+            override fun onLocationResult(locationResult: LocationResult) {
+                locationResult.locations.firstOrNull()?.let { location ->
+                    val newPoint = Point.fromLngLat(location.longitude, location.latitude)
+                    userLocation = newPoint
+                    if (!cameraInitialized) {
+                        mapboxMap.setCamera(CameraOptions.Builder().center(newPoint).zoom(10.0).build())
                         cameraInitialized = true
                     }
                 }
@@ -146,143 +168,106 @@ fun MapboxMapView() {
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        } else {
+            // Request permission
         }
     })
+
+    AndroidView({ mapView }, Modifier.fillMaxSize()) { mapView ->
+        mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
+            setupLocationComponent(mapView)
+            setupMapInteractions(mapboxMap, style, context, coroutineScope, forecastViewModel, bottomSheetState, userMarkerViewModel, annotationHelper)
+        }
+    }
+
+    LaunchedEffect(filteredFeatures) {
+        filteredFeatures?.let { features ->
+            mapView.mapboxMap.addAlertOverlay(context, features)
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
-            BottomSheetContent(
-                timeseries = forecastViewModel.selectedLocationWeatherData.value
-            )
+            BottomSheetContent(timeseries = forecastViewModel.selectedLocationWeatherData.value)
         }
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 40.dp)
-        ) {
-            AndroidView({ mapView }, Modifier.fillMaxSize()) { mapView ->
-                mapView.getMapAsync { mapboxMap ->
-                    mapboxMapState.value = mapboxMap
-                    userMarkerViewModel.loadSavedMarkers { savedMarkers ->
-                        displaySavedMarkers(savedMarkers, mapboxMap, userMarkerViewModel)
-                    }
-                    mapboxMap.setStyle(Style.MAPBOX_STREETS) { style ->
-                        val customLocationComponentOptions = LocationComponentOptions.builder(context)
-                            .trackingGesturesManagement(true)
-                            .accuracyColor(ContextCompat.getColor(context, com.mapbox.mapboxsdk.R.color.mapbox_blue))
-                            .build()
-
-                        val locationComponentActivationOptions = LocationComponentActivationOptions.builder(context, style)
-                            .locationComponentOptions(customLocationComponentOptions)
-                            .build()
-
-                        val locationComponent = mapboxMap.locationComponent
-
-                        locationComponent.activateLocationComponent(locationComponentActivationOptions)
-
-                        locationComponent.isLocationComponentEnabled = true
-                        locationComponent.cameraMode = CameraMode.TRACKING
-                        locationComponent.renderMode = RenderMode.COMPASS
-
-                        // Marker handling
-                        val customIcon = BitmapFactory.decodeResource(context.resources, R.drawable.pointer)
-                        style.addImage("custom-marker", customIcon)
-
-                        val markerSource = GeoJsonSource("marker-source")
-                        style.addSource(markerSource)
-                        currentMarkerSource = markerSource
-
-                        style.addLayer(SymbolLayer("marker-layer", "marker-source").withProperties(
-                            PropertyFactory.iconImage("custom-marker"),
-                            PropertyFactory.iconAnchor(Property.ICON_ANCHOR_BOTTOM),
-                            PropertyFactory.iconSize(0.05f),
-                            PropertyFactory.iconAllowOverlap(true),
-                            PropertyFactory.iconIgnorePlacement(true)
-                        ))
-
-                        mapboxMap.addOnMapClickListener { point ->
-                            val screenPoint = mapboxMap.projection.toScreenLocation(point)
-                            val features = mapboxMap.queryRenderedFeatures(screenPoint, "alerts-fill-layer")
-
-                            if (features.isNotEmpty()) {
-                                val selectedFeature = features.first()
-                                val selectedFeatureProperties = parseFeatureProperties(selectedFeature)
-                                selectedFeatureProperties?.let { properties ->
-                                    showAlertDialog(context, properties)
-                                }
-                            } else {
-                                val feature = Feature.fromGeometry(Point.fromLngLat(point.longitude, point.latitude))
-                                currentMarkerSource?.setGeoJson(FeatureCollection.fromFeatures(arrayOf(feature)))
-                                forecastViewModel.fetchWeatherForLocation(point.latitude, point.longitude)
-                                coroutineScope.launch {
-                                    bottomSheetState.show()
-                                }
-                            }
-                            true
-                        }
-                        mapboxMap.addOnMapLongClickListener { point ->
-                            showSaveLocationDialog(context, point, userMarkerViewModel, mapboxMap)
-
-                            true
-                        }
-                    }
-                }
-            }
-
-            LaunchedEffect(filteredFeatures) {
-                filteredFeatures?.let { features ->
-                    Log.d("UI Display", "Displaying Features: ${features.map { it.properties }.joinToString()}")
-                    mapView.getMapAsync { mapboxMap ->
-                        mapboxMap.addAlertOverlay(context, features)
-                    }
-                }
-            }
-
+        Box(modifier = Modifier.fillMaxSize().padding(bottom = 40.dp)) {
             RadiusSelector(
                 radius = radius,
                 onRadiusChange = { newRadius ->
                     alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), userLocation, newRadius)
-                    mapboxMapState.value?.updateSearchArea(userLocation, newRadius)
-                    Log.d("RadiusSelector", "${mapboxMapState.value}")
+                    mapboxMap.updateSearchArea(userLocation, newRadius)
                 },
-                mapboxMap = mapboxMapState.value,
+                mapboxMap = mapboxMap, // Pass the direct reference
                 centerLocation = userLocation
             )
+        }
+    }
+    DisposableEffect(Unit) {
+        onDispose {
+            // Disable the location component when the view is disposed of
+            mapView.location.enabled = false
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+fun setupMapInteractions(
+    mapboxMap: MapboxMap,
+    style: Style,
+    context: Context,
+    coroutineScope: CoroutineScope,
+    forecastViewModel: ForecastViewModel,
+    bottomSheetState: ModalBottomSheetState,
+    userMarkerViewModel: UserMarkerViewModel,
+    annotationHelper: MapAnnotationHelper
+) {
+    // Location component and other setups here
+    mapboxMap.addOnMapClickListener { point ->
+        handleMapClick(point, mapboxMap, context, coroutineScope, forecastViewModel, bottomSheetState)
+        true
+    }
+    mapboxMap.addOnMapLongClickListener { point ->
+        showSaveLocationDialog(context, point, userMarkerViewModel, annotationHelper)
+        true
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+fun handleMapClick(
+    point: Point,
+    mapboxMap: MapboxMap,
+    context: Context,
+    coroutineScope: CoroutineScope,
+    forecastViewModel: ForecastViewModel,
+    bottomSheetState: ModalBottomSheetState
+) {
+    val screenPoint = mapboxMap.pixelForCoordinate(point)
+    val queryGeometry = RenderedQueryGeometry(ScreenCoordinate(screenPoint.x, screenPoint.y))
+    val queryOptions = RenderedQueryOptions(listOf("alerts-fill-layer"), null)
+
+    mapboxMap.queryRenderedFeatures(queryGeometry, queryOptions) { result ->
+        result.value?.let { features ->
+            if (features.isNotEmpty()) {
+                val selectedFeature = features.first()
+                val properties = parseFeatureProperties(selectedFeature)
+                properties?.let {
+                    showAlertDialog(context, it)
+                }
+            } else {
+                forecastViewModel.fetchWeatherForLocation(point.latitude(), point.longitude())
+                coroutineScope.launch {
+                    bottomSheetState.show()
+                }
+            }
         }
     }
 }
 
 @Composable
 fun rememberMapViewWithLifecycle(context: Context): MapView {
-    val mapView = remember {
-        MapView(context).apply {
-            onCreate(null)
-        }
-    }
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    DisposableEffect(lifecycleOwner) {
-        val lifecycle = lifecycleOwner.lifecycle
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_START -> mapView.onStart()
-                Lifecycle.Event.ON_RESUME -> mapView.onResume()
-                Lifecycle.Event.ON_PAUSE -> mapView.onPause()
-                Lifecycle.Event.ON_STOP -> mapView.onStop()
-                Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
-                else -> {}
-            }
-        }
-        lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycle.removeObserver(observer)
-        }
-    }
-
-    return mapView
+    return remember { MapView(context) }
 }
 
 // Alert overlay from metAlerts
@@ -291,22 +276,31 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
     val sourceId = "alerts-source"
     val fillLayerId = "alerts-fill-layer"
 
-    getStyle { style ->
-        if (style.getSource(sourceId) == null) {
-            val geoJsonSource = GeoJsonSource(sourceId, featureCollection)
+    this.getStyle { style ->
+        // Ensure the source is added or updated
+        var geoJsonSource = style.getSourceAs<GeoJsonSource>(sourceId)
+        if (geoJsonSource == null) {
+            geoJsonSource = GeoJsonSource.Builder(sourceId)
+                .featureCollection(featureCollection)
+                .build()
             style.addSource(geoJsonSource)
         } else {
-            (style.getSourceAs<GeoJsonSource>(sourceId))?.setGeoJson(featureCollection)
+            geoJsonSource.featureCollection(featureCollection)
         }
 
-        if (style.getLayer(fillLayerId) == null) {
-            val fillLayer = FillLayer(fillLayerId, sourceId).withProperties(
-                // Default color set to red, in case no matrixColor is found
-                PropertyFactory.fillColor("red")
-            )
+        // Ensure the layer is added or updated
+        var fillLayer = style.getLayerAs<FillLayer>(fillLayerId)
+        if (fillLayer == null) {
+            fillLayer = FillLayer(fillLayerId, sourceId).apply {
+                fillColor("red") // Default color, replace with dynamic value if needed
+            }
             style.addLayer(fillLayer)
+        } else {
+            // Assuming fillColor needs to be updated dynamically
+            fillLayer.fillColor(Expression.literal("red"))
         }
 
+        // Optionally update fill color based on feature properties
         myFeatures.firstOrNull()?.properties?.riskMatrixColor?.let { matrixColor ->
             val fillColor = when(matrixColor.lowercase()) {
                 "red" -> "rgba(202, 0, 42, 0.5)"
@@ -314,68 +308,50 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
                 "green" -> "rgba(85, 107, 47, 0.5)"
                 else -> "rgba(255, 0, 0, 0.5)" // Default color if riskMatrixColor not defined
             }
-            val fillLayer = style.getLayerAs<FillLayer>(fillLayerId)
-            fillLayer?.setProperties(PropertyFactory.fillColor(fillColor))
+            fillLayer.fillColor(Expression.literal(fillColor))
         }
-/*
-        addOnMapClickListener { point ->
-            val screenPoint = projection.toScreenLocation(point)
-            val features = queryRenderedFeatures(screenPoint, fillLayerId)
-
-            if (features.isNotEmpty()) {
-                val selectedFeature = features.first()
-                val selectedFeatureProperties = parseFeatureProperties(selectedFeature)
-                selectedFeatureProperties?.let { properties ->
-                    showAlertDialog(context, properties)
-                    Log.d("MAPSCREEN_ALERT", "Alert clicked: ${properties.title}")
-                }
-            } else {
-                val markerSource = getStyle()?.getSourceAs<GeoJsonSource>("marker-source")
-                val feature = Feature.fromGeometry(Point.fromLngLat(point.longitude, point.latitude))
-                markerSource?.setGeoJson(FeatureCollection.fromFeatures(arrayOf(feature)))
-                Log.d("MAPSCREEN_MARKER", "Marker placed on: ${point.longitude}, ${point.latitude}")
-            }
-            true
-        }
- */
     }
 }
 
-fun MapboxMap.updateSearchArea(center: LatLng, radiusKm: Double) {
+fun MapboxMap.updateSearchArea(center: Point, radiusKm: Double) {
     val radiusM = radiusKm * 1000
     val circlePoints = mutableListOf<Point>()
     val steps = 64
-    val distanceX = radiusM / (111320 * cos(Math.toRadians(center.latitude)))
+    val centerLat = center.latitude()
+    val centerLng = center.longitude()
+    val distanceX = radiusM / (111320 * cos(Math.toRadians(centerLat)))
     val distanceY = radiusM / 110540
 
     for (i in 0 until steps) {
         val theta = (i.toDouble() / steps) * (2 * Math.PI)
         val x = distanceX * cos(theta)
         val y = distanceY * sin(theta)
-        circlePoints.add(Point.fromLngLat(center.longitude + x, center.latitude + y))
+        circlePoints.add(Point.fromLngLat(centerLng + x, centerLat + y))
     }
 
     val polygon = Polygon.fromLngLats(listOf(circlePoints))
     val sourceId = "search-area-source"
 
     this.getStyle { style ->
-        if (style.getSource(sourceId) != null) {
-            (style.getSourceAs<GeoJsonSource>(sourceId))?.setGeoJson(polygon)
+        val source = style.getSourceAs<GeoJsonSource>(sourceId)
+        if (source == null) {
+            style.addSource(geoJsonSource(sourceId) {
+                data(polygon.toJson())
+            })
+            if (style.getLayer("search-area-layer") == null) {
+                style.addLayer(fillLayer("search-area-layer", sourceId) {
+                    fillColor("rgba(0, 0, 255, 0.3)")
+                    fillOpacity(0.5)
+                })
+            }
         } else {
-            val geoJsonSource = GeoJsonSource(sourceId, polygon)
-            style.addSource(geoJsonSource)
-
-            val fillLayer = FillLayer("search-area-layer", sourceId).withProperties(
-                PropertyFactory.fillColor("blue"),
-                PropertyFactory.fillOpacity(0.3f)
-            )
-            style.addLayer(fillLayer)
+            source.geometry(polygon)
         }
     }
 }
 
 @Composable
-fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Unit, mapboxMap: MapboxMap?, centerLocation: LatLng) {
+fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Unit, mapboxMap: MapboxMap?, centerLocation: Point) {
     Slider(
         value = radius.value.toFloat(),
         onValueChange = { newValue ->
@@ -394,9 +370,12 @@ fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Uni
 }
 
 fun MapboxMap.clearSearchArea() {
-    getStyle { style ->
+    this.getStyle { style ->
         val sourceId = "search-area-source"
-        (style.getSourceAs<GeoJsonSource>(sourceId))?.setGeoJson(FeatureCollection.fromFeatures(emptyList()))
+        style.getSourceAs<GeoJsonSource>(sourceId)?.let { existingSource ->
+            val emptyData = FeatureCollection.fromFeatures(emptyList()).toJson()
+            existingSource.data(emptyData)
+        }
     }
 }
 
@@ -423,18 +402,35 @@ fun createAlertMessage(title: String, properties: Properties): String {
     }
 }
 
-fun parseFeatureProperties(feature: Feature): Properties? {
-    feature.properties()?.let { propertiesMap ->
-        val propertiesJson = Gson().toJson(propertiesMap)
-        Log.d("PARSE_PROPERTIES", "Feature Properties JSON: $propertiesJson")
-        return Gson().fromJson(propertiesJson, Properties::class.java)
-    }
-    return null
+fun parseFeatureProperties(queriedRenderedFeature: QueriedRenderedFeature): Properties? {
+    val feature = queriedRenderedFeature.queriedFeature.feature
+    val propertiesMap = feature.properties()
+    val propertiesJson = Gson().toJson(propertiesMap)
+    Log.d("PARSE_PROPERTIES", "Feature Properties JSON: $propertiesJson")
+
+    // Deserialize JSON to Properties object
+    return Gson().fromJson(propertiesJson, Properties::class.java)
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
+    val locationPermissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
+
+    LaunchedEffect(key1 = locationPermissionState) {
+        when {
+            locationPermissionState.status.isGranted -> {
+                onPermissionGranted()
+            }
+            locationPermissionState.status.shouldShowRationale -> {
+                // Here, you might want to show a dialog or a UI element explaining why you need the location permission
+            }
+            else -> {
+                locationPermissionState.launchPermissionRequest()
+            }
+        }
+    }
+    /*
     val locationPermissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
 
     LaunchedEffect(key1 = locationPermissionState.permission) {
@@ -446,6 +442,7 @@ fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
         }
         // Case where showRationale
     }
+     */
 }
 
 @Composable
@@ -525,7 +522,7 @@ fun BottomSheetContent(
     }
 }
 
-fun showSaveLocationDialog(context: Context, point: LatLng, viewModel: UserMarkerViewModel, map: MapboxMap) {
+fun showSaveLocationDialog(context: Context, point: Point, viewModel: UserMarkerViewModel, annotationHelper: MapAnnotationHelper) {
     val dialogView = LayoutInflater.from(context).inflate(R.layout.save_location_dialog, null)
     val editTextName = dialogView.findViewById<EditText>(R.id.editTextLocationName)
 
@@ -534,7 +531,7 @@ fun showSaveLocationDialog(context: Context, point: LatLng, viewModel: UserMarke
         .setView(dialogView)
         .setPositiveButton("Save") { dialog, _ ->
             val name = editTextName.text.toString()
-            saveLocation(name, point, viewModel, map)
+            annotationHelper.saveLocation(name, point, viewModel)
             dialog.dismiss()
         }
         .setNegativeButton("Cancel") { dialog, _ ->
@@ -543,25 +540,13 @@ fun showSaveLocationDialog(context: Context, point: LatLng, viewModel: UserMarke
         .show()
 }
 
-val markersMap = mutableMapOf<String, Marker>()
-fun saveLocation(name: String, point: LatLng, viewModel: UserMarkerViewModel, map: MapboxMap) {
-    val marker = map.addMarker(MarkerOptions().position(point).title(name))
-    // Store the marker with a unique identifier, perhaps using the name and coordinates
-    markersMap["${point.latitude}_${point.longitude}"] = marker
-    viewModel.saveUserLocation(UserMarkerEntity(name = name, latitude = point.latitude, longitude = point.longitude))
+fun setupLocationComponent(mapView: MapView) {
+        mapView.location.apply {
+            enabled = true
+            locationPuck = createDefault2DPuck()
+        }
 }
 
-fun displaySavedMarkers(savedLocations: List<UserMarkerEntity>, mapboxMap: MapboxMap, userMarkerViewModel: UserMarkerViewModel) {
-    savedLocations.forEach { location ->
-        val markerOptions = MarkerOptions()
-            .position(LatLng(location.latitude, location.longitude))
-            .title(location.name)
-        val marker = mapboxMap.addMarker(markerOptions)
-        // Assuming `marker` has an id or some unique identifier you can use
-        //location.mapboxMarkerId = marker.id.toString()
-        userMarkerViewModel.updateUserLocation(location) // Update your entity with the marker ID
-    }
-}
 
 // Function to simplify the process of applying hex colors.
 val String.color

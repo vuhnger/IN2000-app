@@ -74,8 +74,10 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1")
-    implementation("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.9.0")
+    implementation("com.mapbox.maps:android:11.3.0")
+    implementation("com.mapbox.extension:maps-compose:11.3.0")
+    //implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:11.3.0")
+    //implementation("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.9.0")
 
     // Ktor 8)
     implementation("org.jetbrains.kotlin:kotlin-serialization:1.9.23")

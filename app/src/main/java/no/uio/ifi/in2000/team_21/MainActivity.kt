@@ -31,6 +31,8 @@ import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 import com.mapbox.mapboxsdk.Mapbox
+import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
+import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 
 sealed class Screen(val route: String){
     object HomeScreen: Screen(route = "HomeScreen")
@@ -87,12 +89,16 @@ fun App(){
 
     NavHost(
         navController = navController,
-        startDestination = Screen.SettingScreen.route
-        // startDestination = Screen.HomeScreen.route
+        //startDestination = Screen.SettingScreen.route
+        startDestination = Screen.HomeScreen.route
     ){
 
+        composable(Screen.MapScreen.route){
+            MapboxMapView()
+        }
+
         composable(Screen.HomeScreen.route){
-            //HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)
+            HomeScreen(navController = navController)
         }
 
         composable(Screen.SettingScreen.route){

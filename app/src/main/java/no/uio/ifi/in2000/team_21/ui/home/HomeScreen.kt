@@ -1,6 +1,6 @@
 package no.uio.ifi.in2000.team_21.ui.home
-import android.app.Activity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,12 +8,18 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,8 +39,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import no.uio.ifi.in2000.team_21.Screen
 
 // Top bar implementation: to work as one component to be used through all the screens.
 // Dataclass to define each tab in the navbar
@@ -102,47 +113,133 @@ fun RowScope.TopBarItem(item: TopNavItem, isSelected: Boolean, onItemSelect: () 
 
 @Composable
 fun WeatherCard(temperature: String, highLowTemp: String, weatherCondition: String) {
-    Card(
+    Row(
+        horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .fillMaxWidth()
     ) {
-        Column (
+        Card(
             modifier = Modifier
-            .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(
+                    color = Color(0xFFF7F7F7),
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .padding(40.dp)
+                .fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 16.dp
+            )
         ) {
-            Text("Min posisjon", style = MaterialTheme.typography.headlineMedium )
-            Spacer(Modifier.height(4.dp))
-            Text("Oslo", style = MaterialTheme.typography.labelSmall)
-            Spacer(Modifier.height(16.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                /*Icon(/* ... */) */
-                 Text(temperature, style = MaterialTheme.typography.labelLarge)
+            Column (
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Min posisjon",
+                    style = TextStyle(
+                        fontSize = 25.sp,
+                        lineHeight = 20.sp,
+                        //fontFamily = FontFamily(Font(R.font.roboto)),
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFF00145D),
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.1.sp,
+                    )
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = "Oslo",
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        lineHeight = 20.sp,
+                        //fontFamily = FontFamily(Font(R.font.roboto)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF00145D),
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.1.sp,
+                    )
+                )
+                Spacer(Modifier.height(16.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    WeatherIcon(
+                        element = "fair_day",
+                    )
+                    Spacer(modifier = Modifier.padding(4.dp))
+                    Text(
+                        text = temperature,
+                        style = TextStyle(
+                            fontSize = 70.sp,
+                            lineHeight = 16.sp,
+                            //fontFamily = FontFamily(Font(R.font.roboto)),
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF00145D),
+                            textAlign = TextAlign.Center,
+                            letterSpacing = 0.5.sp,
+                        )
+                    )
+                }
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = weatherCondition,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        lineHeight = 20.sp,
+                        //fontFamily = FontFamily(Font(R.font.roboto)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF00145D),
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.1.sp,
+                    )
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = highLowTemp,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        lineHeight = 20.sp,
+                        //fontFamily = FontFamily(Font(R.font.roboto)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF00145D),
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.1.sp,
+                    )
+                )
             }
-            Spacer(Modifier.height(4.dp))
-            Text(weatherCondition, style = MaterialTheme.typography.labelSmall)
-            Spacer(Modifier.height(4.dp))
-            Text(highLowTemp, style = MaterialTheme.typography.labelSmall)
         }
     }
+
 }
 
 @Composable
-fun ActivityFavorites(activities: List<Activity>) {
+fun ActivityFavorites(activities: MutableList<no.uio.ifi.in2000.team_21.model.Activity>) {
     Column(modifier = Modifier.padding(8.dp)) {
-        Text("Favoritter", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = "Favoritter",
+            style = TextStyle(
+                fontSize = 20.sp,
+                lineHeight = 20.sp,
+                //fontFamily = FontFamily(Font(R.font.roboto)),
+                fontWeight = FontWeight(400),
+                color = Color(0xFF00145D),
+                textAlign = TextAlign.Center,
+                letterSpacing = 0.1.sp,
+            )
+        )
         Spacer(Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.SpaceBetween) {
             activities.forEach {activity ->
-                ActivityIcon(activity)
+               ActivityCardSmall()
             }
         }
     }
 }
 @Composable
-fun ActivityIcon(activity: Activity) {
+fun ActivityIcon(activity: no.uio.ifi.in2000.team_21.model.Activity) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         /*Icon(/* ... */) */
         /*Text(activity.name)*/
@@ -151,34 +248,38 @@ fun ActivityIcon(activity: Activity) {
     }
 }
 @Composable
-fun RecommendationSection(recommendations: List<Activity>) {
+fun RecommendationSection(
+    recommendations: List<no.uio.ifi.in2000.team_21.model.Activity>,
+    viewModel: ActivitiesViewModel
+) {
     Column(modifier = Modifier.padding(8.dp)) {
-        Text("Anbefaling", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = "Anbefaling",
+            style = TextStyle(
+                fontSize = 20.sp,
+                lineHeight = 20.sp,
+                //fontFamily = FontFamily(Font(R.font.roboto)),
+                fontWeight = FontWeight(400),
+                color = Color(0xFF00145D),
+                textAlign = TextAlign.Center,
+                letterSpacing = 0.1.sp,
+            )
+        )
         Spacer(Modifier.height(8.dp))
         LazyRow {
             this.items(recommendations){ recommendation ->
-                ActivityCard(recommendation)
+                // TODO: ActivityCardGridHorizontal her
             }
             }
         }
     }
-@Composable
-fun ActivityCard(activity: Activity) {
-    Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .width(120.dp)
-            .height(120.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        // Activity card logic.
-    }
-}
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(
+    navController: NavController,
+    viewModel: ActivitiesViewModel = ActivitiesViewModel()
+) {
     //TopBar(items = TopNavItem<items>, currentSelection = 1 ) {}
-
 
     Column(
         modifier = Modifier
@@ -186,15 +287,68 @@ fun HomeScreen(navController: NavController) {
             .height(50.dp)
             .background(color = Color(0xFFF7F8FF))
     ) {
-        Text(text = "Hjem")
-        Text(text = "Kart")
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color(0xFF00145D),
+                    containerColor = MaterialTheme.colorScheme.background
+                ),
+                modifier = Modifier
+                    .weight(0.5f)
+
+            ) {
+                Text(
+                    text = "Hjem",
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .offset(x = 110.dp) // Flytter tekst-elementet lengre til høyre
+                )
+            }
+
+            Button(
+                onClick = { navController.navigate(Screen.MapScreen.route)},
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color(0xFF00145D),
+                    containerColor = MaterialTheme.colorScheme.background
+                ),
+                modifier = Modifier
+                    .weight(0.5f)
+            ) {
+                Text(
+                    text = "Kart",
+                    modifier = Modifier
+                        .weight(0.5f)
+                )
+            }
+
+            Icon(
+                imageVector = Icons.Default.AccountCircle,
+                contentDescription = "Account icon",
+                modifier = Modifier
+                    .clickable { navController.navigate(Screen.SettingScreen.route) }
+            )
+
+        }
 
         WeatherCard(
             temperature = "14°",
             highLowTemp = "H:16° L:3°",
             weatherCondition = "Skyfritt"
         )
-        ActivityFavorites(activities = listOf())
-        RecommendationSection(recommendations = listOf())
+        ActivityFavorites(
+            activities = viewModel.activityUIstate.favorites
+        )
+        RecommendationSection(
+            recommendations = viewModel.activityUIstate.activities,
+            viewModel = viewModel
+        )
     }
 }

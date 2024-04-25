@@ -3,15 +3,15 @@ package no.uio.ifi.in2000.team_21
 import androidx.compose.runtime.Composable
 import io.ktor.util.InternalAPI
 import kotlinx.coroutines.runBlocking
-import no.uio.ifi.in2000.team_21.data.LocationForecastDataSource
+import no.uio.ifi.in2000.team_21.data.LocationForcastDataSource
 import org.junit.Test
 
 
-class TestLFCResponse(private val datasource: LocationForecastDataSource = LocationForecastDataSource()) {
+class TestLFCResponse(private val datasource: LocationForcastDataSource = LocationForcastDataSource()) {
     @OptIn(InternalAPI::class)
     suspend fun fetchForecast() {
         try {
-            val forecast = datasource.fetchForecast()
+            val forecast = datasource.fetchLocationForcastResponse()
         } catch (e: RuntimeException) {
 
         }catch (e: Exception){

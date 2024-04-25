@@ -44,4 +44,5 @@ class LocationForcastViewModel: ViewModel() {
             Log.d("LF_VM", "Air temperature at $time is $temperature degrees Celsius.")
         }
     }
+
  }

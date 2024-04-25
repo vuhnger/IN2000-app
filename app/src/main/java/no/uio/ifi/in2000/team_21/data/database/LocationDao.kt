@@ -19,4 +19,7 @@ interface LocationDao {
 
     @Delete
     suspend fun delete(location: UserMarkerEntity)
+
+    @Query("DELETE FROM locations WHERE latitude = :lat AND longitude = :lng")
+    suspend fun deleteByLatLong(lat: Double, lng: Double)
 }

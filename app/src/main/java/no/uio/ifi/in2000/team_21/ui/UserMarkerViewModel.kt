@@ -11,12 +11,12 @@ import no.uio.ifi.in2000.team_21.data.database.UserMarkerEntity
 class UserMarkerViewModel(application: Application) : AndroidViewModel(application) {
     private val database = DatabaseBuilder.getDatabase(application)
     private val dao = database.locationDao()
-    val markerMap = mutableMapOf<String, UserMarkerEntity>()
+    private val markerMap = mutableMapOf<String, UserMarkerEntity>()
 
     // DAO to interact with the database
-    fun saveUserLocation(locationEntity: UserMarkerEntity) {
+    fun saveUserLocation(userMarkerEntity: UserMarkerEntity) {
         viewModelScope.launch {
-            dao.insert(locationEntity)
+            dao.insert(userMarkerEntity)
         }
     }
 
@@ -24,16 +24,20 @@ class UserMarkerViewModel(application: Application) : AndroidViewModel(applicati
         markerMap[markerId] = userMarkerEntity
     }
 
-    fun deleteUserLocation(locationEntity: UserMarkerEntity) {
+    fun deleteUserMarker(userMarkerEntity: UserMarkerEntity) {
         viewModelScope.launch {
-            dao.delete(locationEntity)
-            markerMap.values.remove(locationEntity)
+            //dao.delete(userMarkerEntity)
+            dao.deleteByLatLong(userMarkerEntity.latitude, userMarkerEntity.longitude)
+            markerMap.values.remove(userMarkerEntity)
+            Log.d("ViewModel", "Deleted marker at lat: ${userMarkerEntity.latitude}, long: ${userMarkerEntity.longitude}")
+            val allMarkers = dao.getAll()  // Debugging purpose
+            Log.d("UserMarkerViewModel", "Remaining Markers after delete: ${allMarkers.size}")
         }
     }
 
-    fun updateUserLocation(locationEntity: UserMarkerEntity) {
+    fun updateUserMarker(userMarkerEntity: UserMarkerEntity) {
         viewModelScope.launch {
-            dao.update(locationEntity)
+            dao.update(userMarkerEntity)
         }
     }
 

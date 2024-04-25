@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "locations")
 data class UserMarkerEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey val annotationId: String,
     val name: String,
     val latitude: Double,
     val longitude: Double,

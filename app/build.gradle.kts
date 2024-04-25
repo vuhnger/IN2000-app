@@ -74,10 +74,6 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("com.mapbox.maps:android:11.3.0")
-    implementation("com.mapbox.extension:maps-compose:11.3.0")
-    //implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:11.3.0")
-    //implementation("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.9.0")
 
     // Ktor 8)
     implementation("org.jetbrains.kotlin:kotlin-serialization:1.9.23")
@@ -137,6 +133,16 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+
+    // Mapbox
+    implementation("com.mapbox.maps:android:11.3.0")
+    implementation("com.mapbox.extension:maps-compose:11.3.0")
+    implementation("com.mapbox.search:autofill:1.2.0")
+    implementation("com.mapbox.search:discover:1.2.0")
+    implementation("com.mapbox.search:place-autocomplete:1.2.0")
+    implementation("com.mapbox.search:offline:1.2.0")
+    implementation("com.mapbox.search:mapbox-search-android:1.2.0")
+    implementation("com.mapbox.search:mapbox-search-android-ui:1.2.0")
 }
 
 

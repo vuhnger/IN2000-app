@@ -1,23 +1,5 @@
 package no.uio.ifi.in2000.team_21.ui.map
 
-/*
-import com.mapbox.mapboxsdk.annotations.Marker
-import com.mapbox.mapboxsdk.annotations.MarkerOptions
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
-import com.mapbox.mapboxsdk.location.LocationComponentOptions
-import com.mapbox.mapboxsdk.location.modes.CameraMode
-import com.mapbox.mapboxsdk.location.modes.RenderMode
-import com.mapbox.mapboxsdk.maps.MapView
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.style.layers.FillLayer
-import com.mapbox.mapboxsdk.style.layers.Property
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
-*/
 import android.Manifest
 import android.app.Application
 import android.content.Context
@@ -45,6 +27,7 @@ import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -111,6 +94,7 @@ import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.container.MapBoxDataTransformer.convertFeaturesToFeatureCollection
 import no.uio.ifi.in2000.team_21.container.UserMarkerViewModelFactory
 import no.uio.ifi.in2000.team_21.data.database.MapAnnotationHelper
+import no.uio.ifi.in2000.team_21.data.database.UserMarkerEntity
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
 import no.uio.ifi.in2000.team_21.model.locationforecast.Timeseries
@@ -132,18 +116,29 @@ fun MapboxMapView() {
     val lifecycleOwner = LocalLifecycleOwner.current
     val alertsViewModel: AlertsViewModel = viewModel()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
-    val annotationHelper = remember { MapAnnotationHelper(mapView) }
+    //val annotationHelper = remember { MapAnnotationHelper(mapView) }
     val radius = remember { mutableStateOf(500.0) }
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     var userLocation by remember { mutableStateOf(Point.fromLngLat(0.0, 0.0)) }
     var cameraInitialized by remember { mutableStateOf(false)}
-    //var currentMarkerSource by remember { mutableStateOf<GeoJsonSource?>(null)}
+    val selectedMarker = remember { mutableStateOf<UserMarkerEntity?>(null) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val selectedLocationWeatherData = remember { mutableStateOf<List<Timeseries>?>(null)}
     val forecastViewModel: ForecastViewModel = viewModel()
     val application = LocalContext.current.applicationContext as Application
     val userMarkerViewModel: UserMarkerViewModel = viewModel(factory = UserMarkerViewModelFactory(application))
+
+    val annotationHelper = remember {
+        MapAnnotationHelper(mapView) { marker ->
+            selectedMarker.value = marker
+            forecastViewModel.fetchWeatherForLocation(marker.latitude, marker.longitude)
+            coroutineScope.launch {
+                bottomSheetState.show()
+            }
+        }
+    }
+
 
     LocationPermissionRequest(onPermissionGranted = {
         val locationRequest = LocationRequest.create().apply {
@@ -176,7 +171,13 @@ fun MapboxMapView() {
     AndroidView({ mapView }, Modifier.fillMaxSize()) { mapView ->
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
             setupLocationComponent(mapView)
-            setupMapInteractions(mapboxMap, style, context, coroutineScope, forecastViewModel, bottomSheetState, userMarkerViewModel, annotationHelper)
+            setupMapInteractions(mapboxMap, style, context, coroutineScope, forecastViewModel, bottomSheetState, userMarkerViewModel, annotationHelper, selectedMarker)
+        }
+    }
+
+    LaunchedEffect(annotationHelper) {
+        userMarkerViewModel.loadSavedMarkers { markers ->
+            annotationHelper.displaySavedMarkers(markers)
         }
     }
 
@@ -189,17 +190,24 @@ fun MapboxMapView() {
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
-            BottomSheetContent(timeseries = forecastViewModel.selectedLocationWeatherData.value)
+            BottomSheetContent(
+                timeseries = forecastViewModel.selectedLocationWeatherData.value,
+                annotationHelper = annotationHelper,
+                marker = selectedMarker.value,
+                userMarkerViewModel = userMarkerViewModel
+                )
         }
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(bottom = 40.dp)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 40.dp)) {
             RadiusSelector(
                 radius = radius,
                 onRadiusChange = { newRadius ->
                     alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), userLocation, newRadius)
                     mapboxMap.updateSearchArea(userLocation, newRadius)
                 },
-                mapboxMap = mapboxMap, // Pass the direct reference
+                mapboxMap = mapboxMap,
                 centerLocation = userLocation
             )
         }
@@ -221,11 +229,12 @@ fun setupMapInteractions(
     forecastViewModel: ForecastViewModel,
     bottomSheetState: ModalBottomSheetState,
     userMarkerViewModel: UserMarkerViewModel,
-    annotationHelper: MapAnnotationHelper
+    annotationHelper: MapAnnotationHelper,
+    selectedMarker: MutableState<UserMarkerEntity?>
 ) {
     // Location component and other setups here
     mapboxMap.addOnMapClickListener { point ->
-        handleMapClick(point, mapboxMap, context, coroutineScope, forecastViewModel, bottomSheetState)
+        handleMapClick(point, mapboxMap, context, coroutineScope, forecastViewModel, bottomSheetState, selectedMarker)
         true
     }
     mapboxMap.addOnMapLongClickListener { point ->
@@ -241,7 +250,8 @@ fun handleMapClick(
     context: Context,
     coroutineScope: CoroutineScope,
     forecastViewModel: ForecastViewModel,
-    bottomSheetState: ModalBottomSheetState
+    bottomSheetState: ModalBottomSheetState,
+    selectedMarker: MutableState<UserMarkerEntity?>
 ) {
     val screenPoint = mapboxMap.pixelForCoordinate(point)
     val queryGeometry = RenderedQueryGeometry(ScreenCoordinate(screenPoint.x, screenPoint.y))
@@ -260,6 +270,7 @@ fun handleMapClick(
                 coroutineScope.launch {
                     bottomSheetState.show()
                 }
+                selectedMarker.value = null
             }
         }
     }
@@ -396,7 +407,7 @@ fun createAlertMessage(title: String, properties: Properties): String {
         append("Event: $event\n")
         append("Severity: ${properties.severity ?: "N/A"}\n")
         append("Area: ${properties.area ?: "N/A"}\n")
-        append("Description: ${properties.description ?: "N/A"}\n")
+        //append("Description: ${properties.description ?: "N/A"}\n")
         append("Instruction: ${properties.instruction ?: "N/A"}\n")
         append("Ending: ${properties.eventEndingTime ?: "N/A"}\n") // Funker ikke atm, må formatteres.
     }
@@ -448,20 +459,28 @@ fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
 @Composable
 fun BottomSheetContent(
     timeseries: List<Timeseries>?,
+    marker: UserMarkerEntity?,
+    annotationHelper: MapAnnotationHelper,
+    userMarkerViewModel: UserMarkerViewModel
 ) {
-    timeseries?.firstOrNull()?.let { series ->
-        val currentDetails = series.data?.instant
-        val nextHoursDetails = series.data?.next_1_hours
-        val next6HoursDetails = series.data?.next_6_hours
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        marker?.name?.let {
+            Text(marker.name, style = MaterialTheme.typography.h5, modifier = Modifier.padding(bottom = 8.dp))
+        }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
+        timeseries?.firstOrNull()?.let { series ->
+            val currentDetails = series.data?.instant
+            val nextHoursDetails = series.data?.next_1_hours
+            val next6HoursDetails = series.data?.next_6_hours
+
             Text("Været nå:", style = MaterialTheme.typography.h6)
-            Row(verticalAlignment = Alignment.CenterVertically,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -492,14 +511,19 @@ fun BottomSheetContent(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text("Været neste 6 timene:", style = MaterialTheme.typography.h6)
-            Row(verticalAlignment = Alignment.CenterVertically,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 next6HoursDetails?.let {
                     WeatherIcon(element = it.summary?.symbol_code)
-                    Text("${it.details?.air_temperature_min} - ${it.details?.air_temperature_max}°", color = Color.Red, fontSize = 25.sp)
+                    Text(
+                        "${it.details?.air_temperature_min} - ${it.details?.air_temperature_max}°",
+                        color = Color.Red,
+                        fontSize = 25.sp
+                    )
                     Text(buildAnnotatedString {
                         withStyle(style = SpanStyle(color = Color.Blue, fontSize = 25.sp)) {
                             append("${it.details?.precipitation_amount}")
@@ -516,6 +540,17 @@ fun BottomSheetContent(
                             append(" %")
                         }
                     })
+                }
+            }
+            marker?.let {
+                Button(
+                    onClick = {
+                        annotationHelper.deleteAnnotation(it.annotationId)
+                        userMarkerViewModel.deleteUserMarker(it)
+                    },
+                    modifier = Modifier.padding(top = 16.dp),
+                ) {
+                    Text("Delete Marker")
                 }
             }
         }

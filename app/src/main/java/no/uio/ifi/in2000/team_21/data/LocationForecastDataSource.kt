@@ -10,9 +10,11 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForcastResponse
+import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastResponse
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
-class LocationForcastDataSource {
+import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
+
+class LocationForecastDataSource {
 
     private var latitude: Double = 59.93
     private var longitude: Double = 10.72
@@ -33,9 +35,9 @@ class LocationForcastDataSource {
         }
     }
 
-    suspend fun fetchLocationForcastResponse(): LocationForcastResponse? {
+    suspend fun fetchLocationForecastResponse(latitude: Double, longitude: Double): LocationForecastResponse? {
 
-        val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.93&lon=10.72")
+        val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/locationforecast/2.0/complete?lat=${latitude}3&lon=$longitude")
 
         Log.d("LOCATION_DATA_SOURCE", "fetchLocationForcastResponse() status code: ${response.status.value}")
 
@@ -47,9 +49,14 @@ class LocationForcastDataSource {
         }
     }
 
-    suspend fun fetchLocationForecastTimeseries(): ArrayList<LocationForecastTimeseries>? {
-        val response = fetchLocationForcastResponse()
+    suspend fun fetchLocationForecastTimeseries(latitude: Double, longitude: Double): ArrayList<LocationForecastTimeseries>? {
+        val response = fetchLocationForecastResponse(latitude, longitude)
         return response?.properties?.timeseries
+    }
+
+    suspend fun fetchLocationForecastByTime(time: String, latitude: Double, longitude: Double): LocationForecastTimeseries? {
+        val timeseries = fetchLocationForecastTimeseries(latitude, longitude)
+        return timeseries?.find { it.time == time }
     }
 
 

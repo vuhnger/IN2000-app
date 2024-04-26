@@ -1,80 +1,51 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.data.OceanForecastRepository
-import no.uio.ifi.in2000.team_21.model.oceanforecast.Response
+import no.uio.ifi.in2000.team_21.model.oceanforecast.Details
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
+import no.uio.ifi.in2000.team_21.model.oceanforecast.OceanData
+
 
 class OceanForecastViewModel : ViewModel() {
 
     private val repository: OceanForecastRepository = OceanForecastRepository()
 
-    private var _forecasts: MutableLiveData<Response?> = MutableLiveData()
-    val forecasts: LiveData<Response?> get() = _forecasts
+    private val _oceanDataState = MutableStateFlow<OceanDataState>(OceanDataState.Loading)
+    val oceanDataState: StateFlow<OceanDataState> = _oceanDataState
 
-    private var _timeseries: MutableLiveData<ArrayList<Timeseries>?> = MutableLiveData()
-    val timeseries: LiveData<ArrayList<Timeseries>?> get() = _timeseries
+    sealed class OceanDataState {
+        object Loading : OceanDataState()
+        data class Success(val oceanData: OceanData?) : OceanDataState()
+        data class Error(val message: String) : OceanDataState()
+    }
 
-    private var _averageWaveHeightAndSeaState: MutableLiveData<Pair<Double?, String>> = MutableLiveData()
-    val averageWaveHeightAndSeaState: LiveData<Pair<Double?, String>> get() = _averageWaveHeightAndSeaState
-
-    fun fetchOceanForecastResponse() {
+    fun fetchOceanForecastByTime(time: String, latitude: Double, longitude: Double) {
+        _oceanDataState.value = OceanDataState.Loading
         viewModelScope.launch {
-            val response = repository.fetchOceanForecastResponse()
-            _forecasts.value = response
-            Log.d("OCEANFORCAST_VM", "Response: $response")
+            val timeseries = repository.fetchOceanForecastTimeseriesByTime(time, latitude, longitude)
+            val oceanData = timeseries?.data?.instant?.details?.let { transformToOceanData(it, timeseries) }
+            _oceanDataState.value = if (oceanData != null) {
+                OceanDataState.Success(oceanData)
+            } else {
+                OceanDataState.Error("No data found for time: $time")
+            }
         }
     }
 
-    fun fetchOceanForcastTimeseries() {
-        viewModelScope.launch {
-            val timeseriesData = repository.fetchOceanForecastTimeseries()
-            _timeseries.value = timeseriesData
-            Log.d("OCEANFORCAST_VM", "Timeseries: $timeseriesData")
-        }
+    private fun transformToOceanData(details: Details, timeseries: Timeseries?): OceanData {
+        return OceanData(
+            time = timeseries?.time,
+            sea_surface_wave_from_direction = details.sea_surface_wave_from_direction,
+            sea_surface_wave_height = details.sea_surface_wave_height,
+            sea_water_speed = details.sea_water_speed,
+            sea_water_temperature = details.sea_water_temperature,
+            sea_water_to_direction = details.sea_water_to_direction
+        )
     }
-
-    fun fetchSeaWaterTemperatureAtTime(time: String) {
-        viewModelScope.launch {
-            val temperature = repository.fetchSeaWaterTemperatureAtTime(time)
-            Log.d("OCEANFORCAST_VM", "Sea water temperature at $time is $temperature degrees Celsius.")
-        }
-    }
-
-    fun fetchSeaSurfaceWaveHeightAtTime(time: String) {
-        viewModelScope.launch {
-            val waveHeight = repository.fetchSeaSurfaceWaveHeightAtTime(time)
-            Log.d("OCEANFORCAST_VM", "Sea surface wave height at $time is $waveHeight meters.")
-        }
-    }
-
-    fun updateCoordinates(newLatitude: Double, newLongitude: Double) {
-        Log.d("OCEANFORCAST_VM", "Updating coordinates to lat: $newLatitude, lon: $newLongitude")
-        repository.setCoordinates(newLatitude, newLongitude)
-    }
-
-    fun fetchTimeseriesForTimeRange(startTime: String, endTime: String) {
-        viewModelScope.launch {
-            val timeseries = repository.fetchTimeseriesForTimeRange(startTime, endTime)
-            _timeseries.value = timeseries
-            Log.d("OCEANFORCAST_VM", "Timeseries for time range $startTime to $endTime: $timeseries")
-        }
-    }
-
-    fun fetchAverageWaveHeightAndSeaState(startTime: String, endTime: String) {
-        viewModelScope.launch {
-            val result = repository.fetchAverageWaveHeightAndSeaState(startTime, endTime)
-            _averageWaveHeightAndSeaState.value = result
-            Log.d("OCEANFORCAST_VM", "Average wave height and sea state for time range $startTime to $endTime: $result")
-        }
-    }
-
-
 }
-
 

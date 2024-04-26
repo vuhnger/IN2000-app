@@ -2,13 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="GitHub.team-21.app">
-        <State />
-      </entry>
-      <entry key="ProfileScreenTest">
-        <State />
-      </entry>
-      <entry key="SettingScreenTest">
+      <entry key="app">
         <State />
       </entry>
     </value>

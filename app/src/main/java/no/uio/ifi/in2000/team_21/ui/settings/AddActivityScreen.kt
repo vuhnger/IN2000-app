@@ -6,9 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,6 +21,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -32,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
+import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,19 +60,22 @@ fun AddActivityScreen(navController: NavController) {
             navigationIcon = {
                 IconButton(
                     onClick = {
-                        navController.navigate(route = Screen.SettingScreen.route)
+                        navController.popBackStack()
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Tilbake"
+                        contentDescription = "Tilbake",
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                        tint = onContainerLight,
+                        modifier = Modifier
+                            .size(30.dp)
                     )
                 }
-            }
-        )
+            },
+                colors = TopAppBarDefaults.topAppBarColors(backgroundLight),
+            )
         },
-        modifier = Modifier
-            .background(color = Color(0xFFF7F8FF))
+        containerColor = backgroundLight,
     ) {innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -83,10 +91,9 @@ fun AddActivityScreen(navController: NavController) {
                         .fillMaxWidth(),
                     //ikke optimal
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color(0xFF5062A4),
-                        unfocusedBorderColor = Color(0xFF5062A4)
+                        focusedBorderColor = onContainerLight,
+                        unfocusedBorderColor = onContainerLight)
                     )
-                )
                  Spacer(modifier = Modifier
                      .padding(30.dp)
                  )
@@ -105,7 +112,7 @@ fun WeatherSliders(name: String){
     Slider(
         value = sliderPosition,
         onValueChange = { sliderPosition = it },
-        colors = SliderDefaults.colors(Color(0xFF5062A4)),
+        colors = SliderDefaults.colors(onContainerLight),
         steps = 4,
         valueRange = 0f..15f
     )

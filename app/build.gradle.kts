@@ -137,12 +137,11 @@ dependencies {
     // Mapbox
     implementation("com.mapbox.maps:android:11.3.0")
     implementation("com.mapbox.extension:maps-compose:11.3.0")
-    implementation("com.mapbox.search:autofill:1.2.0")
+    /*implementation("com.mapbox.search:autofill:1.2.0")
     implementation("com.mapbox.search:discover:1.2.0")
     implementation("com.mapbox.search:place-autocomplete:1.2.0")
     implementation("com.mapbox.search:offline:1.2.0")
-    implementation("com.mapbox.search:mapbox-search-android:1.2.0")
-    implementation("com.mapbox.search:mapbox-search-android-ui:1.2.0")
+    implementation("com.mapbox.search:mapbox-search-android:1.2.0")*/
 }
 
 

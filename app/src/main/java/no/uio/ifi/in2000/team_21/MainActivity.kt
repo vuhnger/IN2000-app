@@ -8,21 +8,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mapbox.common.MapboxOptions
-import androidx.navigation.compose.currentBackStackEntryAsState
-import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
-import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
-import no.uio.ifi.in2000.team_21.ui.home.ActivityCardGrid
-import no.uio.ifi.in2000.team_21.ui.home.ActivityCardSmall
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.FriendsActivityScreen
@@ -90,7 +82,7 @@ fun App(){
 
     NavHost(
         navController = navController,
-        startDestination = Screen.SettingScreen.route
+        startDestination = Screen.HomeScreen.route
         // startDestination = Screen.HomeScreen.route
     ){
 

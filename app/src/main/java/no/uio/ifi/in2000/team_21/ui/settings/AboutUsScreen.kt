@@ -61,19 +61,42 @@ data class TeamMember(
 @ExperimentalMaterial3Api
 fun AboutUsScreen(navController: NavController) {
 
-    val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
     val names = listOf(
-        TeamMember("Joachim Haasted", 23, "hmm", "Informatikk: programmering og systemarkitektur") ,
-        TeamMember("Jonas Holmboe", 21, "hmm", "Informatikk: programmering og systemarkitektur"),
-        TeamMember("Kaja Stenen", 23, "ESTJ-A", "Informatikk: design, bruk og interaksjon"),
-        TeamMember("Mari Stenbrenden", 22, "ESFP-A", "Informatikk: design, bruk og interaksjon"),
-        TeamMember("Sebastian Hareide", 21, "ENFJ-T", "Informatikk: programmering og systemarkitektur"),
-        TeamMember("Victor Uhnger", 22, "INTJ-A", "Informatikk: språkteknologi")
-    )
-
-    Log.d(
-        FUNCTION_NAME,
-        "called"
+        TeamMember(
+            name = "Joachim Haasted",
+            age =  23,
+            personality = "ISTJ-A (Assertive Logistician)",
+            studyProgramme = "Informatikk: programmering og systemarkitektur"
+        ),
+        TeamMember(
+            name  = "Jonas Holmboe",
+            age = 22,
+            personality = "INTP-A (Assertive Logician)",
+            studyProgramme = "Informatikk: programmering og systemarkitektur"
+        ),
+        TeamMember(
+            name = "Kaja Stenen",
+            age = 23,
+            personality = "ESTJ-A (Executive)",
+            studyProgramme = "Informatikk: design, bruk og interaksjon"
+        ),
+        TeamMember(
+            name = "Mari Stenbrenden",
+            age = 22,
+            personality = "ESFP-A (Entertainer)",
+            studyProgramme = "Informatikk: design, bruk og interaksjon"
+        ),
+        TeamMember(
+            name = "Sebastian Hareide",
+            age = 21,
+            personality = "ENFJ-T (Protagonist)",
+            studyProgramme = "Informatikk: programmering og systemarkitektur"
+        ),
+        TeamMember(
+            name = "Victor Uhnger", age = 22,
+            personality = "INTJ-A (Architect)",
+            studyProgramme = "Informatikk: språkteknologi"
+        )
     )
 
     Scaffold(
@@ -156,7 +179,7 @@ fun AboutUsCard(teamMember: TeamMember){
                     .height(16.dp)
             )
             Text(
-                text = teamMember.age.toString(),
+                text = teamMember.age.toString() + " år",
                 style = TextStyle(
                     fontSize = 12.sp,
                     color = onContainerLight,

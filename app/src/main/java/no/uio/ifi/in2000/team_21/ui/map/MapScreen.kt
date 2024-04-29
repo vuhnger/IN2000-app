@@ -36,6 +36,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -217,13 +218,12 @@ fun MapboxMapView() {
             )
         }
     }
-    /*
     DisposableEffect(Unit) {
         onDispose {
             // Disable the location component when the view is disposed of
             mapView.location.enabled = false
         }
-    }*/
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)

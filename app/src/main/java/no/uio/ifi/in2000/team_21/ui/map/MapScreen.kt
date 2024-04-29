@@ -6,9 +6,13 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color.parseColor
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,7 +36,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -53,6 +56,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -130,7 +135,7 @@ fun MapboxMapView() {
     val userMarkerViewModel: UserMarkerViewModel = viewModel(factory = UserMarkerViewModelFactory(application))
 
     val annotationHelper = remember {
-        MapAnnotationHelper(mapView) { marker ->
+        MapAnnotationHelper(mapView, context) { marker ->
             selectedMarker.value = marker
             forecastViewModel.fetchWeatherForLocation(marker.latitude, marker.longitude)
             coroutineScope.launch {
@@ -212,12 +217,13 @@ fun MapboxMapView() {
             )
         }
     }
+    /*
     DisposableEffect(Unit) {
         onDispose {
             // Disable the location component when the view is disposed of
             mapView.location.enabled = false
         }
-    }
+    }*/
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -232,7 +238,6 @@ fun setupMapInteractions(
     annotationHelper: MapAnnotationHelper,
     selectedMarker: MutableState<UserMarkerEntity?>
 ) {
-    // Location component and other setups here
     mapboxMap.addOnMapClickListener { point ->
         handleMapClick(point, mapboxMap, context, coroutineScope, forecastViewModel, bottomSheetState, selectedMarker)
         true
@@ -288,7 +293,6 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
     val fillLayerId = "alerts-fill-layer"
 
     this.getStyle { style ->
-        // Ensure the source is added or updated
         var geoJsonSource = style.getSourceAs<GeoJsonSource>(sourceId)
         if (geoJsonSource == null) {
             geoJsonSource = GeoJsonSource.Builder(sourceId)
@@ -299,25 +303,22 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
             geoJsonSource.featureCollection(featureCollection)
         }
 
-        // Ensure the layer is added or updated
         var fillLayer = style.getLayerAs<FillLayer>(fillLayerId)
         if (fillLayer == null) {
             fillLayer = FillLayer(fillLayerId, sourceId).apply {
-                fillColor("red") // Default color, replace with dynamic value if needed
+                fillColor("red") // Default color
             }
             style.addLayer(fillLayer)
         } else {
-            // Assuming fillColor needs to be updated dynamically
             fillLayer.fillColor(Expression.literal("red"))
         }
 
-        // Optionally update fill color based on feature properties
         myFeatures.firstOrNull()?.properties?.riskMatrixColor?.let { matrixColor ->
             val fillColor = when(matrixColor.lowercase()) {
                 "red" -> "rgba(202, 0, 42, 0.5)"
                 "yellow" -> "rgba(255, 176, 66, 0.5)"
                 "green" -> "rgba(85, 107, 47, 0.5)"
-                else -> "rgba(255, 0, 0, 0.5)" // Default color if riskMatrixColor not defined
+                else -> "rgba(255, 176, 66, 0.5)" // Default color if riskMatrixColor not defined
             }
             fillLayer.fillColor(Expression.literal(fillColor))
         }
@@ -434,26 +435,13 @@ fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
                 onPermissionGranted()
             }
             locationPermissionState.status.shouldShowRationale -> {
-                // Here, you might want to show a dialog or a UI element explaining why you need the location permission
+                // show a dialog or a UI element explaining why you need the location permission
             }
             else -> {
                 locationPermissionState.launchPermissionRequest()
             }
         }
     }
-    /*
-    val locationPermissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
-
-    LaunchedEffect(key1 = locationPermissionState.permission) {
-        if (locationPermissionState.status.isGranted) {
-            onPermissionGranted()
-        } else if (!locationPermissionState.status.shouldShowRationale) {
-            // If permission is not granted and rationale should not be shown, request permission
-            locationPermissionState.launchPermissionRequest()
-        }
-        // Case where showRationale
-    }
-     */
 }
 
 @Composable
@@ -496,7 +484,6 @@ fun BottomSheetContent(
                             append(" mm")
                         }
                     })
-                    //Text("${it.details?.wind_speed} m/s")
                     Text(buildAnnotatedString {
                         withStyle(style = SpanStyle(color = "#00145D".color, fontSize = 30.sp)) {
                             append("${it.details?.wind_speed}")
@@ -560,19 +547,68 @@ fun BottomSheetContent(
 fun showSaveLocationDialog(context: Context, point: Point, viewModel: UserMarkerViewModel, annotationHelper: MapAnnotationHelper) {
     val dialogView = LayoutInflater.from(context).inflate(R.layout.save_location_dialog, null)
     val editTextName = dialogView.findViewById<EditText>(R.id.editTextLocationName)
+    val iconsContainer = dialogView.findViewById<LinearLayout>(R.id.icon_selection_container)
 
-    AlertDialog.Builder(context)
-        .setTitle("Save Location")
-        .setView(dialogView)
-        .setPositiveButton("Save") { dialog, _ ->
-            val name = editTextName.text.toString()
-            annotationHelper.saveLocation(name, point, viewModel)
-            dialog.dismiss()
+    val icons = listOf(
+        R.drawable.fishing,
+        R.drawable.rowing,
+        R.drawable.scuba,
+        R.drawable.surfing,
+        R.drawable.swimming,
+        R.drawable.waterski
+    )
+
+    val dialog = AlertDialog.Builder(context).apply {
+        setTitle("Save Location")
+        setView(dialogView)
+        setPositiveButton("Save", null)
+        setNegativeButton("Cancel", null)
+    }.create()
+
+    var selectedIconResId: Int? = null
+
+    icons.forEach { iconResId ->
+        val imageView = ImageView(context).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                marginEnd = 8
+            }
+            setImageResource(iconResId)
+            setOnClickListener {
+                selectedIconResId = iconResId
+                iconsContainer.children.forEach { view ->
+                    view.background = null
+                }
+                background = ContextCompat.getDrawable(context, R.drawable.selected_icon_background)
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = editTextName.text.toString().trim().isNotEmpty() && selectedIconResId != null
+            }
         }
-        .setNegativeButton("Cancel") { dialog, _ ->
-            dialog.cancel()
+        iconsContainer.addView(imageView)
+    }
+
+    dialog.setOnShowListener {
+        val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        positiveButton.isEnabled = false
+
+        positiveButton.setOnClickListener {
+            val name = editTextName.text.toString().trim()
+            if (selectedIconResId != null && name.isNotEmpty()) {
+                annotationHelper.saveLocation(name, point, selectedIconResId!!, viewModel)
+                dialog.dismiss()
+            }
         }
-        .show()
+
+        editTextName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                positiveButton.isEnabled = s.toString().trim().isNotEmpty() && selectedIconResId != null
+            }
+            override fun afterTextChanged(s: Editable) {}
+        })
+    }
+    dialog.show()
 }
 
 fun setupLocationComponent(mapView: MapView) {

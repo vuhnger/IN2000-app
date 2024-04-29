@@ -1,9 +1,7 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,9 +19,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -32,7 +30,6 @@ import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.ui.tooling.preview.Preview
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.model.Activity
 import no.uio.ifi.in2000.team_21.model.Kayaking
@@ -161,6 +158,27 @@ fun ActivityCardSmall(
         sea_surface_wave_height = 0.5
     )
 ){
+    Card(
+        modifier = Modifier
+            .width(102.dp)
+            .height(142.dp)
+            .padding(start = 10.dp, top = 10.dp, end = 10.dp)
+    ) {
+
+    }
+}
+
+@Composable
+fun ActivityIconSmall(
+    activity: Activity = Kayaking(
+        air_temperature = 10.0,
+        air_temperature_unit = R.string.celsius.toString(),
+        sea_water_temperature = 2.0,
+        sea_water_temperature_unit = "celsius",
+        sea_water_speed = 3.0,
+        sea_surface_wave_height = 0.5
+    )
+){
     Icon(
         imageVector = Icons.Rounded.AccountCircle,
         contentDescription = "",
@@ -169,6 +187,25 @@ fun ActivityCardSmall(
     )
 }
 
+@Composable
+fun ActivityCardHoriznotalWide(
+    activity: Activity
+){
+    Card(
+
+    ) {
+        Row(
+
+        ) {
+            // TODO: Icon
+            // TODO: Fav button icon clickable
+        }
+    }
+}
+
+/*
+* Lager Grid med aktiviteskort nedover, 2 og 2 per kolonne.
+*/
 @Composable
 fun ActivityCardGrid(
     activities: List<Activity>,
@@ -182,6 +219,38 @@ fun ActivityCardGrid(
     ) {
         items(activities) { activity ->
             ActivityCard(activity = activity, viewModel = activitiesViewModel)
+        }
+    }
+}
+
+/*
+
+*/
+@Composable
+fun ActivityCardGridHorizontal(
+    activites: List<Activity>
+){
+    LazyHorizontalGrid(
+        rows = GridCells.Fixed(1)
+    ) {
+        items(activites){activity ->
+            ActivityCardSmall(activity)
+        }
+    }
+}
+
+/*
+
+*/
+@Composable
+fun ActivityCardGridHorizontalSmall(
+    activities: List<Activity>
+) {
+    LazyHorizontalGrid(
+        rows = GridCells.Fixed(1)
+    ) {
+        items(activities){activity ->
+
         }
     }
 }

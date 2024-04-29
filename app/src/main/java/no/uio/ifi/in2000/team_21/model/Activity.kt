@@ -19,11 +19,10 @@ Vannski
 Kano
  */
 
-
 private fun toFahrenheit(x: Double): Double {
     return (x * 9.0 / 5.0) + 32
 }
-abstract class Activity{
+abstract class Activity{ //TODO: Legge til aktivitetsikon
 
     abstract val type: String
     abstract val air_temperature: Double?

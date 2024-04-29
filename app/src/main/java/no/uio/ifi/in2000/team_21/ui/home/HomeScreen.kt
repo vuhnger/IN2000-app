@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -216,7 +215,9 @@ fun WeatherCard(temperature: String, highLowTemp: String, weatherCondition: Stri
 }
 
 @Composable
-fun ActivityFavorites(activities: MutableList<no.uio.ifi.in2000.team_21.model.Activity>) {
+fun ActivityFavorites(
+    activities: MutableList<no.uio.ifi.in2000.team_21.model.Activity>
+) {
     Column(modifier = Modifier.padding(8.dp)) {
         Text(
             text = "Favoritter",
@@ -231,11 +232,9 @@ fun ActivityFavorites(activities: MutableList<no.uio.ifi.in2000.team_21.model.Ac
             )
         )
         Spacer(Modifier.height(8.dp))
-        Row(horizontalArrangement = Arrangement.SpaceBetween) {
-            activities.forEach {activity ->
-               ActivityCardSmall()
-            }
-        }
+        ActivityCardGridHorizontalSmall(
+            activities
+        )
     }
 }
 @Composable

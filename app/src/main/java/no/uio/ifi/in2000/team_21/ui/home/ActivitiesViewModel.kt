@@ -8,17 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.R
-import no.uio.ifi.in2000.team_21.model.Activity
-import no.uio.ifi.in2000.team_21.model.Fishing
-import no.uio.ifi.in2000.team_21.model.Kayaking
-import no.uio.ifi.in2000.team_21.model.Rowing
-import no.uio.ifi.in2000.team_21.model.Snorkeling
-import no.uio.ifi.in2000.team_21.model.Waterskiing
+import no.uio.ifi.in2000.team_21.model.ActivityModel
+import no.uio.ifi.in2000.team_21.model.ActivityModels
 
 
 data class ActivitiesUIState(
-    val activities: List<Activity>,
-    val favorites: MutableList<Activity>
+    val activities: List<ActivityModel>,
+    val favorites: MutableList<ActivityModel>
 )
 
 class ActivitiesViewModel(
@@ -27,48 +23,7 @@ class ActivitiesViewModel(
 
     var activityUIstate by mutableStateOf(
         ActivitiesUIState(
-            activities = mutableListOf(
-                Kayaking(
-                    air_temperature = 10.0,
-                    air_temperature_unit = R.string.celsius.toString(),
-                    sea_water_temperature = 2.0,
-                    sea_water_temperature_unit = "celsius",
-                    sea_water_speed = 3.0,
-                    sea_surface_wave_height = 0.5
-                ),
-                Fishing(
-                    air_temperature = 10.0,
-                    air_temperature_unit = R.string.celsius.toString(),
-                    sea_water_temperature = 2.0,
-                    sea_water_temperature_unit = "celsius",
-                    sea_water_speed = 3.0,
-                    sea_surface_wave_height = 0.5
-                ),
-                Rowing(
-                    air_temperature = 10.0,
-                    air_temperature_unit = R.string.celsius.toString(),
-                    sea_water_temperature = 2.0,
-                    sea_water_temperature_unit = "celsius",
-                    sea_water_speed = 3.0,
-                    sea_surface_wave_height = 0.5
-                ),
-                Snorkeling(
-                    air_temperature = 10.0,
-                    air_temperature_unit = R.string.celsius.toString(),
-                    sea_water_temperature = 2.0,
-                    sea_water_temperature_unit = "celsius",
-                    sea_water_speed = 3.0,
-                    sea_surface_wave_height = 0.5
-                ),
-                Waterskiing(
-                    air_temperature = 10.0,
-                    air_temperature_unit = R.string.celsius.toString(),
-                    sea_water_temperature = 2.0,
-                    sea_water_temperature_unit = "celsius",
-                    sea_water_speed = 3.0,
-                    sea_surface_wave_height = 0.5
-                )
-            ),
+            activities = ActivityModels.allActivities,
             favorites = mutableListOf()
         )
     )
@@ -76,7 +31,7 @@ class ActivitiesViewModel(
 
     // TODO: Lage konstruktør som henter værdata
 
-    fun addFavorite(activity: Activity){
+    fun addFavorite(activity: ActivityModel){
 
         activityUIstate.favorites.add(activity)
 

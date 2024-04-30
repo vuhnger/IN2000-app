@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.model.ActivityModel
 
 // Top bar implementation: to work as one component to be used through all the screens.
 // Dataclass to define each tab in the navbar
@@ -111,7 +113,12 @@ fun RowScope.TopBarItem(item: TopNavItem, isSelected: Boolean, onItemSelect: () 
 }
 
 @Composable
-fun WeatherCard(temperature: String, highLowTemp: String, weatherCondition: String) {
+fun WeatherCard(
+    temperature: String,
+    highLowTemp: String,
+    weatherCondition: String,
+    icon: String
+) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -166,7 +173,7 @@ fun WeatherCard(temperature: String, highLowTemp: String, weatherCondition: Stri
                     horizontalArrangement = Arrangement.Start
                 ) {
                     WeatherIcon(
-                        element = "fair_day",
+                        element = icon,
                     )
                     Spacer(modifier = Modifier.padding(4.dp))
                     Text(
@@ -216,9 +223,12 @@ fun WeatherCard(temperature: String, highLowTemp: String, weatherCondition: Stri
 
 @Composable
 fun ActivityFavorites(
-    activities: MutableList<no.uio.ifi.in2000.team_21.model.Activity>
+    viewModel: ActivitiesViewModel,
+    navController: NavController
 ) {
-    Column(modifier = Modifier.padding(8.dp)) {
+    Column(
+        modifier = Modifier.padding(8.dp)
+    ) {
         Text(
             text = "Favoritter",
             style = TextStyle(
@@ -232,23 +242,33 @@ fun ActivityFavorites(
             )
         )
         Spacer(Modifier.height(8.dp))
-        ActivityCardGridHorizontalSmall(
-            activities
+        Row(
+
+        ) {
+
+
+        }
+        Icon(
+            imageVector = Icons.Rounded.Add,
+            contentDescription = "Button add to favorites",
+            modifier = Modifier
+                .padding(1.dp)
+                .width(84.dp)
+                .height(84.dp)
+                .clickable {
+                    navController.navigate(Screen.AddActivitiyScreen.route)
+                } //TODO: add to favorites screen
         )
-    }
-}
-@Composable
-fun ActivityIcon(activity: no.uio.ifi.in2000.team_21.model.Activity) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        /*Icon(/* ... */) */
-        /*Text(activity.name)*/
-        Text("Aktivitet")
+
+        ActivityCardGridHorizontalSmall(
+            activitiesViewModel = viewModel
+        )
 
     }
 }
+
 @Composable
 fun RecommendationSection(
-    recommendations: List<no.uio.ifi.in2000.team_21.model.Activity>,
     viewModel: ActivitiesViewModel
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
@@ -266,8 +286,10 @@ fun RecommendationSection(
         )
         Spacer(Modifier.height(8.dp))
         LazyRow {
-            this.items(recommendations){ recommendation ->
-                // TODO: ActivityCardGridHorizontal her
+            this.items(viewModel.activityUIstate.activities){ recommendation ->
+                ActivityCardSmall(
+                    activity = recommendation
+                )
             }
             }
         }
@@ -276,7 +298,8 @@ fun RecommendationSection(
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: ActivitiesViewModel = ActivitiesViewModel()
+    activitiesViewModel: ActivitiesViewModel,
+    locationForecastViewModel: LocationForecastViewModel
 ) {
     //TopBar(items = TopNavItem<items>, currentSelection = 1 ) {}
 
@@ -336,18 +359,21 @@ fun HomeScreen(
             )
 
         }
-
+        // TODO: Hente fra data nå
         WeatherCard(
-            temperature = "14°",
-            highLowTemp = "H:16° L:3°",
-            weatherCondition = "Skyfritt"
+            temperature = "",
+            highLowTemp = "",
+            weatherCondition = "",
+            icon = ""
         )
+
         ActivityFavorites(
-            activities = viewModel.activityUIstate.favorites
+            viewModel = activitiesViewModel,
+            navController = navController
         )
+
         RecommendationSection(
-            recommendations = viewModel.activityUIstate.activities,
-            viewModel = viewModel
+            viewModel = activitiesViewModel
         )
     }
 }

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LocationForcastResponse (
+data class LocationForecastResponse (
     @SerializedName("type") var type: String? = null,
     @SerializedName("geometry") var geometry: Geometry? = Geometry(),
     @SerializedName("properties") var properties: Properties? = Properties()

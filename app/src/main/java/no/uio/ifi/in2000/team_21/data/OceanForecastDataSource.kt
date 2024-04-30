@@ -4,28 +4,19 @@ import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
-import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.util.appendIfNameAbsent
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import no.uio.ifi.in2000.team_21.model.oceanforecast.Response
+import no.uio.ifi.in2000.team_21.model.oceanforecast.OceanForecastResponse
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
 
 open class OceanForecastDataSource {
 
-    private var latitude: Double = 59.0
-    private var longitude: Double = 3.0
-
-    fun setCoordinates(newLatitude: Double, newLongitude: Double) {
-        latitude = newLatitude
-        longitude = newLongitude
-    }
+    private var latitude: Double = 59.05391729907632
+    private var longitude: Double = 10.431265180256219
 
 
     private val client = HttpClient() {
@@ -42,9 +33,9 @@ open class OceanForecastDataSource {
         }
     }
 
-    suspend fun fetchOceanForecastResponse(): Response? {
+    suspend fun fetchOceanForecastResponse(latitude: Double, longitude: Double): OceanForecastResponse? {
         return try {
-            val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/oceanforecast/2.0/complete?lat=59.0&lon=3.0")
+            val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/oceanforecast/2.0/complete?lat=$latitude&lon=$longitude")
             Log.d("OCEAN_DATA_SOURCE", "fetchForecast() status code: ${response.status.value}")
             if (response.status.value in 200..299) {
                 response.body()
@@ -57,8 +48,14 @@ open class OceanForecastDataSource {
         }
     }
 
-    suspend fun fetchOceanForecastTimeseries(): ArrayList<Timeseries>? {
-        val response = fetchOceanForecastResponse()
+    suspend fun fetchOceanForecastTimeseries(latitude: Double, longitude: Double): ArrayList<Timeseries>? {
+        val response = fetchOceanForecastResponse(latitude, longitude)
         return response?.properties?.timeseries
     }
+
+    suspend fun fetchOceanForecastByTime(time: String, latitude: Double, longitude: Double): Timeseries? {
+        val timeseries = fetchOceanForecastTimeseries(latitude, longitude)
+        return timeseries?.find { it.time == time }
+    }
 }
+

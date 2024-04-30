@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class Response (
+data class OceanForecastResponse (
 
     @SerializedName("type"       ) var type       : String?     = null,
     @SerializedName("geometry"   ) var geometry   : Geometry?   = Geometry(),

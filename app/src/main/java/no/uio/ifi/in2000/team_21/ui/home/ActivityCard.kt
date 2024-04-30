@@ -31,12 +31,11 @@ import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import no.uio.ifi.in2000.team_21.R
-import no.uio.ifi.in2000.team_21.model.Activity
-import no.uio.ifi.in2000.team_21.model.Kayaking
+import no.uio.ifi.in2000.team_21.model.ActivityModel
 
 @Composable
 fun ActivityCard(
-    activity : Activity,
+    activity : ActivityModel,
     viewModel: ActivitiesViewModel
 ) {
     val aspectRatio = 4f / 2f
@@ -58,7 +57,7 @@ fun ActivityCard(
                     .padding(5.dp)
             ) {
                 Text(
-                    text = activity.type,
+                    text = activity.activityName,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -83,13 +82,16 @@ fun ActivityCard(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth(),
             ){
-                Image(
-                    painter = painterResource(id = activity.imageId),
-                    contentDescription = "Picture of ${activity.type}",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(aspectRatio)
-                )
+
+                if (activity.imageId != null){
+                    Image(
+                        painter = painterResource(activity.imageId),
+                        contentDescription = "Picture of ${activity.activityName}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(aspectRatio)
+                    )
+                }
             }
             Text(
                 text = "Forholdene i dag oppsummert: ",
@@ -101,23 +103,20 @@ fun ActivityCard(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(horizontal = 8.dp)
             ) {
-                if (activity.icons.isNotEmpty()) {
-                    activity.icons.forEach { icon ->
-                        WeatherIcon(element = icon, size = 30)
-                        Spacer(modifier = Modifier.width(4.dp))
-                    }
-                }else{ // TODO: Finne plassholder for ikoner
-                    WeatherIcon(element = "fair_day", size = 30)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    WeatherIcon(element = "cloudy", size = 30)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    WeatherIcon(element = "clearsky_day", size = 30)
-                    Spacer(modifier = Modifier.width(4.dp))
-                }
+
+                // TODO: Hente ikoner for i dag
+
+                WeatherIcon(element = "fair_day", size = 30)
+                Spacer(modifier = Modifier.width(4.dp))
+                WeatherIcon(element = "cloudy", size = 30)
+                Spacer(modifier = Modifier.width(4.dp))
+                WeatherIcon(element = "clearsky_day", size = 30)
+                Spacer(modifier = Modifier.width(4.dp))
+
             }
             Text(
-                text = "I dag er forholdene ${activity.isReccomended()} for ${activity.type.lowercase()}.",
-                fontSize = 8.sp, // Halved font size
+                text = "", // TODO: bruke beregning fra modell
+                fontSize = 8.sp,
                 modifier = Modifier
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             )
@@ -149,14 +148,7 @@ fun ActivityCard(
 
 @Composable
 fun ActivityCardSmall(
-    activity: Activity = Kayaking(
-        air_temperature = 10.0,
-        air_temperature_unit = R.string.celsius.toString(),
-        sea_water_temperature = 2.0,
-        sea_water_temperature_unit = "celsius",
-        sea_water_speed = 3.0,
-        sea_surface_wave_height = 0.5
-    )
+    activity: ActivityModel
 ){
     Card(
         modifier = Modifier
@@ -164,32 +156,42 @@ fun ActivityCardSmall(
             .height(142.dp)
             .padding(start = 10.dp, top = 10.dp, end = 10.dp)
     ) {
+        Column(
 
+        ) {
+            Text(
+                text = activity.activityName
+            )
+            if (activity.icon != null){
+                Icon(
+                    painter = painterResource(id = activity.icon),
+                    contentDescription = "Icon of ${activity.activityName}",
+                    modifier = Modifier
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun ActivityIconSmall(
-    activity: Activity = Kayaking(
-        air_temperature = 10.0,
-        air_temperature_unit = R.string.celsius.toString(),
-        sea_water_temperature = 2.0,
-        sea_water_temperature_unit = "celsius",
-        sea_water_speed = 3.0,
-        sea_surface_wave_height = 0.5
-    )
+    activity: ActivityModel,
+    activitiesViewModel: ActivitiesViewModel
 ){
+    //TODO : Make clickable and add to favorites
     Icon(
-        imageVector = Icons.Rounded.AccountCircle,
-        contentDescription = "",
+        painter = painterResource(id = activity.icon),
+        contentDescription = "Icon of ${activity.activityName}",
         modifier = Modifier
-            .clickable {  }
+            .clickable {
+                activitiesViewModel.activityUIstate.favorites.add(activity)
+            }
     )
 }
 
 @Composable
 fun ActivityCardHoriznotalWide(
-    activity: Activity
+    activity: ActivityModel
 ){
     Card(
 
@@ -208,7 +210,7 @@ fun ActivityCardHoriznotalWide(
 */
 @Composable
 fun ActivityCardGrid(
-    activities: List<Activity>,
+    activities: List<ActivityModel>,
     activitiesViewModel: ActivitiesViewModel
 ) {
     LazyVerticalGrid(
@@ -228,7 +230,7 @@ fun ActivityCardGrid(
 */
 @Composable
 fun ActivityCardGridHorizontal(
-    activites: List<Activity>
+    activites: List<ActivityModel>
 ){
     LazyHorizontalGrid(
         rows = GridCells.Fixed(1)
@@ -244,13 +246,13 @@ fun ActivityCardGridHorizontal(
 */
 @Composable
 fun ActivityCardGridHorizontalSmall(
-    activities: List<Activity>
+    activitiesViewModel: ActivitiesViewModel
 ) {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(1)
     ) {
-        items(activities){activity ->
-
+        items(activitiesViewModel.activityUIstate.favorites){activity ->
+            ActivityIconSmall(activity = activity, activitiesViewModel = activitiesViewModel)
         }
     }
 }

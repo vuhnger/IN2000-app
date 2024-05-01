@@ -1,17 +1,13 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.data.LocationForecastRepository
-import no.uio.ifi.in2000.team_21.data.OceanForecastRepository
 import no.uio.ifi.in2000.team_21.model.locationforcast.Details
-import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastResponse
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
 import no.uio.ifi.in2000.team_21.model.locationforcast.WeatherData
 

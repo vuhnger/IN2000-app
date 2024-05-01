@@ -1,4 +1,6 @@
 package no.uio.ifi.in2000.team_21.ui.home
+
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,17 +43,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
-import no.uio.ifi.in2000.team_21.model.ActivityModel
-import no.uio.ifi.in2000.team_21.model.ActivityModels
+import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 
 // Top bar implementation: to work as one component to be used through all the screens.
 // Dataclass to define each tab in the navbar
@@ -415,3 +420,67 @@ fun HomeScreen(
         )
     }
 }
+
+
+
+
+
+@Composable
+fun HomeScreen(navController: NavController) {
+    Box {
+        MapboxMapView().apply {
+            //Modifier.padding(innerPadding)
+        }
+        Column {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Spacer(modifier = Modifier.weight(1.0f))
+                SettingsButton(
+                    onClick = {
+                        navController.navigate(
+                            route = Screen.SettingScreen.route
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SettingsButton(onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(Icons.Filled.Settings, contentDescription = "Settings")
+    }
+}
+/*
+@Composable
+fun BottomBarWithIcons() {
+    BottomNavigation(
+        modifier = Modifier.height(56.dp),
+        backgroundColor = Color.White,
+        elevation = 8.dp
+    ) {
+        repeat(1) { index ->
+            BottomNavigationItem(
+                icon = {
+                    Box(
+                        Modifier
+                            .size(24.dp)
+                            .background(Color.Gray, CircleShape)
+                    )
+                },
+                label = { Text("Icon $index") },
+                selected = false,
+                onClick = {  }
+            )
+        }
+    }
+}
+
+ */
+

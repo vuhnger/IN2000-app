@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.team_21.data
 
-import com.mapbox.mapboxsdk.geometry.LatLng
+
+import com.mapbox.geojson.Point
 import no.uio.ifi.in2000.team_21.model.Alert
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Feature
@@ -18,7 +19,7 @@ class AlertsRepository(private val dataSource: AlertsDataSource) {
         return dataSource.fetchAlerts(parameters)
     }
 
-    suspend fun fetchAndFilterAlerts(parameters: AlertsInfo, userLocation: LatLng, radius: Double): List<Feature>? {
+    suspend fun fetchAndFilterAlerts(parameters: AlertsInfo, userLocation: Point, radius: Double): List<Feature>? {
         val alertsResponse = fetchAlerts(parameters)
         val allFeatures = alertsResponse?.features ?: return null
 
@@ -40,7 +41,7 @@ class AlertsRepository(private val dataSource: AlertsDataSource) {
         return R * c
     }
 
-    private fun filterAlertsByRadius(allFeatures: List<Feature>, userLocation: LatLng, radius: Double): List<Feature> {
+    private fun filterAlertsByRadius(allFeatures: List<Feature>, userLocation: Point, radius: Double): List<Feature> {
         return allFeatures.filter { feature ->
             val firstCoordinate = when (val geometry = feature.geometry) {
                 is Polygon -> if (geometry.coordinates.isNotEmpty() && geometry.coordinates.first().isNotEmpty()) {
@@ -57,7 +58,7 @@ class AlertsRepository(private val dataSource: AlertsDataSource) {
 
             firstCoordinate?.let { coords ->
                 val alertLocation = GeoPoint(coords[1], coords[0])
-                val distance = haversine(userLocation.latitude, userLocation.longitude, alertLocation.latitude, alertLocation.longitude)
+                val distance = haversine(userLocation.latitude(), userLocation.longitude(), alertLocation.latitude, alertLocation.longitude)
                 distance <= radius
             }?: false
         }

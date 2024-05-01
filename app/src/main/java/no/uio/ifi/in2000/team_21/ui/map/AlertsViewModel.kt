@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.geojson.Point
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.container.RepositoryContainer
 import no.uio.ifi.in2000.team_21.data.AlertsRepository
@@ -26,7 +26,7 @@ class AlertsViewModel(private val repository: AlertsRepository = RepositoryConta
         }
     }
 
-    fun fetchAndFilterAlerts(parameters: AlertsInfo, userLocation: LatLng, radius: Double) {
+    fun fetchAndFilterAlerts(parameters: AlertsInfo, userLocation: Point, radius: Double) {
         viewModelScope.launch {
             _filteredFeatures.value = repository.fetchAndFilterAlerts(parameters, userLocation, radius)
             //Log.d("Pre-UI Update", "Filtered Features: ${_filteredFeatures.value?.joinToString { it.properties?.title.orEmpty() }}")

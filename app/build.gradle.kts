@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.23"
+    id("kotlin-kapt")
 }
 
 android {
@@ -54,18 +55,18 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.13.0")
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9") // Denne burde være 21.2.0 sammed med 'play-services-location', mend de deler ikke samme versjon???
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.9.0")
-    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation(platform("androidx.compose:compose-bom:2024.02.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation ("androidx.core:core-ktx:1.13.0")
+    implementation ("androidx.core:core-ktx:1.12.0")
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
     implementation ("org.slf4j:slf4j-simple:1.7.30")
     implementation ("androidx.compose.material:material:1.6.4")
@@ -73,7 +74,6 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1")
 
     // Ktor 8)
     implementation("org.jetbrains.kotlin:kotlin-serialization:1.9.23")
@@ -126,6 +126,22 @@ dependencies {
     // Location
     implementation("com.google.android.gms:play-services-location:20.0.0") // DENNE MÅ VÆRE 20.0.0 TIL TROSS FOR NYERE VERSJONER!!!!
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+
+    // Room (SQLite) for database
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
+    // Mapbox
+    implementation("com.mapbox.maps:android:11.3.0")
+    implementation("com.mapbox.extension:maps-compose:11.3.0")
+    /*implementation("com.mapbox.search:autofill:1.2.0")
+    implementation("com.mapbox.search:discover:1.2.0")
+    implementation("com.mapbox.search:place-autocomplete:1.2.0")
+    implementation("com.mapbox.search:offline:1.2.0")
+    implementation("com.mapbox.search:mapbox-search-android:1.2.0")*/
 }
 
 

@@ -21,8 +21,8 @@ class ForecastViewModel : ViewModel() {
     private val repository: LocationForecastDataRepository = LocationForecastDataRepository()
     private val _selectedLocationWeatherData = mutableStateOf<List<LocationForecastTimeseries>?>(null)
     val selectedLocationWeatherData: State<List<LocationForecastTimeseries>?> = _selectedLocationWeatherData
-    private val _weatherDataState = MutableStateFlow<LocationForecastViewModel.WeatherDataState>(LocationForecastViewModel.WeatherDataState.Loading)
-    val weatherDataState: StateFlow<LocationForecastViewModel.WeatherDataState> = _weatherDataState
+    private val _weatherDataState = MutableStateFlow<WeatherDataState>(WeatherDataState.Loading)
+    val weatherDataState: StateFlow<WeatherDataState> = _weatherDataState
 
     // Private mutable LiveData for icons
     var icons by mutableStateOf(
@@ -61,14 +61,14 @@ class ForecastViewModel : ViewModel() {
     }
 
     fun fetchWeatherDataByTime(time: String, latitude: Double, longitude: Double) {
-        _weatherDataState.value = LocationForecastViewModel.WeatherDataState.Loading
+        _weatherDataState.value = WeatherDataState.Loading
         viewModelScope.launch {
             val timeseries = repository.fetchLocationForecastTimeseriesByTime(time ,latitude, longitude) // Assuming this fetches by location
             val weatherData = timeseries?.data?.instant?.details?.let { transformToWeatherData(it, timeseries) }
             _weatherDataState.value = if (weatherData != null) {
-                LocationForecastViewModel.WeatherDataState.Success(weatherData)
+                WeatherDataState.Success(weatherData)
             } else {
-                LocationForecastViewModel.WeatherDataState.Error("No data found for time: $time")
+                WeatherDataState.Error("No data found for time: $time")
             }
         }
     }

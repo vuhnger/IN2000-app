@@ -35,6 +35,7 @@ import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
 import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
+import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.home.LocationForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
@@ -141,27 +142,27 @@ class MainActivity : ComponentActivity() {
     }
 
     fun testLocationForecastViewModel() {
-        val locationForecastViewModel = LocationForecastViewModel()
+        val forecastViewModel = ForecastViewModel()
 
         lifecycleScope.launchWhenStarted {
-            locationForecastViewModel.weatherDataState.collect { weatherDataState ->
+            forecastViewModel.weatherDataState.collect { weatherDataState ->
                 when (weatherDataState) {
-                    is LocationForecastViewModel.WeatherDataState.Loading -> {
+                    is ForecastViewModel.WeatherDataState.Loading -> {
                         Log.d("MAIN", "Loading ocean data...")
                     }
-                    is LocationForecastViewModel.WeatherDataState.Success -> {
+                    is ForecastViewModel.WeatherDataState.Success -> {
                         weatherDataState.weatherData?.let { weatherData ->
                             Log.d("MAIN", "Ocean Data: $weatherData")
                         }
                     }
-                    is LocationForecastViewModel.WeatherDataState.Error -> {
+                    is ForecastViewModel.WeatherDataState.Error -> {
                         Log.d("MAIN", "Error: ${weatherDataState.message}")
                     }
                 }
             }
         }
 
-        locationForecastViewModel.fetchWeatherDataByTime("2024-04-26T16:00:00Z", 59.081729131417404, 10.424095397874112)
+        forecastViewModel.fetchWeatherDataByTime("2024-04-26T16:00:00Z", 59.081729131417404, 10.424095397874112)
     }
 
 
@@ -175,8 +176,12 @@ fun App(){
     val navController = rememberNavController()
 
     val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
+
     val locationForecastViewModel: LocationForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
     val locationViewModel: LocationViewModel = LocationViewModel(LocalContext.current)
+
+    val forecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
+
 
     val defaultActivity: ActivityModel = ActivityModels.FISHING
 
@@ -194,7 +199,9 @@ fun App(){
                 navController = navController,
                 activitiesViewModel = activitiesViewModel,
                 locationForecastViewModel = locationForecastViewModel,
-                locationViewModel = locationViewModel
+                locationViewModel = locationViewModel,
+                forecastViewModel = forecastViewModel
+
             )
         }
 

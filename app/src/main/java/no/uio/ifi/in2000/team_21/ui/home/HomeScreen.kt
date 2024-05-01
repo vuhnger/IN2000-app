@@ -34,7 +34,9 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.ActivityModel
+import no.uio.ifi.in2000.team_21.model.ActivityModels
 
 // Top bar implementation: to work as one component to be used through all the screens.
 // Dataclass to define each tab in the navbar
@@ -263,10 +266,7 @@ fun ActivityFavorites(
 
         }
 
-
         Spacer(Modifier.height(8.dp))
-
-
 
         ActivityCardGridHorizontalSmall(
             activitiesViewModel = viewModel
@@ -277,7 +277,8 @@ fun ActivityFavorites(
 
 @Composable
 fun RecommendationSection(
-    viewModel: ActivitiesViewModel
+    viewModel: ActivitiesViewModel,
+    navController: NavController
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
         Text(
@@ -296,7 +297,9 @@ fun RecommendationSection(
         LazyRow {
             this.items(viewModel.activityUIstate.activities){ recommendation ->
                 ActivityCardSmall(
-                    activity = recommendation
+                    activity = recommendation,
+                    navController = navController,
+                    activitiesViewModel = viewModel
                 )
             }
             }
@@ -382,7 +385,8 @@ fun HomeScreen(
         )
 
         RecommendationSection(
-            viewModel = activitiesViewModel
+            viewModel = activitiesViewModel,
+            navController = navController
         )
     }
 }

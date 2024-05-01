@@ -35,8 +35,11 @@ import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 import com.mapbox.mapboxsdk.Mapbox
+import no.uio.ifi.in2000.team_21.model.ActivityModel
+import no.uio.ifi.in2000.team_21.model.ActivityModels
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
+import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
 import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
 import no.uio.ifi.in2000.team_21.ui.home.LocationForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
@@ -54,6 +57,7 @@ sealed class Screen(val route: String){
     object NotificationScreen: Screen(route = "NotificationScreen")
     object ContactsScreen: Screen(route = "ContactsScreen")
     object AddFavoriteScreen: Screen(route = "AddFavoriteScreen")
+    object ActivityDetailScreen: Screen(route = "ActivityDetailScreen")
 
     // Funksjonen bygger en streng av argumenter som kan sendes med et kall på navigate til en skjerm.
     // Dersom du bruker funksjonen, erstatt:
@@ -70,6 +74,7 @@ sealed class Screen(val route: String){
     }
 
 }
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -159,6 +164,8 @@ fun App(){
     val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
     val locationForecastViewModel: LocationForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
 
+    val defaultActivity: ActivityModel = ActivityModels.FISHING
+
     NavHost(
         navController = navController,
         startDestination = Screen.HomeScreen.route
@@ -205,10 +212,19 @@ fun App(){
         composable(Screen.ContactsScreen.route){
             ContactsScreen(navController = navController)
         }
+
         composable(Screen.AddActivitiyScreen.route){
             AddFavoriteScreen(
                 navController = navController,
                 activitiesViewModel = activitiesViewModel
+            )
+        }
+
+        composable(Screen.ActivityDetailScreen.route){
+            ActivityDetailScreen(
+                activitiesViewModel = activitiesViewModel,
+                navController = navController,
+                activity = defaultActivity
             )
         }
     }

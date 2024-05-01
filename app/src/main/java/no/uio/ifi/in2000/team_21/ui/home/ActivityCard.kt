@@ -32,7 +32,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.R
+import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.ActivityModel
 
 @Composable
@@ -150,7 +152,9 @@ fun ActivityCard(
 
 @Composable
 fun ActivityCardSmall(
-    activity: ActivityModel
+    activity: ActivityModel,
+    navController: NavController,
+    activitiesViewModel: ActivitiesViewModel
 ){
     Card(
         modifier = Modifier
@@ -158,7 +162,7 @@ fun ActivityCardSmall(
             .height(142.dp)
             .padding(start = 10.dp, top = 10.dp, end = 10.dp)
             .clickable {
-                // TODO: Navigate to info screen
+                navController.navigate(Screen.ActivityDetailScreen.withArgs(activity.activityName))
             }
     ) {
         Column(
@@ -233,13 +237,19 @@ fun ActivityCardGrid(
 */
 @Composable
 fun ActivityCardGridHorizontal(
-    activites: List<ActivityModel>
+    activites: List<ActivityModel>,
+    navController: NavController,
+    activitiesViewModel: ActivitiesViewModel
 ){
     LazyHorizontalGrid(
         rows = GridCells.Fixed(1)
     ) {
         items(activites){activity ->
-            ActivityCardSmall(activity)
+            ActivityCardSmall(
+                activity,
+                navController,
+                activitiesViewModel = activitiesViewModel
+            )
         }
     }
 }

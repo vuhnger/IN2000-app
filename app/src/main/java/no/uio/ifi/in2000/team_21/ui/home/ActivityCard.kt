@@ -1,9 +1,7 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,9 +19,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -32,14 +30,16 @@ import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.R
-import no.uio.ifi.in2000.team_21.model.Activity
-import no.uio.ifi.in2000.team_21.model.Kayaking
+import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.model.ActivityModel
 
 @Composable
 fun ActivityCard(
-    activity : Activity,
+    activity : ActivityModel,
     viewModel: ActivitiesViewModel
 ) {
     val aspectRatio = 4f / 2f
@@ -61,7 +61,7 @@ fun ActivityCard(
                     .padding(5.dp)
             ) {
                 Text(
-                    text = activity.type,
+                    text = activity.activityName,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -86,13 +86,16 @@ fun ActivityCard(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth(),
             ){
-                Image(
-                    painter = painterResource(id = activity.imageId),
-                    contentDescription = "Picture of ${activity.type}",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(aspectRatio)
-                )
+
+                if (activity.imageId != null){
+                    Image(
+                        painter = painterResource(activity.imageId),
+                        contentDescription = "Picture of ${activity.activityName}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(aspectRatio)
+                    )
+                }
             }
             Text(
                 text = "Forholdene i dag oppsummert: ",
@@ -104,23 +107,20 @@ fun ActivityCard(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(horizontal = 8.dp)
             ) {
-                if (activity.icons.isNotEmpty()) {
-                    activity.icons.forEach { icon ->
-                        WeatherIcon(element = icon, size = 30)
-                        Spacer(modifier = Modifier.width(4.dp))
-                    }
-                }else{ // TODO: Finne plassholder for ikoner
-                    WeatherIcon(element = "fair_day", size = 30)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    WeatherIcon(element = "cloudy", size = 30)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    WeatherIcon(element = "clearsky_day", size = 30)
-                    Spacer(modifier = Modifier.width(4.dp))
-                }
+
+                // TODO: Hente ikoner for i dag
+
+                WeatherIcon(element = "fair_day", size = 30)
+                Spacer(modifier = Modifier.width(4.dp))
+                WeatherIcon(element = "cloudy", size = 30)
+                Spacer(modifier = Modifier.width(4.dp))
+                WeatherIcon(element = "clearsky_day", size = 30)
+                Spacer(modifier = Modifier.width(4.dp))
+
             }
             Text(
-                text = "I dag er forholdene ${activity.isReccomended()} for ${activity.type.lowercase()}.",
-                fontSize = 8.sp, // Halved font size
+                text = "", // TODO: bruke beregning fra modell
+                fontSize = 8.sp,
                 modifier = Modifier
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             )
@@ -152,26 +152,72 @@ fun ActivityCard(
 
 @Composable
 fun ActivityCardSmall(
-    activity: Activity = Kayaking(
-        air_temperature = 10.0,
-        air_temperature_unit = R.string.celsius.toString(),
-        sea_water_temperature = 2.0,
-        sea_water_temperature_unit = "celsius",
-        sea_water_speed = 3.0,
-        sea_surface_wave_height = 0.5
-    )
+    activity: ActivityModel,
+    navController: NavController,
+    activitiesViewModel: ActivitiesViewModel
 ){
-    Icon(
-        imageVector = Icons.Rounded.AccountCircle,
-        contentDescription = "",
+    Card(
         modifier = Modifier
-            .clickable {  }
+            .width(102.dp)
+            .height(142.dp)
+            .padding(start = 10.dp, top = 10.dp, end = 10.dp)
+            .clickable {
+                navController.navigate(Screen.ActivityDetailScreen.withArgs(activity.activityName))
+            }
+    ) {
+        Column(
+
+        ) {
+            Text(
+                text = activity.activityName
+            )
+            Icon(
+                painter = painterResource(id = activity.icon),
+                contentDescription = "Icon of ${activity.activityName}",
+                modifier = Modifier
+            )
+        }
+    }
+}
+
+@Composable
+fun ActivityIconSmall(
+    activity: ActivityModel,
+    activitiesViewModel: ActivitiesViewModel
+){
+    //TODO : Make clickable and add to favorites
+    Icon(
+        painter = painterResource(id = activity.icon),
+        contentDescription = "Icon of ${activity.activityName}",
+        modifier = Modifier
+            .padding(15.dp)
+            //.shadow(5.dp)
+            .clip(shape = RoundedCornerShape(15.dp, 15.dp))
     )
 }
 
 @Composable
+fun ActivityCardHoriznotalWide(
+    activity: ActivityModel
+){
+    Card(
+
+    ) {
+        Row(
+
+        ) {
+            // TODO: Icon
+            // TODO: Fav button icon clickable
+        }
+    }
+}
+
+/*
+* Lager Grid med aktiviteskort nedover, 2 og 2 per kolonne.
+*/
+@Composable
 fun ActivityCardGrid(
-    activities: List<Activity>,
+    activities: List<ActivityModel>,
     activitiesViewModel: ActivitiesViewModel
 ) {
     LazyVerticalGrid(
@@ -182,6 +228,46 @@ fun ActivityCardGrid(
     ) {
         items(activities) { activity ->
             ActivityCard(activity = activity, viewModel = activitiesViewModel)
+        }
+    }
+}
+
+/*
+
+*/
+@Composable
+fun ActivityCardGridHorizontal(
+    activites: List<ActivityModel>,
+    navController: NavController,
+    activitiesViewModel: ActivitiesViewModel
+){
+    LazyHorizontalGrid(
+        rows = GridCells.Fixed(1)
+    ) {
+        items(activites){activity ->
+            ActivityCardSmall(
+                activity,
+                navController,
+                activitiesViewModel = activitiesViewModel
+            )
+        }
+    }
+}
+
+/*
+
+*/
+@Composable
+fun ActivityCardGridHorizontalSmall(
+    activitiesViewModel: ActivitiesViewModel
+) {
+    LazyHorizontalGrid(
+        rows = GridCells.Fixed(1),
+        modifier = Modifier
+            .height(84.dp)
+    ) {
+        items(activitiesViewModel.activityUIstate.favorites){activity ->
+            ActivityIconSmall(activity = activity, activitiesViewModel = activitiesViewModel)
         }
     }
 }

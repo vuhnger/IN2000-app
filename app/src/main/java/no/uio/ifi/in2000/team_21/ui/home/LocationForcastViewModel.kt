@@ -5,36 +5,39 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import no.uio.ifi.in2000.team_21.data.LocationForcastRepository
-import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForcastResponse
+import no.uio.ifi.in2000.team_21.data.LocationForecastRepository
+import no.uio.ifi.in2000.team_21.data.OceanForecastRepository
+import no.uio.ifi.in2000.team_21.model.locationforcast.Details
+import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastResponse
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
+import no.uio.ifi.in2000.team_21.model.locationforcast.WeatherData
 
-class LocationForcastViewModel: ViewModel() {
+class LocationForecastViewModel() : ViewModel() {
 
-    private val repository: LocationForcastRepository = LocationForcastRepository()
+    private val repository: LocationForecastRepository = LocationForecastRepository()
 
-    private  var _forecasts: MutableLiveData<LocationForcastResponse?> = MutableLiveData()
-    val forecasts: LiveData<LocationForcastResponse?> get() = _forecasts
+    private val _weatherDataState = MutableStateFlow<WeatherDataState>(WeatherDataState.Loading)
+    val weatherDataState: StateFlow<WeatherDataState> = _weatherDataState
 
-    private var _timeseries: MutableLiveData<ArrayList<LocationForecastTimeseries>?> = MutableLiveData()
-
-    val timeseries: LiveData<ArrayList<LocationForecastTimeseries>?> get() = _timeseries
-
-    fun fetchLocationForecastResponse() {
-        viewModelScope.launch {
-            val response = repository.fetchLocationForcastResponse()
-            _forecasts.value = response
-            Log.d("LOCATIONFORECAST_VM", "Response: $response")
-        }
+    sealed class WeatherDataState {
+        object Loading : WeatherDataState()
+        data class Success(val weatherData: WeatherData?) : WeatherDataState()
+        data class Error(val message: String) : WeatherDataState()
     }
 
-    fun fetchLocationForecastTimeseries() {
+    fun fetchWeatherDataByTime(time: String, latitude: Double, longitude: Double) {
+        _weatherDataState.value = WeatherDataState.Loading
         viewModelScope.launch {
-            val timeseriesData = repository.fetchLocationForecastTimeseries()
-            _timeseries.value = timeseriesData
-            Log.d("LF_VM", "Timeseries: $timeseriesData")
-
+            val timeseries = repository.fetchLocationForecastTimeseriesByTime(time ,latitude, longitude) // Assuming this fetches by location
+            val weatherData = timeseries?.data?.instant?.details?.let { transformToWeatherData(it, timeseries) }
+            _weatherDataState.value = if (weatherData != null) {
+                WeatherDataState.Success(weatherData)
+            } else {
+                WeatherDataState.Error("No data found for time: $time")
+            }
         }
     }
 
@@ -44,4 +47,18 @@ class LocationForcastViewModel: ViewModel() {
             Log.d("LF_VM", "Air temperature at $time is $temperature degrees Celsius.")
         }
     }
- }
+
+    private fun transformToWeatherData(details: Details, timeseries: LocationForecastTimeseries): WeatherData? {
+
+        return WeatherData(
+            time = timeseries.time,
+            airTemperature = details.air_temperature,
+            windFromDirection = details.wind_from_direction,
+            windSpeed = details.wind_speed,
+            humidity = details.relative_humidity,
+            chanceOfRain = details.probability_of_precipitation,
+            // Add other fields based on your needs and response structure (e.g., air pressure, cloud cover)
+        )
+    }
+
+}

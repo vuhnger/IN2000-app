@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.util.Log
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
@@ -40,5 +41,10 @@ class LocationViewModel(val context: Context) : ViewModel() {
             .addOnSuccessListener { location ->
                 _location.value = location
             }
+
+        Log.d(
+            "LOCATION_VIEW_MODEL",
+            "fetched location: lat:${location.value?.latitude} long: ${location.value?.longitude}"
+        )
     }
 }

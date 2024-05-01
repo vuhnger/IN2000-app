@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.team_21
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -10,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -28,12 +28,17 @@ import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.home.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
-
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.mapbox.common.MapboxOptions
+import no.uio.ifi.in2000.team_21.model.ActivityModel
+import no.uio.ifi.in2000.team_21.model.ActivityModels
+import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
+import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
+import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
+import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
+import no.uio.ifi.in2000.team_21.ui.home.LocationForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
@@ -44,15 +49,7 @@ import no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
-import no.uio.ifi.in2000.team_21.model.ActivityModel
-import no.uio.ifi.in2000.team_21.model.ActivityModels
-import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
-import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
-import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
-import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
-import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
-import no.uio.ifi.in2000.team_21.ui.home.LocationForecastViewModel
-import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
+
 
 
 

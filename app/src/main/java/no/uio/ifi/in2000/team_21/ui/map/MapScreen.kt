@@ -103,6 +103,7 @@ import no.uio.ifi.in2000.team_21.data.database.MapAnnotationHelper
 import no.uio.ifi.in2000.team_21.data.database.UserMarkerEntity
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
+import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
 import no.uio.ifi.in2000.team_21.model.locationforecast.Timeseries
 import no.uio.ifi.in2000.team_21.ui.UserMarkerViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
@@ -446,7 +447,7 @@ fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
 
 @Composable
 fun BottomSheetContent(
-    timeseries: List<Timeseries>?,
+    timeseries: List<LocationForecastTimeseries>?,
     marker: UserMarkerEntity?,
     annotationHelper: MapAnnotationHelper,
     userMarkerViewModel: UserMarkerViewModel

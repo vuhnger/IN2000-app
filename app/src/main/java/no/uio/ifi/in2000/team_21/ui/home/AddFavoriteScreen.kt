@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.team_21.ui.home
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Button
@@ -22,7 +23,8 @@ fun AddFavoriteScreen(
     navController: NavController
 ){
     Column(
-        
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
         Button(
             onClick = { navController.popBackStack() },

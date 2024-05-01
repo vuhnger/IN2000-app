@@ -80,6 +80,8 @@ fun ActivityDetailScreen(
                     contentColor = MaterialTheme.colors.primary
                 ),
                 modifier = Modifier
+                    .width(20.dp)
+                    .weight(1f)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
@@ -95,6 +97,7 @@ fun ActivityDetailScreen(
                     contentColor = MaterialTheme.colors.primary
                 ),
                 modifier = Modifier
+                    .weight(1f)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.List,
@@ -121,8 +124,9 @@ fun ActivityDetailScreen(
         )
 
         //Beregning av forhold
-
-
+        Text(
+            text = "Forholdene er nå: "
+        )
 
         // Info om aktivitet
 

@@ -51,11 +51,25 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
     }
 
     suspend fun fetchLocationForecastTimeseriesByTime(time: String, latitude: Double, longitude: Double): LocationForecastTimeseries? {
-        return dataSource.fetchLocationForecastByTime(time, latitude, longitude)
+
+        Log.d(
+            "LFC_DATA_REPO",
+            "fetch LFCTimeSeriesByTime recieved time: $time, lat: $latitude, long: $longitude"
+        )
+
+        return dataSource.fetchLocationForecastByTime(time = time, latitude = latitude, longitude = longitude)
     }
 
     fun fetchAirTemperatureAtTime(time: String) {
 
+    }
+
+    suspend fun fetchCurrentAirTemperature(): Double {
+        return dataSource.fetchCurrentAirTemperature()
+    }
+
+    suspend fun repositoryfetchNextHourWeatherIcon(): String {
+        return dataSource.repositoryfetchNextHourWeatherIcon()
     }
 
 }

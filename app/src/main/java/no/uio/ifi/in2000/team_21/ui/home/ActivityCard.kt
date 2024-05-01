@@ -35,6 +35,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.TextUnit
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import no.uio.ifi.in2000.team_21.R
@@ -154,6 +156,7 @@ fun ActivityCard(
     }
 }
 
+// Kortene som ligger under Anbefaling seksjonen
 @Composable
 fun ActivityCardSmall(
     activity: ActivityModel,
@@ -163,8 +166,8 @@ fun ActivityCardSmall(
     Card(
         modifier = Modifier
             .width(102.dp)
-            .height(142.dp)
-            .padding(start = 10.dp, top = 10.dp, end = 10.dp)
+            .height(180.dp)
+            .padding(start = 10.dp, top = 20.dp, end = 10.dp)
             .clickable {
                 navController.navigate(
                     Screen.ActivityDetailScreen.withArgs(
@@ -174,15 +177,26 @@ fun ActivityCardSmall(
             }
     ) {
         Column(
-
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(5.dp)
         ) {
             Text(
-                text = activity.activityName
+                text = activity.activityName,
+                modifier = Modifier.weight(1f),
+                style = TextStyle(
+                    color = MaterialTheme.colors.primary,
+                    fontSize = 20.sp
+                )
             )
+
+            Spacer(modifier = Modifier.padding(5.dp))
+
             Icon(
                 painter = painterResource(id = activity.icon),
                 contentDescription = "Icon of ${activity.activityName}",
                 modifier = Modifier
+                    .weight(1f)
             )
         }
     }
@@ -226,6 +240,7 @@ fun ActivityCardHoriznotalWide(
                 contentDescription = "",
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
+                    .weight(1f)
             )
 
             Button(
@@ -235,7 +250,9 @@ fun ActivityCardHoriznotalWide(
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colors.primary,
                     containerColor = MaterialTheme.colors.background
-                )
+                ),
+                modifier = Modifier
+                    .weight(1f)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,

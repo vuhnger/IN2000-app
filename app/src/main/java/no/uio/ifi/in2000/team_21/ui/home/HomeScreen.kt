@@ -1,6 +1,9 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -66,8 +69,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 
 // Top bar implementation: to work as one component to be used through all the screens.
@@ -137,10 +143,16 @@ fun RowScope.TopBarItem(item: TopNavItem, isSelected: Boolean, onItemSelect: () 
 @Composable
 fun WeatherCard(
     temperature: String,
-    highLowTemp: String,
-    weatherCondition: String,
+    highTemp: String,
+    lowTemp: String,
     icon: String
 ) {
+
+    Log.d(
+        "WEATHER_CARD",
+        "drawn card with temp: $temperature, low: $lowTemp, high: $highTemp, icon: $icon"
+    )
+
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -213,7 +225,7 @@ fun WeatherCard(
                 }
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = weatherCondition,
+                    text = icon,
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 20.sp,
@@ -225,19 +237,42 @@ fun WeatherCard(
                     )
                 )
                 Spacer(Modifier.height(4.dp))
-                Text(
-                    text = highLowTemp,
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.roboto)),
-                        fontWeight = FontWeight(400),
-                        color = Color(0xFF00145D),
-                        textAlign = TextAlign.Center,
-                        letterSpacing = 0.1.sp,
+
+                Row(
+
+                ) {
+                    Text(
+                        text = "H: " + highTemp,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            lineHeight = 20.sp,
+                            //fontFamily = FontFamily(Font(R.font.roboto)),
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF00145D),
+                            textAlign = TextAlign.Center,
+                            letterSpacing = 0.1.sp,
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
                     )
-                )
-            }
+
+                    Text(
+                        text = "L: " + lowTemp ,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            lineHeight = 20.sp,
+                            //fontFamily = FontFamily(Font(R.font.roboto)),
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF00145D),
+                            textAlign = TextAlign.Center,
+                            letterSpacing = 0.1.sp,
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                }
+                }
+
         }
     }
 
@@ -249,7 +284,7 @@ fun ActivityFavorites(
     navController: NavController
 ) {
     Column(
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
 
         Row(
@@ -269,7 +304,7 @@ fun ActivityFavorites(
                     letterSpacing = 0.1.sp,
                 ),
                 modifier = Modifier
-                    .weight(0.5f)
+                    .weight(1f)
             )
 
             Button(
@@ -279,8 +314,8 @@ fun ActivityFavorites(
                     contentColor = androidx.compose.material.MaterialTheme.colors.primary
                 ),
                 modifier = Modifier
-                    .weight(0.5f)
-                    .width(48.dp)
+                    .weight(1f)
+                    .width(20.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -332,6 +367,7 @@ fun RecommendationSection(
         }
     }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -343,19 +379,8 @@ fun HomeScreen(
     //TopBar(items = TopNavItem<items>, currentSelection = 1 ) {}
 
     LaunchedEffect(Unit) {
-        locationViewModel.getLocation()
+        forecastViewModel.fetchTodaysForecast()
     }
-
-    val initialLocation = locationViewModel.location.collectAsState()
-
-    LaunchedEffect(Unit) {
-        locationForecastViewModel.fetchWeatherDataByTime(
-            time = "2024-05-01T13:00:00Z",
-            latitude = initialLocation.value?.latitude ?: 0.0,
-            longitude = initialLocation.value?.longitude ?: 0.0
-        )
-    }
-
 
     Column(
         modifier = Modifier
@@ -414,12 +439,11 @@ fun HomeScreen(
 
         }
 
-        // TODO: Hente fra data nå
         WeatherCard(
-            temperature = "",
-            highLowTemp = "",
-            weatherCondition = "",
-            icon = ""
+            temperature = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature?.toString() ?: "N/A",
+            highTemp = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature_max?.toString() ?: "N/A",
+            lowTemp = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature_min?.toString() ?: "N/A",
+            icon = forecastViewModel.today_forecast?.data?.next_1_hours?.summary?.symbol_code?.toString() ?: "N/A"
         )
 
         ActivityFavorites(

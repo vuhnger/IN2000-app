@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,13 +27,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.sharp.Add
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.navigation.NavController
+import androidx.navigation.Navigation.findNavController
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.ActivityModel
@@ -162,7 +166,11 @@ fun ActivityCardSmall(
             .height(142.dp)
             .padding(start = 10.dp, top = 10.dp, end = 10.dp)
             .clickable {
-                navController.navigate(Screen.ActivityDetailScreen.withArgs(activity.activityName))
+                navController.navigate(
+                    Screen.ActivityDetailScreen.withArgs(
+                        activity.activityName
+                    )
+                )
             }
     ) {
         Column(
@@ -198,16 +206,42 @@ fun ActivityIconSmall(
 
 @Composable
 fun ActivityCardHoriznotalWide(
-    activity: ActivityModel
+    activity: ActivityModel,
+    activitiesViewModel: ActivitiesViewModel
 ){
     Card(
-
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+            horizontal = 10.dp
+        ),
+        elevation = 10.dp
     ) {
         Row(
-
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            // TODO: Icon
-            // TODO: Fav button icon clickable
+            Icon(
+                painter = painterResource(id = activity.icon),
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+            )
+
+            Button(
+                onClick = {
+                    activitiesViewModel.addFavorite(activity)
+                },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colors.primary,
+                    containerColor = MaterialTheme.colors.background
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = ""
+                )
+            }
         }
     }
 }

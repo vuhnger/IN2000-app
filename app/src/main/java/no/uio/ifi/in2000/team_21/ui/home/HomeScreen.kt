@@ -32,6 +32,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -245,7 +247,7 @@ fun ActivityFavorites(
                     lineHeight = 20.sp,
                     //fontFamily = FontFamily(Font(R.font.roboto)),
                     fontWeight = FontWeight(400),
-                    color = Color(0xFF00145D),
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                     letterSpacing = 0.1.sp,
                 ),
@@ -253,16 +255,23 @@ fun ActivityFavorites(
                     .weight(0.5f)
             )
 
-            Icon(
-                imageVector = Icons.Rounded.Add,
-                contentDescription = "Button add to favorites",
+            Button(
+                onClick = { navController.navigate(Screen.AddActivitiyScreen.route) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = androidx.compose.material.MaterialTheme.colors.background,
+                    contentColor = androidx.compose.material.MaterialTheme.colors.primary
+                ),
                 modifier = Modifier
-                    .padding(1.dp)
-                    .clickable {
-                        navController.navigate(Screen.AddActivitiyScreen.route)
-                    } //TODO: add to favorites screen
                     .weight(0.5f)
-            )
+                    .width(48.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Button add to favorites",
+                    modifier = Modifier
+                        .padding(1.dp)
+                )
+            }
 
         }
 
@@ -288,7 +297,7 @@ fun RecommendationSection(
                 lineHeight = 20.sp,
                 //fontFamily = FontFamily(Font(R.font.roboto)),
                 fontWeight = FontWeight(400),
-                color = Color(0xFF00145D),
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center,
                 letterSpacing = 0.1.sp,
             )
@@ -310,9 +319,25 @@ fun RecommendationSection(
 fun HomeScreen(
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel,
-    locationForecastViewModel: LocationForecastViewModel
+    locationForecastViewModel: LocationForecastViewModel,
+    locationViewModel: LocationViewModel
 ) {
     //TopBar(items = TopNavItem<items>, currentSelection = 1 ) {}
+
+    LaunchedEffect(Unit) {
+        locationViewModel.getLocation()
+    }
+
+    val initialLocation = locationViewModel.location.collectAsState()
+
+    LaunchedEffect(Unit) {
+        locationForecastViewModel.fetchWeatherDataByTime(
+            time = "2024-05-01T13:00:00Z",
+            latitude = initialLocation.value?.latitude ?: 0.0,
+            longitude = initialLocation.value?.longitude ?: 0.0
+        )
+    }
+
 
     Column(
         modifier = Modifier

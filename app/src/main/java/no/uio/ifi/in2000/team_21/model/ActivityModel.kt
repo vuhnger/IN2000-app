@@ -117,4 +117,10 @@ object ActivityModels {
         SNORKELING_SWIMMING,
         WATERSKIING
     )
+
+    // Get an activity object based on its unique string identifier
+    fun find(activityName: String): ActivityModel?{
+        return allActivities.find { it.activityName == activityName }
+    }
+
 }

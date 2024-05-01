@@ -30,6 +30,8 @@ import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.model.ActivityModel
 
@@ -155,6 +157,9 @@ fun ActivityCardSmall(
             .width(102.dp)
             .height(142.dp)
             .padding(start = 10.dp, top = 10.dp, end = 10.dp)
+            .clickable {
+                // TODO: Navigate to info screen
+            }
     ) {
         Column(
 
@@ -162,13 +167,11 @@ fun ActivityCardSmall(
             Text(
                 text = activity.activityName
             )
-            if (activity.icon != null){
-                Icon(
-                    painter = painterResource(id = activity.icon),
-                    contentDescription = "Icon of ${activity.activityName}",
-                    modifier = Modifier
-                )
-            }
+            Icon(
+                painter = painterResource(id = activity.icon),
+                contentDescription = "Icon of ${activity.activityName}",
+                modifier = Modifier
+            )
         }
     }
 }
@@ -183,9 +186,9 @@ fun ActivityIconSmall(
         painter = painterResource(id = activity.icon),
         contentDescription = "Icon of ${activity.activityName}",
         modifier = Modifier
-            .clickable {
-                activitiesViewModel.activityUIstate.favorites.add(activity)
-            }
+            .padding(15.dp)
+            //.shadow(5.dp)
+            .clip(shape = RoundedCornerShape(15.dp, 15.dp))
     )
 }
 
@@ -249,7 +252,9 @@ fun ActivityCardGridHorizontalSmall(
     activitiesViewModel: ActivitiesViewModel
 ) {
     LazyHorizontalGrid(
-        rows = GridCells.Fixed(1)
+        rows = GridCells.Fixed(1),
+        modifier = Modifier
+            .height(84.dp)
     ) {
         items(activitiesViewModel.activityUIstate.favorites){activity ->
             ActivityIconSmall(activity = activity, activitiesViewModel = activitiesViewModel)

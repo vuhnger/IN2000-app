@@ -229,36 +229,44 @@ fun ActivityFavorites(
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
-        Text(
-            text = "Favoritter",
-            style = TextStyle(
-                fontSize = 20.sp,
-                lineHeight = 20.sp,
-                //fontFamily = FontFamily(Font(R.font.roboto)),
-                fontWeight = FontWeight(400),
-                color = Color(0xFF00145D),
-                textAlign = TextAlign.Center,
-                letterSpacing = 0.1.sp,
-            )
-        )
-        Spacer(Modifier.height(8.dp))
-        Row(
 
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
 
+            Text(
+                text = "Favoritter",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    lineHeight = 20.sp,
+                    //fontFamily = FontFamily(Font(R.font.roboto)),
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF00145D),
+                    textAlign = TextAlign.Center,
+                    letterSpacing = 0.1.sp,
+                ),
+                modifier = Modifier
+                    .weight(0.5f)
+            )
+
+            Icon(
+                imageVector = Icons.Rounded.Add,
+                contentDescription = "Button add to favorites",
+                modifier = Modifier
+                    .padding(1.dp)
+                    .clickable {
+                        navController.navigate(Screen.AddActivitiyScreen.route)
+                    } //TODO: add to favorites screen
+                    .weight(0.5f)
+            )
 
         }
-        Icon(
-            imageVector = Icons.Rounded.Add,
-            contentDescription = "Button add to favorites",
-            modifier = Modifier
-                .padding(1.dp)
-                .width(84.dp)
-                .height(84.dp)
-                .clickable {
-                    navController.navigate(Screen.AddActivitiyScreen.route)
-                } //TODO: add to favorites screen
-        )
+
+
+        Spacer(Modifier.height(8.dp))
+
+
 
         ActivityCardGridHorizontalSmall(
             activitiesViewModel = viewModel
@@ -359,6 +367,7 @@ fun HomeScreen(
             )
 
         }
+
         // TODO: Hente fra data nå
         WeatherCard(
             temperature = "",

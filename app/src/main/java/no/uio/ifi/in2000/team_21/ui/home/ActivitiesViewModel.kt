@@ -33,7 +33,11 @@ class ActivitiesViewModel(
 
     fun addFavorite(activity: ActivityModel){
 
-        activityUIstate.favorites.add(activity)
+        if (activity in activityUIstate.favorites ){
+
+        }else{
+            activityUIstate.favorites.add(activity)
+        }
 
         Log.d(
             "ACTIVITY_VIEW_MODEL",

@@ -66,6 +66,10 @@ import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 @Composable
 fun WeatherCard(
@@ -211,17 +215,16 @@ fun WeatherCard(
                             .weight(1f)
                     )
                 }
-                }
-
+            }
         }
     }
-
 }
 
 @Composable
 fun ActivityFavorites(
     viewModel: ActivitiesViewModel,
-    navController: NavController
+    navController: NavController,
+    activityConditionCheckerViewModel: ActivityConditionCheckerViewModel
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -299,8 +302,7 @@ fun RecommendationSection(
             this.items(viewModel.activityUIstate.activities){ recommendation ->
                 ActivityCardSmall(
                     activity = recommendation,
-                    navController = navController,
-                    activitiesViewModel = viewModel
+                    navController = navController
                 )
             }
             }
@@ -309,7 +311,9 @@ fun RecommendationSection(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController) {
+fun TopBar(
+    navController: NavController
+) {
     TopAppBar(
         title = { /* No title for now */ },
         actions = {
@@ -322,7 +326,9 @@ fun TopBar(navController: NavController) {
             IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) }) {
                 Icon(Icons.Default.AccountCircle, contentDescription = "Account icon")
             }
-        }
+        },
+        modifier = Modifier
+            .padding(top = 16.dp)
     )
 }
 
@@ -335,7 +341,8 @@ fun HomeScreen(
     activitiesViewModel: ActivitiesViewModel,
     forecastViewModel: ForecastViewModel,
     alertsViewModel: AlertsViewModel,
-    locationViewModel: LocationViewModel
+    locationViewModel: LocationViewModel,
+    activityConditionCheckerViewModel: ActivityConditionCheckerViewModel
 ) {
 
     val userLocation by locationViewModel.userLocation.collectAsState()
@@ -347,9 +354,28 @@ fun HomeScreen(
 
     LaunchedEffect(userLocation) {
         if (userLocation != null) {
+
             alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), userLocation!!, 500.0)
+
             Log.d("HOME_SCREEN", "User location: ${userLocation!!.latitude()}, ${userLocation!!.longitude()}")
+
             forecastViewModel.fetchTodaysForecast( // let him cook!
+                latitude = userLocation?.latitude() ?: 0.0,
+                longitude = userLocation?.longitude() ?: 0.0
+            )
+
+
+
+            val norwayZone = ZoneId.of("Europe/Oslo")
+
+
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
+
+
+            val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
+
+            activityConditionCheckerViewModel.checkActivityConditions(
+                time = time,
                 latitude = userLocation?.latitude() ?: 0.0,
                 longitude = userLocation?.longitude() ?: 0.0
             )
@@ -385,7 +411,8 @@ fun HomeScreen(
 
         ActivityFavorites(
             viewModel = activitiesViewModel,
-            navController = navController
+            navController = navController,
+            activityConditionCheckerViewModel = activityConditionCheckerViewModel
         )
 
         RecommendationSection(

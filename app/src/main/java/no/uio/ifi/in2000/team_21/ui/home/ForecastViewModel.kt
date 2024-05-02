@@ -23,14 +23,15 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
-class ForecastViewModel() : ViewModel() {
+class ForecastViewModel(
+
+) : ViewModel() {
 
     private val repository: LocationForecastDataRepository = LocationForecastDataRepository()
     private val _selectedLocationWeatherData = mutableStateOf<List<LocationForecastTimeseries>?>(null)
     val selectedLocationWeatherData: State<List<LocationForecastTimeseries>?> = _selectedLocationWeatherData
     private val _weatherDataState = MutableStateFlow<WeatherDataState>(WeatherDataState.Loading)
     val weatherDataState: StateFlow<WeatherDataState> = _weatherDataState
-
 
     var instant_air_temperature by mutableStateOf(
         0.0
@@ -60,13 +61,13 @@ class ForecastViewModel() : ViewModel() {
     ){
         viewModelScope.launch {
 
-            // Define the time zone for Norway, accounting for Daylight Saving Time automatically
+
             val norwayZone = ZoneId.of("Europe/Oslo")
 
-            // Create a DateTimeFormatter with the desired format including only the date and the nearest hour
+
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
 
-            // Get the current date and time in Norway, truncated to the nearest hour
+
             val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
 
             Log.d(

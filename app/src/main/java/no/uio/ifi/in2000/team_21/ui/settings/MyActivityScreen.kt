@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.team_21.ui.settings
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,13 +26,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-fun MyActivityScreen(navController: NavController) {
+fun MyActivityScreen(
+    navController: NavController,
+    activitiesViewModel: ActivitiesViewModel
+) {
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
 
@@ -78,11 +83,16 @@ fun MyActivityScreen(navController: NavController) {
                 .padding(15.dp)
                 .padding(innerPadding)
         ){
+            activitiesViewModel.activityUIstate.activityLog.reversed().forEach { activityLog ->
+                Row(
+                    modifier = Modifier
+                        .padding(5.dp)
+                ) {
+                    Text(
+                        text = "Bruker gjorde ${activityLog.activity.activityName} : ${activityLog.time}"
+                    )
+                }
+            }
         }
     }
-}
-@Preview
-@Composable
-fun MyActivityScreenTest() {
-    MyActivityScreen(navController = rememberNavController())
 }

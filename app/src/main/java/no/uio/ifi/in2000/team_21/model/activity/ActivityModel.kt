@@ -13,11 +13,12 @@ data class ActivityModel(
     val imageId: Int,
     val icon: Int
 ){
-    fun getFlagColorId(): Int {
+    fun getFlagColorId(
+    ): Int {
         return when (conditionStatus) {
-            ConditionStatus.ALL_MET -> R.drawable.green_flag_48
-            ConditionStatus.SOME_MET -> R.drawable.yellow_flag_48
-            ConditionStatus.NONE_MET -> R.drawable.red_flag_48
+            ConditionStatus.ALL_MET -> R.drawable.svg_flag_green_icon
+            ConditionStatus.SOME_MET -> R.drawable.svg_flag_orange_icon
+            ConditionStatus.NONE_MET -> R.drawable.svg_red_flag_icon
         }
     }
 }

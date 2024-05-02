@@ -27,6 +27,14 @@ open class ActivityConditionCheckerViewModel : ViewModel() {
         _activities.value = allActivities
     }
 
+    fun get(
+        activityName: String
+    ): ActivityModel? {
+        return activities.value?.find {
+            it.activityName == activityName
+        }
+    }
+
     fun checkActivityConditions(
         time: String,
         latitude: Double,
@@ -68,7 +76,6 @@ open class ActivityConditionCheckerViewModel : ViewModel() {
         val windSpeed: Double?
     )
 
-
     private fun getRelevantWeatherDetails(oceanDetails: Details?, locationDetails: LocationDetails?): WeatherDetails {
         return WeatherDetails(
             seaWaterTemperature = oceanDetails?.sea_water_temperature,
@@ -97,4 +104,7 @@ open class ActivityConditionCheckerViewModel : ViewModel() {
             else -> ConditionStatus.SOME_MET
         }
     }
+
+
+
 }

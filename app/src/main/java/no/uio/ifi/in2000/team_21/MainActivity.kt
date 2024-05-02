@@ -114,10 +114,9 @@ fun App(){
     val locationViewModel: LocationViewModel = viewModel()
     val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
     val locationForecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
-
     val forecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
     val alertsViewModel: AlertsViewModel = viewModel()
-
+    val activityConditionCheckerViewModel: ActivityConditionCheckerViewModel = viewModel()
 
     val defaultActivity: ActivityModel = ActivityModels.FISHING
 
@@ -136,7 +135,8 @@ fun App(){
                 activitiesViewModel = activitiesViewModel,
                 forecastViewModel = forecastViewModel,
                 locationViewModel = locationViewModel,
-                alertsViewModel = alertsViewModel
+                alertsViewModel = alertsViewModel,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel
             )
         }
 
@@ -158,8 +158,12 @@ fun App(){
             FriendsActivityScreen(navController = navController)
         }
         composable(Screen.MyActivityScreen.route){
-            MyActivityScreen(navController = navController)
+            MyActivityScreen(
+                navController = navController,
+                activitiesViewModel = activitiesViewModel
+            )
         }
+
         composable(Screen.TrophyWallScreen.route){
             TrophyWallScreen(navController = navController)
         }
@@ -189,6 +193,7 @@ fun App(){
             ){entry ->
             ActivityDetailScreen(
                 activitiesViewModel = activitiesViewModel,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel,
                 navController = navController,
                 activityName = entry.arguments?.getString("activityName")
             )

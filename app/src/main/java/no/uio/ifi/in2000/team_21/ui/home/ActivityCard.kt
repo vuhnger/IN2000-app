@@ -76,7 +76,6 @@ fun ActivityCard(
                         .align(Alignment.CenterVertically)
                         .fillMaxWidth(0.2f)
                         .clickable {
-                            // TODO: Legg til aktivitet i favoritter
                             viewModel.addFavorite(activity)
                         }
                 )
@@ -153,8 +152,7 @@ fun ActivityCard(
 @Composable
 fun ActivityCardSmall(
     activity: ActivityModel,
-    navController: NavController,
-    activitiesViewModel: ActivitiesViewModel
+    navController: NavController
 ){
     Card(
         modifier = Modifier
@@ -162,6 +160,9 @@ fun ActivityCardSmall(
             .height(180.dp)
             .padding(start = 10.dp, top = 20.dp, end = 10.dp)
             .clickable {
+
+                // TODO : Oppdater flagg for alle aktiviteter
+
                 navController.navigate(
                     Screen.ActivityDetailScreen.withArgs(
                         activity.activityName
@@ -291,8 +292,7 @@ fun ActivityCardGridHorizontal(
         items(activites){activity ->
             ActivityCardSmall(
                 activity,
-                navController,
-                activitiesViewModel = activitiesViewModel
+                navController
             )
         }
     }

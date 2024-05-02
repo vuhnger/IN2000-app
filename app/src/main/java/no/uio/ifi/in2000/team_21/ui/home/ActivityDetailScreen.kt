@@ -1,11 +1,15 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -29,10 +33,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
+import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ActivityDetailScreen(
     activitiesViewModel: ActivitiesViewModel,
+    activityConditionCheckerViewModel: ActivityConditionCheckerViewModel,
     activityName : String?,
     navController: NavController
 ){
@@ -41,8 +52,8 @@ fun ActivityDetailScreen(
             .fillMaxWidth()
     ) {
 
-        val activity: ActivityModel = ActivityModels.find(
-            activityName ?: ""
+        val activity: ActivityModel = activityConditionCheckerViewModel.get(
+            activityName = activityName ?: ""
         ) ?: ActivityModels.FISHING
 
         Image(
@@ -109,15 +120,34 @@ fun ActivityDetailScreen(
                 color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center,
                 letterSpacing = 0.1.sp,
-            ),
-            modifier = Modifier
-                .weight(0.5f)
+            )
         )
 
-        //Beregning av forhold
-        Text(
-            text = "Forholdene er nå: "
-        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+
+            //Beregning av forhold
+            Text(
+                text = "Forholdene for $activityName er nå: ",
+                modifier = Modifier
+                    .weight(1f)
+            )
+
+            Image(
+                painter = painterResource(
+                    id = activity.getFlagColorId()
+                ),
+                contentDescription = "Flagg med farge for aktivitet",
+                modifier = Modifier
+                    .weight(1f)
+                    .height(50.dp)
+                    .width(50.dp)
+            )
+
+        }
 
         // Info om aktivitet
 
@@ -125,11 +155,31 @@ fun ActivityDetailScreen(
 
         // Startknapp med logging
 
-        Row(
+        Spacer(
+            modifier = Modifier
+                .padding(100.dp)
+        )
 
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             Button(
-                onClick = { /*TODO logg startet aktivitet på tidspunkt*/ }
+                onClick = {
+
+                    val norwayZone = ZoneId.of("Europe/Oslo")
+
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm").withZone(norwayZone)
+
+                    val time = ZonedDateTime.now(norwayZone).format(formatter)
+
+                    activitiesViewModel.log(
+                        time = time,
+                        activity = activity
+                    )
+
+                }
             ) {
                 Text(
                     text = "Start aktivitet"

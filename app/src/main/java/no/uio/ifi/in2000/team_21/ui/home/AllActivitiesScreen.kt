@@ -58,11 +58,6 @@ fun ActivityListItem(activity: ActivityModel) {
             Text(text = activity.activityName, color = Color(0xFF49454F)) // Hvit text
             Text(getActivityConditionText(activity.conditionStatus, activity.activityName))
         }
-        Image(
-            painter = painterResource(id = activity.getFlagColorId()),
-            contentDescription = "Condition Status",
-            modifier = Modifier.align(Alignment.TopEnd)
-        )
     }
 }
 

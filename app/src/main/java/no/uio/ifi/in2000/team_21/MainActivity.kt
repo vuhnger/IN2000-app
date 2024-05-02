@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mapbox.common.MapboxOptions
 import no.uio.ifi.in2000.team_21.model.ActivityModel
 import no.uio.ifi.in2000.team_21.model.ActivityModels
+import no.uio.ifi.in2000.team_21.ui.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
@@ -27,6 +28,7 @@ import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
@@ -158,9 +160,10 @@ class MainActivity : ComponentActivity() {
 fun App(){
 
     val navController = rememberNavController()
-
+    val locationViewModel: LocationViewModel = viewModel()
     val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
     val forecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
+    val alertsViewModel: AlertsViewModel = viewModel()
 
     val defaultActivity: ActivityModel = ActivityModels.FISHING
 
@@ -177,7 +180,9 @@ fun App(){
             HomeScreen(
                 navController = navController,
                 activitiesViewModel = activitiesViewModel,
-                forecastViewModel = forecastViewModel
+                forecastViewModel = forecastViewModel,
+                locationViewModel = locationViewModel,
+                alertsViewModel = alertsViewModel
             )
         }
 

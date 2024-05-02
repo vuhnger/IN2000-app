@@ -8,7 +8,6 @@ import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
-import java.io.Serial
 
 /* Data fra endepunktet.
 * Kan tilpasses, om det er behov for å hente flere felt
@@ -17,7 +16,7 @@ import java.io.Serial
 // Parametere til API'en.
 data class AlertsInfo(
     val cap: String? = null,                // Retrieve CAP XML message with given guid
-    val lang: String = "en",                // Output language "no" or "en"
+    val lang: String = "no",                // Output language "no" or "en"
     val event: String? = null,              // Filter by CAP eventType
     val incidentName: String? = null,       // Filter by incident
     val geographicDomain: String? = null,   // Filter by land or marine
@@ -27,22 +26,6 @@ data class AlertsInfo(
     val period: String? = null,             // Only used with /archive method
     val sort: String = "event",                // area, event, incidentName, t_onset, t_published, type
 )
-
-/*
-@Serializable
-data class Alert(
-    val area: String,
-    val event: String,
-    val severity: String
-)
-@Serializable
-data class AlertsResponse(
-    val features: List<Feature>
-)
-@Serializable
-data class Feature(
-    val properties: Alert
-)*/
 
 @Serializable
 data class Alert(

@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,14 +14,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -37,7 +39,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -51,6 +56,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.model.AlertsInfo
+import no.uio.ifi.in2000.team_21.ui.LocationViewModel
+import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 
 // Top bar implementation: to work as one component to be used through all the screens.
@@ -122,7 +130,9 @@ fun WeatherCard(
     temperature: String,
     highLowTemp: String,
     weatherCondition: String,
-    icon: String
+    icon: String,
+    alertColor: Color = Color(0xFFF7F7F7),
+    isAlertActive: Boolean = false
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -131,15 +141,10 @@ fun WeatherCard(
     ) {
         Card(
             modifier = Modifier
-                .background(
-                    color = Color(0xFFF7F7F7),
-                    shape = RoundedCornerShape(10.dp)
-                )
                 .padding(40.dp)
                 .fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 16.dp
-            )
+            elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+            colors = CardDefaults.cardColors(containerColor = alertColor)
         ) {
             Column (
                 modifier = Modifier
@@ -173,26 +178,43 @@ fun WeatherCard(
                     )
                 )
                 Spacer(Modifier.height(16.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start
+                Box(
+                    contentAlignment = Alignment.CenterStart,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 40.dp)
                 ) {
-                    WeatherIcon(
-                        element = icon,
-                    )
-                    Spacer(modifier = Modifier.padding(4.dp))
-                    Text(
-                        text = temperature,
-                        style = TextStyle(
-                            fontSize = 70.sp,
-                            lineHeight = 16.sp,
-                            //fontFamily = FontFamily(Font(R.font.roboto)),
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF00145D),
-                            textAlign = TextAlign.Center,
-                            letterSpacing = 0.5.sp,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        WeatherIcon(
+                            element = icon,
                         )
-                    )
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Text(
+                            text = temperature,
+                            style = TextStyle(
+                                fontSize = 70.sp,
+                                lineHeight = 16.sp,
+                                //fontFamily = FontFamily(Font(R.font.roboto)),
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF00145D),
+                                textAlign = TextAlign.Center,
+                                letterSpacing = 0.5.sp,
+                            ),
+                        )
+                        if (isAlertActive) {
+                            Icon(
+                                imageVector = Icons.Default.Warning,
+                                contentDescription = "Alert active",
+                                modifier = Modifier
+                                    .padding(start = 8.dp)
+                                    .size(48.dp),
+                                //tint = MaterialTheme.colors.error
+                            )
+                        }
+                    }
                 }
                 Spacer(Modifier.height(4.dp))
                 Text(
@@ -312,11 +334,33 @@ fun RecommendationSection(
 fun HomeScreen(
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel,
-    forecastViewModel: ForecastViewModel
+    forecastViewModel: ForecastViewModel,
+    locationViewModel: LocationViewModel,
+    alertsViewModel: AlertsViewModel
 ) {
     //TopBar(items = TopNavItem<items>, currentSelection = 1 ) {}
+    val userLocation by locationViewModel.userLocation.collectAsState()
+    val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
 
-    Column(
+    val isAlertActive = remember(filteredFeatures) {
+        filteredFeatures?.isNotEmpty() == true
+    }
+
+    LaunchedEffect(userLocation) {
+        if (userLocation != null) {
+            alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), userLocation!!, 500.0)
+            Log.d("HOME_SCREEN", "User location: ${userLocation!!.latitude()}, ${userLocation!!.longitude()}")
+        }
+    }
+
+    val alertColor = when (filteredFeatures?.maxByOrNull { it.properties.severity?.toIntOrNull() ?: 0 }?.properties?.riskMatrixColor) {
+        "Yellow" -> Color(0xFFF9F1DC) // Yellow
+        "Red" -> Color(0xFFF9DEDC) // Red
+        "Green" -> Color(0xFFECF9DC) // Green
+        else -> Color(0xFFF7F7F7) // Default case
+    }
+
+        Column(
         modifier = Modifier
             .width(360.dp)
             .height(50.dp)
@@ -375,10 +419,12 @@ fun HomeScreen(
 
         // TODO: Hente fra data nå
         WeatherCard(
-            temperature = "",
+            temperature = "14°",
             highLowTemp = "",
             weatherCondition = "",
-            icon = ""
+            icon = "",
+            alertColor = alertColor,
+            isAlertActive = isAlertActive
         )
 
         ActivityFavorites(

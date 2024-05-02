@@ -7,20 +7,38 @@ import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeserie
 class LocationForecastDataRepository(private val dataSource: LocationForecastDataSource = LocationForecastDataSource()) {
 
 
-    suspend fun fetchForecast(): LocationForecastResponse? {
-        return dataSource.fetchLocationForecastResponse(60.0, 10.0)
+    suspend fun fetchForecast(
+        latitude: Double,
+        longitude: Double
+    ): LocationForecastResponse? {
+        return dataSource.fetchLocationForecastResponse(
+            latitude = latitude,
+            longitude = longitude
+        )
     }
 
     // Timeseries er værmeldinger
-    suspend fun fetchTimeseries(): ArrayList<LocationForecastTimeseries>? {
+    suspend fun fetchTimeseries(
+        latitude: Double,
+        longitude: Double
+    ): ArrayList<LocationForecastTimeseries>? {
 
         Log.d("FORECAST_REPO","fetching timeseries.")
 
-        return dataSource.fetchLocationForecastTimeseries(60.0, 10.0)
+        return dataSource.fetchLocationForecastTimeseries(
+            latitude = latitude,
+            longitude =  longitude
+        )
     }
 
-    suspend fun fetchImageIcons(): ArrayList<String> {
-        val timeseries = fetchTimeseries()
+    suspend fun fetchAllNext1HourImageIcons(
+        latitude: Double,
+        longitude: Double
+    ): ArrayList<String> {
+        val timeseries = fetchTimeseries(
+            latitude = latitude,
+            longitude = longitude
+        )
         val icons = ArrayList<String>()
 
         Log.d("FORECAST_REPO", "timeseries size: ${timeseries?.size}")
@@ -60,16 +78,26 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
         return dataSource.fetchLocationForecastByTime(time = time, latitude = latitude, longitude = longitude)
     }
 
-    fun fetchAirTemperatureAtTime(time: String) {
-
+    suspend fun fetchCurrentAirTemperature(
+        latitude: Double,
+        longitude: Double
+    ): Double {
+        return dataSource.fetchCurrentAirTemperature(
+            latitude = latitude,
+            longitude = longitude
+        )
     }
 
-    suspend fun fetchCurrentAirTemperature(): Double {
-        return dataSource.fetchCurrentAirTemperature()
-    }
-
-    suspend fun repositoryfetchNextHourWeatherIcon(): String {
-        return dataSource.repositoryfetchNextHourWeatherIcon()
+    suspend fun repositoryfetchNextHourWeatherIcon(
+        time: String,
+        latitude: Double,
+        longitude: Double
+    ): String {
+        return dataSource.repositoryfetchNextHourWeatherIcon(
+            time = time,
+            latitude = latitude,
+            longitude = longitude
+        )
     }
 
 }

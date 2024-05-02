@@ -67,70 +67,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 
-// Top bar implementation: to work as one component to be used through all the screens.
-// Dataclass to define each tab in the navbar
-data class TopNavItem(val title: String, val icon: @Composable (() -> Unit)? = null)
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar(
-    items : List<TopNavItem>,
-    currentSelection: Int,
-    onItemSelected: (Int) -> Unit
-
-) {
-    var presses by remember { mutableIntStateOf(0) }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                colors = topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                title = {
-                    Text("Hjem")
-                }
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { presses++ }) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
-            }
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Text(
-                modifier = Modifier.padding(8.dp),
-                text =
-                """
-                    This is an example of a scaffold. It uses the Scaffold composable's parameters to create a screen with a simple top app bar, bottom app bar, and floating action button.
-
-                    It also contains some basic inner content, such as this text.
-
-                    You have pressed the floating action button $presses times.
-                """.trimIndent(),
-            )
-        }
-    }
-}
-
-    
-@Composable
-fun RowScope.TopBarItem(item: TopNavItem, isSelected: Boolean, onItemSelect: () -> Unit) {
-    Tab(
-        selected = isSelected,
-        onClick = onItemSelect,
-        text = { Text(item.title) },
-        icon = item.icon
-    )
-}
-
 @Composable
 fun WeatherCard(
     temperature: String,
@@ -398,10 +334,10 @@ fun HomeScreen(
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel,
     forecastViewModel: ForecastViewModel,
-    locationViewModel: LocationViewModel,
-    alertsViewModel: AlertsViewModel
+    alertsViewModel: AlertsViewModel,
+    locationViewModel: LocationViewModel
 ) {
-    //TopBar(items = TopNavItem<items>, currentSelection = 1 ) {}
+
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
 
@@ -413,6 +349,10 @@ fun HomeScreen(
         if (userLocation != null) {
             alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), userLocation!!, 500.0)
             Log.d("HOME_SCREEN", "User location: ${userLocation!!.latitude()}, ${userLocation!!.longitude()}")
+            forecastViewModel.fetchTodaysForecast( // let him cook!
+                latitude = userLocation?.latitude() ?: 0.0,
+                longitude = userLocation?.longitude() ?: 0.0
+            )
         }
     }
 
@@ -423,10 +363,6 @@ fun HomeScreen(
         else -> Color(0xFFF7F7F7) // Default case
     }
 
-    LaunchedEffect(Unit) {
-        forecastViewModel.fetchTodaysForecast()
-    }
-
     Column(
         modifier = Modifier
             .width(360.dp)
@@ -434,55 +370,9 @@ fun HomeScreen(
             .background(color = Color(0xFFF7F8FF))
     ) {
 
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-
-            Button(
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color(0xFF00145D),
-                    containerColor = MaterialTheme.colorScheme.background
-                ),
-                modifier = Modifier
-                    .weight(0.5f)
-
-            ) {
-                Text(
-                    text = "Hjem",
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .offset(x = 110.dp) // Flytter tekst-elementet lengre til høyre
-                )
-            }
-
-            Button(
-                onClick = { navController.navigate(Screen.MapScreen.route)},
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color(0xFF00145D),
-                    containerColor = MaterialTheme.colorScheme.background
-                ),
-                modifier = Modifier
-                    .weight(0.5f)
-            ) {
-                Text(
-                    text = "Kart",
-                    modifier = Modifier
-                        .weight(0.5f)
-                )
-            }
-
-            Icon(
-                imageVector = Icons.Default.AccountCircle,
-                contentDescription = "Account icon",
-                modifier = Modifier
-                    .clickable { navController.navigate(Screen.SettingScreen.route) }
-            )
-
-        }
+        TopBar(
+            navController = navController
+        )
 
         WeatherCard(
             alertColor = alertColor,
@@ -504,67 +394,3 @@ fun HomeScreen(
         )
     }
 }
-
-
-
-
-
-@Composable
-fun HomeScreen(navController: NavController) {
-    Box {
-        MapboxMapView().apply {
-            //Modifier.padding(innerPadding)
-        }
-        Column {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Spacer(modifier = Modifier.weight(1.0f))
-                SettingsButton(
-                    onClick = {
-                        navController.navigate(
-                            route = Screen.SettingScreen.route
-                        )
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun SettingsButton(onClick: () -> Unit) {
-    IconButton(onClick = onClick) {
-        Icon(Icons.Filled.Settings, contentDescription = "Settings")
-    }
-}
-/*
-@Composable
-fun BottomBarWithIcons() {
-    BottomNavigation(
-        modifier = Modifier.height(56.dp),
-        backgroundColor = Color.White,
-        elevation = 8.dp
-    ) {
-        repeat(1) { index ->
-            BottomNavigationItem(
-                icon = {
-                    Box(
-                        Modifier
-                            .size(24.dp)
-                            .background(Color.Gray, CircleShape)
-                    )
-                },
-                label = { Text("Icon $index") },
-                selected = false,
-                onClick = {  }
-            )
-        }
-    }
-}
-
- */
-

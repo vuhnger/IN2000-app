@@ -5,10 +5,8 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,16 +17,13 @@ import no.uio.ifi.in2000.team_21.model.locationforcast.Details
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastResponse
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
 import no.uio.ifi.in2000.team_21.model.locationforcast.WeatherData
-import java.time.Instant
-import java.time.LocalDate
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
-class ForecastViewModel : ViewModel() {
+class ForecastViewModel() : ViewModel() {
 
     private val repository: LocationForecastDataRepository = LocationForecastDataRepository()
     private val _selectedLocationWeatherData = mutableStateOf<List<LocationForecastTimeseries>?>(null)
@@ -59,7 +54,10 @@ class ForecastViewModel : ViewModel() {
     )
 
 
-    fun fetchTodaysForecast(){
+    fun fetchTodaysForecast(
+        latitude: Double,
+        longitude: Double
+    ){
         viewModelScope.launch {
 
             // Define the time zone for Norway, accounting for Daylight Saving Time automatically
@@ -78,38 +76,64 @@ class ForecastViewModel : ViewModel() {
 
             val response: LocationForecastTimeseries? = repository.fetchLocationForecastTimeseriesByTime(
                 time = time,
-                latitude = 60.0,
-                longitude = 10.0
+                latitude = latitude,
+                longitude = longitude
             )
 
             today_forecast = response
         }
     }
 
-    fun fetchNextHourWeatherIcon(){
+    fun fetchNextHourWeatherIcon(
+        time: String,
+        latitude: Double,
+        longitude: Double
+    ){
         viewModelScope.launch {
-            val response: String = repository.repositoryfetchNextHourWeatherIcon()
+            val response: String = repository.repositoryfetchNextHourWeatherIcon(
+                time = time,
+                latitude = latitude,
+                longitude = longitude
+            )
             next_1_hour_weather_icon = response
         }
     }
 
-    fun fetchCurrentAirTemperature(){
+    fun fetchCurrentAirTemperature(
+        latitude: Double,
+        longitude: Double
+    ){
         viewModelScope.launch {
-            val response: Double = repository.fetchCurrentAirTemperature()
+            val response: Double = repository.fetchCurrentAirTemperature(
+                latitude = latitude,
+                longitude = longitude
+            )
             instant_air_temperature = response
         }
     }
 
-    fun fetchIcons() {
+    fun fetchIcons(
+        latitude: Double,
+        longitude: Double
+    ) {
         viewModelScope.launch {
-            val response = repository.fetchImageIcons()
+            val response = repository.fetchAllNext1HourImageIcons(
+                latitude = latitude,
+                longitude = longitude
+            )
             icons = response
         }
     }
 
-    fun fetchForecast(){
+    fun fetchForecast(
+        latitude: Double,
+        longitude: Double
+    ){
         viewModelScope.launch {
-            val response: LocationForecastResponse? = repository.fetchForecast()
+            val response: LocationForecastResponse? = repository.fetchForecast(
+                latitude = latitude,
+                longitude = longitude
+            )
             forecast = response
         }
     }
@@ -140,13 +164,6 @@ class ForecastViewModel : ViewModel() {
         }
     }
 
-    fun fetchAirTemperatureAtTime(time: String) {
-        viewModelScope.launch {
-            val temperature = repository.fetchAirTemperatureAtTime(time)
-            Log.d("LF_VM", "Air temperature at $time is $temperature degrees Celsius.")
-        }
-    }
-
     private fun transformToWeatherData(details: Details, timeseries: LocationForecastTimeseries): WeatherData? {
 
         return WeatherData(
@@ -161,7 +178,9 @@ class ForecastViewModel : ViewModel() {
     }
 
     init {
-        //fetchForecast()
-        fetchTodaysForecast()
+        fetchTodaysForecast(
+            latitude = 60.0,
+            longitude = 10.0
+        )
     }
 }

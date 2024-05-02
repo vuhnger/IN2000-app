@@ -212,7 +212,7 @@ fun ActivityIconSmall(
 }
 
 @Composable
-fun ActivityCardHoriznotalWide(
+fun ActivityCardHorizontalWide(
     activity: ActivityModel,
     activitiesViewModel: ActivitiesViewModel
 ){

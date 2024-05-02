@@ -55,7 +55,7 @@ sealed class Screen(val route: String){
     object MapScreen: Screen(route = "MapScreen")
     object SettingScreen: Screen(route = "SettingScreen")
     object AboutUsScreen: Screen(route = "AboutUsScreen")
-    object AddActivitiyScreen: Screen(route = "AddActivityScreen")
+    object AddActivityScreen: Screen(route = "AddActivityScreen")
     object ProfileScreen: Screen(route = "ProfileScreen")
     object FriendsActivityScreen: Screen(route = "FriendsActivityScreen")
     object MyActivityScreen: Screen(route = "MyActivityScreen")
@@ -211,7 +211,7 @@ fun App(){
             AboutUsScreen(navController = navController)
         }
 
-        composable(Screen.AddActivitiyScreen.route){
+        composable(Screen.AddActivityScreen.route){
             AddActivityScreen(navController = navController)
         }
         composable(Screen.ProfileScreen.route){
@@ -233,7 +233,7 @@ fun App(){
             ContactsScreen(navController = navController)
         }
 
-        composable(Screen.AddActivitiyScreen.route){
+        composable(Screen.AddActivityScreen.route){
             AddFavoriteScreen(
                 navController = navController,
                 activitiesViewModel = activitiesViewModel

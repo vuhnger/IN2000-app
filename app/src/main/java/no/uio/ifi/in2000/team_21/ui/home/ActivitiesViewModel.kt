@@ -84,9 +84,7 @@ class ActivitiesViewModel(
             "ACTIVITY_VIEW_MODEL",
             "favorites: ${activityUIstate.favorites}"
         )
-
     }
-
     fun getWeatherData(){
         viewModelScope.launch {
             // TODO: Hent relevant værdata og legg det i kortene
@@ -94,8 +92,6 @@ class ActivitiesViewModel(
             activityUIstate = activityUIstate.copy(
                 activities = mutableListOf()// TODO: Oppdater aktivitetene med værdata i
             )
-
         }
     }
-
 }

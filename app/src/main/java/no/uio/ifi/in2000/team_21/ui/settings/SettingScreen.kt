@@ -123,7 +123,7 @@ fun SettingScreen(navController: NavController) {
             AllSettingsCard(navController,
                 mainText = "Alle aktiviteter",
                 onClick = {
-                    //handle event
+                    navController.navigate(Screen.AllActivitiesScreen.route)
                 }
             )
             Spacer(modifier = Modifier.padding(6.dp))

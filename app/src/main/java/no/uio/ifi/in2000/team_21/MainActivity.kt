@@ -29,6 +29,7 @@ import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 import com.mapbox.mapboxsdk.Mapbox
 import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
+import no.uio.ifi.in2000.team_21.ui.home.AllActivitiesScreen
 import no.uio.ifi.in2000.team_21.ui.home.LocationForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
 
@@ -44,6 +45,8 @@ sealed class Screen(val route: String){
     object TrophyWallScreen: Screen(route = "TrophyWallScreen")
     object NotificationScreen: Screen(route = "NotificationScreen")
     object ContactsScreen: Screen(route = "ContactsScreen")
+
+    object AllActivitiesScreen : Screen(route = "AllActivitiesScreen")
 
     // Funksjonen bygger en streng av argumenter som kan sendes med et kall på navigate til en skjerm.
     // Dersom du bruker funksjonen, erstatt:
@@ -76,16 +79,18 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+
     fun testActivityConditionCheckerViewModel() {
         val activityViewModel = ActivityConditionCheckerViewModel()
 
         activityViewModel.activities.observe(this, Observer { activities ->
             activities?.forEach { activity ->
-                Log.d("MAIN", "Activity: ${activity.activityName}, Are conditions met: ${activity.areConditionsMet}")
+                Log.d("MAIN", "Activity: ${activity.activityName}, Are conditions met: ${activity.conditionStatus}")
             }
         })
 
-        activityViewModel.checkActivityConditions("2024-04-26T13:00:00Z", 59.081729131417404, 10.424095397874112)
+        activityViewModel.checkActivityConditions("2024-05-02T17:00:00Z", 59.081729131417404, 10.424095397874112)
     }
 
     fun testOceanForecastViewModel() {
@@ -109,7 +114,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        oceanForecastViewModel.fetchOceanForecastByTime("2024-04-26T16:00:00Z", 59.081729131417404, 10.424095397874112)
+        oceanForecastViewModel.fetchOceanForecastByTime("2024-04-02T13:00:00Z", 59.081729131417404, 10.424095397874112)
     }
 
     fun testLocationForecastViewModel() {
@@ -133,11 +138,13 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        locationForecastViewModel.fetchWeatherDataByTime("2024-04-26T16:00:00Z", 59.081729131417404, 10.424095397874112)
+        locationForecastViewModel.fetchWeatherDataByTime("2024-05-02T17:00:00Z", 59.081729131417404, 10.424095397874112)
     }
 
 
 }
+
+
 
 
 
@@ -161,6 +168,10 @@ fun App(){
 
         composable(Screen.SettingScreen.route){
             SettingScreen(navController = navController)
+        }
+
+        composable(Screen.AllActivitiesScreen.route) {
+            AllActivitiesScreen(navController = navController)
         }
 
         composable(Screen.AboutUsScreen.route){

@@ -12,9 +12,10 @@ import no.uio.ifi.in2000.team_21.data.LocationForecastRepository
 import no.uio.ifi.in2000.team_21.data.OceanForecastRepository
 import no.uio.ifi.in2000.team_21.model.ActivityModel
 import no.uio.ifi.in2000.team_21.model.ActivityModels.allActivities
+import no.uio.ifi.in2000.team_21.model.ConditionStatus
 
 
-class ActivityConditionCheckerViewModel(
+open class ActivityConditionCheckerViewModel(
     private val oceanRepository: OceanForecastRepository = OceanForecastRepository(),
     private val locationRepository: LocationForecastRepository = LocationForecastRepository()
 ) : ViewModel() {
@@ -24,6 +25,21 @@ class ActivityConditionCheckerViewModel(
 
     init {
         _activities.value = allActivities
+    }
+
+    fun useDummyData() {
+        val dummyData = listOf(
+            ActivityModel("Surfing", 5.0, 5.0, 3.0, 10.0, 18.0, conditionStatus = ConditionStatus.ALL_MET),
+            ActivityModel("Swimming", 18.0, 2.0, 0.5, 5.0, 20.0, conditionStatus = ConditionStatus.ALL_MET),
+            ActivityModel("Fishing", 5.0, 2.0, 1.0, 5.0, 15.0, conditionStatus = ConditionStatus.SOME_MET),
+            ActivityModel("Boating", 5.0, 4.0, 0.5, 12.0, 20.0, conditionStatus = ConditionStatus.SOME_MET),
+            ActivityModel("Kayaking & Canoeing", 2.0, 3.0, 0.5, 10.0, 10.0, conditionStatus = ConditionStatus.ALL_MET),
+            ActivityModel("Sailing", 5.0, 5.0, 2.0, 15.0, 20.0, conditionStatus = ConditionStatus.NONE_MET),
+            ActivityModel("Rowing & Paddling", 5.0, 3.0, 0.5, 8.0, 15.0, conditionStatus = ConditionStatus.ALL_MET),
+            ActivityModel("Snorkeling & Swimming", 18.0, 2.0, 0.5, 5.0, 20.0, conditionStatus = ConditionStatus.NONE_MET),
+            ActivityModel("Vannski", 5.0, 4.0, 0.5, 12.0, 20.0, conditionStatus = ConditionStatus.NONE_MET)
+        )
+        _activities.value = dummyData
     }
 
     fun checkActivityConditions(time: String, latitude: Double, longitude: Double) {
@@ -42,9 +58,9 @@ class ActivityConditionCheckerViewModel(
                 val oceanDetails = oceanTimeseries?.data?.instant?.details ?: return@map activity
                 val locationDetails = locationData?.data?.instant?.details ?: return@map activity
 
-                // Update areConditionsMet based on combined data
+                // Update conditionStatus based on combined data
                 activity.copy(
-                    areConditionsMet = isWeatherOptimalForActivity(oceanDetails, locationDetails, activity)
+                    conditionStatus = isWeatherOptimalForActivity(oceanDetails, locationDetails, activity)
                 )
             }
 
@@ -57,19 +73,19 @@ class ActivityConditionCheckerViewModel(
         oceanDetails: Details,
         locationDetails: LocationDetails,
         activity: ActivityModel
-    ): Boolean {
-        val waterTemperatureSuitable = (oceanDetails.sea_water_temperature ?: 0.0) >= activity.waterTemperatureThreshold
-        val waterSpeedSuitable = (oceanDetails.sea_water_speed ?: Double.MAX_VALUE) <= activity.waterSpeedThreshold
-        val waveHeightSuitable = (oceanDetails.sea_surface_wave_height ?: Double.MAX_VALUE) <= activity.waveHeightThreshold
+    ): ConditionStatus {
+        val conditions = listOf(
+            (oceanDetails.sea_water_temperature ?: 0.0) >= activity.waterTemperatureThreshold,
+            (oceanDetails.sea_water_speed ?: Double.MAX_VALUE) <= activity.waterSpeedThreshold,
+            (oceanDetails.sea_surface_wave_height ?: Double.MAX_VALUE) <= activity.waveHeightThreshold,
+            (locationDetails.air_temperature ?: Double.MIN_VALUE) >= (activity.airTemperatureThreshold ?: Double.MIN_VALUE),
+            (locationDetails.wind_speed ?: Double.MAX_VALUE) <= (activity.windSpeedThreshold ?: Double.MAX_VALUE)
+        )
 
-        val airTemperatureSuitable = (locationDetails.air_temperature
-            ?: Double.MIN_VALUE) >= (activity.airTemperatureThreshold
-            ?: Double.MIN_VALUE)
-        val windSpeedSuitable =
-            (locationDetails.wind_speed ?: Double.MAX_VALUE) <= (activity.windSpeedThreshold
-                ?: Double.MAX_VALUE)
-        // Legg til flere skjekker
-
-        return waterTemperatureSuitable && waterSpeedSuitable && waveHeightSuitable && airTemperatureSuitable && windSpeedSuitable
+        return when (conditions.count { it }) {
+            conditions.size -> ConditionStatus.ALL_MET
+            0 -> ConditionStatus.NONE_MET
+            else -> ConditionStatus.SOME_MET
+        }
     }
 }

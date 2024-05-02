@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.team_21.data
 import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
@@ -58,6 +59,4 @@ class LocationForecastDataSource {
         val timeseries = fetchLocationForecastTimeseries(latitude, longitude)
         return timeseries?.find { it.time == time }
     }
-
-
 }

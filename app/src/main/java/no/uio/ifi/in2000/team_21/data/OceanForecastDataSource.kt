@@ -35,7 +35,7 @@ open class OceanForecastDataSource {
 
     suspend fun fetchOceanForecastResponse(latitude: Double, longitude: Double): OceanForecastResponse? {
         return try {
-            val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/oceanforecast/2.0/complete?lat=$latitude&lon=$longitude")
+            val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/oceanforecast/2.0/complete?lat=60.10&lon=5")
             Log.d("OCEAN_DATA_SOURCE", "fetchForecast() status code: ${response.status.value}")
             if (response.status.value in 200..299) {
                 response.body()

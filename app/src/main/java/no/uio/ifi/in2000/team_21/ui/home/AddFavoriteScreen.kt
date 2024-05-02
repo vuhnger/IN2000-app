@@ -37,7 +37,7 @@ fun AddFavoriteScreen(
         }
         activitiesViewModel.activityUIstate.activities.forEach {
                 activity -> 
-            ActivityCardHoriznotalWide(
+            ActivityCardHorizontalWide(
                 activity = activity,
                 activitiesViewModel = activitiesViewModel
             )

@@ -4,9 +4,11 @@ import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -14,10 +16,6 @@ import no.uio.ifi.in2000.team_21.model.oceanforecast.OceanForecastResponse
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
 
 open class OceanForecastDataSource {
-
-    private var latitude: Double = 59.05391729907632
-    private var longitude: Double = 10.431265180256219
-
 
     private val client = HttpClient() {
         install(ContentNegotiation) {
@@ -31,9 +29,18 @@ open class OceanForecastDataSource {
         install(Logging){
             level = LogLevel.BODY
         }
+        defaultRequest {
+            header(
+                key = "X-Gravitee-API-Key",
+                value = "eff58995-389e-4cd2-816f-4c6728aeec6e"
+            )
+        }
     }
 
-    suspend fun fetchOceanForecastResponse(latitude: Double, longitude: Double): OceanForecastResponse? {
+    suspend fun fetchOceanForecastResponse(
+        latitude: Double,
+        longitude: Double
+    ): OceanForecastResponse? {
         return try {
             val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/oceanforecast/2.0/complete?lat=$latitude&lon=$longitude")
             Log.d("OCEAN_DATA_SOURCE", "fetchForecast() status code: ${response.status.value}")
@@ -55,7 +62,7 @@ open class OceanForecastDataSource {
 
     suspend fun fetchOceanForecastByTime(time: String, latitude: Double, longitude: Double): Timeseries? {
         val timeseries = fetchOceanForecastTimeseries(latitude, longitude)
-        return timeseries?.find { it.time == time }
+        return timeseries?.find { it.time?.contains(time) ?: false }
     }
 }
 

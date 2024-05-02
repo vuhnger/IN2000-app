@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.team_21.model
+package no.uio.ifi.in2000.team_21.model.activity
 
 import no.uio.ifi.in2000.team_21.R
 

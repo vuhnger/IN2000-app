@@ -10,8 +10,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.data.LocationForecastDataRepository
 import no.uio.ifi.in2000.team_21.data.OceanForecastRepository
-import no.uio.ifi.in2000.team_21.model.ActivityModel
-import no.uio.ifi.in2000.team_21.model.ActivityModels.allActivities
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModels.allActivities
 
 
 class ActivityConditionCheckerViewModel(

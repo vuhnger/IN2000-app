@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.team_21
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -29,18 +28,13 @@ import no.uio.ifi.in2000.team_21.ui.home.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import com.mapbox.common.MapboxOptions
-import no.uio.ifi.in2000.team_21.model.ActivityModel
-import no.uio.ifi.in2000.team_21.model.ActivityModels
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
 import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
-import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
-import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
-import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.home.LocationForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
-import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
-import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.FriendsActivityScreen

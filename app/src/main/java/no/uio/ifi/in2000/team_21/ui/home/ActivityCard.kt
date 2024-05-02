@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,20 +27,14 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.sharp.Add
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.TextUnit
 import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
-import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
-import no.uio.ifi.in2000.team_21.model.ActivityModel
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 
 @Composable
 fun ActivityCard(

@@ -15,7 +15,7 @@ class OceanForecastRepository(
         return dataSource.fetchOceanForecastResponse(latitude, longitude)
     }
 
-    suspend fun fetchOceanForecastTimeseries(latitude: Double, longitude: Double): ArrayList<Timeseries>? {
+    suspend fun fetchOceanForecastTimeseries(latitude: Double, longitude: Double): List<Timeseries>? {
         Log.d("OCEANFORECAST_REPO", "fetching OceanForecast timeseries...")
         return dataSource.fetchOceanForecastTimeseries(latitude, longitude)
     }

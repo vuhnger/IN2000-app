@@ -48,8 +48,6 @@ import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 
 
-
-
 sealed class Screen(val route: String){
     object HomeScreen: Screen(route = "HomeScreen")
     object MapScreen: Screen(route = "MapScreen")
@@ -64,6 +62,8 @@ sealed class Screen(val route: String){
     object ContactsScreen: Screen(route = "ContactsScreen")
     object AddFavoriteScreen: Screen(route = "AddFavoriteScreen")
     object ActivityDetailScreen: Screen(route = "ActivityDetailScreen")
+
+    object AllActivitiesScreen : Screen(route = "AllActivitiesScreen")
 
     // Funksjonen bygger en streng av argumenter som kan sendes med et kall på navigate til en skjerm.
     // Dersom du bruker funksjonen, erstatt:
@@ -102,73 +102,10 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    fun testActivityConditionCheckerViewModel() {
-        val activityViewModel = ActivityConditionCheckerViewModel()
-
-        activityViewModel.activities.observe(this, Observer { activities ->
-            activities?.forEach { activity ->
-                Log.d("MAIN", "Activity: ${activity.activityName}, Are conditions met: ${activity.areConditionsMet}")
-            }
-        })
-
-        activityViewModel.checkActivityConditions("2024-04-26T13:00:00Z", 59.081729131417404, 10.424095397874112)
-    }
-
-    fun testOceanForecastViewModel() {
-        val oceanForecastViewModel = OceanForecastViewModel()
-
-        lifecycleScope.launchWhenStarted {
-            oceanForecastViewModel.oceanDataState.collect { oceanDataState ->
-                when (oceanDataState) {
-                    is OceanForecastViewModel.OceanDataState.Loading -> {
-                        Log.d("MAIN", "Loading ocean data...")
-                    }
-                    is OceanForecastViewModel.OceanDataState.Success -> {
-                        oceanDataState.oceanData?.let { oceanData ->
-                            Log.d("MAIN", "Ocean Data: $oceanData")
-                        }
-                    }
-                    is OceanForecastViewModel.OceanDataState.Error -> {
-                        Log.d("MAIN", "Error: ${oceanDataState.message}")
-                    }
-                }
-            }
-        }
-
-        oceanForecastViewModel.fetchOceanForecastByTime("2024-04-26T16:00:00Z", 59.081729131417404, 10.424095397874112)
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun testLocationForecastViewModel() {
-        val forecastViewModel = ForecastViewModel()
-
-        lifecycleScope.launchWhenStarted {
-            forecastViewModel.weatherDataState.collect { weatherDataState ->
-                when (weatherDataState) {
-                    is ForecastViewModel.WeatherDataState.Loading -> {
-                        Log.d("MAIN", "Loading ocean data...")
-                    }
-                    is ForecastViewModel.WeatherDataState.Success -> {
-                        weatherDataState.weatherData?.let { weatherData ->
-                            Log.d("MAIN", "Ocean Data: $weatherData")
-                        }
-                    }
-                    is ForecastViewModel.WeatherDataState.Error -> {
-                        Log.d("MAIN", "Error: ${weatherDataState.message}")
-                    }
-                }
-            }
-        }
-
-        forecastViewModel.fetchWeatherDataByTime("2024-04-26T16:00:00Z", 59.081729131417404, 10.424095397874112)
-    }
-
-
 }
 
-
 @RequiresApi(Build.VERSION_CODES.O)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App(){

@@ -42,7 +42,7 @@ open class OceanForecastDataSource {
         longitude: Double
     ): OceanForecastResponse? {
         return try {
-            val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/oceanforecast/2.0/complete?lat=$latitude&lon=$longitude")
+            val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/oceanforecast/2.0/complete?lat=60.10&lon=5")
             Log.d("OCEAN_DATA_SOURCE", "fetchForecast() status code: ${response.status.value}")
             if (response.status.value in 200..299) {
                 response.body()
@@ -62,7 +62,7 @@ open class OceanForecastDataSource {
 
     suspend fun fetchOceanForecastByTime(time: String, latitude: Double, longitude: Double): Timeseries? {
         val timeseries = fetchOceanForecastTimeseries(latitude, longitude)
-        return timeseries?.find { it.time == time }
+        return timeseries?.find { it.time?.contains(time) ?: false }
     }
 }
 

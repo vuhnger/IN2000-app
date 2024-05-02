@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-import android.util.Log
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Details
 import no.uio.ifi.in2000.team_21.model.locationforcast.Details as LocationDetails
 import androidx.lifecycle.LiveData
@@ -10,14 +9,16 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.data.LocationForecastDataRepository
 import no.uio.ifi.in2000.team_21.data.OceanForecastRepository
+
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels.allActivities
+import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
+    
+open class ActivityConditionCheckerViewModel : ViewModel() {
 
+    private val oceanRepository: OceanForecastRepository = OceanForecastRepository()
 
-class ActivityConditionCheckerViewModel(
-    private val oceanRepository: OceanForecastRepository = OceanForecastRepository(),
     private val locationRepository: LocationForecastDataRepository = LocationForecastDataRepository()
-) : ViewModel() {
 
     private var _activities: MutableLiveData<List<ActivityModel>> = MutableLiveData()
     val activities: LiveData<List<ActivityModel>> get() = _activities
@@ -26,50 +27,74 @@ class ActivityConditionCheckerViewModel(
         _activities.value = allActivities
     }
 
-    fun checkActivityConditions(time: String, latitude: Double, longitude: Double) {
+    fun checkActivityConditions(
+        time: String,
+        latitude: Double,
+        longitude: Double
+    ) {
         viewModelScope.launch {
-            Log.d("ActivityViewModel", "Fetching ocean timeseries for time: $time")
-            val oceanTimeseries = oceanRepository.fetchOceanForecastTimeseriesByTime(time, latitude, longitude)
-            Log.d("ActivityViewModel", "Fetched ocean timeseries: $oceanTimeseries")
-
-            Log.d("ActivityViewModel", "Fetching location forecast for time: $time")
-            val locationData = locationRepository.fetchLocationForecastTimeseriesByTime(time, latitude, longitude)
-            Log.d("ActivityViewModel", "Fetched location forecast: $locationData")
-
-            val currentActivities = _activities.value ?: emptyList()
-
-            val updatedActivities = currentActivities.map { activity ->
-                val oceanDetails = oceanTimeseries?.data?.instant?.details ?: return@map activity
-                val locationDetails = locationData?.data?.instant?.details ?: return@map activity
-
-                // Update areConditionsMet based on combined data
-                activity.copy(
-                    areConditionsMet = isWeatherOptimalForActivity(oceanDetails, locationDetails, activity)
+                val oceanData = oceanRepository.fetchOceanForecastTimeseriesByTime(
+                    time = time,
+                    latitude = latitude,
+                    longitude = longitude
                 )
-            }
+                val locationData = locationRepository.fetchLocationForecastTimeseriesByTime(
+                    time = time,
+                    latitude = latitude,
+                    longitude = longitude
+                )
 
+                val updatedActivities = _activities.value?.map { activity ->
+                    val relevantDetails = getRelevantWeatherDetails(
+                        oceanData?.data?.instant?.details,
+                        locationData?.data?.instant?.details
+                    )
+                    activity.copy(
+                        conditionStatus = isWeatherOptimalForActivity(
+                            weatherDetails = relevantDetails,
+                            activity = activity
+                        )
+                    )
+                } ?: emptyList()
             _activities.value = updatedActivities
-            Log.d("ActivityViewModel", "Updated activities: $updatedActivities")
         }
     }
 
+    private data class WeatherDetails(
+        val seaWaterTemperature: Double?,
+        val seaWaterSpeed: Double?,
+        val seaSurfaceWaveHeight: Double?,
+        val airTemperature: Double?,
+        val windSpeed: Double?
+    )
+
+
+    private fun getRelevantWeatherDetails(oceanDetails: Details?, locationDetails: LocationDetails?): WeatherDetails {
+        return WeatherDetails(
+            seaWaterTemperature = oceanDetails?.sea_water_temperature,
+            seaWaterSpeed = oceanDetails?.sea_water_speed,
+            seaSurfaceWaveHeight = oceanDetails?.sea_surface_wave_height,
+            airTemperature = locationDetails?.air_temperature,
+            windSpeed = locationDetails?.wind_speed
+        )
+    }
+
     private fun isWeatherOptimalForActivity(
-        oceanDetails: Details,
-        locationDetails: LocationDetails,
+        weatherDetails: WeatherDetails,
         activity: ActivityModel
-    ): Boolean {
-        val waterTemperatureSuitable = (oceanDetails.sea_water_temperature ?: 0.0) >= activity.waterTemperatureThreshold
-        val waterSpeedSuitable = (oceanDetails.sea_water_speed ?: Double.MAX_VALUE) <= activity.waterSpeedThreshold
-        val waveHeightSuitable = (oceanDetails.sea_surface_wave_height ?: Double.MAX_VALUE) <= activity.waveHeightThreshold
+    ): ConditionStatus {
+        val conditions = listOf(
+            (weatherDetails.seaWaterTemperature ?: 0.0) >= activity.waterTemperatureThreshold,
+            (weatherDetails.seaWaterSpeed ?: Double.MAX_VALUE) <= activity.waterSpeedThreshold,
+            (weatherDetails.seaSurfaceWaveHeight ?: Double.MAX_VALUE) <= activity.waveHeightThreshold,
+            (weatherDetails.airTemperature ?: Double.MIN_VALUE) >= (activity.airTemperatureThreshold),
+            (weatherDetails.windSpeed ?: Double.MAX_VALUE) <= (activity.windSpeedThreshold)
+        )
 
-        val airTemperatureSuitable = (locationDetails.air_temperature
-            ?: Double.MIN_VALUE) >= (activity.airTemperatureThreshold
-            ?: Double.MIN_VALUE)
-        val windSpeedSuitable =
-            (locationDetails.wind_speed ?: Double.MAX_VALUE) <= (activity.windSpeedThreshold
-                ?: Double.MAX_VALUE)
-        // Legg til flere skjekker
-
-        return waterTemperatureSuitable && waterSpeedSuitable && waveHeightSuitable && airTemperatureSuitable && windSpeedSuitable
+        return when (conditions.count { it }) {
+            conditions.size -> ConditionStatus.ALL_MET
+            0 -> ConditionStatus.NONE_MET
+            else -> ConditionStatus.SOME_MET
+        }
     }
 }

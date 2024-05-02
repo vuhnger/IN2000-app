@@ -9,31 +9,23 @@ data class ActivityModel(
     val waveHeightThreshold: Double,
     val windSpeedThreshold: Double,
     val airTemperatureThreshold: Double,
-    val windDirection: WindDirection? = null,
-    val prefferedCloudCover: CloudCover? = null,
-    val equipmentImpact: EquipmentImpact? = null,
-    val areConditionsMet: Boolean = false,
+    val conditionStatus: ConditionStatus = ConditionStatus.NONE_MET,
     val imageId: Int,
     val icon: Int
-)
-
-enum class WindDirection {
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
+){
+    fun getFlagColorId(): Int {
+        return when (conditionStatus) {
+            ConditionStatus.ALL_MET -> R.drawable.green_flag_48
+            ConditionStatus.SOME_MET -> R.drawable.yellow_flag_48
+            ConditionStatus.NONE_MET -> R.drawable.red_flag_48
+        }
+    }
 }
 
-enum class CloudCover {
-    CLEAR,
-    PARTLY_CLOUDY,
-    OVERCAST
-}
-
-enum class EquipmentImpact {  // Hva slags utstyr man trenger for eksempel
-    LOW,
-    MEDIUM,
-    HIGH
+enum class ConditionStatus {
+    ALL_MET, // Green flag
+    SOME_MET, // Yellow flag
+    NONE_MET // Red flag
 }
 
 object ActivityModels {

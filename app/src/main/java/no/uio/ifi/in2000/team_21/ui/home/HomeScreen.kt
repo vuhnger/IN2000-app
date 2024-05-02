@@ -354,7 +354,6 @@ fun RecommendationSection(
 fun HomeScreen(
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel,
-    locationForecastViewModel: LocationForecastViewModel,
     locationViewModel: LocationViewModel,
     forecastViewModel: ForecastViewModel
 ) {

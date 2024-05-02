@@ -1,9 +1,11 @@
 package no.uio.ifi.in2000.team_21
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -33,7 +35,6 @@ import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
 import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
-import no.uio.ifi.in2000.team_21.ui.home.LocationForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
@@ -84,6 +85,7 @@ class MainActivity : ComponentActivity() {
 
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -135,6 +137,7 @@ class MainActivity : ComponentActivity() {
         oceanForecastViewModel.fetchOceanForecastByTime("2024-04-26T16:00:00Z", 59.081729131417404, 10.424095397874112)
     }
 
+
     fun testLocationForecastViewModel() {
         val forecastViewModel = ForecastViewModel()
 
@@ -163,6 +166,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App(){
@@ -171,7 +175,7 @@ fun App(){
 
     val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
 
-    val locationForecastViewModel: LocationForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
+    val locationForecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
     val locationViewModel: LocationViewModel = LocationViewModel(LocalContext.current)
 
     val forecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
@@ -192,7 +196,6 @@ fun App(){
             HomeScreen(
                 navController = navController,
                 activitiesViewModel = activitiesViewModel,
-                locationForecastViewModel = locationForecastViewModel,
                 locationViewModel = locationViewModel,
                 forecastViewModel = forecastViewModel
 

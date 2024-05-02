@@ -1,9 +1,11 @@
 package no.uio.ifi.in2000.team_21
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -14,23 +16,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mapbox.common.MapboxOptions
-import no.uio.ifi.in2000.team_21.model.ActivityModel
-import no.uio.ifi.in2000.team_21.model.ActivityModels
 import no.uio.ifi.in2000.team_21.ui.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
+import androidx.navigation.navArgument
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
 import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
-import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
 import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
+import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.FriendsActivityScreen
@@ -40,6 +46,8 @@ import no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
+
+
 
 
 sealed class Screen(val route: String){
@@ -75,11 +83,14 @@ sealed class Screen(val route: String){
 
 
 class MainActivity : ComponentActivity() {
+
+    private var fusedLocationClient: FusedLocationProviderClient? = null
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         MapboxOptions.accessToken = "pk.eyJ1Ijoiandob2xtYm8iLCJhIjoiY2x1MDQ0MHg2MDYxNjJrdDR4eTAwanVhOSJ9.UJ531h6BwXp56LYSIOxwFQ"
-
-
         setContent {
             Team21Theme {
                 Surface(
@@ -127,6 +138,8 @@ class MainActivity : ComponentActivity() {
         oceanForecastViewModel.fetchOceanForecastByTime("2024-04-26T16:00:00Z", 59.081729131417404, 10.424095397874112)
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     fun testLocationForecastViewModel() {
         val forecastViewModel = ForecastViewModel()
 
@@ -155,6 +168,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App(){
@@ -162,8 +176,11 @@ fun App(){
     val navController = rememberNavController()
     val locationViewModel: LocationViewModel = viewModel()
     val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
+    val locationForecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
+
     val forecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
     val alertsViewModel: AlertsViewModel = viewModel()
+
 
     val defaultActivity: ActivityModel = ActivityModels.FISHING
 
@@ -223,11 +240,20 @@ fun App(){
             )
         }
 
-        composable(Screen.ActivityDetailScreen.route){
+        composable(
+            route = Screen.ActivityDetailScreen.route + "/{activityName}",
+            arguments = listOf(
+                navArgument(name = "activityName"){
+                    type = NavType.StringType
+                    defaultValue = defaultActivity.activityName
+                    nullable = true
+                }
+            )
+            ){entry ->
             ActivityDetailScreen(
                 activitiesViewModel = activitiesViewModel,
                 navController = navController,
-                activity = defaultActivity
+                activityName = entry.arguments?.getString("activityName")
             )
         }
     }

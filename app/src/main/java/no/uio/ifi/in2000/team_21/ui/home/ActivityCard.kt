@@ -26,16 +26,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavController
-import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
-import no.uio.ifi.in2000.team_21.model.ActivityModel
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 
 @Composable
 fun ActivityCard(
@@ -150,6 +149,7 @@ fun ActivityCard(
     }
 }
 
+// Kortene som ligger under Anbefaling seksjonen
 @Composable
 fun ActivityCardSmall(
     activity: ActivityModel,
@@ -159,22 +159,37 @@ fun ActivityCardSmall(
     Card(
         modifier = Modifier
             .width(102.dp)
-            .height(142.dp)
-            .padding(start = 10.dp, top = 10.dp, end = 10.dp)
+            .height(180.dp)
+            .padding(start = 10.dp, top = 20.dp, end = 10.dp)
             .clickable {
-                navController.navigate(Screen.ActivityDetailScreen.withArgs(activity.activityName))
+                navController.navigate(
+                    Screen.ActivityDetailScreen.withArgs(
+                        activity.activityName
+                    )
+                )
             }
     ) {
         Column(
-
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(5.dp)
         ) {
             Text(
-                text = activity.activityName
+                text = activity.activityName,
+                modifier = Modifier.weight(1f),
+                style = TextStyle(
+                    color = MaterialTheme.colors.primary,
+                    fontSize = 20.sp
+                )
             )
+
+            Spacer(modifier = Modifier.padding(5.dp))
+
             Icon(
                 painter = painterResource(id = activity.icon),
                 contentDescription = "Icon of ${activity.activityName}",
                 modifier = Modifier
+                    .weight(1f)
             )
         }
     }
@@ -198,16 +213,45 @@ fun ActivityIconSmall(
 
 @Composable
 fun ActivityCardHoriznotalWide(
-    activity: ActivityModel
+    activity: ActivityModel,
+    activitiesViewModel: ActivitiesViewModel
 ){
     Card(
-
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+            horizontal = 10.dp
+        ),
+        elevation = 10.dp
     ) {
         Row(
-
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            // TODO: Icon
-            // TODO: Fav button icon clickable
+            Icon(
+                painter = painterResource(id = activity.icon),
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .weight(1f)
+            )
+
+            Button(
+                onClick = {
+                    activitiesViewModel.addFavorite(activity)
+                },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colors.primary,
+                    containerColor = MaterialTheme.colors.background
+                ),
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = ""
+                )
+            }
         }
     }
 }

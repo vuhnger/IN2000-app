@@ -51,7 +51,6 @@ fun AddActivityScreen(navController: NavController) {
         "called"
     )
 
-
     Scaffold(
         topBar = {
             TopAppBar(

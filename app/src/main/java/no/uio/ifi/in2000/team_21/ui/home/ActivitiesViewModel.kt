@@ -7,14 +7,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import no.uio.ifi.in2000.team_21.R
-import no.uio.ifi.in2000.team_21.model.ActivityModel
-import no.uio.ifi.in2000.team_21.model.ActivityModels
+import no.uio.ifi.in2000.team_21.model.activity.ActivityLog
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
 
 
 data class ActivitiesUIState(
     val activities: List<ActivityModel>,
-    val favorites: MutableList<ActivityModel>
+    val favorites: MutableList<ActivityModel>,
+    val activityLog: MutableList<ActivityLog>
 )
 
 class ActivitiesViewModel(
@@ -24,7 +25,8 @@ class ActivitiesViewModel(
     var activityUIstate by mutableStateOf(
         ActivitiesUIState(
             activities = ActivityModels.allActivities,
-            favorites = mutableListOf()
+            favorites = mutableListOf(),
+            activityLog = mutableListOf()
         )
     )
         private set

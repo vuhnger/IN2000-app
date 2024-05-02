@@ -104,7 +104,7 @@ import no.uio.ifi.in2000.team_21.data.database.UserMarkerEntity
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
-import no.uio.ifi.in2000.team_21.model.locationforecast.Timeseries
+import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
 import no.uio.ifi.in2000.team_21.ui.UserMarkerViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.WeatherIcon

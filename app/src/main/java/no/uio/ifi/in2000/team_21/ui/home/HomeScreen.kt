@@ -1,6 +1,9 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +24,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -37,20 +39,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
+import androidx.compose.ui.Modifier
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 
 // Top bar implementation: to work as one component to be used through all the screens.
@@ -120,10 +125,16 @@ fun RowScope.TopBarItem(item: TopNavItem, isSelected: Boolean, onItemSelect: () 
 @Composable
 fun WeatherCard(
     temperature: String,
-    highLowTemp: String,
-    weatherCondition: String,
+    highTemp: String,
+    lowTemp: String,
     icon: String
 ) {
+
+    Log.d(
+        "WEATHER_CARD",
+        "drawn card with temp: $temperature, low: $lowTemp, high: $highTemp, icon: $icon"
+    )
+
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -196,7 +207,7 @@ fun WeatherCard(
                 }
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = weatherCondition,
+                    text = icon,
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 20.sp,
@@ -208,19 +219,42 @@ fun WeatherCard(
                     )
                 )
                 Spacer(Modifier.height(4.dp))
-                Text(
-                    text = highLowTemp,
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.roboto)),
-                        fontWeight = FontWeight(400),
-                        color = Color(0xFF00145D),
-                        textAlign = TextAlign.Center,
-                        letterSpacing = 0.1.sp,
+
+                Row(
+
+                ) {
+                    Text(
+                        text = "H: " + highTemp,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            lineHeight = 20.sp,
+                            //fontFamily = FontFamily(Font(R.font.roboto)),
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF00145D),
+                            textAlign = TextAlign.Center,
+                            letterSpacing = 0.1.sp,
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
                     )
-                )
-            }
+
+                    Text(
+                        text = "L: " + lowTemp ,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            lineHeight = 20.sp,
+                            //fontFamily = FontFamily(Font(R.font.roboto)),
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF00145D),
+                            textAlign = TextAlign.Center,
+                            letterSpacing = 0.1.sp,
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                }
+                }
+
         }
     }
 
@@ -232,7 +266,7 @@ fun ActivityFavorites(
     navController: NavController
 ) {
     Column(
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
 
         Row(
@@ -247,24 +281,31 @@ fun ActivityFavorites(
                     lineHeight = 20.sp,
                     //fontFamily = FontFamily(Font(R.font.roboto)),
                     fontWeight = FontWeight(400),
-                    color = Color(0xFF00145D),
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                     letterSpacing = 0.1.sp,
                 ),
                 modifier = Modifier
-                    .weight(0.5f)
+                    .weight(1f)
             )
 
-            Icon(
-                imageVector = Icons.Rounded.Add,
-                contentDescription = "Button add to favorites",
+            Button(
+                onClick = { navController.navigate(Screen.AddActivitiyScreen.route) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = androidx.compose.material.MaterialTheme.colors.background,
+                    contentColor = androidx.compose.material.MaterialTheme.colors.primary
+                ),
                 modifier = Modifier
-                    .padding(1.dp)
-                    .clickable {
-                        navController.navigate(Screen.AddActivitiyScreen.route)
-                    } //TODO: add to favorites screen
-                    .weight(0.5f)
-            )
+                    .weight(1f)
+                    .width(20.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Button add to favorites",
+                    modifier = Modifier
+                        .padding(1.dp)
+                )
+            }
 
         }
 
@@ -290,7 +331,7 @@ fun RecommendationSection(
                 lineHeight = 20.sp,
                 //fontFamily = FontFamily(Font(R.font.roboto)),
                 fontWeight = FontWeight(400),
-                color = Color(0xFF00145D),
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center,
                 letterSpacing = 0.1.sp,
             )
@@ -308,13 +349,19 @@ fun RecommendationSection(
         }
     }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel,
+    locationViewModel: LocationViewModel,
     forecastViewModel: ForecastViewModel
 ) {
     //TopBar(items = TopNavItem<items>, currentSelection = 1 ) {}
+
+    LaunchedEffect(Unit) {
+        forecastViewModel.fetchTodaysForecast()
+    }
 
     Column(
         modifier = Modifier
@@ -373,12 +420,11 @@ fun HomeScreen(
 
         }
 
-        // TODO: Hente fra data nå
         WeatherCard(
-            temperature = "",
-            highLowTemp = "",
-            weatherCondition = "",
-            icon = ""
+            temperature = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature?.toString() ?: "N/A",
+            highTemp = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature_max?.toString() ?: "N/A",
+            lowTemp = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature_min?.toString() ?: "N/A",
+            icon = forecastViewModel.today_forecast?.data?.next_1_hours?.summary?.symbol_code?.toString() ?: "N/A"
         )
 
         ActivityFavorites(

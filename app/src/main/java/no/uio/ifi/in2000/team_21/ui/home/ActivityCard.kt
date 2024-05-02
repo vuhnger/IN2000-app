@@ -158,7 +158,7 @@ fun ActivityCardSmall(
 ){
     Card(
         modifier = Modifier
-            .width(102.dp)
+            .width(130.dp)
             .height(180.dp)
             .padding(start = 10.dp, top = 20.dp, end = 10.dp)
             .clickable {

@@ -37,8 +37,8 @@ enum class EquipmentImpact {  // Hva slags utstyr man trenger for eksempel
 }
 
 object ActivityModels {
-    val KAYAKING_CANOEING = ActivityModel(
-        "Kayaking & Canoeing",
+    val KAYAKING = ActivityModel(
+        "Kayaking",
         waterTemperatureThreshold = 2.0,
         waterSpeedThreshold = 3.0,
         waveHeightThreshold = 0.5,
@@ -67,8 +67,18 @@ object ActivityModels {
         imageId = R.drawable.sailing_stock,
         icon = R.drawable.sailing_icon
     )
-    val ROWING_PADDLING = ActivityModel(
-        "Rowing & Paddling",
+    val ROWING = ActivityModel(
+        "Rowing",
+        waterTemperatureThreshold = 5.0,
+        waterSpeedThreshold = 3.0,
+        waveHeightThreshold = 0.5,
+        windSpeedThreshold = 8.0,
+        airTemperatureThreshold = 15.0,
+        imageId = R.drawable.roing_stock,
+        icon = R.drawable.rowing_dark
+    )
+    val PADDLING = ActivityModel(
+        "Paddling",
         waterTemperatureThreshold = 5.0,
         waterSpeedThreshold = 3.0,
         waveHeightThreshold = 0.5,
@@ -87,8 +97,18 @@ object ActivityModels {
         imageId = R.drawable.surfing_stock,
         icon = R.drawable.surfing_dark
     )
-    val SNORKELING_SWIMMING = ActivityModel(
-        "Snorkeling & Swimming",
+    val SNORKELING = ActivityModel(
+        "Snorkeling",
+        waterTemperatureThreshold = 18.0,
+        waterSpeedThreshold = 2.0,
+        waveHeightThreshold = 0.5,
+        windSpeedThreshold = 5.0,
+        airTemperatureThreshold = 20.0,
+        imageId = R.drawable.snorkeling_stock,
+        icon = R.drawable.scuba
+    )
+    val SWIMMING = ActivityModel(
+        "Swimming",
         waterTemperatureThreshold = 18.0,
         waterSpeedThreshold = 2.0,
         waveHeightThreshold = 0.5,
@@ -109,12 +129,14 @@ object ActivityModels {
     )
 
     val allActivities = listOf(
-        KAYAKING_CANOEING,
+        KAYAKING,
         FISHING,
         SAILING,
-        ROWING_PADDLING,
+        ROWING,
+        PADDLING,
         SURFING,
-        SNORKELING_SWIMMING,
+        SNORKELING,
+        SWIMMING,
         WATERSKIING
     )
 

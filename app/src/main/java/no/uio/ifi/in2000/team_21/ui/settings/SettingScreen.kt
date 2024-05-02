@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.team_21.ui.settings
 
 import android.annotation.SuppressLint
+import android.app.Notification
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,7 +22,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -53,7 +56,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
-import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
 import no.uio.ifi.in2000.team_21.ui.theme.containerLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
@@ -62,7 +64,7 @@ import no.uio.ifi.in2000.team_21.ui.theme.profileLight
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-fun SettingScreen(navController: NavController, alertsViewModel: AlertsViewModel) {
+fun SettingScreen(navController: NavController) {
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
 
@@ -107,12 +109,6 @@ fun SettingScreen(navController: NavController, alertsViewModel: AlertsViewModel
                 .padding(15.dp)
                 .padding(innerPadding)
         ){
-            alertsViewModel.RadiusSelector(
-                radius = alertsViewModel.radius,
-                onRadiusChange = { newRadius ->
-                    alertsViewModel.updateRadius(newRadius)
-                }
-            )
             //Profile
             ProfileCard(navController, onClick = { navController.navigate(Screen.ProfileScreen.route)})
             Spacer(modifier = Modifier.padding(6.dp))
@@ -361,8 +357,7 @@ fun SettingsGroupCard(navController: NavController){
             .fillMaxWidth()
             .height(112.dp),
         colors = CardDefaults.cardColors(containerLight)
-    ){
-        Column {
+    ){Column{
         //Notifications
         AllSettingsCard(navController,
             mainText = "Varslinger",
@@ -419,5 +414,5 @@ fun ProfileImage(){
 @Preview
 @Composable
 fun SettingScreenTest() {
-    SettingScreen(navController = rememberNavController(), alertsViewModel = AlertsViewModel())
+    SettingScreen(navController = rememberNavController())
 }

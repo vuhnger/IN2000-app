@@ -1,9 +1,7 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
@@ -39,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -50,7 +50,9 @@ import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.ui.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
-import androidx.compose.ui.Modifier
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
+import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -59,7 +61,7 @@ import java.time.temporal.ChronoUnit
 @Composable
 fun WeatherCard(
     temperature: String,
-    alertColor: Color = Color(0xFFF7F7F7),
+    alertColor: Color,
     isAlertActive: Boolean = false,
     icon: String,
     waveheight: String,
@@ -91,7 +93,7 @@ fun WeatherCard(
                         lineHeight = 20.sp,
                         //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(500),
-                        color = Color(0xFF00145D),
+                        color = HomeFont,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.1.sp,
                     )
@@ -114,23 +116,24 @@ fun WeatherCard(
                     contentAlignment = Alignment.CenterStart,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 40.dp)
+                        .padding(start = 20.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         WeatherIcon(
                             element = icon,
                         )
-                        Spacer(modifier = Modifier.padding(4.dp))
+                        Spacer(modifier = Modifier.padding(12.dp))
                         Text(
                             text = temperature,
                             style = TextStyle(
                                 fontSize = 70.sp,
                                 lineHeight = 16.sp,
                                 //fontFamily = FontFamily(Font(R.font.roboto)),
-                                fontWeight = FontWeight(400),
+                                //fontWeight = FontWeight(400),
                                 color = Color(0xFF00145D),
                                 textAlign = TextAlign.Center,
                                 letterSpacing = 0.5.sp,
@@ -141,8 +144,8 @@ fun WeatherCard(
                                 imageVector = Icons.Default.Warning,
                                 contentDescription = "Alert active",
                                 modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .size(48.dp)
+                                    .padding(start = 16.dp)
+                                    .size(40.dp)
                             )
                         }
                     }
@@ -214,31 +217,29 @@ fun ActivityFavorites(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-
             Text(
                 text = "Favoritter",
                 style = TextStyle(
                     fontSize = 20.sp,
-                    lineHeight = 20.sp,
+                    //lineHeight = 20.sp,
                     //fontFamily = FontFamily(Font(R.font.roboto)),
-                    fontWeight = FontWeight(400),
+                    //fontWeight = FontWeight(400),
                     color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
+                    //textAlign = TextAlign.Center,
                     letterSpacing = 0.1.sp,
                 ),
                 modifier = Modifier
-                    .weight(1f)
+                    .padding(8.dp)
             )
 
             Button(
-                onClick = { navController.navigate(Screen.AddActivitiyScreen.route) },
+                onClick = { navController.navigate(Screen.AddActivityScreen.route) },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = androidx.compose.material.MaterialTheme.colors.background,
-                    contentColor = androidx.compose.material.MaterialTheme.colors.primary
+                    containerColor = Background,
+                    contentColor = MaterialTheme.colorScheme.primary
                 ),
                 modifier = Modifier
-                    .weight(1f)
-                    .width(20.dp)
+                    .offset(x = 200.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -347,7 +348,6 @@ fun TopBar(
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -370,13 +370,11 @@ fun HomeScreen(
 
     LaunchedEffect(userLocation) {
         if (userLocation != null) {
-
             alertsViewModel.fetchAndFilterAlerts(
                 AlertsInfo(),
                 userLocation!!,
                 radius = 500.0
             )
-
             Log.d("HOME_SCREEN", "User location: ${userLocation!!.latitude()}, ${userLocation!!.longitude()}")
 
             forecastViewModel.fetchTodaysForecast( // let him cook!
@@ -402,14 +400,14 @@ fun HomeScreen(
         "Yellow" -> Color(0xFFF9F1DC) // Yellow
         "Red" -> Color(0xFFF9DEDC) // Red
         "Green" -> Color(0xFFECF9DC) // Green
-        else -> Color(0xFFF7F7F7) // Default case
+        else -> HomeCard // Default case
     }
 
     Column(
         modifier = Modifier
             .width(360.dp)
             .height(50.dp)
-            .background(color = Color(0xFFF7F8FF))
+            .background(color = Background)
     ) {
 
         TopBar(
@@ -417,10 +415,10 @@ fun HomeScreen(
         )
 
         WeatherCard(
-            temperature = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature?.toString() ?: "N/A",
+            temperature = (forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature?.toInt().toString() + "°") ?: "N/A",
             alertColor = alertColor,
             isAlertActive = isAlertActive,
-            icon = forecastViewModel.today_forecast?.data?.next_1_hours?.summary?.symbol_code?.toString() ?: "N/A",
+            icon = forecastViewModel.today_forecast?.data?.next_1_hours?.summary?.symbol_code ?: "N/A",
             waveheight = "",
             windSpeed = ""
         )

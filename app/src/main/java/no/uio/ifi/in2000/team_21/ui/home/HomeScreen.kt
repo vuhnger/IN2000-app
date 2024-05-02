@@ -39,7 +39,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -61,6 +64,7 @@ import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.ui.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 
 // Top bar implementation: to work as one component to be used through all the screens.
@@ -367,6 +371,27 @@ fun RecommendationSection(
         }
     }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar(navController: NavController) {
+    TopAppBar(
+        title = { /* No title for now */ },
+        actions = {
+            IconButton(onClick = { /* Navigate to home screen */ }) {
+                Text("Hjem")
+            }
+            IconButton(onClick = { navController.navigate(Screen.MapScreen.route) }) {
+                Text("Kart")
+            }
+            IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) }) {
+                Icon(Icons.Default.AccountCircle, contentDescription = "Account icon")
+            }
+        }
+    )
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(

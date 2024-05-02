@@ -20,22 +20,23 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.mapbox.common.MapboxOptions
+import no.uio.ifi.in2000.team_21.ui.LocationViewModel
+import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
+import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
 import androidx.navigation.navArgument
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
 import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
-import no.uio.ifi.in2000.team_21.ui.home.LocationViewModel
+import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
-import com.mapbox.common.MapboxOptions
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
-import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
-import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
-import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.FriendsActivityScreen
@@ -138,6 +139,7 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun testLocationForecastViewModel() {
         val forecastViewModel = ForecastViewModel()
 
@@ -172,13 +174,12 @@ class MainActivity : ComponentActivity() {
 fun App(){
 
     val navController = rememberNavController()
-
+    val locationViewModel: LocationViewModel = viewModel()
     val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
-
     val locationForecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
-    val locationViewModel: LocationViewModel = LocationViewModel(LocalContext.current)
 
     val forecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
+    val alertsViewModel: AlertsViewModel = viewModel()
 
 
     val defaultActivity: ActivityModel = ActivityModels.FISHING
@@ -196,9 +197,9 @@ fun App(){
             HomeScreen(
                 navController = navController,
                 activitiesViewModel = activitiesViewModel,
+                forecastViewModel = forecastViewModel,
                 locationViewModel = locationViewModel,
-                forecastViewModel = forecastViewModel
-
+                alertsViewModel = alertsViewModel
             )
         }
 

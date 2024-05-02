@@ -10,9 +10,15 @@ class OceanForecastRepository(
     private val dataSource: OceanForecastDataSource = OceanForecastDataSource()
 ) {
 
-    suspend fun fetchOceanForecastResponse(latitude: Double, longitude: Double): OceanForecastResponse? {
+    suspend fun fetchOceanForecastResponse(
+        latitude: Double,
+        longitude: Double
+    ): OceanForecastResponse? {
         Log.d("OCEANFORCAST_REPO", "fetching OceanForecast responses...")
-        return dataSource.fetchOceanForecastResponse(latitude, longitude)
+        return dataSource.fetchOceanForecastResponse(
+            latitude = latitude,
+            longitude = longitude
+        )
     }
 
     suspend fun fetchOceanForecastTimeseries(latitude: Double, longitude: Double): List<Timeseries>? {

@@ -5,52 +5,39 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -64,8 +51,6 @@ import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.ui.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -76,15 +61,10 @@ fun WeatherCard(
     temperature: String,
     alertColor: Color = Color(0xFFF7F7F7),
     isAlertActive: Boolean = false,
-    highTemp: String,
-    lowTemp: String,
-    icon: String
+    icon: String,
+    waveheight: String,
+    windSpeed: String
 ) {
-
-    Log.d(
-        "WEATHER_CARD",
-        "drawn card with temp: $temperature, low: $lowTemp, high: $highTemp, icon: $icon"
-    )
 
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -186,7 +166,7 @@ fun WeatherCard(
 
                 ) {
                     Text(
-                        text = "H: " + highTemp,
+                        text = "Vind: " + windSpeed,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
@@ -201,7 +181,7 @@ fun WeatherCard(
                     )
 
                     Text(
-                        text = "L: " + lowTemp ,
+                        text = "Bølger: " + waveheight ,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
@@ -315,21 +295,54 @@ fun TopBar(
     navController: NavController
 ) {
     TopAppBar(
-        title = { /* No title for now */ },
+        title = {  },
         actions = {
-            IconButton(onClick = { /* Navigate to home screen */ }) {
-                Text("Hjem")
-            }
-            IconButton(onClick = { navController.navigate(Screen.MapScreen.route) }) {
-                Text("Kart")
-            }
-            IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) }) {
-                Icon(Icons.Default.AccountCircle, contentDescription = "Account icon")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Box(Modifier.weight(1f))
+
+                Row {
+                    IconButton(
+                        onClick = {
+                                  // TODO: Tilbake navigering
+                                  },
+                        modifier = Modifier
+                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
+                    ) {
+                        Text("Hjem", style = TextStyle(
+                            fontSize = 20.sp
+                        )
+                        )
+                    }
+                    IconButton(
+                        onClick = { navController.navigate(Screen.MapScreen.route) },
+                        modifier = Modifier
+                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
+                    ) {
+                        Text("Kart", style = TextStyle(
+                            fontSize = 20.sp
+                        ))
+                    }
+                }
+
+                Box(Modifier.weight(1f)) {
+                    IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) }) {
+                        Icon(
+                            Icons.Default.AccountCircle,
+                            contentDescription = "Account icon",
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
+                }
             }
         },
         modifier = Modifier
             .padding(top = 16.dp)
     )
+
 }
 
 
@@ -342,11 +355,14 @@ fun HomeScreen(
     forecastViewModel: ForecastViewModel,
     alertsViewModel: AlertsViewModel,
     locationViewModel: LocationViewModel,
-    activityConditionCheckerViewModel: ActivityConditionCheckerViewModel
+    activityConditionCheckerViewModel: ActivityConditionCheckerViewModel,
+    oceanForecastViewModel: OceanForecastViewModel
 ) {
 
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
+    val oceanData by oceanForecastViewModel.oceanDataState.observeAsState()
+
 
     val isAlertActive = remember(filteredFeatures) {
         filteredFeatures?.isNotEmpty() == true
@@ -355,7 +371,11 @@ fun HomeScreen(
     LaunchedEffect(userLocation) {
         if (userLocation != null) {
 
-            alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), userLocation!!, 500.0)
+            alertsViewModel.fetchAndFilterAlerts(
+                AlertsInfo(),
+                userLocation!!,
+                radius = 500.0
+            )
 
             Log.d("HOME_SCREEN", "User location: ${userLocation!!.latitude()}, ${userLocation!!.longitude()}")
 
@@ -364,13 +384,9 @@ fun HomeScreen(
                 longitude = userLocation?.longitude() ?: 0.0
             )
 
-
-
             val norwayZone = ZoneId.of("Europe/Oslo")
 
-
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
-
 
             val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
 
@@ -401,12 +417,12 @@ fun HomeScreen(
         )
 
         WeatherCard(
+            temperature = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature?.toString() ?: "N/A",
             alertColor = alertColor,
             isAlertActive = isAlertActive,
-            temperature = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature?.toString() ?: "N/A",
-            highTemp = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature_max?.toString() ?: "N/A",
-            lowTemp = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature_min?.toString() ?: "N/A",
-            icon = forecastViewModel.today_forecast?.data?.next_1_hours?.summary?.symbol_code?.toString() ?: "N/A"
+            icon = forecastViewModel.today_forecast?.data?.next_1_hours?.summary?.symbol_code?.toString() ?: "N/A",
+            waveheight = "",
+            windSpeed = ""
         )
 
         ActivityFavorites(

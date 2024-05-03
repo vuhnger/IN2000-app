@@ -1,5 +1,12 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,35 +16,36 @@ import no.uio.ifi.in2000.team_21.data.OceanForecastRepository
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Details
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
 import no.uio.ifi.in2000.team_21.model.oceanforecast.OceanData
+import no.uio.ifi.in2000.team_21.model.oceanforecast.OceanForecastResponse
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 class OceanForecastViewModel : ViewModel() {
 
     private val repository: OceanForecastRepository = OceanForecastRepository()
 
-    private val _oceanDataState = MutableStateFlow<OceanDataState>(OceanDataState.Loading)
-    val oceanDataState: StateFlow<OceanDataState> = _oceanDataState
+    private val _oceanDataState = MutableLiveData<OceanForecastResponse>()
+    val oceanDataState: LiveData<OceanForecastResponse> = _oceanDataState
 
-    sealed class OceanDataState {
-        object Loading : OceanDataState()
-        data class Success(val oceanData: OceanData?) : OceanDataState()
-        data class Error(val message: String) : OceanDataState()
-    }
-
-    fun fetchOceanForecastByTime(time: String, latitude: Double, longitude: Double) {
-        _oceanDataState.value = OceanDataState.Loading
+    fun fetchOceanForecastByTime(
+        latitude: Double,
+        longitude: Double
+    ) {
         viewModelScope.launch {
-            val timeseries = repository.fetchOceanForecastTimeseriesByTime(time, latitude, longitude)
-            val oceanData = timeseries?.data?.instant?.details?.let { transformToOceanData(it, timeseries) }
-            _oceanDataState.value = if (oceanData != null) {
-                OceanDataState.Success(oceanData)
-            } else {
-                OceanDataState.Error("No data found for time: $time")
-            }
+            _oceanDataState.value = repository.fetchOceanForecastResponse(
+                latitude = latitude,
+                longitude = longitude
+            )
         }
     }
 
-    private fun transformToOceanData(details: Details, timeseries: Timeseries?): OceanData {
+    private fun transformToOceanData(
+        details: Details,
+        timeseries: Timeseries?
+    ): OceanData {
         return OceanData(
             time = timeseries?.time,
             sea_surface_wave_from_direction = details.sea_surface_wave_from_direction,
@@ -47,5 +55,6 @@ class OceanForecastViewModel : ViewModel() {
             sea_water_to_direction = details.sea_water_to_direction
         )
     }
+
 }
 

@@ -1,54 +1,44 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -60,90 +50,23 @@ import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.ui.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
-import androidx.compose.ui.Modifier
-import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import no.uio.ifi.in2000.team_21.ui.theme.Background
 import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
 import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
-
-// Top bar implementation: to work as one component to be used through all the screens.
-// Dataclass to define each tab in the navbar
-data class TopNavItem(val title: String, val icon: @Composable (() -> Unit)? = null)
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar(
-    items : List<TopNavItem>,
-    currentSelection: Int,
-    onItemSelected: (Int) -> Unit
-
-) {
-    var presses by remember { mutableIntStateOf(0) }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                colors = topAppBarColors(
-                    containerColor = HomeCard,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                title = {
-                    Text("Hjem")
-                }
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { presses++ }) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
-            }
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Text(
-                modifier = Modifier.padding(8.dp),
-                text =
-                """
-                    This is an example of a scaffold. It uses the Scaffold composable's parameters to create a screen with a simple top app bar, bottom app bar, and floating action button.
-
-                    It also contains some basic inner content, such as this text.
-
-                    You have pressed the floating action button $presses times.
-                """.trimIndent(),
-            )
-        }
-    }
-}
-
-    
-@Composable
-fun RowScope.TopBarItem(item: TopNavItem, isSelected: Boolean, onItemSelect: () -> Unit) {
-    Tab(
-        selected = isSelected,
-        onClick = onItemSelect,
-        text = { Text(item.title) },
-        icon = item.icon
-    )
-}
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 @Composable
 fun WeatherCard(
     temperature: String,
     alertColor: Color,
     isAlertActive: Boolean = false,
-    highTemp: String,
-    lowTemp: String,
-    icon: String
+    icon: String,
+    waveheight: String,
+    windSpeed: String
 ) {
-
-    Log.d(
-        "WEATHER_CARD",
-        "drawn card with temp: $temperature, low: $lowTemp, high: $highTemp, icon: $icon"
-    )
 
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -197,19 +120,20 @@ fun WeatherCard(
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         WeatherIcon(
                             element = icon,
                         )
-                        Spacer(modifier = Modifier.padding(4.dp))
+                        Spacer(modifier = Modifier.padding(12.dp))
                         Text(
                             text = temperature,
                             style = TextStyle(
                                 fontSize = 70.sp,
                                 lineHeight = 16.sp,
                                 //fontFamily = FontFamily(Font(R.font.roboto)),
-                                fontWeight = FontWeight(400),
+                                //fontWeight = FontWeight(400),
                                 color = Color(0xFF00145D),
                                 textAlign = TextAlign.Center,
                                 letterSpacing = 0.5.sp,
@@ -245,7 +169,7 @@ fun WeatherCard(
 
                 ) {
                     Text(
-                        text = "H: " + highTemp,
+                        text = "Vind: " + windSpeed,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
@@ -260,7 +184,7 @@ fun WeatherCard(
                     )
 
                     Text(
-                        text = "L: " + lowTemp ,
+                        text = "Bølger: " + waveheight ,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
@@ -274,17 +198,16 @@ fun WeatherCard(
                             .weight(1f)
                     )
                 }
-                }
-
+            }
         }
     }
-
 }
 
 @Composable
 fun ActivityFavorites(
     viewModel: ActivitiesViewModel,
-    navController: NavController
+    navController: NavController,
+    activityConditionCheckerViewModel: ActivityConditionCheckerViewModel
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -294,7 +217,6 @@ fun ActivityFavorites(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-
             Text(
                 text = "Favoritter",
                 style = TextStyle(
@@ -331,9 +253,7 @@ fun ActivityFavorites(
 
         Spacer(Modifier.height(8.dp))
 
-        ActivityCardGridHorizontalSmall(
-            activitiesViewModel = viewModel
-        )
+        ActivityCardGridHorizontalSmall(activitiesViewModel = viewModel)
 
     }
 }
@@ -361,26 +281,86 @@ fun RecommendationSection(
             this.items(viewModel.activityUIstate.activities){ recommendation ->
                 ActivityCardSmall(
                     activity = recommendation,
-                    navController = navController,
-                    activitiesViewModel = viewModel
+                    navController = navController
                 )
             }
             }
         }
     }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar(
+    navController: NavController
+) {
+    TopAppBar(
+        title = {  },
+        actions = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Box(Modifier.weight(1f))
+
+                Row {
+                    IconButton(
+                        onClick = {
+                                  // TODO: Tilbake navigering
+                                  },
+                        modifier = Modifier
+                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
+                    ) {
+                        Text("Hjem", style = TextStyle(
+                            fontSize = 20.sp
+                        )
+                        )
+                    }
+                    IconButton(
+                        onClick = { navController.navigate(Screen.MapScreen.route) },
+                        modifier = Modifier
+                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
+                    ) {
+                        Text("Kart", style = TextStyle(
+                            fontSize = 20.sp
+                        ))
+                    }
+                }
+
+                Box(Modifier.weight(1f)) {
+                    IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) }) {
+                        Icon(
+                            Icons.Default.AccountCircle,
+                            contentDescription = "Account icon",
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
+                }
+            }
+        },
+        modifier = Modifier
+            .padding(top = 16.dp)
+    )
+
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel,
     forecastViewModel: ForecastViewModel,
+    alertsViewModel: AlertsViewModel,
     locationViewModel: LocationViewModel,
-    alertsViewModel: AlertsViewModel
+    activityConditionCheckerViewModel: ActivityConditionCheckerViewModel,
+    oceanForecastViewModel: OceanForecastViewModel
 ) {
-    //TopBar(items = TopNavItem<items>, currentSelection = 1 ) {}
+
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
+    val oceanData by oceanForecastViewModel.oceanDataState.observeAsState()
+
 
     val isAlertActive = remember(filteredFeatures) {
         filteredFeatures?.isNotEmpty() == true
@@ -388,8 +368,29 @@ fun HomeScreen(
 
     LaunchedEffect(userLocation) {
         if (userLocation != null) {
-            alertsViewModel.fetchAndFilterAlerts(AlertsInfo(), userLocation!!, 0.0)
+            alertsViewModel.fetchAndFilterAlerts(
+                AlertsInfo(),
+                userLocation!!,
+                radius = 500.0
+            )
             Log.d("HOME_SCREEN", "User location: ${userLocation!!.latitude()}, ${userLocation!!.longitude()}")
+
+            forecastViewModel.fetchTodaysForecast( // let him cook!
+                latitude = userLocation?.latitude() ?: 0.0,
+                longitude = userLocation?.longitude() ?: 0.0
+            )
+
+            val norwayZone = ZoneId.of("Europe/Oslo")
+
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
+
+            val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
+
+            activityConditionCheckerViewModel.checkActivityConditions(
+                time = time,
+                latitude = userLocation?.latitude() ?: 0.0,
+                longitude = userLocation?.longitude() ?: 0.0
+            )
         }
     }
 
@@ -400,10 +401,6 @@ fun HomeScreen(
         else -> HomeCard // Default case
     }
 
-    LaunchedEffect(Unit) {
-        forecastViewModel.fetchTodaysForecast()
-    }
-
     Column(
         modifier = Modifier
             .width(360.dp)
@@ -411,68 +408,23 @@ fun HomeScreen(
             .background(color = Background)
     ) {
 
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-
-            Button(
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color(0xFF00145D),
-                    containerColor = MaterialTheme.colorScheme.background
-                ),
-                modifier = Modifier
-                    .weight(0.5f)
-
-            ) {
-                Text(
-                    text = "Hjem",
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .offset(x = 110.dp) // Flytter tekst-elementet lengre til høyre
-                )
-            }
-
-            Button(
-                onClick = { navController.navigate(Screen.MapScreen.route)},
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color(0xFF00145D),
-                    containerColor = MaterialTheme.colorScheme.background
-                ),
-                modifier = Modifier
-                    .weight(0.5f)
-            ) {
-                Text(
-                    text = "Kart",
-                    modifier = Modifier
-                        .weight(0.5f)
-                )
-            }
-
-            Icon(
-                imageVector = Icons.Default.AccountCircle,
-                contentDescription = "Account icon",
-                modifier = Modifier
-                    .clickable { navController.navigate(Screen.SettingScreen.route) }
-            )
-
-        }
+        TopBar(
+            navController = navController
+        )
 
         WeatherCard(
+            temperature = (forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature?.toInt().toString() + "°") ?: "N/A",
             alertColor = alertColor,
             isAlertActive = isAlertActive,
-            temperature = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature?.toString() ?: "N/A",
-            highTemp = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature_max?.toString() ?: "N/A",
-            lowTemp = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature_min?.toString() ?: "N/A",
-            icon = forecastViewModel.today_forecast?.data?.next_1_hours?.summary?.symbol_code?.toString() ?: "N/A"
+            icon = forecastViewModel.today_forecast?.data?.next_1_hours?.summary?.symbol_code ?: "N/A",
+            waveheight = "",
+            windSpeed = ""
         )
 
         ActivityFavorites(
             viewModel = activitiesViewModel,
-            navController = navController
+            navController = navController,
+            activityConditionCheckerViewModel = activityConditionCheckerViewModel
         )
 
         RecommendationSection(
@@ -481,67 +433,3 @@ fun HomeScreen(
         )
     }
 }
-
-
-
-
-
-@Composable
-fun HomeScreen(navController: NavController) {
-    Box {
-        MapboxMapView().apply {
-            //Modifier.padding(innerPadding)
-        }
-        Column {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Spacer(modifier = Modifier.weight(1.0f))
-                SettingsButton(
-                    onClick = {
-                        navController.navigate(
-                            route = Screen.SettingScreen.route
-                        )
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun SettingsButton(onClick: () -> Unit) {
-    IconButton(onClick = onClick) {
-        Icon(Icons.Filled.Settings, contentDescription = "Settings")
-    }
-}
-/*
-@Composable
-fun BottomBarWithIcons() {
-    BottomNavigation(
-        modifier = Modifier.height(56.dp),
-        backgroundColor = Color.White,
-        elevation = 8.dp
-    ) {
-        repeat(1) { index ->
-            BottomNavigationItem(
-                icon = {
-                    Box(
-                        Modifier
-                            .size(24.dp)
-                            .background(Color.Gray, CircleShape)
-                    )
-                },
-                label = { Text("Icon $index") },
-                selected = false,
-                onClick = {  }
-            )
-        }
-    }
-}
-
- */
-

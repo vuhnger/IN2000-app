@@ -40,6 +40,27 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
 
     // TODO: Lage konstruktør som henter værdata
 
+
+    fun log(
+        time: String,
+        activity: ActivityModel
+    ){
+        viewModelScope.launch {
+
+            Log.d(
+                "ACTIVITY_VIEW_MODEL",
+                "logged activity: ${activity.activityName} at time: $time"
+            )
+
+            activityUIstate.activityLog.add(
+                ActivityLog(
+                    time = time,
+                    activity = activity
+                )
+            )
+        }
+    }
+
     fun addFavorite(activity: ActivityModel){
 
         if (activity in activityUIstate.favorites ){
@@ -47,8 +68,12 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
         }else{
             activityUIstate.favorites.add(activity)
         }
-    }
 
+        Log.d(
+            "ACTIVITY_VIEW_MODEL",
+            "favorites: ${activityUIstate.favorites}"
+        )
+    }
     fun getWeatherData(){
         viewModelScope.launch {
             // TODO: Hent relevant værdata og legg det i kortene
@@ -56,8 +81,6 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
             activityUIstate = activityUIstate.copy(
                 activities = mutableListOf()// TODO: Oppdater aktivitetene med værdata i
             )
-
         }
     }
-
 }

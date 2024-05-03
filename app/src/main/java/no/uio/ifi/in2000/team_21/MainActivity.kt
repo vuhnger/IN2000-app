@@ -2,7 +2,6 @@ package no.uio.ifi.in2000.team_21
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -13,8 +12,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -30,13 +27,13 @@ import com.google.android.gms.location.LocationServices
 import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
 import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
 import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
-import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.FriendsActivityScreen
@@ -46,8 +43,6 @@ import no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
-
-
 
 
 sealed class Screen(val route: String){
@@ -64,6 +59,8 @@ sealed class Screen(val route: String){
     object ContactsScreen: Screen(route = "ContactsScreen")
     object AddFavoriteScreen: Screen(route = "AddFavoriteScreen")
     object ActivityDetailScreen: Screen(route = "ActivityDetailScreen")
+
+    object AllActivitiesScreen : Screen(route = "AllActivitiesScreen")
 
     // Funksjonen bygger en streng av argumenter som kan sendes med et kall på navigate til en skjerm.
     // Dersom du bruker funksjonen, erstatt:
@@ -97,78 +94,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
                     App()
+
                 }
             }
         }
     }
-    fun testActivityConditionCheckerViewModel() {
-        val activityViewModel = ActivityConditionCheckerViewModel()
-
-        activityViewModel.activities.observe(this, Observer { activities ->
-            activities?.forEach { activity ->
-                Log.d("MAIN", "Activity: ${activity.activityName}, Are conditions met: ${activity.areConditionsMet}")
-            }
-        })
-
-        activityViewModel.checkActivityConditions("2024-04-26T13:00:00Z", 59.081729131417404, 10.424095397874112)
-    }
-
-    fun testOceanForecastViewModel() {
-        val oceanForecastViewModel = OceanForecastViewModel()
-
-        lifecycleScope.launchWhenStarted {
-            oceanForecastViewModel.oceanDataState.collect { oceanDataState ->
-                when (oceanDataState) {
-                    is OceanForecastViewModel.OceanDataState.Loading -> {
-                        Log.d("MAIN", "Loading ocean data...")
-                    }
-                    is OceanForecastViewModel.OceanDataState.Success -> {
-                        oceanDataState.oceanData?.let { oceanData ->
-                            Log.d("MAIN", "Ocean Data: $oceanData")
-                        }
-                    }
-                    is OceanForecastViewModel.OceanDataState.Error -> {
-                        Log.d("MAIN", "Error: ${oceanDataState.message}")
-                    }
-                }
-            }
-        }
-
-        oceanForecastViewModel.fetchOceanForecastByTime("2024-04-26T16:00:00Z", 59.081729131417404, 10.424095397874112)
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun testLocationForecastViewModel() {
-        val forecastViewModel = ForecastViewModel()
-
-        lifecycleScope.launchWhenStarted {
-            forecastViewModel.weatherDataState.collect { weatherDataState ->
-                when (weatherDataState) {
-                    is ForecastViewModel.WeatherDataState.Loading -> {
-                        Log.d("MAIN", "Loading ocean data...")
-                    }
-                    is ForecastViewModel.WeatherDataState.Success -> {
-                        weatherDataState.weatherData?.let { weatherData ->
-                            Log.d("MAIN", "Ocean Data: $weatherData")
-                        }
-                    }
-                    is ForecastViewModel.WeatherDataState.Error -> {
-                        Log.d("MAIN", "Error: ${weatherDataState.message}")
-                    }
-                }
-            }
-        }
-
-        forecastViewModel.fetchWeatherDataByTime("2024-04-26T16:00:00Z", 59.081729131417404, 10.424095397874112)
-    }
-
-
 }
 
-
 @RequiresApi(Build.VERSION_CODES.O)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App(){
@@ -176,11 +112,10 @@ fun App(){
     val navController = rememberNavController()
     val locationViewModel: LocationViewModel = viewModel()
     val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
-    val locationForecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
-
     val forecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
     val alertsViewModel: AlertsViewModel = viewModel()
-
+    val activityConditionCheckerViewModel: ActivityConditionCheckerViewModel = viewModel()
+    val oceanForecastViewModel: OceanForecastViewModel = viewModel()
 
     val defaultActivity: ActivityModel = ActivityModels.FISHING
 
@@ -198,8 +133,10 @@ fun App(){
                 navController = navController,
                 activitiesViewModel = activitiesViewModel,
                 forecastViewModel = forecastViewModel,
+                alertsViewModel = alertsViewModel,
                 locationViewModel = locationViewModel,
-                alertsViewModel = alertsViewModel
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel,
+                oceanForecastViewModel = oceanForecastViewModel
             )
         }
 
@@ -221,8 +158,12 @@ fun App(){
             FriendsActivityScreen(navController = navController)
         }
         composable(Screen.MyActivityScreen.route){
-            MyActivityScreen(navController = navController)
+            MyActivityScreen(
+                navController = navController,
+                activitiesViewModel = activitiesViewModel
+            )
         }
+
         composable(Screen.TrophyWallScreen.route){
             TrophyWallScreen(navController = navController)
         }
@@ -236,6 +177,7 @@ fun App(){
         composable(Screen.AddActivityScreen.route){
             AddFavoriteScreen(
                 navController = navController,
+                forecastViewModel =  forecastViewModel,
                 activitiesViewModel = activitiesViewModel
             )
         }
@@ -252,6 +194,7 @@ fun App(){
             ){entry ->
             ActivityDetailScreen(
                 activitiesViewModel = activitiesViewModel,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel,
                 navController = navController,
                 activityName = entry.arguments?.getString("activityName")
             )

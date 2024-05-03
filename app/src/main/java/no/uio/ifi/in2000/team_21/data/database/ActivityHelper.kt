@@ -1,8 +1,6 @@
 package no.uio.ifi.in2000.team_21.data.database
 
 import no.uio.ifi.in2000.team_21.R
-import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
-import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
 
 object ActivityIconMapper {
     private val iconMap = mapOf(
@@ -18,7 +16,7 @@ object ActivityIconMapper {
     fun getIcon(activityName: String): Int {
         return iconMap[activityName] ?: R.drawable.fishing_icon
     }
-
+/*
     fun getModelForActivity(activityName: String): ActivityModel {
         return when(activityName) {
             "Kayaking & Canoeing" -> ActivityModels.KAYAKING_CANOEING
@@ -31,4 +29,6 @@ object ActivityIconMapper {
             else -> throw IllegalArgumentException("Unknown activity")
         }
     }
+
+ */
 }

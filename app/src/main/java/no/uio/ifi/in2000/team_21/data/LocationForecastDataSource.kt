@@ -4,21 +4,21 @@ package no.uio.ifi.in2000.team_21.data
 import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastResponse
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
+import java.nio.channels.UnresolvedAddressException
 
 class LocationForecastDataSource {
-
-    private var latitude: Double = 59.93
-    private var longitude: Double = 10.72
-    private var altitude: Int = 90
 
 
     private val client = HttpClient() {
@@ -33,23 +33,42 @@ class LocationForecastDataSource {
         install(Logging){
             level = LogLevel.BODY
         }
+        defaultRequest {
+            header(
+                key = "X-Gravitee-API-Key",
+                value = "eff58995-389e-4cd2-816f-4c6728aeec6e"
+            )
+        }
     }
 
-    suspend fun fetchLocationForecastResponse(latitude: Double, longitude: Double): LocationForecastResponse? {
+    suspend fun fetchLocationForecastResponse(
+        latitude: Double,
+        longitude: Double
+    ): LocationForecastResponse? {
 
-        val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/locationforecast/2.0/complete?lat=${latitude}3&lon=$longitude")
+        try {
 
-        Log.d(
-            "LOCATION_DATA_SOURCE",
-            "fetchLocationForcastResponse() status code: ${response.status.value} for lat: $latitude and long: $longitude"
-        )
+            val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/locationforecast/2.0/complete?lat=${latitude}3&lon=$longitude")
 
-        return if (response.status.value in 200..299) {
-            response.body()
+            Log.d(
+                "LOCATION_DATA_SOURCE",
+                "fetchLocationForcastResponse() status code: ${response.status.value} for lat: $latitude and long: $longitude"
+            )
+
+            return if (response.status.value in 200..299) {
+                response.body()
+            }
+            else{
+                null
+            }
+
+        }catch (e: UnresolvedAddressException){
+            Log.d(
+                "LFC_DATASOURCE",
+                "could not fetch from URL: ${e.message}"
+            )
         }
-        else{
-            null
-        }
+        return null
     }
 
     suspend fun fetchLocationForecastTimeseries(latitude: Double, longitude: Double): ArrayList<LocationForecastTimeseries>? {
@@ -91,36 +110,47 @@ class LocationForecastDataSource {
         }
     }
 
-    suspend fun fetchCurrentAirTemperature(): Double {
+    suspend fun fetchCurrentAirTemperature(
+        latitude: Double,
+        longitude: Double
+    ): Double {
 
-        val response: LocationForecastResponse? = fetchForecast()
+        val response: LocationForecastResponse? = fetchForecast(
+            latitude = latitude,
+            longitude = longitude
+        )
 
         return response?.properties?.timeseries?.first()?.data?.instant?.details?.air_temperature ?: 0.0
 
     }
 
-    suspend fun repositoryfetchNextHourWeatherIcon(): String {
+    suspend fun repositoryfetchNextHourWeatherIcon(
+        time: String,
+        latitude: Double,
+        longitude: Double
+    ): String {
 
-        val response: LocationForecastResponse? = fetchForecast()
+        val response: LocationForecastResponse? = fetchForecast(
+            latitude = latitude,
+            longitude = longitude
+        )
 
-        return response?.properties?.timeseries?.first()?.data?.next_1_hours?.summary?.symbol_code ?: ""
+        val return_value = response?.properties?.timeseries?.find {
+            it.time?.contains(time) ?: false
+        }
+
+        return return_value?.data?.next_1_hours?.summary?.symbol_code ?: ""
 
     }
 
-        suspend fun fetchForecast(): LocationForecastResponse? {
+        suspend fun fetchForecast(
+            latitude: Double,
+            longitude: Double
+        ): LocationForecastResponse? {
 
             val response: HttpResponse = client.get("https://api.met.no/weatherapi/locationforecast/2.0/complete?" +
                     "lat=$latitude" +
                     "&lon=$longitude")
-
-            /*
-            *
-            Log.d(
-                "LFC_DATA_SOURCE",
-                "fetchForecast() returned code ${response.status.value}"
-            )
-            *
-            * */
 
             return if (response.status.value in 200..299) {
                 response.body()
@@ -129,8 +159,4 @@ class LocationForecastDataSource {
                 null
             }
         }
-
-
-
-
 }

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "no.uio.ifi.in2000.team_21"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -71,6 +71,8 @@ dependencies {
     implementation ("org.slf4j:slf4j-simple:1.7.30")
     implementation ("androidx.compose.material:material:1.6.4")
     implementation("org.osmdroid:osmdroid-android:6.1.14")
+    implementation("androidx.activity:activity:1.8.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -116,11 +118,11 @@ dependencies {
     implementation("com.github.MKergall:osmbonuspack:6.9.0")
 
     // Gson og sånn
-    implementation("io.ktor:ktor-client-core:1.6.7") // Use the latest version
-    implementation("io.ktor:ktor-client-cio:1.6.7")
-    implementation("io.ktor:ktor-client-json:1.6.7")
-    implementation("io.ktor:ktor-client-serialization-jvm:1.6.7")
-    implementation("com.google.code.gson:gson:2.8.8") // Gson library
+    implementation("io.ktor:ktor-client-core:2.3.10") // Use the latest version
+    implementation("io.ktor:ktor-client-cio:2.3.10")
+    implementation("io.ktor:ktor-client-json:2.3.10")
+    implementation("io.ktor:ktor-client-serialization-jvm:2.3.10")
+    implementation("com.google.code.gson:gson:2.10.1") // Gson library
 
 
     // Location

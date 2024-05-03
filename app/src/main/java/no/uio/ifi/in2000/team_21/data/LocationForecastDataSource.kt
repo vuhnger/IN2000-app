@@ -16,6 +16,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastResponse
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
+import java.nio.channels.UnresolvedAddressException
 
 class LocationForecastDataSource {
 
@@ -40,21 +41,34 @@ class LocationForecastDataSource {
         }
     }
 
-    suspend fun fetchLocationForecastResponse(latitude: Double, longitude: Double): LocationForecastResponse? {
+    suspend fun fetchLocationForecastResponse(
+        latitude: Double,
+        longitude: Double
+    ): LocationForecastResponse? {
 
-        val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/locationforecast/2.0/complete?lat=${latitude}3&lon=$longitude")
+        try {
 
-        Log.d(
-            "LOCATION_DATA_SOURCE",
-            "fetchLocationForcastResponse() status code: ${response.status.value} for lat: $latitude and long: $longitude"
-        )
+            val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/locationforecast/2.0/complete?lat=${latitude}3&lon=$longitude")
 
-        return if (response.status.value in 200..299) {
-            response.body()
+            Log.d(
+                "LOCATION_DATA_SOURCE",
+                "fetchLocationForcastResponse() status code: ${response.status.value} for lat: $latitude and long: $longitude"
+            )
+
+            return if (response.status.value in 200..299) {
+                response.body()
+            }
+            else{
+                null
+            }
+
+        }catch (e: UnresolvedAddressException){
+            Log.d(
+                "LFC_DATASOURCE",
+                "could not fetch from URL: ${e.message}"
+            )
         }
-        else{
-            null
-        }
+        return null
     }
 
     suspend fun fetchLocationForecastTimeseries(latitude: Double, longitude: Double): ArrayList<LocationForecastTimeseries>? {

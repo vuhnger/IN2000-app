@@ -178,10 +178,4 @@ class ForecastViewModel(
         )
     }
 
-    init {
-        fetchTodaysForecast(
-            latitude = 60.0,
-            longitude = 10.0
-        )
-    }
 }

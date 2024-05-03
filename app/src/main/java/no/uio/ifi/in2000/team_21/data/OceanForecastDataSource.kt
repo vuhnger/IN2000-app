@@ -14,6 +14,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.team_21.model.oceanforecast.OceanForecastResponse
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
+import java.nio.channels.UnresolvedAddressException
 
 open class OceanForecastDataSource {
 
@@ -49,7 +50,7 @@ open class OceanForecastDataSource {
             } else {
                 null
             }
-        } catch (e: Exception) {
+        } catch (e: UnresolvedAddressException) {
             e.printStackTrace()
             null
         }

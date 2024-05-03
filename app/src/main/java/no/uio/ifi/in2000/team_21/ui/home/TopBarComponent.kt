@@ -1,17 +1,16 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -21,12 +20,11 @@ import no.uio.ifi.in2000.team_21.Screen
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 
 
-val darkPurple = Color(0xFF800080)
-val darkBlue = Color(0xFF000080)
+val darkPurple = Color(0xFFEBEFFF) // Background
+val darkBlue = Color(0xFF37498B)   // Content
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,8 +91,13 @@ fun TopBarComponent(
                 }
             }
         },
-        modifier = Modifier
-            .padding(top = 16.dp)
-            .background(color = darkPurple)
+        modifier = Modifier,
+        colors = TopAppBarColors(
+            containerColor = darkPurple,
+            titleContentColor = Color.White,
+            navigationIconContentColor = Color.White,
+            actionIconContentColor = Color.White,
+            scrolledContainerColor = darkPurple,
+        )
     )
 }

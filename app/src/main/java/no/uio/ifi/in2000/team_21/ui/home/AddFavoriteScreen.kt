@@ -13,12 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
-
 @Composable
 fun AddFavoriteScreen(
     activitiesViewModel: ActivitiesViewModel,
+    forecastViewModel: ForecastViewModel,
     navController: NavController
 ){
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -33,7 +34,7 @@ fun AddFavoriteScreen(
             Text(text = "Tilbake")
         }
         activitiesViewModel.activityUIstate.activities.forEach {
-                activity -> 
+                activity ->
             ActivityCardHorizontalWide(
                 activity = activity,
                 activitiesViewModel = activitiesViewModel
@@ -41,4 +42,16 @@ fun AddFavoriteScreen(
             Spacer(modifier = Modifier.padding(8.dp))
         }
     }
+
+/*
+
+  ActivityCardGrid(
+        forecastViewModel = forecastViewModel,
+        activitiesViewModel = activitiesViewModel
+    )
+
+
+* */
+
+
 }

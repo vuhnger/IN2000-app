@@ -262,7 +262,7 @@ fun ActivityCardHorizontalWide(
 */
 @Composable
 fun ActivityCardGrid(
-    activities: List<ActivityModel>,
+    forecastViewModel: OceanForecastViewModel,
     activitiesViewModel: ActivitiesViewModel
 ) {
     LazyVerticalGrid(
@@ -271,7 +271,7 @@ fun ActivityCardGrid(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(activities) { activity ->
+        items(activitiesViewModel.activityUIstate.activities) { activity ->
             ActivityCard(activity = activity, viewModel = activitiesViewModel)
         }
     }

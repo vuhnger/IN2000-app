@@ -100,12 +100,4 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
         )
     }
 
-    suspend fun fetchCurrentAirTemperature(): Double {
-        return dataSource.fetchCurrentAirTemperature()
-    }
-
-    suspend fun repositoryfetchNextHourWeatherIcon(): String {
-        return dataSource.repositoryfetchNextHourWeatherIcon()
-    }
-
 }

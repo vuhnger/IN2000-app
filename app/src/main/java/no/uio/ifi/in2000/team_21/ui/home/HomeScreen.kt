@@ -253,9 +253,7 @@ fun ActivityFavorites(
 
         Spacer(Modifier.height(8.dp))
 
-        ActivityCardGridHorizontalSmall(
-            activitiesViewModel = viewModel
-        )
+        ActivityCardGridHorizontalSmall(activitiesViewModel = viewModel)
 
     }
 }

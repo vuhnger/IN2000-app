@@ -175,6 +175,7 @@ fun App(){
         composable(Screen.AddActivityScreen.route){
             AddFavoriteScreen(
                 navController = navController,
+                forecastViewModel =  forecastViewModel,
                 activitiesViewModel = activitiesViewModel
             )
         }

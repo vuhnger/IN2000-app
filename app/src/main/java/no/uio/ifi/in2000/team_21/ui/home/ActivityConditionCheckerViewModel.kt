@@ -8,15 +8,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import no.uio.ifi.in2000.team_21.data.LocationForecastRepository
+import no.uio.ifi.in2000.team_21.data.LocationForecastDataRepository
 import no.uio.ifi.in2000.team_21.data.OceanForecastRepository
-import no.uio.ifi.in2000.team_21.model.ActivityModel
-import no.uio.ifi.in2000.team_21.model.ActivityModels.allActivities
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModels.allActivities
 
 
 class ActivityConditionCheckerViewModel(
     private val oceanRepository: OceanForecastRepository = OceanForecastRepository(),
-    private val locationRepository: LocationForecastRepository = LocationForecastRepository()
+    private val locationRepository: LocationForecastDataRepository = LocationForecastDataRepository()
 ) : ViewModel() {
 
     private var _activities: MutableLiveData<List<ActivityModel>> = MutableLiveData()

@@ -23,19 +23,28 @@ import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Card
+// import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavController
-import no.uio.ifi.in2000.team_21.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mapbox.maps.extension.compose.style.layers.generated.BackgroundColor
 import no.uio.ifi.in2000.team_21.Screen
-import no.uio.ifi.in2000.team_21.model.ActivityModel
+import no.uio.ifi.in2000.team_21.data.database.ActivityEntity
+import no.uio.ifi.in2000.team_21.data.database.ActivityIconMapper
+import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
+import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
+import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
 
 @Composable
 fun ActivityCard(
@@ -47,8 +56,8 @@ fun ActivityCard(
         modifier = Modifier
             .fillMaxWidth(0.5f)
             .padding(2.dp)
-            .background(MaterialTheme.colors.background),
-        elevation = 2.dp,
+            .background(MaterialTheme.colorScheme.background),
+        elevation = CardDefaults.cardElevation(2.dp),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
@@ -137,7 +146,7 @@ fun ActivityCard(
                     modifier = Modifier
                         .padding(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colors.primary
+                        containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Text(
@@ -150,31 +159,49 @@ fun ActivityCard(
     }
 }
 
+// Kortene som ligger under Anbefaling seksjonen
 @Composable
 fun ActivityCardSmall(
     activity: ActivityModel,
     navController: NavController,
-    activitiesViewModel: ActivitiesViewModel
+    activitiesViewModel: ActivitiesViewModel,
 ){
     Card(
         modifier = Modifier
             .width(102.dp)
-            .height(142.dp)
-            .padding(start = 10.dp, top = 10.dp, end = 10.dp)
+            .height(180.dp)
+            .padding(start = 10.dp, top = 20.dp, end = 10.dp)
             .clickable {
-                navController.navigate(Screen.ActivityDetailScreen.withArgs(activity.activityName))
-            }
+                navController.navigate(
+                    Screen.ActivityDetailScreen.withArgs(
+                        activity.activityName
+                    )
+                )
+            },
+        elevation = CardDefaults.cardElevation(2.dp),
+        colors = CardDefaults.cardColors(containerColor = HomeCard)
     ) {
         Column(
-
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(5.dp)
         ) {
             Text(
-                text = activity.activityName
+                text = activity.activityName,
+                modifier = Modifier.weight(1f),
+                style = TextStyle(
+                    color = HomeFont,
+                    fontSize = 20.sp
+                )
             )
+
+            Spacer(modifier = Modifier.padding(5.dp))
+
             Icon(
                 painter = painterResource(id = activity.icon),
                 contentDescription = "Icon of ${activity.activityName}",
                 modifier = Modifier
+                    .weight(1f)
             )
         }
     }
@@ -198,23 +225,53 @@ fun ActivityIconSmall(
 
 @Composable
 fun ActivityCardHoriznotalWide(
-    activity: ActivityModel
+    activity: ActivityModel,
+    activitiesViewModel: ActivitiesViewModel
 ){
     Card(
-
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+            horizontal = 10.dp
+        ),
+        elevation = CardDefaults.cardElevation(10.dp),
+        colors = CardDefaults.cardColors(containerColor = HomeCard)
     ) {
         Row(
-
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            // TODO: Icon
-            // TODO: Fav button icon clickable
+            Icon(
+                painter = painterResource(id = activity.imageId),
+                contentDescription = activity.activityName,
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .weight(1f)
+            )
+
+            Button(
+                onClick = {
+                    activitiesViewModel.addFavorite(activity)
+                },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = HomeCard
+                ),
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = ""
+                )
+            }
         }
     }
 }
 
 /*
 * Lager Grid med aktiviteskort nedover, 2 og 2 per kolonne.
-*/
+
 @Composable
 fun ActivityCardGrid(
     activities: List<ActivityModel>,
@@ -232,9 +289,11 @@ fun ActivityCardGrid(
     }
 }
 
+ */
+
 /*
 
-*/
+
 @Composable
 fun ActivityCardGridHorizontal(
     activites: List<ActivityModel>,
@@ -253,6 +312,8 @@ fun ActivityCardGridHorizontal(
         }
     }
 }
+
+ */
 
 /*
 

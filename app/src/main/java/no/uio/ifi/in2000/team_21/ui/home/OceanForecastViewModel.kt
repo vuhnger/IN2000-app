@@ -56,8 +56,5 @@ class OceanForecastViewModel : ViewModel() {
         )
     }
 
-    init {
-
-    }
 }
 

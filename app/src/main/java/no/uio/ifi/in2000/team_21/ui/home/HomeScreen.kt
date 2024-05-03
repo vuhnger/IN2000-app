@@ -309,29 +309,6 @@ fun RecommendationSection(
         }
     }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar(
-    navController: NavController
-) {
-    TopAppBar(
-        title = { /* No title for now */ },
-        actions = {
-            IconButton(onClick = { /* Navigate to home screen */ }) {
-                Text("Hjem")
-            }
-            IconButton(onClick = { navController.navigate(Screen.MapScreen.route) }) {
-                Text("Kart")
-            }
-            IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) }) {
-                Icon(Icons.Default.AccountCircle, contentDescription = "Account icon")
-            }
-        },
-        modifier = Modifier
-            .padding(top = 16.dp)
-    )
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -396,7 +373,7 @@ fun HomeScreen(
             .background(color = Color(0xFFF7F8FF))
     ) {
 
-        TopBar(
+        TopBarComponent(
             navController = navController
         )
 

@@ -137,5 +137,4 @@ object ActivityModels {
     fun find(activityName: String): ActivityModel?{
         return allActivities.find { it.activityName == activityName }
     }
-
 }

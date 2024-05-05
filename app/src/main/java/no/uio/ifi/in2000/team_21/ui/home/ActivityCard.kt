@@ -29,6 +29,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -209,7 +210,10 @@ fun ActivityIconSmall(
         contentDescription = "Icon of ${activity.activityName}",
         modifier = Modifier
             .padding(15.dp)
-            .background(color = Color.White, shape = CircleShape) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
+            .background(
+                color = Color.White,
+                shape = CircleShape
+            ) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
             .clip(CircleShape) // Klipper ikonet til en sirkelform
             .border(1.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
             .padding(15.dp) // Justering for å beholde plassering og størrelse
@@ -254,8 +258,8 @@ fun ActivityCardHorizontalWide(
                     .weight(1f)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = ""
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Knapp for å legge til i favoritter"
                 )
             }
         }
@@ -310,13 +314,17 @@ fun ActivityCardGridHorizontal(
 fun ActivityCardGridHorizontalSmall(
     activitiesViewModel: ActivitiesViewModel
 ) {
-    LazyHorizontalGrid(
-        rows = GridCells.Fixed(1),
-        modifier = Modifier
-            .height(84.dp)
-    ) {
-        items(activitiesViewModel.activityUIstate.favorites){activity ->
-            ActivityIconSmall(activity = activity, activitiesViewModel = activitiesViewModel)
+    if (activitiesViewModel.activityUIstate.favorites.isEmpty()){
+        Text(text = "Du har ikke valgt noen favoritter ennå, trykk på + for å legge til!")
+    }else{
+        LazyHorizontalGrid(
+            rows = GridCells.Fixed(1),
+            modifier = Modifier
+                .height(84.dp)
+        ) {
+            items(activitiesViewModel.activityUIstate.favorites){activity ->
+                ActivityIconSmall(activity = activity, activitiesViewModel = activitiesViewModel)
+            }
         }
     }
 }

@@ -9,8 +9,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.data.LocationForecastDataRepository
 import no.uio.ifi.in2000.team_21.model.locationforcast.Details
@@ -33,6 +37,9 @@ class ForecastViewModel(
     private val _weatherDataState = MutableStateFlow<WeatherDataState>(WeatherDataState.Loading)
     val weatherDataState: StateFlow<WeatherDataState> = _weatherDataState
 
+    private var _forecast = MutableStateFlow<LocationForecastResponse?>(null)
+    val forecast: StateFlow<LocationForecastResponse?> = _forecast.asStateFlow()
+
     var instant_air_temperature by mutableStateOf(
         0.0
     )
@@ -41,25 +48,17 @@ class ForecastViewModel(
         ""
     )
 
-    var forecast by mutableStateOf<LocationForecastResponse?>(
-        null
-    )
-
-    var today_forecast by mutableStateOf<LocationForecastTimeseries?>(
-        null
-    )
 
     // Private mutable LiveData for icons
     var icons by mutableStateOf(
         listOf<String>()
     )
 
-
     fun fetchTodaysForecast(
         latitude: Double,
         longitude: Double
     ){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
 
 
             val norwayZone = ZoneId.of("Europe/Oslo")
@@ -75,13 +74,26 @@ class ForecastViewModel(
                 "attempted to fetch forecast at time: $time"
             )
 
-            val response: LocationForecastTimeseries? = repository.fetchLocationForecastTimeseriesByTime(
-                time = time,
+            val response: LocationForecastResponse? = repository.fetchForecast(
                 latitude = latitude,
                 longitude = longitude
             )
 
-            today_forecast = response
+            _forecast.value = response
+        }
+    }
+
+    fun continuousForecastUpdate(latitude: Double, longitude: Double) {
+        viewModelScope.launch(Dispatchers.IO) {
+            flow {
+                while (true) {
+                    val forecast = repository.fetchForecast(latitude, longitude)
+                    emit(forecast)
+                    delay(30_000) // Delay for 30 seconds
+                }
+            }.collect { forecast ->
+                _forecast.value = forecast
+            }
         }
     }
 
@@ -135,7 +147,7 @@ class ForecastViewModel(
                 latitude = latitude,
                 longitude = longitude
             )
-            forecast = response
+            _forecast.value = response
         }
     }
 

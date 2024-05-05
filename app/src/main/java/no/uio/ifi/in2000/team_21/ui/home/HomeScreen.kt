@@ -306,6 +306,7 @@ fun RecommendationSection(
         }
     }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
@@ -362,7 +363,6 @@ fun TopBar(
 
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -385,6 +385,12 @@ fun HomeScreen(
         filteredFeatures?.isNotEmpty() == true
     }
 
+    val norwayZone = ZoneId.of("Europe/Oslo")
+
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
+
+    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
+
     LaunchedEffect(userLocation) {
         if (userLocation != null) {
 
@@ -400,12 +406,6 @@ fun HomeScreen(
                 latitude = userLocation!!.latitude(),
                 longitude = userLocation!!.longitude()
             )
-
-            val norwayZone = ZoneId.of("Europe/Oslo")
-
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
-
-            val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
 
             activityConditionCheckerViewModel.checkActivityConditions(
                 time = time,
@@ -430,7 +430,7 @@ fun HomeScreen(
             .background(color = Color(0xFFF7F8FF))
     ) {
 
-        TopBar(
+        TopBarComponent(
             navController = navController
         )
 
@@ -439,9 +439,9 @@ fun HomeScreen(
             temperature = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature?.toString() ?: "N/A",
             alertColor = alertColor,
             isAlertActive = isAlertActive,
-            icon = forecastViewModel.today_forecast?.data?.next_1_hours?.summary?.symbol_code?.toString() ?: "N/A",
-            waveheight = "",
-            windSpeed = ""
+            icon = forecastViewModel.today_forecast?.data?.next_1_hours?.summary?.symbol_code?.toString() ?: "",
+            waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
+            windSpeed = "${forecastViewModel.today_forecast?.data?.instant?.details?.wind_speed.toString()} ${forecastViewModel.forecast?.properties?.meta?.units?.wind_speed}"
         )
 
         ActivityFavorites(

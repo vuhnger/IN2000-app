@@ -341,7 +341,7 @@ fun RecommendationSection(
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Ingen aktiviteter passer akkurat nå. Dette kan skyldes upassende vær eller manglende nettverkstilkobling."
+                    text = "Ingen aktiviteter kan anbefales akkurat nå. Dette kan skyldes upassende vær eller manglende nettverkstilkobling."
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(

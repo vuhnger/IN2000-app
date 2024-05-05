@@ -315,7 +315,7 @@ fun ActivityCardGridHorizontalSmall(
     activitiesViewModel: ActivitiesViewModel
 ) {
     if (activitiesViewModel.activityUIstate.favorites.isEmpty()){
-        Text(text = "Du har ikke valgt noen favoritter ennå, trykk på + for å legge til!")
+        Text(text = "Du har ikke valgt noen favorittaktiviteter ennå, trykk på + for å legge til en!")
     }else{
         LazyHorizontalGrid(
             rows = GridCells.Fixed(1),

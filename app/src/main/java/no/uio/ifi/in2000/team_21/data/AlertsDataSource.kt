@@ -4,6 +4,8 @@ import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.cio.endpoint
+import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -30,13 +32,18 @@ class AlertsDataSource {
                 encodeDefaults = true
             })
         }
+        engine {
+            endpoint {
+                connectTimeout = 30_000
+            }
+        }
         install(Logging) {
             level = LogLevel.BODY
         }
         install(HttpTimeout){
-            requestTimeoutMillis = 30000
-            connectTimeoutMillis = 30000
-            socketTimeoutMillis = 30000
+            requestTimeoutMillis = 30_000
+            connectTimeoutMillis = 30_000
+            socketTimeoutMillis = 30_000
         }
         defaultRequest {
             header(
@@ -47,20 +54,26 @@ class AlertsDataSource {
     }
 
     suspend fun fetchAlerts(parameters: AlertsInfo): Alert? {
-        val url = buildUrl(parameters)
-        val response: HttpResponse = client.get(url)
 
-        Log.d("ALERTS_DATA_SOURCE", "AlertsDataSource.fetchAlerts() HTTPS status: ${response.status}")
+        try {
+            val url = buildUrl(parameters)
+            val response: HttpResponse = client.get(url)
 
-        return if (response.status.value in 200..299) {
-            val alert: Alert? = response.body<Alert?>()
-            /*alert?.features?.forEach { feature ->
-                Log.d("ALERTS_DATA_SOURCE", "Feature: ${feature.type}, Properties: ${feature.properties}")
-            }*/
-            response.body<Alert?>()
-        } else {
-            println("Error: ${response.status.value}")
-            null
+            Log.d("ALERTS_DATA_SOURCE", "AlertsDataSource.fetchAlerts() HTTPS status: ${response.status}")
+
+            return if (response.status.value in 200..299) {
+                val alert: Alert? = response.body<Alert?>()
+                /*alert?.features?.forEach { feature ->
+                    Log.d("ALERTS_DATA_SOURCE", "Feature: ${feature.type}, Properties: ${feature.properties}")
+                }*/
+                response.body<Alert?>()
+            } else {
+                println("Error: ${response.status.value}")
+                null
+            }
+
+        }catch (e: Exception){
+            return null
         }
     }
 

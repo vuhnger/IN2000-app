@@ -182,7 +182,7 @@ fun ActivityDetailScreen(
                 }
             ) {
                 Text(
-                    text = "Start aktivitet"
+                    text = "Loggfør aktivitet"
                 )
             }
         }

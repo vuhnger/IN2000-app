@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.team_21
 
+import LocationViewModel
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,7 +19,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mapbox.common.MapboxOptions
-import no.uio.ifi.in2000.team_21.ui.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
 import androidx.navigation.navArgument

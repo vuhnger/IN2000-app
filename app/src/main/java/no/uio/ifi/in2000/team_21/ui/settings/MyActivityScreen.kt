@@ -52,7 +52,7 @@ fun MyActivityScreen(
             TopAppBar(
                 title = {
                     Text(
-                        "Min aktivitet",
+                        "Historikk",
                         color = onContainerLight
                     )
                 },

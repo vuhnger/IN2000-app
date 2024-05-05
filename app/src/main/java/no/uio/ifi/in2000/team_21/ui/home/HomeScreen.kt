@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
 
+import LocationViewModel
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,7 +39,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -48,16 +52,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
-import no.uio.ifi.in2000.team_21.ui.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
+
 @Composable
 fun WeatherCard(
+    cityName: String,
     temperature: String,
     alertColor: Color = Color(0xFFF7F7F7),
     isAlertActive: Boolean = false,
@@ -70,11 +77,14 @@ fun WeatherCard(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-    ) {
+    ){
+
         Card(
             modifier = Modifier
                 .padding(40.dp)
-                .fillMaxWidth(),
+                .width(320.dp)
+                .height(280.dp)
+                .aspectRatio(1f),
             elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
             colors = CardDefaults.cardColors(containerColor = alertColor)
         ) {
@@ -98,7 +108,7 @@ fun WeatherCard(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Oslo",
+                    text = cityName,
                     style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 20.sp,
@@ -200,6 +210,7 @@ fun WeatherCard(
     }
 }
 
+
 @Composable
 fun ActivityFavorites(
     viewModel: ActivitiesViewModel,
@@ -260,6 +271,8 @@ fun ActivityFavorites(
 @Composable
 fun RecommendationSection(
     viewModel: ActivitiesViewModel,
+    activityConditionCheckerViewModel: ActivityConditionCheckerViewModel,
+    locationViewModel: LocationViewModel,
     navController: NavController
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
@@ -276,8 +289,14 @@ fun RecommendationSection(
             )
         )
         Spacer(Modifier.height(8.dp))
+
+        val activityList by activityConditionCheckerViewModel.activities.observeAsState(initial = emptyList())
+        val filteredActivities = activityList.filter {
+            it.conditionStatus == ConditionStatus.ALL_MET
+        }
+
         LazyRow {
-            this.items(viewModel.activityUIstate.activities){ recommendation ->
+            this.items(filteredActivities){ recommendation ->
                 ActivityCardSmall(
                     activity = recommendation,
                     navController = navController
@@ -360,7 +379,7 @@ fun HomeScreen(
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
     val oceanData by oceanForecastViewModel.oceanDataState.observeAsState()
-
+    val currentCityName by locationViewModel.currentCityName.collectAsState()
 
     val isAlertActive = remember(filteredFeatures) {
         filteredFeatures?.isNotEmpty() == true
@@ -378,8 +397,8 @@ fun HomeScreen(
             Log.d("HOME_SCREEN", "User location: ${userLocation!!.latitude()}, ${userLocation!!.longitude()}")
 
             forecastViewModel.fetchTodaysForecast( // let him cook!
-                latitude = userLocation?.latitude() ?: 0.0,
-                longitude = userLocation?.longitude() ?: 0.0
+                latitude = userLocation!!.latitude(),
+                longitude = userLocation!!.longitude()
             )
 
             val norwayZone = ZoneId.of("Europe/Oslo")
@@ -390,9 +409,10 @@ fun HomeScreen(
 
             activityConditionCheckerViewModel.checkActivityConditions(
                 time = time,
-                latitude = userLocation?.latitude() ?: 0.0,
-                longitude = userLocation?.longitude() ?: 0.0
+                latitude = userLocation!!.latitude() ,
+                longitude = userLocation!!.longitude()
             )
+
         }
     }
 
@@ -415,6 +435,7 @@ fun HomeScreen(
         )
 
         WeatherCard(
+            cityName = currentCityName ?: "",
             temperature = forecastViewModel.today_forecast?.data?.instant?.details?.air_temperature?.toString() ?: "N/A",
             alertColor = alertColor,
             isAlertActive = isAlertActive,
@@ -431,7 +452,10 @@ fun HomeScreen(
 
         RecommendationSection(
             viewModel = activitiesViewModel,
+            activityConditionCheckerViewModel = activityConditionCheckerViewModel,
+            locationViewModel = locationViewModel,
             navController = navController
         )
     }
 }
+

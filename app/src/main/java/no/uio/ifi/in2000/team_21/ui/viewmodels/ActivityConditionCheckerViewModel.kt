@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.team_21.ui.home
+package no.uio.ifi.in2000.team_21.ui.viewmodels
 
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Details
 import no.uio.ifi.in2000.team_21.model.locationforcast.Details as LocationDetails

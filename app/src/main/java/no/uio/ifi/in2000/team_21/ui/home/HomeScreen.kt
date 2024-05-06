@@ -2,7 +2,7 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 
 
-import LocationViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
@@ -42,9 +41,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -58,13 +55,15 @@ import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
 import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
 import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.OceanForecastViewModel
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -80,6 +79,7 @@ fun WeatherCard(
     alertColor: Color,
     isAlertActive: Boolean = false,
     icon: String,
+    cloudCoverDescription: String,
     waveheight: String,
     windSpeed: String
 ) {
@@ -171,7 +171,7 @@ fun WeatherCard(
                 }
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = icon,
+                    text = cloudCoverDescription,
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 20.sp,
@@ -189,7 +189,7 @@ fun WeatherCard(
                 ) {
 
                     Text(
-                        text = "Vind" + windSpeed,
+                        text = "Vind: " + windSpeed,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
@@ -239,7 +239,7 @@ fun ActivityFavorites(
                 .fillMaxWidth()
         ) {
             Text(
-                text = "Favoritter",
+                text = "Dine favoritter",
                 style = TextStyle(
                     fontSize = 20.sp,
                     //lineHeight = 20.sp,
@@ -254,7 +254,9 @@ fun ActivityFavorites(
             )
 
             Button(
-                onClick = { navController.navigate(Screen.AddActivityScreen.route) },
+                onClick = {
+                    navController.navigate(Screen.AddActivityScreen.route)
+                          },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Background,
                     contentColor = MaterialTheme.colorScheme.primary
@@ -327,7 +329,7 @@ fun RecommendationSection(
 
     Column(modifier = Modifier.padding(8.dp)) {
         Text(
-            text = "Anbefaling",
+            text = "Våre anbefalinger",
             style = TextStyle(
                 fontSize = 20.sp,
                 lineHeight = 20.sp,
@@ -457,6 +459,11 @@ fun HomeScreen(
     val currentCityName by locationViewModel.currentCityName.collectAsState()
     val currentForcastResponse by forecastViewModel.forecast.collectAsState()
 
+    Log.d(
+        "HOME_SCREEN",
+        "oceanData: ${oceanData?.properties?.timeseries}"
+    )
+
     val currentForecast = currentForcastResponse?.properties?.timeseries?.find {
         it.time?.contains(time) ?: false
     }
@@ -470,7 +477,7 @@ fun HomeScreen(
             alertsViewModel.fetchAndFilterAlerts(
                 AlertsInfo(),
                 userLocation!!,
-                radius = 500.0
+                radius = 20.0
             )
             Log.d("HOME_SCREEN", "User location: ${userLocation!!.latitude()}, ${userLocation!!.longitude()}")
 
@@ -482,6 +489,11 @@ fun HomeScreen(
             activityConditionCheckerViewModel.checkActivityConditions(
                 time = time,
                 latitude = userLocation!!.latitude() ,
+                longitude = userLocation!!.longitude()
+            )
+
+            oceanForecastViewModel.fetchOceanForecastByTime(
+                latitude = userLocation!!.latitude(),
                 longitude = userLocation!!.longitude()
             )
 
@@ -508,9 +520,15 @@ fun HomeScreen(
 
         WeatherCard(
             cityName = currentCityName ?: "",
-            temperature = currentForecast?.data?.instant?.details?.air_temperature.toString(),
+            temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
+                "celsius" -> "${currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()}°"
+                else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString() ?: ""
+            },
             alertColor = alertColor,
             isAlertActive = isAlertActive,
+            cloudCoverDescription = forecastViewModel.describeCloudCover(
+                currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
+            ),
             icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
             waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
             windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}"

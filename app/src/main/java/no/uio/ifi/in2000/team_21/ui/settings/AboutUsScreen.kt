@@ -206,7 +206,7 @@ fun AboutUsCard(teamMember: TeamMember){
                     textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier
-                    .padding(top = 15.dp)
+                    .padding(top = 15.dp, bottom = 10.dp)
 
             )
         }

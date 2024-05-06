@@ -1,6 +1,6 @@
 package no.uio.ifi.in2000.team_21
 
-import LocationViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,8 +19,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mapbox.common.MapboxOptions
-import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
-import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import androidx.navigation.navArgument
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -32,10 +32,9 @@ import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
 import no.uio.ifi.in2000.team_21.ui.home.AllActivitiesScreen
-import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
-import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.OceanForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.map.MapScreen
-import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.FriendsActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.MyActivityScreen
@@ -149,9 +148,6 @@ fun App(){
             AboutUsScreen(navController = navController)
         }
 
-        composable(Screen.AddActivityScreen.route){
-            AddActivityScreen(navController = navController)
-        }
         composable(Screen.ProfileScreen.route){
             ProfileScreen(navController = navController)
         }

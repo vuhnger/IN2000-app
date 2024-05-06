@@ -13,6 +13,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.appendIfNameAbsent
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastResponse
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
@@ -34,8 +35,9 @@ class LocationForecastDataSource {
             level = LogLevel.BODY
         }
         defaultRequest {
-            header(
-                key = "X-Gravitee-API-Key",
+            url("https://gw-uio.intark.uh-it.no/in2000/")
+            headers.appendIfNameAbsent(
+                name = "X-Gravitee-API-Key",
                 value = "eff58995-389e-4cd2-816f-4c6728aeec6e"
             )
         }

@@ -133,8 +133,8 @@ fun SettingScreen(navController: NavController) {
             Spacer(modifier = Modifier.padding(6.dp))
 
             //Settings
-            SettingsGroupCard(navController)
-            Spacer(modifier = Modifier.padding(6.dp))
+            //SettingsGroupCard(navController)
+            //Spacer(modifier = Modifier.padding(6.dp))
 
             AllSettingsCard(navController,
                 mainText = "Om oss",
@@ -312,16 +312,10 @@ fun HistorySettings(navController: NavController){
         modifier = Modifier
             //.clickable { }
             .fillMaxWidth()
-            .height(168.dp),
+            .height(112.dp),
         colors = CardDefaults.cardColors(containerLight)
     ){ Column (){
         //Friends
-        AllSettingsCard(navController,
-            mainText = "Venners aktivitet",
-            onClick = {
-                navController.navigate(Screen.FriendsActivityScreen.route)
-            }
-        )
         HorizontalDivider(
             color = profileLight,
             modifier = Modifier
@@ -329,7 +323,7 @@ fun HistorySettings(navController: NavController){
         )
         //Me
         AllSettingsCard(navController,
-            mainText = "Min aktivitet",
+            mainText = "Historikk",
             onClick = {
                 navController.navigate(Screen.MyActivityScreen.route)
             }
@@ -355,7 +349,7 @@ fun SettingsGroupCard(navController: NavController){
         modifier = Modifier
             .clickable { }
             .fillMaxWidth()
-            .height(112.dp),
+            .height(56.dp),
         colors = CardDefaults.cardColors(containerLight)
     ){Column{
         //Notifications
@@ -371,12 +365,6 @@ fun SettingsGroupCard(navController: NavController){
                 .padding(start = 25.dp, end = 25.dp)
         )
         //Contacts
-        AllSettingsCard(navController,
-            mainText = "Kontakter",
-            onClick = {
-                navController.navigate(Screen.ContactsScreen.route)
-            }
-        )
     } }
 }
 

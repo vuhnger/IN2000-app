@@ -48,6 +48,11 @@ class LocationForecastDataSource {
 
         try {
 
+            Log.d(
+                "LOCATION_DATA_SOURCE",
+                "attempting fetch from lat: $latitude and long: $longitude"
+            )
+
             val response: HttpResponse = client.get("https://in2000.api.met.no/weatherapi/locationforecast/2.0/complete?lat=${latitude}3&lon=$longitude")
 
             Log.d(
@@ -65,7 +70,7 @@ class LocationForecastDataSource {
         }catch (e: UnresolvedAddressException){
             Log.d(
                 "LFC_DATASOURCE",
-                "could not fetch from URL: ${e.message}"
+                "could not fetch from URL: ${e.stackTrace}"
             )
         }
         return null

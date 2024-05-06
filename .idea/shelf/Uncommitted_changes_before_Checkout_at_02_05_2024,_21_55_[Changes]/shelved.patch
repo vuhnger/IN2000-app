@@ -1,0 +1,280 @@
+Index: app/src/main/java/no/uio/ifi/in2000/team_21/ui/home/ActivityConditionCheckerViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package no.uio.ifi.in2000.team_21.ui.home\n\nimport no.uio.ifi.in2000.team_21.model.oceanforecast.Details\nimport no.uio.ifi.in2000.team_21.model.locationforcast.Details as LocationDetails\nimport androidx.lifecycle.LiveData\nimport androidx.lifecycle.MutableLiveData\nimport androidx.lifecycle.ViewModel\nimport androidx.lifecycle.viewModelScope\nimport kotlinx.coroutines.launch\nimport no.uio.ifi.in2000.team_21.data.LocationForecastRepository\nimport no.uio.ifi.in2000.team_21.data.OceanForecastRepository\nimport no.uio.ifi.in2000.team_21.model.ActivityModel\nimport no.uio.ifi.in2000.team_21.model.ActivityModels.allActivities\nimport no.uio.ifi.in2000.team_21.model.ConditionStatus\n\n\nopen class ActivityConditionCheckerViewModel : ViewModel() {\n\n    private val oceanRepository: OceanForecastRepository = OceanForecastRepository()\n\n    private val locationRepository: LocationForecastRepository = LocationForecastRepository()\n\n    private var _activities: MutableLiveData<List<ActivityModel>> = MutableLiveData()\n    val activities: LiveData<List<ActivityModel>> get() = _activities\n\n    init {\n        _activities.value = allActivities\n    }\n\n    fun checkActivityConditions(time: String, latitude: Double, longitude: Double) {\n        viewModelScope.launch {\n                val oceanData = oceanRepository.fetchOceanForecastTimeseriesByTime(time, latitude, longitude)\n                val locationData = locationRepository.fetchLocationForecastTimeseriesByTime(time, latitude, longitude)\n\n                val updatedActivities = _activities.value?.map { activity ->\n                    val relevantDetails = getRelevantWeatherDetails(oceanData?.data?.instant?.details, locationData?.data?.instant?.details)\n                    activity.copy(\n                        conditionStatus = isWeatherOptimalForActivity(relevantDetails, activity)\n                    )\n                } ?: emptyList()\n            _activities.value = updatedActivities\n        }\n    }\n\n    private data class WeatherDetails(\n        val seaWaterTemperature: Double?,\n        val seaWaterSpeed: Double?,\n        val seaSurfaceWaveHeight: Double?,\n        val airTemperature: Double?,\n        val windSpeed: Double?\n    )\n\n\n    private fun getRelevantWeatherDetails(oceanDetails: Details?, locationDetails: LocationDetails?): WeatherDetails {\n        return WeatherDetails(\n            seaWaterTemperature = oceanDetails?.sea_water_temperature,\n            seaWaterSpeed = oceanDetails?.sea_water_speed,\n            seaSurfaceWaveHeight = oceanDetails?.sea_surface_wave_height,\n            airTemperature = locationDetails?.air_temperature,\n            windSpeed = locationDetails?.wind_speed\n        )\n    }\n\n    private fun isWeatherOptimalForActivity(\n        weatherDetails: WeatherDetails,\n        activity: ActivityModel\n    ): ConditionStatus {\n        val conditions = listOf(\n            (weatherDetails.seaWaterTemperature ?: 0.0) >= activity.waterTemperatureThreshold,\n            (weatherDetails.seaWaterSpeed ?: Double.MAX_VALUE) <= activity.waterSpeedThreshold,\n            (weatherDetails.seaSurfaceWaveHeight ?: Double.MAX_VALUE) <= activity.waveHeightThreshold,\n            (weatherDetails.airTemperature ?: Double.MIN_VALUE) >= (activity.airTemperatureThreshold),\n            (weatherDetails.windSpeed ?: Double.MAX_VALUE) <= (activity.windSpeedThreshold)\n        )\n\n        return when (conditions.count { it }) {\n            conditions.size -> ConditionStatus.ALL_MET\n            0 -> ConditionStatus.NONE_MET\n            else -> ConditionStatus.SOME_MET\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/no/uio/ifi/in2000/team_21/ui/home/ActivityConditionCheckerViewModel.kt b/app/src/main/java/no/uio/ifi/in2000/team_21/ui/home/ActivityConditionCheckerViewModel.kt
+--- a/app/src/main/java/no/uio/ifi/in2000/team_21/ui/home/ActivityConditionCheckerViewModel.kt	
++++ b/app/src/main/java/no/uio/ifi/in2000/team_21/ui/home/ActivityConditionCheckerViewModel.kt	
+@@ -9,8 +9,8 @@
+ import kotlinx.coroutines.launch
+ import no.uio.ifi.in2000.team_21.data.LocationForecastRepository
+ import no.uio.ifi.in2000.team_21.data.OceanForecastRepository
++import no.uio.ifi.in2000.team_21.data.allActivities
+ import no.uio.ifi.in2000.team_21.model.ActivityModel
+-import no.uio.ifi.in2000.team_21.model.ActivityModels.allActivities
+ import no.uio.ifi.in2000.team_21.model.ConditionStatus
+ 
+ 
+@@ -29,15 +29,16 @@
+ 
+     fun checkActivityConditions(time: String, latitude: Double, longitude: Double) {
+         viewModelScope.launch {
+-                val oceanData = oceanRepository.fetchOceanForecastTimeseriesByTime(time, latitude, longitude)
+-                val locationData = locationRepository.fetchLocationForecastTimeseriesByTime(time, latitude, longitude)
++            val oceanData = oceanRepository.fetchOceanForecastTimeseriesByTime(time, latitude, longitude)
++            val locationData = locationRepository.fetchLocationForecastTimeseriesByTime(time, latitude, longitude)
+ 
+-                val updatedActivities = _activities.value?.map { activity ->
+-                    val relevantDetails = getRelevantWeatherDetails(oceanData?.data?.instant?.details, locationData?.data?.instant?.details)
+-                    activity.copy(
+-                        conditionStatus = isWeatherOptimalForActivity(relevantDetails, activity)
+-                    )
+-                } ?: emptyList()
++            val updatedActivities = _activities.value?.map { activity ->
++                val relevantDetails = getRelevantWeatherDetails(oceanData?.data?.instant?.details, locationData?.data?.instant?.details)
++                activity.copy(
++                    conditionStatus = isWeatherOptimalForActivity(relevantDetails, activity)
++                )
++            } ?: emptyList()
++
+             _activities.value = updatedActivities
+         }
+     }
+Index: app/src/main/java/no/uio/ifi/in2000/team_21/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package no.uio.ifi.in2000.team_21\n\nimport android.os.Bundle\nimport android.util.Log\nimport androidx.lifecycle.Observer\nimport androidx.activity.ComponentActivity\nimport androidx.activity.compose.setContent\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.material3.ExperimentalMaterial3Api\nimport androidx.compose.material3.MaterialTheme\nimport androidx.compose.material3.Surface\nimport androidx.compose.runtime.Composable\nimport androidx.compose.ui.Modifier\nimport androidx.lifecycle.lifecycleScope\nimport androidx.navigation.compose.NavHost\nimport androidx.navigation.compose.composable\nimport androidx.navigation.compose.rememberNavController\n//import no.uio.ifi.in2000.team_21.ui.home.drawImages\nimport no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen\n//import no.uio.ifi.in2000.team_21.ui.home.HomeScreen\nimport no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen\nimport no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen\nimport no.uio.ifi.in2000.team_21.ui.settings.FriendsActivityScreen\nimport no.uio.ifi.in2000.team_21.ui.settings.MyActivityScreen\nimport no.uio.ifi.in2000.team_21.ui.settings.NotificationScreen\nimport no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen\nimport no.uio.ifi.in2000.team_21.ui.settings.SettingScreen\nimport no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen\nimport no.uio.ifi.in2000.team_21.ui.theme.Team21Theme\nimport com.mapbox.mapboxsdk.Mapbox\nimport no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel\nimport no.uio.ifi.in2000.team_21.ui.home.AllActivitiesScreen\nimport no.uio.ifi.in2000.team_21.ui.home.LocationForecastViewModel\nimport no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel\n\nsealed class Screen(val route: String){\n    object HomeScreen: Screen(route = \"HomeScreen\")\n    object MapScreen: Screen(route = \"MapScreen\")\n    object SettingScreen: Screen(route = \"SettingScreen\")\n    object AboutUsScreen: Screen(route = \"AboutUsScreen\")\n    object AddActivitiyScreen: Screen(route = \"AddActivityScreen\")\n    object ProfileScreen: Screen(route = \"ProfileScreen\")\n    object FriendsActivityScreen: Screen(route = \"FriendsActivityScreen\")\n    object MyActivityScreen: Screen(route = \"MyActivityScreen\")\n    object TrophyWallScreen: Screen(route = \"TrophyWallScreen\")\n    object NotificationScreen: Screen(route = \"NotificationScreen\")\n    object ContactsScreen: Screen(route = \"ContactsScreen\")\n\n    object AllActivitiesScreen : Screen(route = \"AllActivitiesScreen\")\n\n    // Funksjonen bygger en streng av argumenter som kan sendes med et kall på navigate til en skjerm.\n    // Dersom du bruker funksjonen, erstatt:\n    // navController.navigate(Screen.ExampleScreen.route)\n    // med:\n    // navController.navigate(Screen.ExampleScreen.withArgs([ExampleArgs]))\n    fun withArgs(vararg args: String): String{\n        return buildString {\n            append(route)\n            args.forEach {\n             arg -> append(\"/$arg\")\n            }\n        }\n    }\n\n}\n\nclass MainActivity : ComponentActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        Mapbox.getInstance(applicationContext, \"pk.eyJ1Ijoiandob2xtYm8iLCJhIjoiY2x1MDQ0MHg2MDYxNjJrdDR4eTAwanVhOSJ9.UJ531h6BwXp56LYSIOxwFQ\")\n        setContent {\n            Team21Theme {\n                Surface(\n                    modifier = Modifier.fillMaxSize(),\n                    color = MaterialTheme.colorScheme.background\n                ) {\n                    testActivityConditionCheckerViewModel()\n                }\n            }\n        }\n    }\n\n\n    fun testActivityConditionCheckerViewModel() {\n        val activityViewModel = ActivityConditionCheckerViewModel()\n\n        activityViewModel.activities.observe(this, Observer { activities ->\n            activities?.forEach { activity ->\n                Log.d(\"MAIN\", \"Activity: ${activity.activityName}, Are conditions met: ${activity.conditionStatus}\")\n            }\n        })\n\n        activityViewModel.checkActivityConditions(\"2024-05-02T17:00:00Z\", 59.081729131417404, 10.424095397874112)\n    }\n\n    fun testOceanForecastViewModel() {\n        val oceanForecastViewModel = OceanForecastViewModel()\n\n        lifecycleScope.launchWhenStarted {\n            oceanForecastViewModel.oceanDataState.collect { oceanDataState ->\n                when (oceanDataState) {\n                    is OceanForecastViewModel.OceanDataState.Loading -> {\n                        Log.d(\"MAIN\", \"Loading ocean data...\")\n                    }\n                    is OceanForecastViewModel.OceanDataState.Success -> {\n                        oceanDataState.oceanData?.let { oceanData ->\n                            Log.d(\"MAIN\", \"Ocean Data: $oceanData\")\n                        }\n                    }\n                    is OceanForecastViewModel.OceanDataState.Error -> {\n                        Log.d(\"MAIN\", \"Error: ${oceanDataState.message}\")\n                    }\n                }\n            }\n        }\n\n        oceanForecastViewModel.fetchOceanForecastByTime(\"2024-04-02T13:00:00Z\", 59.081729131417404, 10.424095397874112)\n    }\n\n    fun testLocationForecastViewModel() {\n        val locationForecastViewModel = LocationForecastViewModel()\n\n        lifecycleScope.launchWhenStarted {\n            locationForecastViewModel.weatherDataState.collect { weatherDataState ->\n                when (weatherDataState) {\n                    is LocationForecastViewModel.WeatherDataState.Loading -> {\n                        Log.d(\"MAIN\", \"Loading ocean data...\")\n                    }\n                    is LocationForecastViewModel.WeatherDataState.Success -> {\n                        weatherDataState.weatherData?.let { weatherData ->\n                            Log.d(\"MAIN\", \"Ocean Data: $weatherData\")\n                        }\n                    }\n                    is LocationForecastViewModel.WeatherDataState.Error -> {\n                        Log.d(\"MAIN\", \"Error: ${weatherDataState.message}\")\n                    }\n                }\n            }\n        }\n\n        locationForecastViewModel.fetchWeatherDataByTime(\"2024-05-02T17:00:00Z\", 59.081729131417404, 10.424095397874112)\n    }\n\n\n}\n\n\n\n\n\n\n\n@OptIn(ExperimentalMaterial3Api::class)\n@Composable\nfun App(){\n\n    val navController = rememberNavController()\n\n    NavHost(\n        navController = navController,\n        startDestination = Screen.SettingScreen.route\n        // startDestination = Screen.HomeScreen.route\n    ){\n\n        //composable(Screen.HomeScreen.route){\n            //HomeScreen(navController = navController) // Per 11.03 er HomeScreen komponenten med kartet, men det skal refaktoreres. :)\n        //}\n\n        composable(Screen.SettingScreen.route){\n            SettingScreen(navController = navController)\n        }\n\n        composable(Screen.AllActivitiesScreen.route) {\n            AllActivitiesScreen(navController = navController)\n        }\n\n        composable(Screen.AboutUsScreen.route){\n            AboutUsScreen(navController = navController)\n        }\n\n        composable(Screen.AddActivitiyScreen.route){\n            AddActivityScreen(navController = navController)\n        }\n        composable(Screen.ProfileScreen.route){\n            ProfileScreen(navController = navController)\n        }\n        composable(Screen.FriendsActivityScreen.route){\n            FriendsActivityScreen(navController = navController)\n        }\n        composable(Screen.MyActivityScreen.route){\n            MyActivityScreen(navController = navController)\n        }\n        composable(Screen.TrophyWallScreen.route){\n            TrophyWallScreen(navController = navController)\n        }\n        composable(Screen.NotificationScreen.route){\n            NotificationScreen(navController = navController)\n        }\n        composable(Screen.ContactsScreen.route){\n            ContactsScreen(navController = navController)\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/no/uio/ifi/in2000/team_21/MainActivity.kt b/app/src/main/java/no/uio/ifi/in2000/team_21/MainActivity.kt
+--- a/app/src/main/java/no/uio/ifi/in2000/team_21/MainActivity.kt	
++++ b/app/src/main/java/no/uio/ifi/in2000/team_21/MainActivity.kt	
+@@ -74,7 +74,7 @@
+                     modifier = Modifier.fillMaxSize(),
+                     color = MaterialTheme.colorScheme.background
+                 ) {
+-                    testActivityConditionCheckerViewModel()
++                    testOceanForecastViewModel()
+                 }
+             }
+         }
+@@ -96,6 +96,8 @@
+     fun testOceanForecastViewModel() {
+         val oceanForecastViewModel = OceanForecastViewModel()
+ 
++        oceanForecastViewModel.oceanDataState
++
+         lifecycleScope.launchWhenStarted {
+             oceanForecastViewModel.oceanDataState.collect { oceanDataState ->
+                 when (oceanDataState) {
+@@ -104,7 +106,7 @@
+                     }
+                     is OceanForecastViewModel.OceanDataState.Success -> {
+                         oceanDataState.oceanData?.let { oceanData ->
+-                            Log.d("MAIN", "Ocean Data: $oceanData")
++                            Log.d("MAIN", "Ocean Data: ${oceanData.sea_surface_wave_from_direction}")
+                         }
+                     }
+                     is OceanForecastViewModel.OceanDataState.Error -> {
+@@ -114,7 +116,7 @@
+             }
+         }
+ 
+-        oceanForecastViewModel.fetchOceanForecastByTime("2024-04-02T13:00:00Z", 59.081729131417404, 10.424095397874112)
++        oceanForecastViewModel.fetchOceanForecastByTime("2024-04-02T22:00:00Z", 59.081729131417404, 10.424095397874112)
+     }
+ 
+     fun testLocationForecastViewModel() {
+Index: app/src/main/java/no/uio/ifi/in2000/team_21/ui/home/AllActivitiesScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package no.uio.ifi.in2000.team_21.ui.home\n\nimport androidx.compose.foundation.Image\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.*\nimport androidx.compose.foundation.lazy.LazyColumn\nimport androidx.compose.foundation.lazy.items\nimport androidx.compose.foundation.shape.RoundedCornerShape\nimport androidx.compose.material.Button\nimport androidx.compose.material.Card\nimport androidx.compose.material.Text\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.getValue\nimport androidx.compose.runtime.livedata.observeAsState\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.layout.ContentScale\nimport androidx.compose.ui.res.painterResource\nimport androidx.compose.ui.tooling.preview.Preview\nimport androidx.compose.ui.unit.dp\nimport androidx.navigation.NavController\nimport androidx.navigation.compose.rememberNavController\nimport no.uio.ifi.in2000.team_21.model.ActivityModel\nimport no.uio.ifi.in2000.team_21.R\nimport no.uio.ifi.in2000.team_21.Screen\nimport no.uio.ifi.in2000.team_21.model.ConditionStatus\n\n\n@Composable\nfun AllActivitiesScreen(navController: NavController ,viewModel: ActivityConditionCheckerViewModel = ActivityConditionCheckerViewModel()) {\n    val activities by viewModel.activities.observeAsState(initial = emptyList())\n\n    LazyColumn(modifier = Modifier.padding(16.dp)) {\n        items(activities) { activity ->\n            Card(\n                modifier = Modifier\n                    .fillMaxWidth()\n                    .padding(8.dp),\n                shape = RoundedCornerShape(16.dp),\n                backgroundColor = Color(0xFFBCCBFF)\n            ) {\n                ActivityListItem(activity = activity)\n            }\n            Spacer(modifier = Modifier.height(8.dp))\n        }\n    }\n}\n\n@Composable\nfun ActivityListItem(activity: ActivityModel) {\n    Box(modifier = Modifier.padding(16.dp)) {\n        Column {\n            // Legg til icon bilde av aktiviteten\n            Text(text = activity.activityName, color = Color(0xFF49454F)) // Hvit text\n            Text(getActivityConditionText(activity.conditionStatus, activity.activityName))\n        }\n        Image(\n            painter = painterResource(id = activity.getFlagColorId()),\n            contentDescription = \"Condition Status\",\n            modifier = Modifier.align(Alignment.TopEnd)\n        )\n    }\n}\n\nfun getActivityConditionText(conditionStatus: ConditionStatus, activityName: String): String {\n    return when (conditionStatus) {\n        ConditionStatus.ALL_MET -> \"Nå er det optimale forhold for $activityName\"\n        ConditionStatus.SOME_MET -> \"Noen forhold er oppfylt for $activityName\"\n        ConditionStatus.NONE_MET -> \"Ingen forhold er oppfylt for $activityName\"\n    }\n}\n\n@Preview\n@Composable\nfun PreviewAllActivitiesScreen() {\n    val navController = rememberNavController()\n\n    val mockViewModel = object : ActivityConditionCheckerViewModel() {\n        init {\n            checkActivityConditions(\"2024-05-03T17:00:00Z\", 70.081729131417404, 13.424095397874112)\n\n        }\n    }\n\n    AllActivitiesScreen(navController = navController, viewModel = mockViewModel)\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/no/uio/ifi/in2000/team_21/ui/home/AllActivitiesScreen.kt b/app/src/main/java/no/uio/ifi/in2000/team_21/ui/home/AllActivitiesScreen.kt
+--- a/app/src/main/java/no/uio/ifi/in2000/team_21/ui/home/AllActivitiesScreen.kt	
++++ b/app/src/main/java/no/uio/ifi/in2000/team_21/ui/home/AllActivitiesScreen.kt	
+@@ -78,7 +78,7 @@
+ 
+     val mockViewModel = object : ActivityConditionCheckerViewModel() {
+         init {
+-            checkActivityConditions("2024-05-03T17:00:00Z", 70.081729131417404, 13.424095397874112)
++            checkActivityConditions("2024-05-03T17:00:00Z", 59.081729131417404, 10.424095397874112)
+ 
+         }
+     }
+Index: app/src/main/java/no/uio/ifi/in2000/team_21/data/Activities.kt
+===================================================================
+diff --git a/app/src/main/java/no/uio/ifi/in2000/team_21/data/Activities.kt b/app/src/main/java/no/uio/ifi/in2000/team_21/data/Activities.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/no/uio/ifi/in2000/team_21/data/Activities.kt	
+@@ -0,0 +1,69 @@
++package no.uio.ifi.in2000.team_21.data
++
++import no.uio.ifi.in2000.team_21.model.ActivityModel
++
++val KAYAKING_CANOEING = ActivityModel(
++        "Kayaking & Canoeing",
++    waterTemperatureThreshold = 2.0,
++    waterSpeedThreshold = 3.0,
++    waveHeightThreshold = 0.5,
++    windSpeedThreshold = 10.0,
++    airTemperatureThreshold = 10.0
++)
++
++val FISHING = ActivityModel(
++    "Fishing",
++    waterTemperatureThreshold = 5.0,
++    waterSpeedThreshold = 2.0,
++    waveHeightThreshold = 1.0,
++    windSpeedThreshold = 5.0,
++    airTemperatureThreshold = 5.0
++)
++
++val SAILING = ActivityModel(
++    "Sailing",
++    waterTemperatureThreshold = 5.0,
++    waterSpeedThreshold = 5.0,
++    waveHeightThreshold = 2.0,
++    windSpeedThreshold = 15.0,
++    airTemperatureThreshold = 2.0
++)
++
++val ROWING_PADDLING = ActivityModel(
++    "Rowing & Paddling",
++    waterTemperatureThreshold = 5.0,
++    waterSpeedThreshold = 3.0,
++    waveHeightThreshold = 0.5,
++    windSpeedThreshold = 8.0,
++    airTemperatureThreshold = 5.0
++)
++
++val SURFING = ActivityModel(
++    "Surfing",
++    waterTemperatureThreshold = 5.0,
++    waterSpeedThreshold = Double.MAX_VALUE,
++    waveHeightThreshold = 3.0,
++    windSpeedThreshold = 10.0,
++    airTemperatureThreshold = 1.0
++)
++
++val SNORKELING_SWIMMING = ActivityModel(
++    "Snorkeling & Swimming",
++    waterTemperatureThreshold = 18.0,
++    waterSpeedThreshold = 2.0,
++    waveHeightThreshold = 0.5,
++    windSpeedThreshold = 5.0,
++    airTemperatureThreshold = 2.0
++)
++
++val WATERSKIING = ActivityModel(
++    "Vannski",
++    waterTemperatureThreshold = 10.0,
++    waterSpeedThreshold = 4.0,
++    waveHeightThreshold = 0.5,
++    windSpeedThreshold = 12.0,
++    airTemperatureThreshold = 0.0
++)
++
++val allActivities = listOf(KAYAKING_CANOEING, FISHING, SAILING, ROWING_PADDLING, SURFING, SNORKELING_SWIMMING, WATERSKIING
++)
+\ No newline at end of file
+Index: app/src/main/java/no/uio/ifi/in2000/team_21/model/ActivityModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package no.uio.ifi.in2000.team_21.model\n\nimport no.uio.ifi.in2000.team_21.R\n\n\ndata class ActivityModel(\n    val activityName: String,\n    val waterTemperatureThreshold: Double,\n    val waterSpeedThreshold: Double,\n    val waveHeightThreshold: Double,\n    val windSpeedThreshold: Double,\n    val airTemperatureThreshold: Double,\n    val conditionStatus: ConditionStatus = ConditionStatus.NONE_MET\n) {\n    fun getFlagColorId(): Int {\n        return when (conditionStatus) {\n            ConditionStatus.ALL_MET -> R.drawable.green_flag_48\n            ConditionStatus.SOME_MET -> R.drawable.yellow_flag_48\n            ConditionStatus.NONE_MET -> R.drawable.red_flag_48\n        }\n    }\n}\nenum class ConditionStatus {\n    ALL_MET, // Green flag\n    SOME_MET, // Yellow flag\n    NONE_MET // Red flag\n}\n\nobject ActivityModels {\n    val KAYAKING_CANOEING = ActivityModel(\n        \"Kayaking & Canoeing\",\n        waterTemperatureThreshold = 2.0,\n        waterSpeedThreshold = 3.0,\n        waveHeightThreshold = 0.5,\n        windSpeedThreshold = 10.0,\n        airTemperatureThreshold = 10.0\n    )\n    val FISHING = ActivityModel(\n        \"Fishing\",\n        waterTemperatureThreshold = 5.0,\n        waterSpeedThreshold = 2.0,\n        waveHeightThreshold = 1.0,\n        windSpeedThreshold = 5.0,\n        airTemperatureThreshold = 5.0\n    )\n    val SAILING = ActivityModel(\n        \"Sailing\",\n        waterTemperatureThreshold = 5.0,\n        waterSpeedThreshold = 5.0,\n        waveHeightThreshold = 2.0,\n        windSpeedThreshold = 15.0,\n        airTemperatureThreshold = 2.0\n    )\n    val ROWING_PADDLING = ActivityModel(\n        \"Rowing & Paddling\",\n        waterTemperatureThreshold = 5.0,\n        waterSpeedThreshold = 3.0,\n        waveHeightThreshold = 0.5,\n        windSpeedThreshold = 8.0,\n        airTemperatureThreshold = 5.0\n    )\n    val SURFING = ActivityModel(\n        \"Surfing\",\n        waterTemperatureThreshold = 5.0,\n        waterSpeedThreshold = Double.MAX_VALUE,\n        waveHeightThreshold = 3.0,\n        windSpeedThreshold = 10.0,\n        airTemperatureThreshold = 1.0\n    )\n    val SNORKELING_SWIMMING = ActivityModel(\n        \"Snorkeling & Swimming\",\n        waterTemperatureThreshold = 18.0,\n        waterSpeedThreshold = 2.0,\n        waveHeightThreshold = 0.5,\n        windSpeedThreshold = 5.0,\n        airTemperatureThreshold = 2.0\n    )\n    val WATERSKIING = ActivityModel(\n        \"Vannski\",\n        waterTemperatureThreshold = 10.0,\n        waterSpeedThreshold = 4.0,\n        waveHeightThreshold = 0.5,\n        windSpeedThreshold = 12.0,\n        airTemperatureThreshold = 0.0\n    )\n\n    val allActivities = listOf(KAYAKING_CANOEING, FISHING, SAILING, ROWING_PADDLING, SURFING, SNORKELING_SWIMMING, WATERSKIING\n    )\n}
+===================================================================
+diff --git a/app/src/main/java/no/uio/ifi/in2000/team_21/model/ActivityModel.kt b/app/src/main/java/no/uio/ifi/in2000/team_21/model/ActivityModel.kt
+--- a/app/src/main/java/no/uio/ifi/in2000/team_21/model/ActivityModel.kt	
++++ b/app/src/main/java/no/uio/ifi/in2000/team_21/model/ActivityModel.kt	
+@@ -19,71 +19,21 @@
+             ConditionStatus.NONE_MET -> R.drawable.red_flag_48
+         }
+     }
++
++    fun copy(conditionStatus: ConditionStatus): ActivityModel {
++        return ActivityModel(
++            activityName = this.activityName,
++            waterTemperatureThreshold = this.waterTemperatureThreshold,
++            waterSpeedThreshold = this.waterSpeedThreshold,
++            waveHeightThreshold = this.waveHeightThreshold,
++            windSpeedThreshold = this.windSpeedThreshold,
++            airTemperatureThreshold = this.airTemperatureThreshold,
++            conditionStatus = conditionStatus
++        )
++    }
+ }
+ enum class ConditionStatus {
+     ALL_MET, // Green flag
+     SOME_MET, // Yellow flag
+     NONE_MET // Red flag
+ }
+-
+-object ActivityModels {
+-    val KAYAKING_CANOEING = ActivityModel(
+-        "Kayaking & Canoeing",
+-        waterTemperatureThreshold = 2.0,
+-        waterSpeedThreshold = 3.0,
+-        waveHeightThreshold = 0.5,
+-        windSpeedThreshold = 10.0,
+-        airTemperatureThreshold = 10.0
+-    )
+-    val FISHING = ActivityModel(
+-        "Fishing",
+-        waterTemperatureThreshold = 5.0,
+-        waterSpeedThreshold = 2.0,
+-        waveHeightThreshold = 1.0,
+-        windSpeedThreshold = 5.0,
+-        airTemperatureThreshold = 5.0
+-    )
+-    val SAILING = ActivityModel(
+-        "Sailing",
+-        waterTemperatureThreshold = 5.0,
+-        waterSpeedThreshold = 5.0,
+-        waveHeightThreshold = 2.0,
+-        windSpeedThreshold = 15.0,
+-        airTemperatureThreshold = 2.0
+-    )
+-    val ROWING_PADDLING = ActivityModel(
+-        "Rowing & Paddling",
+-        waterTemperatureThreshold = 5.0,
+-        waterSpeedThreshold = 3.0,
+-        waveHeightThreshold = 0.5,
+-        windSpeedThreshold = 8.0,
+-        airTemperatureThreshold = 5.0
+-    )
+-    val SURFING = ActivityModel(
+-        "Surfing",
+-        waterTemperatureThreshold = 5.0,
+-        waterSpeedThreshold = Double.MAX_VALUE,
+-        waveHeightThreshold = 3.0,
+-        windSpeedThreshold = 10.0,
+-        airTemperatureThreshold = 1.0
+-    )
+-    val SNORKELING_SWIMMING = ActivityModel(
+-        "Snorkeling & Swimming",
+-        waterTemperatureThreshold = 18.0,
+-        waterSpeedThreshold = 2.0,
+-        waveHeightThreshold = 0.5,
+-        windSpeedThreshold = 5.0,
+-        airTemperatureThreshold = 2.0
+-    )
+-    val WATERSKIING = ActivityModel(
+-        "Vannski",
+-        waterTemperatureThreshold = 10.0,
+-        waterSpeedThreshold = 4.0,
+-        waveHeightThreshold = 0.5,
+-        windSpeedThreshold = 12.0,
+-        airTemperatureThreshold = 0.0
+-    )
+-
+-    val allActivities = listOf(KAYAKING_CANOEING, FISHING, SAILING, ROWING_PADDLING, SURFING, SNORKELING_SWIMMING, WATERSKIING
+-    )
+-}
+\ No newline at end of file

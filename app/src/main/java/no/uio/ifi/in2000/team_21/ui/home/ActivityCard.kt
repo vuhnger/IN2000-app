@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.team_21.ui.home
 // import androidx.compose.material.MaterialTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,9 +18,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -164,8 +167,8 @@ fun ActivityCardSmall(
 ){
     Card(
         modifier = Modifier
-            .width(130.dp)
-            .height(180.dp)
+            .width(195.dp)
+            .height(270.dp)
             .padding(start = 10.dp, top = 20.dp, end = 10.dp)
             .clickable {
 
@@ -217,10 +220,16 @@ fun ActivityIconSmall(
         contentDescription = "Icon of ${activity.activityName}",
         modifier = Modifier
             .padding(15.dp)
-            //.shadow(5.dp)
-            .clip(shape = RoundedCornerShape(15.dp, 15.dp))
+            .background(
+                color = Color.White,
+                shape = CircleShape
+            ) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
+            .clip(CircleShape) // Klipper ikonet til en sirkelform
+            .border(1.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
+            .padding(15.dp) // Justering for å beholde plassering og størrelse
     )
 }
+
 
 @Composable
 fun ActivityCardHorizontalWide(
@@ -261,8 +270,8 @@ fun ActivityCardHorizontalWide(
                     .weight(1f)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = ""
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Knapp for å legge til i favoritter"
                 )
             }
         }
@@ -321,13 +330,21 @@ fun ActivityCardGridHorizontal(
 fun ActivityCardGridHorizontalSmall(
     activitiesViewModel: ActivitiesViewModel
 ) {
-    LazyHorizontalGrid(
-        rows = GridCells.Fixed(1),
-        modifier = Modifier
-            .height(84.dp)
-    ) {
-        items(activitiesViewModel.activityUIstate.favorites){activity ->
-            ActivityIconSmall(activity = activity, activitiesViewModel = activitiesViewModel)
+    if (activitiesViewModel.activityUIstate.favorites.isEmpty()){
+        Card(
+
+        ) {
+            Text(text = "Du har ikke valgt noen favorittaktiviteter ennå, trykk på + for å legge til en!")
+        }
+    }else{
+        LazyHorizontalGrid(
+            rows = GridCells.Fixed(1),
+            modifier = Modifier
+                .height(84.dp)
+        ) {
+            items(activitiesViewModel.activityUIstate.favorites){activity ->
+                ActivityIconSmall(activity = activity, activitiesViewModel = activitiesViewModel)
+            }
         }
     }
 }

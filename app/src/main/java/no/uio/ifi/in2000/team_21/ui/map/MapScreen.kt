@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,6 +61,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -107,11 +109,23 @@ import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeserie
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
 import no.uio.ifi.in2000.team_21.ui.UserMarkerViewModel
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.home.TopBarComponent
 import no.uio.ifi.in2000.team_21.ui.home.WeatherIcon
 import kotlin.math.cos
 import kotlin.math.sin
 import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
 
+@Composable
+fun MapScreen(
+    navController: NavController
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        TopBarComponent(navController = navController)
+        Box(modifier = Modifier.weight(1f)) {
+            MapboxMapView()
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable

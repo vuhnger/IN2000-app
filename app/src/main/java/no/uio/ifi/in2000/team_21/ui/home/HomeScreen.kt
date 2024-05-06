@@ -470,7 +470,7 @@ fun HomeScreen(
             alertsViewModel.fetchAndFilterAlerts(
                 AlertsInfo(),
                 userLocation!!,
-                radius = 20.0
+                radius = 500.0
             )
             Log.d("HOME_SCREEN", "User location: ${userLocation!!.latitude()}, ${userLocation!!.longitude()}")
 

@@ -549,6 +549,7 @@ fun BottomSheetContent(
                     onClick = {
                         annotationHelper.deleteAnnotation(it.annotationId)
                         userMarkerViewModel.deleteUserMarker(it)
+                        // TODO: Oppdatere view
                     },
                     modifier = Modifier.padding(top = 16.dp),
                 ) {

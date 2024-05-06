@@ -123,6 +123,7 @@ fun SettingScreen(navController: NavController) {
             AllSettingsCard(navController,
                 mainText = "Alle aktiviteter",
                 onClick = {
+                    // TODO: Legge til jokkis sin skjerm
                     navController.navigate(Screen.AllActivitiesScreen.route)
                 }
             )

@@ -212,7 +212,8 @@ fun ActivityCardSmall(
 @Composable
 fun ActivityIconSmall(
     activity: ActivityModel,
-    activitiesViewModel: ActivitiesViewModel
+    activitiesViewModel: ActivitiesViewModel,
+    navController: NavController
 ){
     //TODO : Make clickable and add to favorites
     Icon(
@@ -225,8 +226,15 @@ fun ActivityIconSmall(
                 shape = CircleShape
             ) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
             .clip(CircleShape) // Klipper ikonet til en sirkelform
-            .border(1.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
+            //.border(2.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
             .padding(15.dp) // Justering for å beholde plassering og størrelse
+            .clickable {
+                navController.navigate(
+                    Screen.ActivityDetailScreen.withArgs(
+                        activity.activityName
+                    )
+                )
+            }
     )
 }
 
@@ -328,7 +336,8 @@ fun ActivityCardGridHorizontal(
 */
 @Composable
 fun ActivityCardGridHorizontalSmall(
-    activitiesViewModel: ActivitiesViewModel
+    activitiesViewModel: ActivitiesViewModel,
+    navController: NavController
 ) {
     if (activitiesViewModel.activityUIstate.favorites.isEmpty()){
         Card(
@@ -343,7 +352,11 @@ fun ActivityCardGridHorizontalSmall(
                 .height(84.dp)
         ) {
             items(activitiesViewModel.activityUIstate.favorites){activity ->
-                ActivityIconSmall(activity = activity, activitiesViewModel = activitiesViewModel)
+                ActivityIconSmall(
+                    activity = activity,
+                    activitiesViewModel = activitiesViewModel,
+                    navController = navController
+                )
             }
         }
     }

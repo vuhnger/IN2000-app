@@ -73,7 +73,7 @@ class LocationViewModel(application: Application): AndroidViewModel(application)
         val geocoder = Geocoder(context, Locale.getDefault())
         return try {
             val addresses = geocoder.getFromLocation(lat, lon, 1)
-            "${addresses?.firstOrNull()?.adminArea} (${addresses?.firstOrNull()?.subLocality})" ?: "${round(lat * 100) / 100} ${round(lon * 100) / 100}"
+            "${addresses?.firstOrNull()?.adminArea} (${addresses?.firstOrNull()?.subLocality})"
         } catch (e: IOException) {
             e.printStackTrace()
             "Unable to get location"

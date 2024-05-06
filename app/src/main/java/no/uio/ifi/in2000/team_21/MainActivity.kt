@@ -31,6 +31,7 @@ import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
+import no.uio.ifi.in2000.team_21.ui.home.AllActivitiesScreen
 import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.map.MapScreen
@@ -180,6 +181,10 @@ fun App(){
                 forecastViewModel =  forecastViewModel,
                 activitiesViewModel = activitiesViewModel
             )
+        }
+        
+        composable(Screen.AllActivitiesScreen.route){
+            AllActivitiesScreen(navController = navController)
         }
 
         composable(

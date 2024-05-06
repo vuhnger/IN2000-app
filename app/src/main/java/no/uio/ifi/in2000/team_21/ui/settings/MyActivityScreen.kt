@@ -77,20 +77,34 @@ fun MyActivityScreen(
         containerColor = backgroundLight,
     ){
             innerPadding->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(15.dp)
-                .padding(innerPadding)
-        ){
-            activitiesViewModel.activityUIstate.activityLog.reversed().forEach { activityLog ->
-                Row(
-                    modifier = Modifier
-                        .padding(5.dp)
-                ) {
-                    Text(
-                        text = "Bruker gjorde ${activityLog.activity.activityName} : ${activityLog.time}"
-                    )
+
+        if (activitiesViewModel.activityUIstate.activityLog.isEmpty()){
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(15.dp)
+                    .padding(innerPadding)
+            ){
+                Text(
+                    text = "Dine gjennomførte aktiviteter vises her. "
+                )
+            }
+        }else{
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(15.dp)
+                    .padding(innerPadding)
+            ){
+                activitiesViewModel.activityUIstate.activityLog.reversed().forEach { activityLog ->
+                    Row(
+                        modifier = Modifier
+                            .padding(5.dp)
+                    ) {
+                        Text(
+                            text = "Bruker gjorde ${activityLog.activity.activityName} : ${activityLog.time}"
+                        )
+                    }
                 }
             }
         }

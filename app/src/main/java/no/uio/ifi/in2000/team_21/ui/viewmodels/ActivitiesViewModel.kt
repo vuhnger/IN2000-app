@@ -35,8 +35,6 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
     )
         private set
 
-    // TODO: Lage konstruktør som henter værdata
-
     fun log(
         time: String,
         activity: ActivityModel
@@ -84,13 +82,4 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
         )
     }
 
-    fun getWeatherData(){
-        viewModelScope.launch {
-            // TODO: Hent relevant værdata og legg det i kortene
-
-            activityUIstate = activityUIstate.copy(
-                activities = mutableListOf()// TODO: Oppdater aktivitetene med værdata i
-            )
-        }
-    }
 }

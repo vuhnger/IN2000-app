@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -41,7 +42,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -55,6 +58,7 @@ import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -269,6 +273,7 @@ fun ActivityFavorites(
                     contentDescription = "Button add to favorites",
                     modifier = Modifier
                         .padding(1.dp)
+                        .scale(1.5f)
                 )
             }
 
@@ -276,6 +281,7 @@ fun ActivityFavorites(
 
         Spacer(Modifier.height(8.dp))
 
+        // Denne komponenten tegner bare ikonene under "Favoritt"-seksjonen
         ActivityCardGridHorizontalSmall(
             navController = navController,
             activitiesViewModel = viewModel
@@ -459,6 +465,25 @@ fun HomeScreen(
     val currentCityName by locationViewModel.currentCityName.collectAsState()
     val currentForcastResponse by forecastViewModel.forecast.collectAsState()
 
+    var showNoNetworkDialog by remember {
+        mutableStateOf(false)
+    }
+
+    if (showNoNetworkDialog){
+        AlertDialog(
+            onDismissRequest = {
+                showNoNetworkDialog = false
+                               },
+            title = { Text(text = "Ingen nettverksforbindelse")},
+            text = { Text(text = "Vi kan ikke hente værdata, sjekk din nettverkstilkobling og prøv igjen. ")},
+            buttons = {
+                Button(onClick = { showNoNetworkDialog = false }) {
+                    Text(text = "Lukk")
+                }
+            }
+        )
+    }
+
     Log.d(
         "HOME_SCREEN",
         "oceanData: ${oceanData?.properties?.timeseries}"
@@ -518,21 +543,25 @@ fun HomeScreen(
             navController = navController
         )
 
-        WeatherCard(
-            cityName = currentCityName ?: "",
-            temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
-                "celsius" -> "${currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()}°"
-                else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString() ?: ""
-            },
-            alertColor = alertColor,
-            isAlertActive = isAlertActive,
-            cloudCoverDescription = forecastViewModel.describeCloudCover(
-                currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
-            ),
-            icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
-            waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
-            windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}"
-        )
+        if(currentForcastResponse != null){
+            WeatherCard(
+                cityName = currentCityName ?: "---",
+                temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
+                    "celsius" -> "${currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()}°"
+                    else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()
+                },
+                alertColor = alertColor,
+                isAlertActive = isAlertActive,
+                cloudCoverDescription = forecastViewModel.describeCloudCover(
+                    currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
+                ),
+                icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
+                waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
+                windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}"
+            )
+        }else{
+            showNoNetworkDialog = true
+        }
 
         ActivityFavorites(
             viewModel = activitiesViewModel,

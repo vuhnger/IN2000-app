@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -21,7 +22,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -56,6 +62,26 @@ fun ActivityDetailScreen(
             activityName = activityName ?: ""
         ) ?: ActivityModels.FISHING
 
+        var showDialog by remember{
+            mutableStateOf(false)
+        }
+        
+        if (showDialog){
+            AlertDialog(
+                onDismissRequest = {
+                    showDialog = false
+                    navController.popBackStack()
+                                   },
+                title = { Text(text = "Aktivitet loggført!")},
+                text = { Text(text = "Du finner denne i historikk.")},
+                buttons = {
+                    Button(onClick = { showDialog = false }) {
+                        Text(text = "Lukk")
+                    }
+                }
+            )
+        }
+
         Image(
             painter = painterResource(activity.imageId),
             contentDescription = "Image of ${activity.activityName}",
@@ -89,6 +115,7 @@ fun ActivityDetailScreen(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = "Tilbakeknapp til hjemskjerm.",
                     modifier = Modifier
+                        .scale(2f)
                 )
             }
 
@@ -101,10 +128,16 @@ fun ActivityDetailScreen(
                 modifier = Modifier
                     .weight(1f)
             ) {
-                Icon(
+
+                /*
+                *Icon(
                     imageVector = Icons.AutoMirrored.Filled.List,
-                    contentDescription = "Knapp for å endre værnivåer."
+                    contentDescription = "Knapp for å endre værnivåer.",
+                    modifier = Modifier
+                        .scale(2f)
                 )
+                *
+                * */
             }
         }
 
@@ -157,7 +190,7 @@ fun ActivityDetailScreen(
 
         Spacer(
             modifier = Modifier
-                .padding(100.dp)
+                .padding(150.dp)
         )
 
         Row(
@@ -178,6 +211,8 @@ fun ActivityDetailScreen(
                         time = time,
                         activity = activity
                     )
+
+                    showDialog = true
 
                 }
             ) {

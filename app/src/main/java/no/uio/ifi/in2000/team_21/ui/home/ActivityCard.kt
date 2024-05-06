@@ -260,8 +260,12 @@ fun ActivityCardHorizontalWide(
     Card(
     modifier = Modifier
         .fillMaxWidth()
+        .height(80.dp)
         .padding(
-            horizontal = 10.dp, vertical = 10.dp
+            horizontal = 10.dp, vertical = 10.dp,
+        )
+        .background(
+            color = HomeCard
         ),
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors(containerColor = HomeCard)
@@ -281,18 +285,22 @@ fun ActivityCardHorizontalWide(
                 painter = painterResource(id = activity.icon),
                 contentDescription = "",
                 modifier = Modifier
-                    .padding(horizontal = 10.dp)
+                    .padding(
+                        horizontal = 10.dp,
+                        vertical = 10.dp
+                    )
                     .weight(1f)
+                    .scale(1.2f),
             )
             Button(
                 onClick = {
-                      if (activity in activitiesViewModel.activityUIstate.favorites){
+                    icon = if (activity in activitiesViewModel.activityUIstate.favorites){
                         activitiesViewModel.removeFavorite(activity = activity)
-                          icon = Icons.Default.FavoriteBorder
-                      }else{
-                          activitiesViewModel.addFavorite(activity = activity)
-                          icon = Icons.Default.Favorite
-                      }
+                        Icons.Default.FavoriteBorder
+                    }else{
+                        activitiesViewModel.addFavorite(activity = activity)
+                        Icons.Default.Favorite
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colorScheme.primary,
@@ -303,57 +311,18 @@ fun ActivityCardHorizontalWide(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = "Knapp for å legge til i favoritter"
+                    contentDescription = "Knapp for å legge til i favoritter",
+                    modifier = Modifier
+                        .padding(
+                            horizontal = 10.dp,
+                            vertical = 10.dp
+                        )
+                        .scale(1.5f)
                 )
             }
         }
     }
 }
-
-/*
-* Lager Grid med aktiviteskort nedover, 2 og 2 per kolonne.
-
-@Composable
-fun ActivityCardGrid(
-    forecastViewModel: OceanForecastViewModel,
-    activitiesViewModel: ActivitiesViewModel
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier.padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(activitiesViewModel.activityUIstate.activities) { activity ->
-            ActivityCard(activity = activity, viewModel = activitiesViewModel)
-        }
-    }
-}
-
- */
-
-/*
-
-
-@Composable
-fun ActivityCardGridHorizontal(
-    activites: List<ActivityModel>,
-    navController: NavController,
-    activitiesViewModel: ActivitiesViewModel
-){
-    LazyHorizontalGrid(
-        rows = GridCells.Fixed(1)
-    ) {
-        items(activites){activity ->
-            ActivityCardSmall(
-                activity,
-                navController
-            )
-        }
-    }
-}
-
- */
 
 /*
 

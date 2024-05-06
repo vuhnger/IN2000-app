@@ -50,20 +50,30 @@ open class OceanForecastDataSource {
             } else {
                 null
             }
-        } catch (e: UnresolvedAddressException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
 
     suspend fun fetchOceanForecastTimeseries(latitude: Double, longitude: Double): ArrayList<Timeseries>? {
-        val response = fetchOceanForecastResponse(latitude, longitude)
-        return response?.properties?.timeseries
+
+        return try {
+            val response = fetchOceanForecastResponse(latitude, longitude)
+            response?.properties?.timeseries
+        }catch (e: Exception){
+            null
+        }
     }
 
     suspend fun fetchOceanForecastByTime(time: String, latitude: Double, longitude: Double): Timeseries? {
-        val timeseries = fetchOceanForecastTimeseries(latitude, longitude)
-        return timeseries?.find { it.time?.contains(time) ?: false }
+
+        return try {
+            val timeseries = fetchOceanForecastTimeseries(latitude, longitude)
+            timeseries?.find { it.time?.contains(time) ?: false }
+        }catch (e: Exception){
+            null
+        }
     }
 }
 

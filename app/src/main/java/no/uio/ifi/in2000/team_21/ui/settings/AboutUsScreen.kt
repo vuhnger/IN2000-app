@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -149,7 +150,7 @@ fun AboutUsCard(teamMember: TeamMember){
     )
     Card(
         modifier = Modifier
-            .height(200.dp)
+            .height(230.dp)
             .padding(15.dp)
             .border(
                 width = 2.dp,

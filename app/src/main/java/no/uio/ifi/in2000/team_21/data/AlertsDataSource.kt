@@ -24,32 +24,40 @@ import no.uio.ifi.in2000.team_21.model.AlertsInfo
 * */
 class AlertsDataSource {
     // HTTP CLIENT
+
     private val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json(Json {
-                //Konfigurer etter behov
-                ignoreUnknownKeys = true
-                encodeDefaults = true
-            })
-        }
-        engine {
-            endpoint {
-                connectTimeout = 30_000
+
+        val TIMEOUT_MS: Long = (30_000.0 * 5).toLong()
+
+        try{
+            install(ContentNegotiation) {
+                json(Json {
+                    //Konfigurer etter behov
+                    ignoreUnknownKeys = true
+                    encodeDefaults = true
+                })
             }
-        }
-        install(Logging) {
-            level = LogLevel.BODY
-        }
-        install(HttpTimeout){
-            requestTimeoutMillis = 30_000
-            connectTimeoutMillis = 30_000
-            socketTimeoutMillis = 30_000
-        }
-        defaultRequest {
-            header(
-                key = "X-Gravitee-API-Key",
-                value = "eff58995-389e-4cd2-816f-4c6728aeec6e"
-            )
+            engine {
+                endpoint {
+                    connectTimeout = TIMEOUT_MS
+                }
+            }
+            install(Logging) {
+                level = LogLevel.BODY
+            }
+            install(HttpTimeout){
+                requestTimeoutMillis = TIMEOUT_MS
+                connectTimeoutMillis = TIMEOUT_MS
+                socketTimeoutMillis = TIMEOUT_MS
+            }
+            defaultRequest {
+                header(
+                    key = "X-Gravitee-API-Key",
+                    value = "eff58995-389e-4cd2-816f-4c6728aeec6e"
+                )
+            }
+        }catch(e: Exception){
+            // TODO: Noe gikk alvorlig galt, vise frem til bruker og restarte app.
         }
     }
 

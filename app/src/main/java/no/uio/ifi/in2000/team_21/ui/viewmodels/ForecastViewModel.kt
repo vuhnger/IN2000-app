@@ -29,6 +29,7 @@ class ForecastViewModel(
     private var _forecast = MutableStateFlow<LocationForecastResponse?>(null)
     val forecast: StateFlow<LocationForecastResponse?> = _forecast.asStateFlow()
 
+    private val TIMEOUT_MS = (30_000 * 5).toLong()
     fun continuousForecastUpdate(
         latitude: Double,
         longitude: Double
@@ -38,7 +39,7 @@ class ForecastViewModel(
                 while (true) {
                     val forecast = repository.fetchForecast(latitude, longitude)
                     emit(forecast)
-                    delay(30_000 * 5) // Delay for 30 seconds
+                    delay(TIMEOUT_MS) // Delay for 30 seconds
                 }
             }.collect { forecast ->
                 _forecast.value = forecast

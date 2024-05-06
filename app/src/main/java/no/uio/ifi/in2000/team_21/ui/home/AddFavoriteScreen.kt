@@ -60,15 +60,4 @@ fun AddFavoriteScreen(
         }
     }
 
-/*
-
-  ActivityCardGrid(
-        forecastViewModel = forecastViewModel,
-        activitiesViewModel = activitiesViewModel
-    )
-
-
-* */
-
-
 }

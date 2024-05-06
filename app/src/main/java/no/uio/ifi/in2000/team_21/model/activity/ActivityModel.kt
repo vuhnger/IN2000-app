@@ -37,7 +37,7 @@ object ActivityModels {
         waveHeightThreshold = 0.5,
         windSpeedThreshold = 10.0,
         airTemperatureThreshold = 10.0,
-        imageId = R.drawable.kayak_stock,
+        imageId = R.drawable.kayaking_ai,
         icon = R.drawable.kayaking_dark
     )
     val FISHING = ActivityModel(
@@ -47,7 +47,7 @@ object ActivityModels {
         waveHeightThreshold = 1.0,
         windSpeedThreshold = 5.0,
         airTemperatureThreshold = 15.0,
-        imageId = R.drawable.fisking_stock,
+        imageId = R.drawable.fishing_ai,
         icon = R.drawable.fishing_icon
     )
     val SAILING = ActivityModel(
@@ -57,7 +57,7 @@ object ActivityModels {
         waveHeightThreshold = 2.0,
         windSpeedThreshold = 15.0,
         airTemperatureThreshold = 20.0,
-        imageId = R.drawable.sailing_stock,
+        imageId = R.drawable.sailing2_ai,
         icon = R.drawable.sailing_icon
     )
     val ROWING = ActivityModel(
@@ -67,7 +67,7 @@ object ActivityModels {
         waveHeightThreshold = 0.5,
         windSpeedThreshold = 8.0,
         airTemperatureThreshold = 15.0,
-        imageId = R.drawable.roing_stock,
+        imageId = R.drawable.rowing_ai,
         icon = R.drawable.rowing_dark
     )
     val PADDLING = ActivityModel(
@@ -77,7 +77,7 @@ object ActivityModels {
         waveHeightThreshold = 0.5,
         windSpeedThreshold = 8.0,
         airTemperatureThreshold = 15.0,
-        imageId = R.drawable.roing_stock,
+        imageId = R.drawable.padling_ai,
         icon = R.drawable.rowing_dark
     )
     val SURFING = ActivityModel(
@@ -87,7 +87,7 @@ object ActivityModels {
         waveHeightThreshold = 3.0,
         windSpeedThreshold = 10.0,
         airTemperatureThreshold = 18.0,
-        imageId = R.drawable.surfing_stock,
+        imageId = R.drawable.surfing_ai,
         icon = R.drawable.surfing_dark
     )
     val SNORKELING = ActivityModel(
@@ -97,7 +97,7 @@ object ActivityModels {
         waveHeightThreshold = 0.5,
         windSpeedThreshold = 5.0,
         airTemperatureThreshold = 20.0,
-        imageId = R.drawable.snorkeling_stock,
+        imageId = R.drawable.snorkelig_ai,
         icon = R.drawable.scuba
     )
     val SWIMMING = ActivityModel(
@@ -107,7 +107,7 @@ object ActivityModels {
         waveHeightThreshold = 0.5,
         windSpeedThreshold = 5.0,
         airTemperatureThreshold = 20.0,
-        imageId = R.drawable.snorkeling_stock,
+        imageId = R.drawable.swimming_ai,
         icon = R.drawable.swimming_dark
     )
     val WATERSKIING = ActivityModel(
@@ -117,7 +117,7 @@ object ActivityModels {
         waveHeightThreshold = 0.5,
         windSpeedThreshold = 12.0,
         airTemperatureThreshold = 20.0,
-        imageId = R.drawable.waterski_stock,
+        imageId = R.drawable.waterski_ai,
         icon = R.drawable.waterski_icon
     )
 
@@ -137,5 +137,4 @@ object ActivityModels {
     fun find(activityName: String): ActivityModel?{
         return allActivities.find { it.activityName == activityName }
     }
-
 }

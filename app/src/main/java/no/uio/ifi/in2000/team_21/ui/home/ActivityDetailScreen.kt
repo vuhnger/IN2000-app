@@ -12,11 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -33,11 +33,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
-import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -68,9 +66,9 @@ fun ActivityDetailScreen(
         Spacer(modifier = Modifier.padding(16.dp))
 
         Row(
-           modifier = Modifier
-               .fillMaxWidth()
-               .padding(horizontal = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
         ){
 
             val buttonSize: Dp = 48.dp

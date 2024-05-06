@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "no.uio.ifi.in2000.team_21"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

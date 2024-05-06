@@ -13,7 +13,7 @@ object DatabaseBuilder {
                 context.applicationContext,
                 AppDatabase::class.java,
                 "app_database")
-                .fallbackToDestructiveMigration() // Use this during development or if data preservation is not necessary
+                .fallbackToDestructiveMigration()
                 .build()
             INSTANCE = instance
             instance

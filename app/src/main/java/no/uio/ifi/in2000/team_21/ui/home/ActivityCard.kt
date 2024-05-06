@@ -1,43 +1,51 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+// import androidx.compose.material.MaterialTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.res.painterResource
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.sharp.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
+import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
+import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
 
 @Composable
 fun ActivityCard(
@@ -49,8 +57,8 @@ fun ActivityCard(
         modifier = Modifier
             .fillMaxWidth(0.5f)
             .padding(2.dp)
-            .background(MaterialTheme.colors.background),
-        elevation = 2.dp,
+            .background(MaterialTheme.colorScheme.background),
+        elevation = CardDefaults.cardElevation(2.dp),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
@@ -138,7 +146,7 @@ fun ActivityCard(
                     modifier = Modifier
                         .padding(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colors.primary
+                        containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Text(
@@ -171,7 +179,9 @@ fun ActivityCardSmall(
                         activity.activityName
                     )
                 )
-            }
+            },
+        elevation = CardDefaults.cardElevation(2.dp),
+        colors = CardDefaults.cardColors(containerColor = HomeCard)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -182,7 +192,7 @@ fun ActivityCardSmall(
                 text = activity.activityName,
                 modifier = Modifier.weight(1f),
                 style = TextStyle(
-                    color = MaterialTheme.colors.primary,
+                    color = HomeFont,
                     fontSize = 20.sp
                 )
             )
@@ -232,11 +242,13 @@ fun ActivityCardHorizontalWide(
         .padding(
             horizontal = 10.dp
         ),
-        elevation = 10.dp
+        elevation = CardDefaults.cardElevation(10.dp),
+        colors = CardDefaults.cardColors(containerColor = HomeCard)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(color = HomeCard)
         ) {
             Icon(
                 painter = painterResource(id = activity.icon),
@@ -251,8 +263,8 @@ fun ActivityCardHorizontalWide(
                     activitiesViewModel.addFavorite(activity)
                 },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colors.primary,
-                    containerColor = MaterialTheme.colors.background
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = HomeCard
                 ),
                 modifier = Modifier
                     .weight(1f)
@@ -268,7 +280,7 @@ fun ActivityCardHorizontalWide(
 
 /*
 * Lager Grid med aktiviteskort nedover, 2 og 2 per kolonne.
-*/
+
 @Composable
 fun ActivityCardGrid(
     forecastViewModel: OceanForecastViewModel,
@@ -286,9 +298,11 @@ fun ActivityCardGrid(
     }
 }
 
+ */
+
 /*
 
-*/
+
 @Composable
 fun ActivityCardGridHorizontal(
     activites: List<ActivityModel>,
@@ -306,6 +320,8 @@ fun ActivityCardGridHorizontal(
         }
     }
 }
+
+ */
 
 /*
 

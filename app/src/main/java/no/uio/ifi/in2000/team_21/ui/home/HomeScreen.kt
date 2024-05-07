@@ -285,7 +285,6 @@ fun ActivityFavorites(
 
         Spacer(Modifier.height(8.dp))
 
-        // Denne komponenten tegner bare ikonene under "Favoritt"-seksjonen
         ActivityCardGridHorizontalSmall(
             navController = navController,
             activitiesViewModel = viewModel

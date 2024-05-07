@@ -7,7 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.data.database.ActivityEntity
 import no.uio.ifi.in2000.team_21.data.database.DatabaseBuilder
@@ -25,7 +27,12 @@ data class ActivitiesUIState(
 class ActivitiesViewModel(application: Application) : AndroidViewModel(application) {
     private val database = DatabaseBuilder.getDatabase(application)
     private val dao = database.activitiesDao()
-    val activities: LiveData<List<ActivityEntity>> = dao.getAllActivities()
+    val favorites: LiveData<List<ActivityEntity>> = dao.getAllActivities()
+
+    init {
+        loadFavorites()
+    }
+
     var activityUIstate by mutableStateOf(
         ActivitiesUIState(
             activities = ActivityModels.allActivities,
@@ -56,30 +63,34 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun addFavorite(activity: ActivityModel){
-
-        if (activity in activityUIstate.favorites ){
-
-        }else{
-            activityUIstate.favorites.add(activity)
+        viewModelScope.launch {
+            if (!dao.activityExists(activity.activityName)) {
+                dao.addActivity(ActivityEntity(name = activity.activityName))
+            }
         }
-
-        Log.d(
-            "ACTIVITY_VIEW_MODEL",
-            "added ${activity.activityName}, favorites: ${activityUIstate.favorites}"
-        )
     }
 
-    fun removeFavorite(activity: ActivityModel){
-        if (activity in activityUIstate.favorites){
-            activityUIstate.favorites.remove(activity)
-        }else{
-
+    fun removeFavorite(activityName: String){
+        viewModelScope.launch {
+            if (dao.activityExists(activityName)) {
+                dao.deleteByName(activityName)
+            }
         }
-
-        Log.d(
-            "ACTIVITY_VIEW_MODEL",
-            "removed: ${activity.activityName}, favorites: ${activityUIstate.favorites}"
-        )
     }
 
+    fun isFavorite(activityName: String): LiveData<Boolean> {
+        return favorites.map { favoritesList ->
+            favoritesList.any { it.name == activityName }
+        }
+    }
+
+    private fun loadFavorites() {
+        viewModelScope.launch(Dispatchers.IO) {
+           // _favorites.value = dao.getAllActivities()
+        }
+    }
+
+    fun getActivityModelByName(activityName: String): ActivityModel? {
+        return ActivityModels.find(activityName)
+    }
 }

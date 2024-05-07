@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ButtonDefaults
@@ -29,6 +31,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
@@ -44,7 +47,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -56,6 +58,8 @@ import no.uio.ifi.in2000.team_21.ui.theme.containerLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.theme.profileLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,6 +75,8 @@ fun ProfileScreen (
     var hobby by rememberSaveable { mutableStateOf(userViewModel.currentUser.hobby) }
     var username by rememberSaveable { mutableStateOf("Brukernavn") }
     var password by rememberSaveable { mutableStateOf("Passord") }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     if (notification.value.isNotEmpty()) {
         Toast.makeText(LocalContext.current, notification.value, Toast.LENGTH_LONG).show()
@@ -128,6 +134,10 @@ fun ProfileScreen (
                 onValueChange = {
                     name = it
                 },
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {keyboardController?.hide()}
+                ),
                 label = { Text("Navn", color = onContainerLight) }, //her endres vel variabelen her og
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = onContainerLight,
@@ -149,6 +159,10 @@ fun ProfileScreen (
                 onValueChange = {
                     hobby = it
                 },
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {keyboardController?.hide()}
+                ),
                 label = { Text("Hobby", color = onContainerLight) }, //her endres vel variabelen her og
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = onContainerLight,
@@ -171,6 +185,10 @@ fun ProfileScreen (
                 onValueChange = {
                     username = it
                 },
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {keyboardController?.hide()}
+                ),
                 label = { Text("Brukernavn", color = onContainerLight) }, //her endres vel variabelen her og
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = onContainerLight,
@@ -188,12 +206,14 @@ fun ProfileScreen (
             )
 
             OutlinedTextField(
-
                 value = password,
                 onValueChange = {
                     password = it
                 },
-                keyboardActions = ,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {keyboardController?.hide()}
+                ),
                 label = { Text("Passord", color = onContainerLight) }, //her endres vel variabelen her og
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = onContainerLight,
@@ -210,7 +230,6 @@ fun ProfileScreen (
                     .padding(top = 40.dp)
             )
 
-
             //Save button
             OutlinedButton(
                 onClick = {
@@ -218,7 +237,8 @@ fun ProfileScreen (
                     userViewModel.createUser(
                         name = name,
                         hobbyDescription = hobby,
-
+                        userName = username,
+                        password = password
                     )
                 },
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -235,7 +255,6 @@ fun ProfileScreen (
         }
     }
 }
-
 
 @Composable
 fun EditProfileImage(){

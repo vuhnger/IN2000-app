@@ -343,7 +343,7 @@ fun ActivityCardGridHorizontalSmall(
         Card(
 
         ) {
-            Text(text = "Du har ikke valgt noen favorittaktiviteter ennå, trykk på + for å legge til en!")
+            Text(text = "Legg til favorittaktiviteter ved å trykke på +")
         }
     }else{
         LazyHorizontalGrid(

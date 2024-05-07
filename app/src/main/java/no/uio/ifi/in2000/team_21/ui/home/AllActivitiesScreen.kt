@@ -52,12 +52,23 @@ fun AllActivitiesScreen(
 
 @Composable
 fun ActivityListItem(activity: ActivityModel) {
-    Box(modifier = Modifier.padding(16.dp)) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween  // Distribute evenly
+    ) {
         Column {
-            // Legg til icon bilde av aktiviteten
-            Text(text = activity.activityName, color = Color(0xFF49454F)) // Hvit text
+            Text(text = activity.activityName, color = Color(0xFF49454F)) // White text
             Text(getActivityConditionText(activity.conditionStatus, activity.activityName))
         }
+        // Move Image composable to the end with Spacer for padding
+        Image(
+            modifier = Modifier.size(40.dp),
+            painter = painterResource(id = activity.getFlagColorId()),
+            contentDescription = null // Set contentDescription for accessibility
+        )
+        Spacer(modifier = Modifier.width(8.dp))  // Adjust spacing as needed
     }
 }
 
@@ -76,7 +87,7 @@ fun PreviewAllActivitiesScreen() {
 
     val mockViewModel = object : ActivityConditionCheckerViewModel() {
         init {
-            checkActivityConditions("2024-05-03T20", 59.0, 10.0)
+            checkActivityConditions("2024-05-06T20", 59.0, 10.0)
         }
     }
 

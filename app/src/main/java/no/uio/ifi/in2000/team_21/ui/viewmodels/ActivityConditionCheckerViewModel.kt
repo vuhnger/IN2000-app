@@ -41,29 +41,30 @@ open class ActivityConditionCheckerViewModel : ViewModel() {
         longitude: Double
     ) {
         viewModelScope.launch {
-                val oceanData = oceanRepository.fetchOceanForecastTimeseriesByTime(
-                    time = time,
-                    latitude = latitude,
-                    longitude = longitude
-                )
-                val locationData = locationRepository.fetchLocationForecastTimeseriesByTime(
-                    time = time,
-                    latitude = latitude,
-                    longitude = longitude
-                )
+            val oceanData = oceanRepository.fetchOceanForecastTimeseriesByTime(
+                time = time,
+                latitude = latitude,
+                longitude = longitude
+            )
+            val locationData = locationRepository.fetchLocationForecastTimeseriesByTime(
+                time = time,
+                latitude = latitude,
+                longitude = longitude
+            )
 
-                val updatedActivities = _activities.value?.map { activity ->
-                    val relevantDetails = getRelevantWeatherDetails(
-                        oceanData?.data?.instant?.details,
-                        locationData?.data?.instant?.details
-                    )
-                    activity.copy(
-                        conditionStatus = isWeatherOptimalForActivity(
-                            weatherDetails = relevantDetails,
-                            activity = activity
-                        )
-                    )
-                } ?: emptyList()
+            val updatedActivities = _activities.value?.map { activity ->
+                val relevantDetails = getRelevantWeatherDetails(
+                    oceanData?.data?.instant?.details,
+                    locationData?.data?.instant?.details
+                )
+                val conditionsMet = getWeatherConditionsMet(relevantDetails, activity)
+                val conditionStatus = isWeatherOptimalForActivity(conditionsMet)
+
+                activity.copy(
+                    conditionStatus = conditionStatus,
+                    conditionDescription = getConditionDescription(activity, conditionsMet)
+                )
+            } ?: emptyList()
             _activities.value = updatedActivities
         }
     }
@@ -86,25 +87,50 @@ open class ActivityConditionCheckerViewModel : ViewModel() {
         )
     }
 
-    private fun isWeatherOptimalForActivity(
+
+    private fun getWeatherConditionsMet(
         weatherDetails: WeatherDetails,
         activity: ActivityModel
-    ): ConditionStatus {
-        val conditions = listOf(
-            (weatherDetails.seaWaterTemperature ?: 0.0) >= activity.waterTemperatureThreshold,
-            (weatherDetails.seaWaterSpeed ?: Double.MAX_VALUE) <= activity.waterSpeedThreshold,
-            (weatherDetails.seaSurfaceWaveHeight ?: Double.MAX_VALUE) <= activity.waveHeightThreshold,
-            (weatherDetails.airTemperature ?: Double.MIN_VALUE) >= (activity.airTemperatureThreshold),
-            (weatherDetails.windSpeed ?: Double.MAX_VALUE) <= (activity.windSpeedThreshold)
-        )
+    ): Map<String, Boolean> {
+        val conditionsMet = mutableMapOf<String, Boolean>()
 
-        return when (conditions.count { it }) {
-            conditions.size -> ConditionStatus.ALL_MET
-            0 -> ConditionStatus.NONE_MET
+        conditionsMet["Vannets temperatur"] = (weatherDetails.seaWaterTemperature ?: 0.0) >= activity.waterTemperatureThreshold
+        conditionsMet["Vannets hastighet"] = (weatherDetails.seaWaterSpeed ?: Double.MAX_VALUE) <= activity.waterSpeedThreshold
+        conditionsMet["Bølgehøyde"] = (weatherDetails.seaSurfaceWaveHeight ?: Double.MAX_VALUE) <= activity.waveHeightThreshold
+        conditionsMet["Lufttemperatur"] = (weatherDetails.airTemperature ?: Double.MIN_VALUE) >= (activity.airTemperatureThreshold)
+        conditionsMet["Vindhastighet"] = (weatherDetails.windSpeed ?: Double.MAX_VALUE) <= (activity.windSpeedThreshold)
+
+        // Legg til flere sjekker
+
+        return conditionsMet
+    }
+
+    private fun isWeatherOptimalForActivity(
+        conditionsMet: Map<String, Boolean>
+    ): ConditionStatus {
+        val allConditionsMet = conditionsMet.values.all { it }
+        val noConditionsMet = conditionsMet.values.none { it }
+
+        return when {
+            allConditionsMet -> ConditionStatus.ALL_MET
+            noConditionsMet -> ConditionStatus.NONE_MET
             else -> ConditionStatus.SOME_MET
         }
     }
 
-
-
+    private fun getConditionDescription(
+        activity: ActivityModel,
+        conditionsMet: Map<String, Boolean>
+    ): String {
+        val descriptionBuilder = StringBuilder()
+        with(descriptionBuilder) {
+            //appendLine("Forholdene for ${activity.activityName} er nå:")
+            conditionsMet.forEach { (condition, conditionMet) ->
+                val icon = if (conditionMet) "✅" else "❌"
+                appendLine("$condition: $icon")
+            }
+        }
+        return descriptionBuilder.toString()
+    }
 }
+

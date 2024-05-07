@@ -62,7 +62,6 @@ fun TopBarComponent(
                             } else {
                                 MaterialTheme.typography.bodyLarge
                             }
-
                         )
                     }
                     Spacer(modifier = Modifier.width(48.dp))

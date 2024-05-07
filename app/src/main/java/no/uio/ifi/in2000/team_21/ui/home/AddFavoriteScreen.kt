@@ -52,6 +52,8 @@ fun AddFavoriteScreen(
 
         activitiesViewModel.activityUIstate.activities.forEach {
                 activity ->
+
+            // Denne komponenten tegner cards på favoritt-skjermen
             ActivityCardHorizontalWide(
                 activity = activity,
                 activitiesViewModel = activitiesViewModel

@@ -253,6 +253,7 @@ fun ActivityCardHorizontalWide(
     activitiesViewModel: ActivitiesViewModel
 ){
 
+    // TODO: Fikse at ikon blir husket
     var icon by remember {
         mutableStateOf(Icons.Outlined.FavoriteBorder)
     }

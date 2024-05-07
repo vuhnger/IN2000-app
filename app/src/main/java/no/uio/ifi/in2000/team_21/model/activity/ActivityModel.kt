@@ -25,8 +25,8 @@ data class ActivityModel(
     fun getFlagDescription(
     ): String {
         return when (conditionStatus) {
-            ConditionStatus.ALL_MET -> "Perfekt tidspunkt for ${activityName}"
-            ConditionStatus.SOME_MET -> "Forholdene er moderate for ${activityName}"
+            ConditionStatus.ALL_MET -> "Perfekt tidspunkt for ${activityName.lowercase()}"
+            ConditionStatus.SOME_MET -> "Forholdene er moderate for ${activityName.lowercase()}"
             ConditionStatus.NONE_MET -> "Vær forsiktig og følg advarsler"
         }
     }
@@ -55,7 +55,7 @@ object ActivityModels {
         icon = R.drawable.kayaking_dark
     )
     val FISHING = ActivityModel(
-        "Fishing",
+        "Fisking",
         waterTemperatureThreshold = 5.0,
         waterSpeedThreshold = 2.0,
         waveHeightThreshold = 1.0,
@@ -65,7 +65,7 @@ object ActivityModels {
         icon = R.drawable.fishing_icon
     )
     val SAILING = ActivityModel(
-        "Sailing",
+        "Seiling",
         waterTemperatureThreshold = 5.0,
         waterSpeedThreshold = 5.0,
         waveHeightThreshold = 2.0,
@@ -75,7 +75,7 @@ object ActivityModels {
         icon = R.drawable.sailing_icon
     )
     val ROWING = ActivityModel(
-        "Rowing",
+        "Roing",
         waterTemperatureThreshold = 5.0,
         waterSpeedThreshold = 3.0,
         waveHeightThreshold = 0.5,
@@ -85,14 +85,14 @@ object ActivityModels {
         icon = R.drawable.rowing_dark
     )
     val PADDLING = ActivityModel(
-        "Paddling",
+        "Padling",
         waterTemperatureThreshold = 5.0,
         waterSpeedThreshold = 3.0,
         waveHeightThreshold = 0.5,
         windSpeedThreshold = 8.0,
         airTemperatureThreshold = 5.0,
         imageId = R.drawable.padling_ai,
-        icon = R.drawable.rowing_dark
+        icon = R.drawable.rowing_icon
     )
     val SURFING = ActivityModel(
         "Surfing",
@@ -105,17 +105,17 @@ object ActivityModels {
         icon = R.drawable.surfing_dark
     )
     val SNORKELING = ActivityModel(
-        "Snorkeling",
+        "Snorkling",
         waterTemperatureThreshold = 18.0,
         waterSpeedThreshold = 2.0,
         waveHeightThreshold = 0.5,
         windSpeedThreshold = 5.0,
         airTemperatureThreshold = 0.0,
         imageId = R.drawable.snorkelig_ai,
-        icon = R.drawable.scuba
+        icon = R.drawable.scuba_dark
     )
     val SWIMMING = ActivityModel(
-        "Swimming",
+        "Svømming",
         waterTemperatureThreshold = 18.0,
         waterSpeedThreshold = 2.0,
         waveHeightThreshold = 0.5,
@@ -133,6 +133,17 @@ object ActivityModels {
         airTemperatureThreshold = 20.0,
         imageId = R.drawable.waterski_ai,
         icon = R.drawable.waterski_icon
+    )
+
+    var CUSTOM_ACTIVITY = ActivityModel(
+        activityName = "",
+        waterTemperatureThreshold = 0.0,
+        waterSpeedThreshold = 0.0,
+        waveHeightThreshold = 0.0,
+        windSpeedThreshold = 0.0,
+        airTemperatureThreshold = 0.0,
+        imageId = R.drawable.default_img,
+        icon = R.drawable.running_icon_free_vector
     )
 
     val allActivities = listOf(

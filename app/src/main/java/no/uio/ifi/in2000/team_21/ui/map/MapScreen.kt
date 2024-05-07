@@ -14,7 +14,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -107,8 +106,8 @@ import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
-import no.uio.ifi.in2000.team_21.ui.UserMarkerViewModel
-import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserMarkerViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.TopBarComponent
 import no.uio.ifi.in2000.team_21.ui.home.WeatherIcon
 import kotlin.math.cos

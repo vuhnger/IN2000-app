@@ -1,9 +1,9 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
 // import androidx.compose.material.MaterialTheme
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,26 +15,36 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -46,6 +56,10 @@ import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
 import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
+import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
+import no.uio.ifi.in2000.team_21.ui.theme.containerLight
+import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 
 @Composable
 fun ActivityCard(
@@ -63,7 +77,7 @@ fun ActivityCard(
     ) {
         Column(
             modifier = Modifier
-                .background(Color.White)
+                .background(backgroundLight)
         ) {
 
             Row(
@@ -171,9 +185,6 @@ fun ActivityCardSmall(
             .height(270.dp)
             .padding(start = 10.dp, top = 20.dp, end = 10.dp)
             .clickable {
-
-                // TODO : Oppdater flagg for alle aktiviteter
-
                 navController.navigate(
                     Screen.ActivityDetailScreen.withArgs(
                         activity.activityName
@@ -187,7 +198,11 @@ fun ActivityCardSmall(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(5.dp)
+                .fillMaxWidth()
         ) {
+            
+            Spacer(modifier = Modifier.padding(top = 16.dp))
+
             Text(
                 text = activity.activityName,
                 modifier = Modifier.weight(1f),
@@ -215,7 +230,6 @@ fun ActivityIconSmall(
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
 ){
-    //TODO : Make clickable and add to favorites
     Icon(
         painter = painterResource(id = activity.icon),
         contentDescription = "Icon of ${activity.activityName}",
@@ -228,6 +242,7 @@ fun ActivityIconSmall(
             .clip(CircleShape) // Klipper ikonet til en sirkelform
             //.border(2.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
             .padding(15.dp) // Justering for å beholde plassering og størrelse
+            .scale(2f)
             .clickable {
                 navController.navigate(
                     Screen.ActivityDetailScreen.withArgs(
@@ -244,15 +259,31 @@ fun ActivityCardHorizontalWide(
     activity: ActivityModel,
     activitiesViewModel: ActivitiesViewModel
 ){
+
+    // TODO: Fikse at ikon blir husket
+    var icon by remember {
+        mutableStateOf(Icons.Outlined.FavoriteBorder)
+    }
+
     Card(
     modifier = Modifier
         .fillMaxWidth()
+        .height(80.dp)
         .padding(
-            horizontal = 10.dp
+            horizontal = 10.dp, vertical = 10.dp,
+        )
+        .background(
+            color = HomeCard
         ),
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors(containerColor = HomeCard)
     ) {
+
+        Log.d(
+            "HORIZONTAL_ACTIVITY_CARD",
+            "initiated with activity: $activity, found in favorites: ${activity in activitiesViewModel.activityUIstate.favorites}"
+        )
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -262,13 +293,22 @@ fun ActivityCardHorizontalWide(
                 painter = painterResource(id = activity.icon),
                 contentDescription = "",
                 modifier = Modifier
-                    .padding(horizontal = 10.dp)
+                    .padding(
+                        horizontal = 10.dp,
+                        vertical = 10.dp
+                    )
                     .weight(1f)
+                    .scale(1.2f),
             )
-
             Button(
                 onClick = {
-                    activitiesViewModel.addFavorite(activity)
+                    icon = if (activity in activitiesViewModel.activityUIstate.favorites){
+                        activitiesViewModel.removeFavorite(activity = activity)
+                        Icons.Default.FavoriteBorder
+                    }else{
+                        activitiesViewModel.addFavorite(activity = activity)
+                        Icons.Default.Favorite
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colorScheme.primary,
@@ -278,58 +318,19 @@ fun ActivityCardHorizontalWide(
                     .weight(1f)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = "Knapp for å legge til i favoritter"
+                    imageVector = icon,
+                    contentDescription = "Knapp for å legge til i favoritter",
+                    modifier = Modifier
+                        .padding(
+                            horizontal = 10.dp,
+                            vertical = 10.dp
+                        )
+                        .scale(1.5f)
                 )
             }
         }
     }
 }
-
-/*
-* Lager Grid med aktiviteskort nedover, 2 og 2 per kolonne.
-
-@Composable
-fun ActivityCardGrid(
-    forecastViewModel: OceanForecastViewModel,
-    activitiesViewModel: ActivitiesViewModel
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier.padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(activitiesViewModel.activityUIstate.activities) { activity ->
-            ActivityCard(activity = activity, viewModel = activitiesViewModel)
-        }
-    }
-}
-
- */
-
-/*
-
-
-@Composable
-fun ActivityCardGridHorizontal(
-    activites: List<ActivityModel>,
-    navController: NavController,
-    activitiesViewModel: ActivitiesViewModel
-){
-    LazyHorizontalGrid(
-        rows = GridCells.Fixed(1)
-    ) {
-        items(activites){activity ->
-            ActivityCardSmall(
-                activity,
-                navController
-            )
-        }
-    }
-}
-
- */
 
 /*
 
@@ -346,12 +347,11 @@ fun ActivityCardGridHorizontalSmall(
             Text(text = "Legg til favorittaktiviteter ved å trykke på +")
         }
     }else{
-        LazyHorizontalGrid(
-            rows = GridCells.Fixed(1),
+        LazyRow(
             modifier = Modifier
                 .height(84.dp)
         ) {
-            items(activitiesViewModel.activityUIstate.favorites){activity ->
+            this.items(activitiesViewModel.activityUIstate.favorites){activity ->
                 ActivityIconSmall(
                     activity = activity,
                     activitiesViewModel = activitiesViewModel,

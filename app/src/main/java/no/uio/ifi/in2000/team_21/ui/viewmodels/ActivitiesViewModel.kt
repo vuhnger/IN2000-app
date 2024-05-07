@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.team_21.ui.home
+package no.uio.ifi.in2000.team_21.ui.viewmodels
 
 import android.app.Application
 import android.util.Log
@@ -7,12 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import no.uio.ifi.in2000.team_21.data.database.ActivitiesDao
 import no.uio.ifi.in2000.team_21.data.database.ActivityEntity
-import no.uio.ifi.in2000.team_21.data.database.AppDatabase
 import no.uio.ifi.in2000.team_21.data.database.DatabaseBuilder
 import no.uio.ifi.in2000.team_21.model.activity.ActivityLog
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
@@ -37,9 +34,6 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
         )
     )
         private set
-
-    // TODO: Lage konstruktør som henter værdata
-
 
     fun log(
         time: String,
@@ -71,16 +65,21 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
 
         Log.d(
             "ACTIVITY_VIEW_MODEL",
-            "favorites: ${activityUIstate.favorites}"
+            "added ${activity.activityName}, favorites: ${activityUIstate.favorites}"
         )
     }
-    fun getWeatherData(){
-        viewModelScope.launch {
-            // TODO: Hent relevant værdata og legg det i kortene
 
-            activityUIstate = activityUIstate.copy(
-                activities = mutableListOf()// TODO: Oppdater aktivitetene med værdata i
-            )
+    fun removeFavorite(activity: ActivityModel){
+        if (activity in activityUIstate.favorites){
+            activityUIstate.favorites.remove(activity)
+        }else{
+
         }
+
+        Log.d(
+            "ACTIVITY_VIEW_MODEL",
+            "removed: ${activity.activityName}, favorites: ${activityUIstate.favorites}"
+        )
     }
+
 }

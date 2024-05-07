@@ -11,6 +11,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.appendIfNameAbsent
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.team_21.model.oceanforecast.OceanForecastResponse
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
@@ -31,8 +32,9 @@ open class OceanForecastDataSource {
             level = LogLevel.BODY
         }
         defaultRequest {
-            header(
-                key = "X-Gravitee-API-Key",
+            url("https://gw-uio.intark.uh-it.no/in2000/")
+            headers.appendIfNameAbsent(
+                name = "X-Gravitee-API-Key",
                 value = "eff58995-389e-4cd2-816f-4c6728aeec6e"
             )
         }
@@ -50,20 +52,30 @@ open class OceanForecastDataSource {
             } else {
                 null
             }
-        } catch (e: UnresolvedAddressException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
 
     suspend fun fetchOceanForecastTimeseries(latitude: Double, longitude: Double): ArrayList<Timeseries>? {
-        val response = fetchOceanForecastResponse(latitude, longitude)
-        return response?.properties?.timeseries
+
+        return try {
+            val response = fetchOceanForecastResponse(latitude, longitude)
+            response?.properties?.timeseries
+        }catch (e: Exception){
+            null
+        }
     }
 
     suspend fun fetchOceanForecastByTime(time: String, latitude: Double, longitude: Double): Timeseries? {
-        val timeseries = fetchOceanForecastTimeseries(latitude, longitude)
-        return timeseries?.find { it.time?.contains(time) ?: false }
+
+        return try {
+            val timeseries = fetchOceanForecastTimeseries(latitude, longitude)
+            timeseries?.find { it.time?.contains(time) ?: false }
+        }catch (e: Exception){
+            null
+        }
     }
 }
 

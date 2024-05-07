@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -51,6 +52,8 @@ import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
 import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
 import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -72,6 +75,29 @@ fun ActivityDetailScreen(
             activityName = activityName ?: ""
         ) ?: ActivityModels.FISHING
 
+        var showDialog by remember{
+            mutableStateOf(false)
+        }
+        
+        if (showDialog){
+            AlertDialog(
+                onDismissRequest = {
+                    showDialog = false
+                    navController.popBackStack()
+                                   },
+                title = { Text(text = "Aktivitet loggført!")},
+                text = { Text(text = "Du finner denne i historikk.")},
+                buttons = {
+                    Button(onClick = {
+                        showDialog = false
+                        navController.popBackStack()
+                    }) {
+                        Text(text = "Lukk")
+                    }
+                }
+            )
+        }
+
         Image(
             painter = painterResource(activity.imageId),
             contentDescription = "Image of ${activity.activityName}",
@@ -92,13 +118,7 @@ fun ActivityDetailScreen(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = "Tilbakeknapp til hjemskjerm.",
-                )
-            }
 
-            IconButton(onClick = { /*TODO pop up vindu med sliders*/ }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.List,
-                    contentDescription = "Knapp for å endre værnivåer."
                 )
             }
         }
@@ -141,9 +161,9 @@ fun ActivityDetailScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp), // Add vertical padding for separation
+                .padding(vertical = 16.dp),
         ) {
-            // Center the text and image horizontally using Arrangement.Row
+
             Row(
                 horizontalArrangement = Arrangement.Center ,
                 modifier = Modifier
@@ -158,10 +178,11 @@ fun ActivityDetailScreen(
                         color = HomeFont
                     ),
                     modifier = Modifier
-                        .padding(end = 8.dp, bottom = 14.dp), // Add padding between text and image
+                        .padding(end = 8.dp, bottom = 14.dp),
                 )
             }
         }
+
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
@@ -194,13 +215,13 @@ fun ActivityDetailScreen(
                         time = time,
                         activity = activity
                     )
+                    showDialog = true
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFF5058A4))
             ) {
                 Text(
                     text = "Loggfør aktivitet",
                     fontSize = 20.sp
-
                 )
             }
         }

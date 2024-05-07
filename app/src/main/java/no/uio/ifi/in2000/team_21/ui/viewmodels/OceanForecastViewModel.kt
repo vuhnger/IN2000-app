@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.team_21.ui.home
+package no.uio.ifi.in2000.team_21.ui.viewmodels
 
 import android.os.Build
 import androidx.annotation.RequiresApi

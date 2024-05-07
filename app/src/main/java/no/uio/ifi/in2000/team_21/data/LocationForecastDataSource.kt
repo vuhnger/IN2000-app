@@ -5,6 +5,8 @@ import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.cio.endpoint
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -13,6 +15,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.appendIfNameAbsent
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastResponse
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
@@ -22,6 +25,9 @@ class LocationForecastDataSource {
 
 
     private val client = HttpClient() {
+
+        val TIMEOUT_MS: Long = (30_000.0 * 5).toLong()
+
         install(ContentNegotiation) {
             json(
                 Json {
@@ -33,9 +39,15 @@ class LocationForecastDataSource {
         install(Logging){
             level = LogLevel.BODY
         }
+        install(HttpTimeout){
+            requestTimeoutMillis = TIMEOUT_MS
+            connectTimeoutMillis = TIMEOUT_MS
+            socketTimeoutMillis = TIMEOUT_MS
+        }
         defaultRequest {
-            header(
-                key = "X-Gravitee-API-Key",
+            url("https://gw-uio.intark.uh-it.no/in2000/")
+            headers.appendIfNameAbsent(
+                name = "X-Gravitee-API-Key",
                 value = "eff58995-389e-4cd2-816f-4c6728aeec6e"
             )
         }

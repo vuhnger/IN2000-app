@@ -54,16 +54,20 @@ import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
 import no.uio.ifi.in2000.team_21.ui.theme.containerLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.theme.profileLight
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen (navController: NavController) {
+fun ProfileScreen (
+    navController: NavController,
+    userViewModel: UserViewModel
+) {
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
     
     val notification = rememberSaveable { mutableStateOf("") }
-    val name by rememberSaveable { mutableStateOf("Navn") }
-    val hobby by rememberSaveable { mutableStateOf("Hobby") }
+    val name by rememberSaveable { mutableStateOf(userViewModel.currentUser.name) }
+    val hobby by rememberSaveable { mutableStateOf(userViewModel.currentUser.hobby) }
     val username by rememberSaveable { mutableStateOf("Brukernavn") }
     val password by rememberSaveable { mutableStateOf("Passord") }
 
@@ -118,11 +122,10 @@ fun ProfileScreen (navController: NavController) {
             EditProfileImage()
 
             //Editable text fields, name, hooby, usernames, password
-            EditTextField(name)
-            EditTextField(hobby)
-            EditTextField(username)
-            EditTextField(password)
-
+            EditTextField("Navn")
+            EditTextField("Hobby")
+            EditTextField("Brukernavn")
+            EditTextField("Passord")
 
             //Save button
             OutlinedButton(
@@ -147,9 +150,13 @@ fun ProfileScreen (navController: NavController) {
 
 @Composable
 fun EditProfileImage(){
+
+    val IMAGE_DEFAULT_VALUE = ""
+
     val image = rememberSaveable {
         mutableStateOf("")
     }
+
     val painter = if(image.value.isEmpty()){
         painterResource(id = R.drawable.user)
     } else{
@@ -193,10 +200,12 @@ fun EditProfileImage(){
 
 @Composable
 fun EditTextField(text: String) {
-    var text = text
+    var text by rememberSaveable {
+        mutableStateOf(text)
+    }
     OutlinedTextField(
 
-        value = text,
+        value = "Tekstfelt",
         onValueChange = {
             text = it
         },
@@ -220,5 +229,5 @@ fun EditTextField(text: String) {
 @Preview
 @Composable
 fun ProfileScreenTest() {
-    ProfileScreen(navController = rememberNavController())
+    //ProfileScreen(navController = rememberNavController())
 }

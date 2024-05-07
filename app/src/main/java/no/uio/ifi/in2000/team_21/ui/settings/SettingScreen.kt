@@ -56,15 +56,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.model.user.User
 import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
 import no.uio.ifi.in2000.team_21.ui.theme.containerLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.theme.profileLight
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-fun SettingScreen(navController: NavController) {
+fun SettingScreen(
+    navController: NavController,
+    userViewModel: UserViewModel
+) {
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
 
@@ -110,7 +115,11 @@ fun SettingScreen(navController: NavController) {
                 .padding(innerPadding)
         ){
             //Profile
-            ProfileCard(navController, onClick = { navController.navigate(Screen.ProfileScreen.route)})
+            ProfileCard(
+                navController,
+                userViewModel = userViewModel,
+                onClick = { navController.navigate(Screen.ProfileScreen.route)}
+            )
             Spacer(modifier = Modifier.padding(6.dp))
 
             //Darkmode
@@ -123,7 +132,6 @@ fun SettingScreen(navController: NavController) {
             AllSettingsCard(navController,
                 mainText = "Alle aktiviteter",
                 onClick = {
-                    // TODO: Legge til jokkis sin skjerm
                     navController.navigate(Screen.AllActivitiesScreen.route)
                 }
             )
@@ -138,7 +146,7 @@ fun SettingScreen(navController: NavController) {
             //Spacer(modifier = Modifier.padding(6.dp))
 
             AllSettingsCard(navController,
-                mainText = "Om oss",
+                mainText = "Om utviklerne",
                 onClick = {
                     navController.navigate(Screen.AboutUsScreen.route)
                 }
@@ -147,7 +155,7 @@ fun SettingScreen(navController: NavController) {
             AllSettingsCard(navController,
                 mainText = "Logg ut",
                 onClick = {
-                    //handle event
+                    // TODO: set current user to default user
                 },
             )
         }
@@ -157,7 +165,11 @@ fun SettingScreen(navController: NavController) {
 
 //Profile
 @Composable
-fun ProfileCard(navController: NavController, onClick: () -> Unit){
+fun ProfileCard(
+    navController: NavController,
+    onClick: () -> Unit,
+    userViewModel: UserViewModel
+){
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -179,8 +191,7 @@ fun ProfileCard(navController: NavController, onClick: () -> Unit){
                     modifier = Modifier
                         .width(190.dp)
                         .padding(bottom = 5.dp, start = 15.dp),
-                    text = "Ola Nordmann",
-
+                    text = userViewModel.currentUser.name,
 
                     style = TextStyle(
                         fontSize = 18.sp,
@@ -195,7 +206,7 @@ fun ProfileCard(navController: NavController, onClick: () -> Unit){
                     modifier = Modifier
                         .width(190.dp)
                         .padding(start = 15.dp),
-                    text = "Fritidsfisker",
+                    text = userViewModel.currentUser.hobby,
                     style = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
@@ -232,7 +243,7 @@ fun DarkModeCard(navController: NavController, checked: MutableState<Boolean>){
             Text(
                 modifier = Modifier
                     .width(190.dp),
-                text = "Darkmode",
+                text = "Nattmodus",
                 style = TextStyle(
                     fontSize = 15.sp,
                     lineHeight = 20.sp,
@@ -313,7 +324,7 @@ fun HistorySettings(navController: NavController){
         modifier = Modifier
             //.clickable { }
             .fillMaxWidth()
-            .height(112.dp),
+            .height(56.dp),
         colors = CardDefaults.cardColors(containerLight)
     ){ Column (){
         //Friends
@@ -334,15 +345,10 @@ fun HistorySettings(navController: NavController){
             modifier = Modifier
                 .padding(start = 25.dp, end = 25.dp)
         )
-        //Badges
-        AllSettingsCard(navController,
-            mainText = "Trofeskap",
-            onClick = {
-                navController.navigate(Screen.TrophyWallScreen.route)
-            }
-        )
     }}
 }
+
+
 //Other settings
 @Composable
 fun SettingsGroupCard(navController: NavController){
@@ -360,12 +366,6 @@ fun SettingsGroupCard(navController: NavController){
                 navController.navigate(Screen.NotificationScreen.route)
             }
         )
-        HorizontalDivider(
-            color = profileLight,
-            modifier = Modifier
-                .padding(start = 25.dp, end = 25.dp)
-        )
-        //Contacts
     } }
 }
 
@@ -403,5 +403,5 @@ fun ProfileImage(){
 @Preview
 @Composable
 fun SettingScreenTest() {
-    SettingScreen(navController = rememberNavController())
+    //SettingScreen(navController = rememberNavController())
 }

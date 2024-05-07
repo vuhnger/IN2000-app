@@ -18,3 +18,5 @@ val backgroundLight = Color(0xFFF7F8FF)
 val containerLight = Color(0xFFEBEFFF)
 val onContainerLight = Color(0xFF00145D)
 val profileLight = Color(0xFFBCCBFF)
+
+// Vannblå farger

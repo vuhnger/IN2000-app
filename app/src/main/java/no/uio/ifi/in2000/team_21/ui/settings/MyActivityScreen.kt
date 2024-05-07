@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,11 +24,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
+import no.uio.ifi.in2000.team_21.model.activity.ActivityLog
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 
@@ -101,12 +102,26 @@ fun MyActivityScreen(
                         modifier = Modifier
                             .padding(5.dp)
                     ) {
-                        Text(
-                            text = "Bruker gjorde ${activityLog.activity.activityName} : ${activityLog.time}"
+                        ActivityLogCard(
+                            activityLog = activityLog
                         )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ActivityLogCard(
+    activityLog: ActivityLog
+){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp),
+        elevation = 5.dp
+    ) {
+        Text(text = "Du gjennomførte ${activityLog.activity.activityName.lowercase()} : ${activityLog.time}")
     }
 }

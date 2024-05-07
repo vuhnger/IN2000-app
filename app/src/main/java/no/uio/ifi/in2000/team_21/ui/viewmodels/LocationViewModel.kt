@@ -1,8 +1,9 @@
+package no.uio.ifi.in2000.team_21.ui.viewmodels
+
 import android.Manifest
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Geocoder
 import android.os.Looper
 import android.util.Log
@@ -23,7 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.Locale
-import kotlin.math.round
 
 class LocationViewModel(application: Application): AndroidViewModel(application) {
     private val _userLocation = MutableStateFlow<Point?>(null)
@@ -73,10 +73,23 @@ class LocationViewModel(application: Application): AndroidViewModel(application)
         val geocoder = Geocoder(context, Locale.getDefault())
         return try {
             val addresses = geocoder.getFromLocation(lat, lon, 1)
-            "${addresses?.firstOrNull()?.adminArea} (${addresses?.firstOrNull()?.subLocality})"
+
+            if(addresses?.firstOrNull()?.subLocality == null && addresses?.firstOrNull()?.adminArea == null){
+                "Kunne ikke hente områdenavn"
+            }
+
+            else if(addresses?.firstOrNull()?.subLocality == null){
+                "${addresses?.firstOrNull()?.adminArea}"
+            }
+
+            else{
+                "${addresses?.firstOrNull()?.adminArea} (${addresses?.firstOrNull()?.subLocality})"
+            }
+
+
         } catch (e: IOException) {
             e.printStackTrace()
-            "Unable to get location"
+            "Kunne ikke hente stedstjenester"
         }
     }
 }

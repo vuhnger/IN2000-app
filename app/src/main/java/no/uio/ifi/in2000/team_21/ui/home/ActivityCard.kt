@@ -15,12 +15,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -30,6 +33,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -343,12 +347,11 @@ fun ActivityCardGridHorizontalSmall(
             Text(text = "Du har ikke valgt noen favorittaktiviteter ennå, trykk på + for å legge til en!")
         }
     }else{
-        LazyHorizontalGrid(
-            rows = GridCells.Fixed(1),
+        LazyRow(
             modifier = Modifier
                 .height(84.dp)
         ) {
-            items(activitiesViewModel.activityUIstate.favorites){activity ->
+            this.items(activitiesViewModel.activityUIstate.favorites){activity ->
                 ActivityIconSmall(
                     activity = activity,
                     activitiesViewModel = activitiesViewModel,

@@ -64,6 +64,8 @@ import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 import no.uio.ifi.in2000.team_21.ui.theme.Background
 import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
 import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
+import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
+import no.uio.ifi.in2000.team_21.ui.theme.weatherCardLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
@@ -116,7 +118,7 @@ fun WeatherCard(
                         lineHeight = 20.sp,
                         //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(500),
-                        color = HomeFont,
+                        color = onContainerLight,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.1.sp,
                     )
@@ -129,7 +131,7 @@ fun WeatherCard(
                         lineHeight = 20.sp,
                         //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF00145D),
+                        color = onContainerLight,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.1.sp,
                     )
@@ -147,7 +149,7 @@ fun WeatherCard(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         WeatherIcon(
-                            element = icon,
+                            element = icon
                         )
                         Spacer(modifier = Modifier.padding(12.dp))
                         Text(
@@ -157,7 +159,7 @@ fun WeatherCard(
                                 lineHeight = 16.sp,
                                 //fontFamily = FontFamily(Font(R.font.roboto)),
                                 //fontWeight = FontWeight(400),
-                                color = Color(0xFF00145D),
+                                color = onContainerLight,
                                 textAlign = TextAlign.Center,
                                 letterSpacing = 0.5.sp,
                             ),
@@ -181,7 +183,7 @@ fun WeatherCard(
                         lineHeight = 20.sp,
                         //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF00145D),
+                        color = onContainerLight,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.1.sp,
                     )
@@ -199,7 +201,7 @@ fun WeatherCard(
                             lineHeight = 20.sp,
                             //fontFamily = FontFamily(Font(R.font.roboto)),
                             fontWeight = FontWeight(400),
-                            color = Color(0xFF00145D),
+                            color = onContainerLight,
                             textAlign = TextAlign.Center,
                             letterSpacing = 0.1.sp,
                         ),
@@ -215,7 +217,7 @@ fun WeatherCard(
                                 lineHeight = 20.sp,
                                 //fontFamily = FontFamily(Font(R.font.roboto)),
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF00145D),
+                                color = onContainerLight,
                                 textAlign = TextAlign.Center,
                                 letterSpacing = 0.1.sp,
                             ),
@@ -251,7 +253,7 @@ fun ActivityFavorites(
                     //lineHeight = 20.sp,
                     //fontFamily = FontFamily(Font(R.font.roboto)),
                     //fontWeight = FontWeight(400),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = onContainerLight,
                     //textAlign = TextAlign.Center,
                     letterSpacing = 0.1.sp,
                 ),
@@ -265,7 +267,7 @@ fun ActivityFavorites(
                           },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Background,
-                    contentColor = MaterialTheme.colorScheme.primary
+                    contentColor = onContainerLight
                 ),
                 modifier = Modifier
                     .offset(x = 200.dp)
@@ -343,7 +345,7 @@ fun RecommendationSection(
                 lineHeight = 20.sp,
                 //fontFamily = FontFamily(Font(R.font.roboto)),
                 fontWeight = FontWeight(400),
-                color = MaterialTheme.colorScheme.primary,
+                color = onContainerLight,
                 textAlign = TextAlign.Center,
                 letterSpacing = 0.1.sp,
             )
@@ -531,7 +533,7 @@ fun HomeScreen(
         "Yellow" -> Color(0xFFF9F1DC) // Yellow
         "Red" -> Color(0xFFF9DEDC) // Red
         "Green" -> Color(0xFFECF9DC) // Green
-        else -> HomeCard // Default case
+        else -> weatherCardLight // Default case
     }
 
     Column(

@@ -46,6 +46,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -98,19 +99,9 @@ fun WeatherCard(
     icon: String,
     cloudCoverDescription: String,
     waveheight: String,
-    windSpeed: String
+    windSpeed: String,
+    time: String
 ) {
-
-    // Tidsformat: yyyy-MM-dd'T'HH
-
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    var selectedTime by remember { mutableStateOf(LocalTime.now()) }
-    var isDatePickerOpen by remember { mutableStateOf(false) }
-    var isTimePickerOpen by remember { mutableStateOf(false) }
-    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val timeFormatter = DateTimeFormatter.ofPattern("'T'HH")
-    val context = LocalContext.current
-    val dateTimeString = "${selectedDate.format(dateFormatter)} ${selectedTime.format(timeFormatter)}"
 
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -126,6 +117,7 @@ fun WeatherCard(
                 .aspectRatio(1f),
             elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
             colors = CardDefaults.cardColors(containerColor = alertColor)
+
         ) {
             Column (
                 modifier = Modifier
@@ -248,64 +240,6 @@ fun WeatherCard(
                         )
                     }
                 }
-
-                // TODO: Date picker her
-
-                Row {
-                    OutlinedTextField(
-                        readOnly = true,
-                        value = selectedDate.format(dateFormatter),
-                        onValueChange = {},
-                        modifier = Modifier.clickable { isDatePickerOpen = true },
-                        label = { Text("Velg dato") }
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    OutlinedTextField(
-                        readOnly = true,
-                        value = selectedTime.format(timeFormatter),
-                        onValueChange = {},
-                        modifier = Modifier.clickable { isTimePickerOpen = true },
-                        label = { Text("Velg klokkeslett") }
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(onClick = { isTimePickerOpen = true }) {
-                        Text("Endre tidspunkt")
-                    }
-
-                }
-
-
-                if (isDatePickerOpen) {
-                    val datePickerDialog = android.app.DatePickerDialog(
-                        context,
-                        { _, year, month, dayOfMonth ->
-                            selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
-                            isDatePickerOpen = false
-                        },
-                        selectedDate.year,
-                        selectedDate.monthValue - 1,
-                        selectedDate.dayOfMonth
-                    )
-                    datePickerDialog.show()
-                    isDatePickerOpen = false
-                }
-
-                if (isTimePickerOpen) {
-                    val timePickerDialog = TimePickerDialog(
-                        context,
-                        { _, hourOfDay, minute ->
-                            selectedTime = LocalTime.of(hourOfDay, minute)
-                            isTimePickerOpen = false
-                        },
-                        selectedTime.hour,
-                        selectedTime.minute,
-                        true
-                    )
-                    timePickerDialog.show()
-                    isTimePickerOpen = false
-                }
-
-                Text("Selected Date and Time: $dateTimeString")
 
             }
         }
@@ -491,8 +425,28 @@ fun HomeScreen(
     val currentCityName by locationViewModel.currentCityName.collectAsState()
     val currentForcastResponse by forecastViewModel.forecast.collectAsState()
 
+    // Tidsformat: yyyy-MM-dd'T'HH
+
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var selectedTime by remember { mutableStateOf(LocalTime.now()) }
+    var isDatePickerOpen by remember { mutableStateOf(false) }
+    var isTimePickerOpen by remember { mutableStateOf(false) }
+    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val timeFormatter = DateTimeFormatter.ofPattern("HH")
+    val context = LocalContext.current
+
     var showNoNetworkDialog by remember {
         mutableStateOf(false)
+    }
+
+    var selected_time by remember {
+        mutableStateOf(time)
+    }
+
+    val currentForecast by derivedStateOf {
+        currentForcastResponse?.properties?.timeseries?.find {
+            it.time.contains(selected_time) ?: false
+        }
     }
 
     if (showNoNetworkDialog){
@@ -515,15 +469,11 @@ fun HomeScreen(
         "oceanData: ${oceanData?.properties?.timeseries}"
     )
 
-    val currentForecast = currentForcastResponse?.properties?.timeseries?.find {
-        it.time?.contains(time) ?: false
-    }
-
     val isAlertActive = remember(filteredFeatures) {
         filteredFeatures?.isNotEmpty() == true
     }
 
-    LaunchedEffect(userLocation) {
+    LaunchedEffect(userLocation, selected_time) {
         if (userLocation != null) {
             alertsViewModel.fetchAndFilterAlerts(
                 AlertsInfo(),
@@ -538,7 +488,7 @@ fun HomeScreen(
             )
 
             activityConditionCheckerViewModel.checkActivityConditions(
-                time = time,
+                time = selected_time,
                 latitude = userLocation!!.latitude() ,
                 longitude = userLocation!!.longitude()
             )
@@ -582,8 +532,9 @@ fun HomeScreen(
                     currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
                 ),
                 icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
-                waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
-                windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}"
+                waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(selected_time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
+                windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}",
+                time = selected_time
             )
         }else{
             showNoNetworkDialog = true
@@ -601,6 +552,70 @@ fun HomeScreen(
             locationViewModel = locationViewModel,
             navController = navController
         )
+
+        // TODO: Date picker her
+
+        Row {
+            OutlinedTextField(
+                readOnly = true,
+                value = selectedDate.format(dateFormatter),
+                onValueChange = {},
+                modifier = Modifier.clickable { isDatePickerOpen = true
+                    Log.d("HS","trykket datofelt")},
+                label = { Text("Velg dato") }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+
+            OutlinedTextField(
+                readOnly = true,
+                value = selectedTime.format(timeFormatter),
+                onValueChange = {},
+                modifier = Modifier.clickable { isTimePickerOpen = true },
+                label = { Text("Velg klokkeslett") }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(onClick = {
+                isTimePickerOpen = true
+            }) {
+                Text("Endre tidspunkt")
+            }
+
+        }
+
+        if (isDatePickerOpen) {
+            val datePickerDialog = android.app.DatePickerDialog(
+                context,
+                { _, year, month, dayOfMonth ->
+                    selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
+                    isDatePickerOpen = false
+                },
+                selectedDate.year,
+                selectedDate.monthValue - 1,
+                selectedDate.dayOfMonth
+            )
+            datePickerDialog.show()
+            isDatePickerOpen = false
+        }
+
+        if (isTimePickerOpen) {
+            val timePickerDialog = TimePickerDialog(
+                context,
+                { _, hourOfDay, minute ->
+                    selectedTime = LocalTime.of(hourOfDay, 0)
+                    isTimePickerOpen = false
+                },
+                selectedTime.hour,
+                selectedTime.minute,
+                true
+            )
+            timePickerDialog.show()
+            isTimePickerOpen = false
+        }
+
+        selected_time = selectedDate.atTime(selectedTime).format(formatter)
+
+        Log.d("HS", "selected time: $selected_time")
+
     }
 }
 

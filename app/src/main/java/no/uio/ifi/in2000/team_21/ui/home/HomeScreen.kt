@@ -2,11 +2,13 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 
 
+import android.app.TimePickerDialog
 import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,14 +29,18 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.TextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -59,6 +65,7 @@ import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -70,6 +77,8 @@ import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.OceanForecastViewModel
+import java.time.LocalDate
+import java.time.LocalTime
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -78,6 +87,8 @@ import java.time.temporal.ChronoUnit
 import kotlin.random.Random
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WeatherCard(
     cityName: String,
@@ -89,6 +100,17 @@ fun WeatherCard(
     waveheight: String,
     windSpeed: String
 ) {
+
+    // Tidsformat: yyyy-MM-dd'T'HH
+
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var selectedTime by remember { mutableStateOf(LocalTime.now()) }
+    var isDatePickerOpen by remember { mutableStateOf(false) }
+    var isTimePickerOpen by remember { mutableStateOf(false) }
+    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val timeFormatter = DateTimeFormatter.ofPattern("'T'HH")
+    val context = LocalContext.current
+    val dateTimeString = "${selectedDate.format(dateFormatter)} ${selectedTime.format(timeFormatter)}"
 
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -226,6 +248,65 @@ fun WeatherCard(
                         )
                     }
                 }
+
+                // TODO: Date picker her
+
+                Row {
+                    OutlinedTextField(
+                        readOnly = true,
+                        value = selectedDate.format(dateFormatter),
+                        onValueChange = {},
+                        modifier = Modifier.clickable { isDatePickerOpen = true },
+                        label = { Text("Velg dato") }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    OutlinedTextField(
+                        readOnly = true,
+                        value = selectedTime.format(timeFormatter),
+                        onValueChange = {},
+                        modifier = Modifier.clickable { isTimePickerOpen = true },
+                        label = { Text("Velg klokkeslett") }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(onClick = { isTimePickerOpen = true }) {
+                        Text("Endre tidspunkt")
+                    }
+
+                }
+
+
+                if (isDatePickerOpen) {
+                    val datePickerDialog = android.app.DatePickerDialog(
+                        context,
+                        { _, year, month, dayOfMonth ->
+                            selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
+                            isDatePickerOpen = false
+                        },
+                        selectedDate.year,
+                        selectedDate.monthValue - 1,
+                        selectedDate.dayOfMonth
+                    )
+                    datePickerDialog.show()
+                    isDatePickerOpen = false
+                }
+
+                if (isTimePickerOpen) {
+                    val timePickerDialog = TimePickerDialog(
+                        context,
+                        { _, hourOfDay, minute ->
+                            selectedTime = LocalTime.of(hourOfDay, minute)
+                            isTimePickerOpen = false
+                        },
+                        selectedTime.hour,
+                        selectedTime.minute,
+                        true
+                    )
+                    timePickerDialog.show()
+                    isTimePickerOpen = false
+                }
+
+                Text("Selected Date and Time: $dateTimeString")
+
             }
         }
     }
@@ -384,64 +465,6 @@ fun RecommendationSection(
         }
     }
 }
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar(
-    navController: NavController
-) {
-    TopAppBar(
-        title = {  },
-        actions = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Box(Modifier.weight(1f))
-
-                Row {
-                    IconButton(
-                        onClick = {
-                                  // TODO: Tilbake navigering
-                                  },
-                        modifier = Modifier
-                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
-                    ) {
-                        Text("Hjem", style = TextStyle(
-                            fontSize = 20.sp
-                        )
-                        )
-                    }
-                    IconButton(
-                        onClick = { navController.navigate(Screen.MapScreen.route) },
-                        modifier = Modifier
-                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
-                    ) {
-                        Text("Kart", style = TextStyle(
-                            fontSize = 20.sp
-                        ))
-                    }
-                }
-
-                Box(Modifier.weight(1f)) {
-                    IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) }) {
-                        Icon(
-                            Icons.Default.Settings,
-                            contentDescription = "Account icon",
-                            modifier = Modifier.size(36.dp)
-                        )
-                    }
-                }
-            }
-        },
-        modifier = Modifier
-            .padding(top = 16.dp)
-    )
-
-}
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)

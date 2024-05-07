@@ -9,4 +9,6 @@ data class User(
     val hobby: String,
     val creationDate: Date,
     val history: List<ActivityLog> = listOf(),
+    val password: String,
+    val userName: String
 )

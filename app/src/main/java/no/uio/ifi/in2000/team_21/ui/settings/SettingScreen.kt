@@ -326,7 +326,9 @@ fun HistorySettings(navController: NavController){
             .fillMaxWidth()
             .height(56.dp),
         colors = CardDefaults.cardColors(containerLight)
-    ){ Column (){
+    ){ Column (
+
+    ){
         //Friends
         HorizontalDivider(
             color = profileLight,
@@ -345,7 +347,8 @@ fun HistorySettings(navController: NavController){
             modifier = Modifier
                 .padding(start = 25.dp, end = 25.dp)
         )
-    }}
+    }
+    }
 }
 
 

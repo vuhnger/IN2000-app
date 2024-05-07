@@ -52,6 +52,9 @@ import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
 import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
+import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
+import no.uio.ifi.in2000.team_21.ui.theme.containerLight
+import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 
 @Composable
@@ -70,7 +73,7 @@ fun ActivityCard(
     ) {
         Column(
             modifier = Modifier
-                .background(Color.White)
+                .background(backgroundLight)
         ) {
 
             Row(

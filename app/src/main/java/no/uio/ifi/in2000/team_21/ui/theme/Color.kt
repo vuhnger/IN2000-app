@@ -16,7 +16,11 @@ val Background = Color(0xFFF7F8FF)
 //Light mode
 val backgroundLight = Color(0xFFF7F8FF)
 val containerLight = Color(0xFFEBEFFF)
+//icons & text
 val onContainerLight = Color(0xFF00145D)
+//ProfileBackground
 val profileLight = Color(0xFFBCCBFF)
+//CardColor
+val weatherCardLight = Color(0xFFDDE4FF)
 
 // Vannblå farger

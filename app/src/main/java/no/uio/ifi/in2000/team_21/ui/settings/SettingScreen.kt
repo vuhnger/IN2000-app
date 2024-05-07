@@ -56,15 +56,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.model.user.User
 import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
 import no.uio.ifi.in2000.team_21.ui.theme.containerLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.theme.profileLight
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-fun SettingScreen(navController: NavController) {
+fun SettingScreen(
+    navController: NavController,
+    userViewModel: UserViewModel
+) {
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
 
@@ -110,7 +115,11 @@ fun SettingScreen(navController: NavController) {
                 .padding(innerPadding)
         ){
             //Profile
-            ProfileCard(navController, onClick = { navController.navigate(Screen.ProfileScreen.route)})
+            ProfileCard(
+                navController,
+                userViewModel = userViewModel,
+                onClick = { navController.navigate(Screen.ProfileScreen.route)}
+            )
             Spacer(modifier = Modifier.padding(6.dp))
 
             //Darkmode
@@ -156,7 +165,11 @@ fun SettingScreen(navController: NavController) {
 
 //Profile
 @Composable
-fun ProfileCard(navController: NavController, onClick: () -> Unit){
+fun ProfileCard(
+    navController: NavController,
+    onClick: () -> Unit,
+    userViewModel: UserViewModel
+){
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -178,7 +191,7 @@ fun ProfileCard(navController: NavController, onClick: () -> Unit){
                     modifier = Modifier
                         .width(190.dp)
                         .padding(bottom = 5.dp, start = 15.dp),
-                    text = "Ingen bruker laget",
+                    text = userViewModel.currentUser.name,
 
                     style = TextStyle(
                         fontSize = 18.sp,
@@ -193,7 +206,7 @@ fun ProfileCard(navController: NavController, onClick: () -> Unit){
                     modifier = Modifier
                         .width(190.dp)
                         .padding(start = 15.dp),
-                    text = "Ingen hobby valgt",
+                    text = userViewModel.currentUser.hobby,
                     style = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
@@ -390,5 +403,5 @@ fun ProfileImage(){
 @Preview
 @Composable
 fun SettingScreenTest() {
-    SettingScreen(navController = rememberNavController())
+    //SettingScreen(navController = rememberNavController())
 }

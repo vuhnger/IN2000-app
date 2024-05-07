@@ -43,6 +43,7 @@ import no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 
 
 sealed class Screen(val route: String){
@@ -116,6 +117,7 @@ fun App(){
     val alertsViewModel: AlertsViewModel = viewModel()
     val activityConditionCheckerViewModel: ActivityConditionCheckerViewModel = viewModel()
     val oceanForecastViewModel: OceanForecastViewModel = viewModel()
+    val userViewModel: UserViewModel = viewModel()
 
     val defaultActivity: ActivityModel = ActivityModels.FISHING
 
@@ -141,7 +143,10 @@ fun App(){
         }
 
         composable(Screen.SettingScreen.route){
-            SettingScreen(navController = navController)
+            SettingScreen(
+                navController = navController,
+                userViewModel = userViewModel
+            )
         }
 
         composable(Screen.AboutUsScreen.route){
@@ -149,7 +154,10 @@ fun App(){
         }
 
         composable(Screen.ProfileScreen.route){
-            ProfileScreen(navController = navController)
+            ProfileScreen(
+                navController = navController,
+                userViewModel = userViewModel
+            )
         }
         composable(Screen.FriendsActivityScreen.route){
             FriendsActivityScreen(navController = navController)

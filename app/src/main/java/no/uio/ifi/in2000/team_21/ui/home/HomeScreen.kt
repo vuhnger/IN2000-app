@@ -207,20 +207,22 @@ fun WeatherCard(
                             .weight(1f)
                     )
 
-                    Text(
-                        text = "Bølger: " + waveheight,
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            lineHeight = 20.sp,
-                            //fontFamily = FontFamily(Font(R.font.roboto)),
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF00145D),
-                            textAlign = TextAlign.Center,
-                            letterSpacing = 0.1.sp,
-                        ),
-                        modifier = Modifier
-                            .weight(1f)
-                    )
+                    if ( !waveheight.contains("null")){
+                        Text(
+                            text = "Bølger: " + waveheight,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                lineHeight = 20.sp,
+                                //fontFamily = FontFamily(Font(R.font.roboto)),
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF00145D),
+                                textAlign = TextAlign.Center,
+                                letterSpacing = 0.1.sp,
+                            ),
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+                    }
                 }
             }
         }

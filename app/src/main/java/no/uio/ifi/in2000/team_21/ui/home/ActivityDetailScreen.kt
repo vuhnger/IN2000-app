@@ -75,7 +75,10 @@ fun ActivityDetailScreen(
                 title = { Text(text = "Aktivitet loggført!")},
                 text = { Text(text = "Du finner denne i historikk.")},
                 buttons = {
-                    Button(onClick = { showDialog = false }) {
+                    Button(onClick = {
+                        showDialog = false
+                        navController.popBackStack()
+                    }) {
                         Text(text = "Lukk")
                     }
                 }

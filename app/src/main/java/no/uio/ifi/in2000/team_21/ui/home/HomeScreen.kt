@@ -3,6 +3,9 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 
 import android.app.TimePickerDialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import android.os.Build
 import android.util.Log
@@ -87,6 +90,32 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random
 
+private fun isInternetAvailable(context: Context): Boolean {
+    var result = false
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val networkCapabilities = connectivityManager.activeNetwork ?: return false
+        val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+        result = when {
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+    } else {
+        connectivityManager.run {
+            connectivityManager.activeNetworkInfo?.run {
+                result = when (type) {
+                    ConnectivityManager.TYPE_WIFI -> true
+                    ConnectivityManager.TYPE_MOBILE -> true
+                    ConnectivityManager.TYPE_ETHERNET -> true
+                    else -> false
+                }
+            }
+        }
+    }
+    return result
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -102,96 +131,106 @@ fun WeatherCard(
     windSpeed: String,
     time: String
 ) {
-
-    Row(
-        horizontalArrangement = Arrangement.Center,
+    Card(
         modifier = Modifier
-            .fillMaxWidth()
-    ){
-
-        Card(
+            .padding(start = 40.dp, end = 40.dp, top = 16.dp, bottom = 16.dp)
+            .width(320.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+        colors = CardDefaults.cardColors(containerColor = alertColor)
+    ) {
+        Column (
             modifier = Modifier
-                .padding(40.dp)
-                .width(320.dp)
-                .height(280.dp)
-                .aspectRatio(1f),
-            elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
-            colors = CardDefaults.cardColors(containerColor = alertColor)
-
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column (
+            Text(
+                text = "Min posisjon",
+                style = TextStyle(
+                    fontSize = 25.sp,
+                    lineHeight = 20.sp,
+                    //fontFamily = FontFamily(Font(R.font.roboto)),
+                    fontWeight = FontWeight(500),
+                    color = onContainerLight,
+                    textAlign = TextAlign.Center,
+                    letterSpacing = 0.1.sp,
+                )
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = cityName,
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    lineHeight = 20.sp,
+                    //fontFamily = FontFamily(Font(R.font.roboto)),
+                    fontWeight = FontWeight(400),
+                    color = onContainerLight,
+                    textAlign = TextAlign.Center,
+                    letterSpacing = 0.1.sp,
+                )
+            )
+            Spacer(Modifier.height(16.dp))
+            Box(
+                contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
+                    .padding(start = 20.dp)
             ) {
-                Text(
-                    text = "Min posisjon",
-                    style = TextStyle(
-                        fontSize = 25.sp,
-                        lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.roboto)),
-                        fontWeight = FontWeight(500),
-                        color = onContainerLight,
-                        textAlign = TextAlign.Center,
-                        letterSpacing = 0.1.sp,
-                    )
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = cityName,
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.roboto)),
-                        fontWeight = FontWeight(400),
-                        color = onContainerLight,
-                        textAlign = TextAlign.Center,
-                        letterSpacing = 0.1.sp,
-                    )
-                )
-                Spacer(Modifier.height(16.dp))
-                Box(
-                    contentAlignment = Alignment.CenterStart,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        WeatherIcon(
-                            element = icon
+                    WeatherIcon(
+                        element = icon
+                    )
+                    Spacer(modifier = Modifier.padding(12.dp))
+                    Text(
+                        text = temperature,
+                        style = TextStyle(
+                            fontSize = 70.sp,
+                            lineHeight = 16.sp,
+                            //fontFamily = FontFamily(Font(R.font.roboto)),
+                            //fontWeight = FontWeight(400),
+                            color = onContainerLight,
+                            textAlign = TextAlign.Center,
+                            letterSpacing = 0.5.sp,
+                        ),
+                    )
+                    if (isAlertActive) {
+                        Icon(
+                            imageVector = Icons.Default.Warning,
+                            contentDescription = "Alert active",
+                            modifier = Modifier
+                                .padding(start = 16.dp)
+                                .size(40.dp)
                         )
-                        Spacer(modifier = Modifier.padding(12.dp))
-                        Text(
-                            text = temperature,
-                            style = TextStyle(
-                                fontSize = 70.sp,
-                                lineHeight = 16.sp,
-                                //fontFamily = FontFamily(Font(R.font.roboto)),
-                                //fontWeight = FontWeight(400),
-                                color = onContainerLight,
-                                textAlign = TextAlign.Center,
-                                letterSpacing = 0.5.sp,
-                            ),
-                        )
-                        if (isAlertActive) {
-                            Icon(
-                                imageVector = Icons.Default.Warning,
-                                contentDescription = "Alert active",
-                                modifier = Modifier
-                                    .padding(start = 16.dp)
-                                    .size(40.dp)
-                            )
-                        }
                     }
                 }
-                Spacer(Modifier.height(4.dp))
+            }
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = cloudCoverDescription,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    lineHeight = 20.sp,
+                    //fontFamily = FontFamily(Font(R.font.roboto)),
+                    fontWeight = FontWeight(400),
+                    color = onContainerLight,
+                    textAlign = TextAlign.Center,
+                    letterSpacing = 0.1.sp,
+                )
+            )
+            Spacer(Modifier.height(4.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+            ) {
+
                 Text(
-                    text = cloudCoverDescription,
+                    text = "Vind: " + windSpeed,
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 20.sp,
@@ -200,16 +239,14 @@ fun WeatherCard(
                         color = onContainerLight,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.1.sp,
-                    )
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
                 )
-                Spacer(Modifier.height(4.dp))
 
-                Row(
-
-                ) {
-
+                if ( !waveheight.contains("null")){
                     Text(
-                        text = "Vind: " + windSpeed,
+                        text = "Bølger: " + waveheight,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
@@ -222,29 +259,13 @@ fun WeatherCard(
                         modifier = Modifier
                             .weight(1f)
                     )
-
-                    if ( !waveheight.contains("null")){
-                        Text(
-                            text = "Bølger: " + waveheight,
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                lineHeight = 20.sp,
-                                //fontFamily = FontFamily(Font(R.font.roboto)),
-                                fontWeight = FontWeight(400),
-                                color = onContainerLight,
-                                textAlign = TextAlign.Center,
-                                letterSpacing = 0.1.sp,
-                            ),
-                            modifier = Modifier
-                                .weight(1f)
-                        )
-                    }
                 }
-
             }
+
         }
     }
 }
+
 
 
 @Composable
@@ -436,16 +457,18 @@ fun HomeScreen(
     val context = LocalContext.current
 
     var showNoNetworkDialog by remember {
-        mutableStateOf(false)
+        mutableStateOf(isInternetAvailable(context))
     }
 
     var selected_time by remember {
         mutableStateOf(time)
     }
 
-    val currentForecast by derivedStateOf {
-        currentForcastResponse?.properties?.timeseries?.find {
-            it.time.contains(selected_time) ?: false
+    val currentForecast by remember{
+        derivedStateOf {
+            currentForcastResponse?.properties?.timeseries?.find {
+                it.time?.contains(selected_time) ?: false
+            }
         }
     }
 
@@ -519,7 +542,7 @@ fun HomeScreen(
             navController = navController
         )
 
-        if(currentForcastResponse != null){
+        if(isInternetAvailable(context)){
             WeatherCard(
                 cityName = currentCityName ?: "---",
                 temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
@@ -537,48 +560,43 @@ fun HomeScreen(
                 time = selected_time
             )
         }else{
-            showNoNetworkDialog = true
+
         }
-
-        ActivityFavorites(
-            viewModel = activitiesViewModel,
-            navController = navController,
-            activityConditionCheckerViewModel = activityConditionCheckerViewModel
-        )
-
-        RecommendationSection(
-            viewModel = activitiesViewModel,
-            activityConditionCheckerViewModel = activityConditionCheckerViewModel,
-            locationViewModel = locationViewModel,
-            navController = navController
-        )
 
         // TODO: Date picker her
 
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .padding(start = 100.dp, end = 40.dp)
+        ) {
+
             OutlinedTextField(
                 readOnly = true,
                 value = selectedDate.format(dateFormatter),
                 onValueChange = {},
-                modifier = Modifier.clickable { isDatePickerOpen = true
-                    Log.d("HS","trykket datofelt")},
-                label = { Text("Velg dato") }
+                modifier = Modifier
+                    .clickable {
+                        isDatePickerOpen = true
+                    Log.d("HS","trykket datofelt")
+                               }
+                    .width(130.dp)
+                    .height(60.dp),
+                label = { Text("Dato") }
             )
+
             Spacer(modifier = Modifier.width(8.dp))
 
             OutlinedTextField(
                 readOnly = true,
                 value = selectedTime.format(timeFormatter),
                 onValueChange = {},
-                modifier = Modifier.clickable { isTimePickerOpen = true },
-                label = { Text("Velg klokkeslett") }
+                modifier = Modifier
+                    .clickable { isTimePickerOpen = true }
+                    .width(66.dp)
+                    .height(60.dp),
+                label = { Text("Tid") }
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = {
-                isTimePickerOpen = true
-            }) {
-                Text("Endre tidspunkt")
-            }
 
         }
 
@@ -616,6 +634,18 @@ fun HomeScreen(
 
         Log.d("HS", "selected time: $selected_time")
 
+        ActivityFavorites(
+            viewModel = activitiesViewModel,
+            navController = navController,
+            activityConditionCheckerViewModel = activityConditionCheckerViewModel
+        )
+
+        RecommendationSection(
+            viewModel = activitiesViewModel,
+            activityConditionCheckerViewModel = activityConditionCheckerViewModel,
+            locationViewModel = locationViewModel,
+            navController = navController
+        )
     }
 }
 

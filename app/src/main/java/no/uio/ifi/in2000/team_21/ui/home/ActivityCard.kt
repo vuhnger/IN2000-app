@@ -214,11 +214,12 @@ fun ActivityCardSmall(
 
             Spacer(modifier = Modifier.padding(5.dp))
 
-            Icon(
-                painter = painterResource(id = activity.icon),
-                contentDescription = "Icon of ${activity.activityName}",
+            Image(
+                painter = painterResource(id = activity.imageId),
+                contentDescription = "",
                 modifier = Modifier
-                    .weight(1f)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .clip(RoundedCornerShape(size = 16.dp))
             )
         }
     }

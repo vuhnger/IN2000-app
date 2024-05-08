@@ -7,9 +7,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,6 +25,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Warning
@@ -35,10 +34,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -64,7 +63,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.zIndex
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -300,7 +298,7 @@ fun ActivityFavorites(
 
         Spacer(Modifier.height(8.dp))
 
-        ActivityCardGridHorizontalSmall(
+        ActivityIconGridHorizontalSmall(
             navController = navController,
             activitiesViewModel = viewModel
         )
@@ -372,19 +370,19 @@ fun RecommendationSection(
         }
 
         if(filteredActivities.isEmpty()){
-            Card(
-
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Ingen aktiviteter kan anbefales akkurat nå. Dette kan skyldes upassende vær eller manglende nettverkstilkobling."
+                    text = "Oi! Her var det ingen aktiviteter å anbefale. Dette kan skyldes dårlig vær eller manglende internett."
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Mens du venter, her er en fakta om vær ved sjøen"
+                    text = "Mens du venter, her er en fakta om vær ved sjøen! "
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(text = getRandomWeatherFact())
             }
         }else{
@@ -394,6 +392,8 @@ fun RecommendationSection(
                         activity = recommendation,
                         navController = navController
                     )
+                    
+                    Spacer(modifier = Modifier.padding(16.dp))
                 }
             }
         }
@@ -506,19 +506,24 @@ fun HomeScreen(
         "Yellow" -> Color(0xFFF9F1DC) // Yellow
         "Red" -> Color(0xFFF9DEDC) // Red
         "Green" -> Color(0xFFECF9DC) // Green
-        else -> weatherCardLight // Default case
+        else -> Color.White
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                color = Color(0xFFEBEFFF)
+            )
     ){
+
+        // Bakgrunnsbilde for skjermen
         Image(
             painter = painterResource(id = R.drawable.waterbackground),
             contentDescription = "",
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .scale(2f)
+                .scale(1.2f)
                 .fillMaxWidth()
         )
 
@@ -571,7 +576,8 @@ fun HomeScreen(
                         }
                         .width(130.dp)
                         .height(60.dp),
-                    label = { Text("Dato") }
+                    label = { Text("Dato") },
+                    shape = RoundedCornerShape(16.dp)
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -584,7 +590,8 @@ fun HomeScreen(
                         .clickable { isTimePickerOpen = true }
                         .width(66.dp)
                         .height(60.dp),
-                    label = { Text("Tid") }
+                    label = { Text("Tid") },
+                    shape = RoundedCornerShape(16.dp)
                 )
 
             }

@@ -16,14 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -33,7 +29,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -58,8 +53,6 @@ import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
 import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
 import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.containerLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 
 @Composable
@@ -349,14 +342,14 @@ fun ActivityCardHorizontalWide(
 
 */
 @Composable
-fun ActivityCardGridHorizontalSmall(
+fun ActivityIconGridHorizontalSmall(
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
 ) {
     if (activitiesViewModel.activityUIstate.favorites.isEmpty()){
         Card(
         modifier = Modifier
-            .padding(start = 32.dp)
+            .padding(start = 16.dp, end = 16.dp)
         ) {
             Text(
                 text = "Legg til favorittaktiviteter ved å trykke på +",
@@ -364,7 +357,7 @@ fun ActivityCardGridHorizontalSmall(
                     .background(
                         color = Color(0xFFC4E2F6) // denne endrer fargen på tekstbakgrunnen
                     )
-                    .padding(4.dp)
+                    .padding(16.dp)
             )
         }
     }else{
@@ -373,16 +366,11 @@ fun ActivityCardGridHorizontalSmall(
                 .height(84.dp)
         ) {
             items(activitiesViewModel.activityUIstate.favorites) { activity ->
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 80.dp)
-                ) {
-                    ActivityIconSmall(
-                        activity = activity,
-                        activitiesViewModel = activitiesViewModel,
-                        navController = navController
-                    )
-                }
+                ActivityIconSmall(
+                    activity = activity,
+                    activitiesViewModel = activitiesViewModel,
+                    navController = navController
+                )
             }
         }
     }

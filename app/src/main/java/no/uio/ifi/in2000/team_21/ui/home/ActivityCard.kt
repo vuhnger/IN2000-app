@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -181,7 +182,7 @@ fun ActivityCardSmall(
 ){
     Card(
         modifier = Modifier
-            .width(195.dp)
+            .width(170.dp)
             .height(270.dp)
             .padding(start = 10.dp, top = 20.dp, end = 10.dp)
             .clickable {
@@ -218,8 +219,9 @@ fun ActivityCardSmall(
                 painter = painterResource(id = activity.imageId),
                 contentDescription = "",
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .padding(start = 10.dp, end = 10.dp, bottom = 16.dp)
                     .clip(RoundedCornerShape(size = 16.dp))
+                    .scale(1.5f)
             )
         }
     }
@@ -230,19 +232,16 @@ fun ActivityIconSmall(
     activity: ActivityModel,
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
-){
-    Icon(
-        painter = painterResource(id = activity.icon),
-        contentDescription = "Icon of ${activity.activityName}",
+) {
+    Column( // Use Column to stack icon and text vertically
         modifier = Modifier
             .padding(15.dp)
             .background(
                 color = Color.White,
                 shape = CircleShape
-            ) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
-            .clip(CircleShape) // Klipper ikonet til en sirkelform
-            //.border(2.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
-            .padding(15.dp) // Justering for å beholde plassering og størrelse
+            )
+            .clip(CircleShape)
+            .padding(15.dp)
             .scale(2f)
             .clickable {
                 navController.navigate(
@@ -251,7 +250,20 @@ fun ActivityIconSmall(
                     )
                 )
             }
-    )
+    ) {
+        Icon( // Existing icon within the Column
+            painter = painterResource(id = activity.icon),
+            contentDescription = "Icon of ${activity.activityName}",
+            modifier = Modifier.align(Alignment.CenterHorizontally) // Center icon horizontally
+        )
+        Spacer(modifier = Modifier.height(8.dp)) // Add spacing between icon and text
+        Text( // Text element for activity name
+            text = activity.activityName,
+            textAlign = TextAlign.Center, // Center text horizontally
+            color = Color.Black,
+            fontSize = 14.sp // Adjust font size as needed
+        )
+    }
 }
 
 
@@ -343,21 +355,34 @@ fun ActivityCardGridHorizontalSmall(
 ) {
     if (activitiesViewModel.activityUIstate.favorites.isEmpty()){
         Card(
-
+        modifier = Modifier
+            .padding(start = 32.dp)
         ) {
-            Text(text = "Legg til favorittaktiviteter ved å trykke på +")
+            Text(
+                text = "Legg til favorittaktiviteter ved å trykke på +",
+                modifier = Modifier
+                    .background(
+                        color = Color(0xFFC4E2F6) // denne endrer fargen på tekstbakgrunnen
+                    )
+                    .padding(4.dp)
+            )
         }
     }else{
         LazyRow(
             modifier = Modifier
                 .height(84.dp)
         ) {
-            this.items(activitiesViewModel.activityUIstate.favorites){activity ->
-                ActivityIconSmall(
-                    activity = activity,
-                    activitiesViewModel = activitiesViewModel,
-                    navController = navController
-                )
+            items(activitiesViewModel.activityUIstate.favorites) { activity ->
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 80.dp)
+                ) {
+                    ActivityIconSmall(
+                        activity = activity,
+                        activitiesViewModel = activitiesViewModel,
+                        navController = navController
+                    )
+                }
             }
         }
     }

@@ -10,6 +10,7 @@ import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,35 +18,27 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.TextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -70,11 +63,11 @@ import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.zIndex
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
-import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
-import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.theme.weatherCardLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
@@ -89,36 +82,22 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random
+import no.uio.ifi.in2000.team_21.R
 
 private fun isInternetAvailable(context: Context): Boolean {
     var result = false
     val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val networkCapabilities = connectivityManager.activeNetwork ?: return false
-        val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
-        result = when {
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
-        }
-    } else {
-        connectivityManager.run {
-            connectivityManager.activeNetworkInfo?.run {
-                result = when (type) {
-                    ConnectivityManager.TYPE_WIFI -> true
-                    ConnectivityManager.TYPE_MOBILE -> true
-                    ConnectivityManager.TYPE_ETHERNET -> true
-                    else -> false
-                }
-            }
-        }
+    val networkCapabilities = connectivityManager.activeNetwork ?: return false
+    val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+    result = when {
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        else -> false
     }
     return result
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WeatherCard(
     cityName: String,
@@ -230,7 +209,7 @@ fun WeatherCard(
             ) {
 
                 Text(
-                    text = "Vind: " + windSpeed,
+                    text = "Vind: $windSpeed",
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 20.sp,
@@ -246,7 +225,7 @@ fun WeatherCard(
 
                 if ( !waveheight.contains("null")){
                     Text(
-                        text = "Bølger: " + waveheight,
+                        text = "Bølger: $waveheight",
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
@@ -310,7 +289,7 @@ fun ActivityFavorites(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Button add to favorites",
+                    contentDescription = "Favorittknapp",
                     modifier = Modifier
                         .padding(1.dp)
                         .scale(1.5f)
@@ -421,8 +400,6 @@ fun RecommendationSection(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -436,9 +413,9 @@ fun HomeScreen(
 
     val norwayZone = ZoneId.of("Europe/Oslo")
 
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
+    val dateFormatterBackEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
 
-    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
+    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(dateFormatterBackEnd)
 
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
@@ -453,11 +430,12 @@ fun HomeScreen(
     var isDatePickerOpen by remember { mutableStateOf(false) }
     var isTimePickerOpen by remember { mutableStateOf(false) }
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val dateFormatterFrontEnd = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     val timeFormatter = DateTimeFormatter.ofPattern("HH")
     val context = LocalContext.current
 
     var showNoNetworkDialog by remember {
-        mutableStateOf(isInternetAvailable(context))
+        mutableStateOf(false)
     }
 
     var selected_time by remember {
@@ -531,121 +509,135 @@ fun HomeScreen(
         else -> weatherCardLight // Default case
     }
 
-    Column(
+    Box(
         modifier = Modifier
-            .width(360.dp)
-            .height(50.dp)
-            .background(color = Background)
-    ) {
-
-        TopBarComponent(
-            navController = navController
+            .fillMaxSize()
+    ){
+        Image(
+            painter = painterResource(id = R.drawable.waterbackground),
+            contentDescription = "",
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .scale(2f)
+                .fillMaxWidth()
         )
 
-        if(isInternetAvailable(context)){
-            WeatherCard(
-                cityName = currentCityName ?: "---",
-                temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
-                    "celsius" -> "${currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()}°"
-                    else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()
-                },
-                alertColor = alertColor,
-                isAlertActive = isAlertActive,
-                cloudCoverDescription = forecastViewModel.describeCloudCover(
-                    currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
-                ),
-                icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
-                waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(selected_time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
-                windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}",
-                time = selected_time
-            )
-        }else{
-
-        }
-
-        // TODO: Date picker her
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
+        Column(
             modifier = Modifier
-                .padding(start = 100.dp, end = 40.dp)
+                .fillMaxSize()
         ) {
 
-            OutlinedTextField(
-                readOnly = true,
-                value = selectedDate.format(dateFormatter),
-                onValueChange = {},
+            TopBarComponent(
+                navController = navController
+            )
+
+            if(isInternetAvailable(context)){
+                WeatherCard(
+                    cityName = currentCityName ?: "---",
+                    temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
+                        "celsius" -> "${currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()}°"
+                        else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()
+                    },
+                    alertColor = alertColor,
+                    isAlertActive = isAlertActive,
+                    cloudCoverDescription = forecastViewModel.describeCloudCover(
+                        currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
+                    ),
+                    icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
+                    waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(selected_time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
+                    windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}",
+                    time = selected_time
+                )
+            }else{
+                showNoNetworkDialog = true
+            }
+
+            // TODO: Date picker her
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .clickable {
-                        isDatePickerOpen = true
-                    Log.d("HS","trykket datofelt")
-                               }
-                    .width(130.dp)
-                    .height(60.dp),
-                label = { Text("Dato") }
+                    .padding(start = 100.dp, end = 40.dp)
+            ) {
+
+                OutlinedTextField(
+                    readOnly = true,
+                    value = selectedDate.format(dateFormatterFrontEnd),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .clickable {
+                            isDatePickerOpen = true
+                            Log.d("HS", "trykket datofelt")
+                        }
+                        .width(130.dp)
+                        .height(60.dp),
+                    label = { Text("Dato") }
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                OutlinedTextField(
+                    readOnly = true,
+                    value = selectedTime.format(timeFormatter),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .clickable { isTimePickerOpen = true }
+                        .width(66.dp)
+                        .height(60.dp),
+                    label = { Text("Tid") }
+                )
+
+            }
+
+            if (isDatePickerOpen) {
+                val datePickerDialog = android.app.DatePickerDialog(
+                    context,
+                    { _, year, month, dayOfMonth ->
+                        selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
+                        isDatePickerOpen = false
+                    },
+                    selectedDate.year,
+                    selectedDate.monthValue - 1,
+                    selectedDate.dayOfMonth
+                )
+                datePickerDialog.show()
+                isDatePickerOpen = false
+            }
+
+            if (isTimePickerOpen) {
+                val timePickerDialog = TimePickerDialog(
+                    context,
+                    { _, hourOfDay, minute ->
+                        selectedTime = LocalTime.of(hourOfDay, 0)
+                        isTimePickerOpen = false
+                    },
+                    selectedTime.hour,
+                    selectedTime.minute,
+                    true
+                )
+                timePickerDialog.show()
+                isTimePickerOpen = false
+            }
+
+            selected_time = selectedDate.atTime(selectedTime).format(dateFormatterBackEnd)
+
+            Log.d("HS", "selected time: $selected_time")
+
+            ActivityFavorites(
+                viewModel = activitiesViewModel,
+                navController = navController,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
-
-            OutlinedTextField(
-                readOnly = true,
-                value = selectedTime.format(timeFormatter),
-                onValueChange = {},
-                modifier = Modifier
-                    .clickable { isTimePickerOpen = true }
-                    .width(66.dp)
-                    .height(60.dp),
-                label = { Text("Tid") }
+            RecommendationSection(
+                viewModel = activitiesViewModel,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel,
+                locationViewModel = locationViewModel,
+                navController = navController
             )
-
         }
-
-        if (isDatePickerOpen) {
-            val datePickerDialog = android.app.DatePickerDialog(
-                context,
-                { _, year, month, dayOfMonth ->
-                    selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
-                    isDatePickerOpen = false
-                },
-                selectedDate.year,
-                selectedDate.monthValue - 1,
-                selectedDate.dayOfMonth
-            )
-            datePickerDialog.show()
-            isDatePickerOpen = false
-        }
-
-        if (isTimePickerOpen) {
-            val timePickerDialog = TimePickerDialog(
-                context,
-                { _, hourOfDay, minute ->
-                    selectedTime = LocalTime.of(hourOfDay, 0)
-                    isTimePickerOpen = false
-                },
-                selectedTime.hour,
-                selectedTime.minute,
-                true
-            )
-            timePickerDialog.show()
-            isTimePickerOpen = false
-        }
-
-        selected_time = selectedDate.atTime(selectedTime).format(formatter)
-
-        Log.d("HS", "selected time: $selected_time")
-
-        ActivityFavorites(
-            viewModel = activitiesViewModel,
-            navController = navController,
-            activityConditionCheckerViewModel = activityConditionCheckerViewModel
-        )
-
-        RecommendationSection(
-            viewModel = activitiesViewModel,
-            activityConditionCheckerViewModel = activityConditionCheckerViewModel,
-            locationViewModel = locationViewModel,
-            navController = navController
-        )
     }
+
+
 }
 

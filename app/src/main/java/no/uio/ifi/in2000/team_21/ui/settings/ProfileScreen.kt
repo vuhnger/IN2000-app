@@ -53,13 +53,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.containerLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
-import no.uio.ifi.in2000.team_21.ui.theme.profileLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,7 +94,7 @@ fun ProfileScreen (
                 title = {
                     Text(
                         "Profil",
-                        color = onContainerLight
+                        color = MidnightBlue
                     )
                 },
                 navigationIcon = {
@@ -107,16 +106,16 @@ fun ProfileScreen (
                         Icon(
                             contentDescription = "Tilbake",
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            tint = onContainerLight,
+                            tint = MidnightBlue,
                             modifier = Modifier
                                 .size(30.dp)
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(backgroundLight)
+                colors = TopAppBarDefaults.topAppBarColors(Background)
             )
         },
-        containerColor = backgroundLight
+        containerColor = Background
     ) {innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -138,15 +137,15 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Navn", color = onContainerLight) }, //her endres vel variabelen her og
+                label = { Text("Navn", color = MidnightBlue) }, //her endres vel variabelen her og
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = onContainerLight,
-                    unfocusedTextColor = onContainerLight,
-                    disabledTextColor = onContainerLight,
-                    unfocusedBorderColor = onContainerLight,
-                    focusedBorderColor = onContainerLight,
-                    focusedContainerColor = containerLight,
-                    unfocusedContainerColor = containerLight
+                    focusedTextColor = MidnightBlue,
+                    unfocusedTextColor = MidnightBlue,
+                    disabledTextColor = MidnightBlue,
+                    unfocusedBorderColor = MidnightBlue,
+                    focusedBorderColor = MidnightBlue,
+                    focusedContainerColor = ContainerBlue,
+                    unfocusedContainerColor = ContainerBlue
                 ),
 
                 modifier = Modifier
@@ -163,15 +162,15 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Hobby", color = onContainerLight) }, //her endres vel variabelen her og
+                label = { Text("Hobby", color = MidnightBlue) }, //her endres vel variabelen her og
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = onContainerLight,
-                    unfocusedTextColor = onContainerLight,
-                    disabledTextColor = onContainerLight,
-                    unfocusedBorderColor = onContainerLight,
-                    focusedBorderColor = onContainerLight,
-                    focusedContainerColor = containerLight,
-                    unfocusedContainerColor = containerLight
+                    focusedTextColor = MidnightBlue,
+                    unfocusedTextColor = MidnightBlue,
+                    disabledTextColor = MidnightBlue,
+                    unfocusedBorderColor = MidnightBlue,
+                    focusedBorderColor = MidnightBlue,
+                    focusedContainerColor = ContainerBlue,
+                    unfocusedContainerColor = ContainerBlue
                 ),
 
                 modifier = Modifier
@@ -189,15 +188,15 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Brukernavn", color = onContainerLight) }, //her endres vel variabelen her og
+                label = { Text("Brukernavn", color = MidnightBlue) }, //her endres vel variabelen her og
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = onContainerLight,
-                    unfocusedTextColor = onContainerLight,
-                    disabledTextColor = onContainerLight,
-                    unfocusedBorderColor = onContainerLight,
-                    focusedBorderColor = onContainerLight,
-                    focusedContainerColor = containerLight,
-                    unfocusedContainerColor = containerLight
+                    focusedTextColor = MidnightBlue,
+                    unfocusedTextColor = MidnightBlue,
+                    disabledTextColor = MidnightBlue,
+                    unfocusedBorderColor = MidnightBlue,
+                    focusedBorderColor = MidnightBlue,
+                    focusedContainerColor = ContainerBlue,
+                    unfocusedContainerColor = ContainerBlue
                 ),
 
                 modifier = Modifier
@@ -214,15 +213,15 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Passord", color = onContainerLight) }, //her endres vel variabelen her og
+                label = { Text("Passord", color = MidnightBlue) }, //her endres vel variabelen her og
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = onContainerLight,
-                    unfocusedTextColor = onContainerLight,
-                    disabledTextColor = onContainerLight,
-                    unfocusedBorderColor = onContainerLight,
-                    focusedBorderColor = onContainerLight,
-                    focusedContainerColor = containerLight,
-                    unfocusedContainerColor = containerLight
+                    focusedTextColor = MidnightBlue,
+                    unfocusedTextColor = MidnightBlue,
+                    disabledTextColor = MidnightBlue,
+                    unfocusedBorderColor = MidnightBlue,
+                    focusedBorderColor = MidnightBlue,
+                    focusedContainerColor = ContainerBlue,
+                    unfocusedContainerColor = ContainerBlue
                 ),
 
                 modifier = Modifier
@@ -242,8 +241,8 @@ fun ProfileScreen (
                     )
                 },
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = onContainerLight,
-                    containerColor = containerLight,
+                    contentColor = MidnightBlue,
+                    containerColor = ContainerBlue,
                     //Går ikke an å endre farge på border.
 
                 ),
@@ -283,10 +282,10 @@ fun EditProfileImage(){
             pressedElevation = 30.dp
         ),
         colors = CardColors(
-            contentColor = profileLight,
-            containerColor = profileLight,
-            disabledContainerColor = profileLight,
-            disabledContentColor = profileLight
+            contentColor = MidnightBlue,
+            containerColor = MidnightBlue,
+            disabledContainerColor = MidnightBlue,
+            disabledContentColor = MidnightBlue
         ),
         modifier = Modifier
             .size(120.dp)

@@ -62,10 +62,12 @@ import androidx.compose.ui.draw.scale
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
-import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
-import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
-import no.uio.ifi.in2000.team_21.ui.theme.weatherCardLight
+import no.uio.ifi.in2000.team_21.ui.theme.WeatherCard
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+import no.uio.ifi.in2000.team_21.ui.theme.YellowAlert
+import no.uio.ifi.in2000.team_21.ui.theme.GreenAlert
+import no.uio.ifi.in2000.team_21.ui.theme.RedAlert
+
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
@@ -118,7 +120,7 @@ fun WeatherCard(
                         lineHeight = 20.sp,
                         //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(500),
-                        color = onContainerLight,
+                        color = MidnightBlue,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.1.sp,
                     )
@@ -131,7 +133,7 @@ fun WeatherCard(
                         lineHeight = 20.sp,
                         //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(400),
-                        color = onContainerLight,
+                        color = MidnightBlue,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.1.sp,
                     )
@@ -159,7 +161,7 @@ fun WeatherCard(
                                 lineHeight = 16.sp,
                                 //fontFamily = FontFamily(Font(R.font.roboto)),
                                 //fontWeight = FontWeight(400),
-                                color = onContainerLight,
+                                color = MidnightBlue,
                                 textAlign = TextAlign.Center,
                                 letterSpacing = 0.5.sp,
                             ),
@@ -183,7 +185,7 @@ fun WeatherCard(
                         lineHeight = 20.sp,
                         //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(400),
-                        color = onContainerLight,
+                        color = MidnightBlue,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.1.sp,
                     )
@@ -201,7 +203,7 @@ fun WeatherCard(
                             lineHeight = 20.sp,
                             //fontFamily = FontFamily(Font(R.font.roboto)),
                             fontWeight = FontWeight(400),
-                            color = onContainerLight,
+                            color = MidnightBlue,
                             textAlign = TextAlign.Center,
                             letterSpacing = 0.1.sp,
                         ),
@@ -217,7 +219,7 @@ fun WeatherCard(
                                 lineHeight = 20.sp,
                                 //fontFamily = FontFamily(Font(R.font.roboto)),
                                 fontWeight = FontWeight(400),
-                                color = onContainerLight,
+                                color = MidnightBlue,
                                 textAlign = TextAlign.Center,
                                 letterSpacing = 0.1.sp,
                             ),
@@ -250,10 +252,10 @@ fun ActivityFavorites(
                 text = "Dine favoritter",
                 style = TextStyle(
                     fontSize = 20.sp,
-                    //lineHeight = 20.sp,
+                    lineHeight = 20.sp,
                     //fontFamily = FontFamily(Font(R.font.roboto)),
                     //fontWeight = FontWeight(400),
-                    color = onContainerLight,
+                    color = MidnightBlue,
                     //textAlign = TextAlign.Center,
                     letterSpacing = 0.1.sp,
                 ),
@@ -267,7 +269,7 @@ fun ActivityFavorites(
                           },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Background,
-                    contentColor = onContainerLight
+                    contentColor = MidnightBlue
                 ),
                 modifier = Modifier
                     .offset(x = 200.dp)
@@ -283,7 +285,7 @@ fun ActivityFavorites(
 
         }
 
-        Spacer(Modifier.height(8.dp))
+        //Spacer(Modifier.height(8.dp))
 
         ActivityCardGridHorizontalSmall(
             navController = navController,
@@ -336,7 +338,8 @@ fun RecommendationSection(
         return weatherFacts[Random.nextInt(weatherFacts.size)]
     }
 
-    Column(modifier = Modifier.padding(8.dp)) {
+    Column(modifier = Modifier.padding(8.dp)
+         ) {
         Text(
             text = "Våre anbefalinger",
             style = TextStyle(
@@ -344,12 +347,12 @@ fun RecommendationSection(
                 lineHeight = 20.sp,
                 //fontFamily = FontFamily(Font(R.font.roboto)),
                 fontWeight = FontWeight(400),
-                color = onContainerLight,
+                color = MidnightBlue,
                 textAlign = TextAlign.Center,
                 letterSpacing = 0.1.sp,
             )
         )
-        Spacer(Modifier.height(8.dp))
+        //Spacer(Modifier.height(4.dp))
 
         val activityList by activityConditionCheckerViewModel.activities.observeAsState(initial = emptyList())
         val filteredActivities = activityList.filter {
@@ -529,10 +532,10 @@ fun HomeScreen(
     }
 
     val alertColor = when (filteredFeatures?.maxByOrNull { it.properties.severity?.toIntOrNull() ?: 0 }?.properties?.riskMatrixColor) {
-        "Yellow" -> Color(0xFFF9F1DC) // Yellow
-        "Red" -> Color(0xFFF9DEDC) // Red
-        "Green" -> Color(0xFFECF9DC) // Green
-        else -> weatherCardLight // Default case
+        "Yellow" -> YellowAlert // Yellow
+        "Red" -> RedAlert // Red
+        "Green" -> GreenAlert// Green
+        else -> WeatherCard// Default case
     }
 
     Column(

@@ -25,8 +25,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +49,7 @@ fun ContactsScreen(navController: NavController) {
                 title = {
                     Text(
                         "Kontakter",
-                        color = onContainerLight
+                        color = MidnightBlue
                     )
                 },
                 navigationIcon = {
@@ -60,16 +61,16 @@ fun ContactsScreen(navController: NavController) {
                         Icon(
                             contentDescription = "Tilbake",
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            tint = onContainerLight,
+                            tint = MidnightBlue,
                             modifier = Modifier
                                 .size(30.dp)
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(backgroundLight),
+                colors = TopAppBarDefaults.topAppBarColors(Background),
             )
         },
-        containerColor = backgroundLight,
+        containerColor = Background,
     ){
             innerPadding->
         Column(

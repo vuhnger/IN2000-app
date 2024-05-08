@@ -50,8 +50,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
-import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
-import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import java.time.ZoneId
@@ -139,7 +139,7 @@ fun ActivityDetailScreen(
                     fontSize = 28.sp, // Increase font size for title
                     lineHeight = 28.sp, // Adjust line height for better readability
                     fontWeight = FontWeight.Bold, // Make title bold
-                    color = HomeFont, // Use MaterialTheme colors
+                    color = MidnightBlue, // Use MaterialTheme colors
 
                 )
             )
@@ -175,7 +175,7 @@ fun ActivityDetailScreen(
                         fontSize = 18.sp,
                         lineHeight = 24.sp,
                         fontWeight = FontWeight.Normal,
-                        color = HomeFont
+                        color = MidnightBlue
                     ),
                     modifier = Modifier
                         .padding(end = 8.dp, bottom = 14.dp),
@@ -233,7 +233,7 @@ fun ConditionCard(conditionTitle: String, conditionDescription: String) {
     Card(
         modifier = Modifier
             .padding(start = 10.dp, top = 20.dp, end = 10.dp),
-        colors = CardDefaults.cardColors(containerColor = HomeCard),
+        colors = CardDefaults.cardColors(containerColor = ContainerBlue),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -243,7 +243,7 @@ fun ConditionCard(conditionTitle: String, conditionDescription: String) {
                     fontSize = 20.sp,
                     lineHeight = 24.sp,
                     fontWeight = FontWeight.Normal,
-                    color = HomeFont,
+                    color = MidnightBlue,
                     textAlign = TextAlign.Center
                 )
             )
@@ -254,7 +254,7 @@ fun ConditionCard(conditionTitle: String, conditionDescription: String) {
                     fontSize = 18.sp,
                     lineHeight = 24.sp,
                     fontWeight = FontWeight.Normal,
-                    color = HomeFont,
+                    color = MidnightBlue,
                     textAlign = TextAlign.Center
                 )
             )

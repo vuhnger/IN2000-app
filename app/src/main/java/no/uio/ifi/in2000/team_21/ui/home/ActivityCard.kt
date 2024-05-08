@@ -54,11 +54,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
-import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
-import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.containerLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 
 @Composable
@@ -77,7 +76,7 @@ fun ActivityCard(
     ) {
         Column(
             modifier = Modifier
-                .background(backgroundLight)
+                .background(Background)
         ) {
 
             Row(
@@ -192,7 +191,7 @@ fun ActivityCardSmall(
                 )
             },
         elevation = CardDefaults.cardElevation(2.dp),
-        colors = CardDefaults.cardColors(containerColor = HomeCard)
+        colors = CardDefaults.cardColors(containerColor = ContainerBlue)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -207,7 +206,7 @@ fun ActivityCardSmall(
                 text = activity.activityName,
                 modifier = Modifier.weight(1f),
                 style = TextStyle(
-                    color = HomeFont,
+                    color = MidnightBlue,
                     fontSize = 20.sp
                 )
             )
@@ -234,15 +233,17 @@ fun ActivityIconSmall(
         painter = painterResource(id = activity.icon),
         contentDescription = "Icon of ${activity.activityName}",
         modifier = Modifier
-            .padding(15.dp)
+            .padding(start = 15.dp)
             .background(
-                color = Color.White,
+                color = ContainerBlue,
                 shape = CircleShape
             ) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
             .clip(CircleShape) // Klipper ikonet til en sirkelform
             //.border(2.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
-            .padding(15.dp) // Justering for å beholde plassering og størrelse
+            .padding(25.dp) // Justering for å beholde plassering og størrelse
             .scale(2f)
+            .size(height = 45.dp, width = 45.dp)
+
             .clickable {
                 navController.navigate(
                     Screen.ActivityDetailScreen.withArgs(
@@ -273,10 +274,10 @@ fun ActivityCardHorizontalWide(
             horizontal = 10.dp, vertical = 10.dp,
         )
         .background(
-            color = HomeCard
+            color = ContainerBlue
         ),
         elevation = CardDefaults.cardElevation(10.dp),
-        colors = CardDefaults.cardColors(containerColor = HomeCard)
+        colors = CardDefaults.cardColors(containerColor = ContainerBlue)
     ) {
 
         Log.d(
@@ -287,7 +288,7 @@ fun ActivityCardHorizontalWide(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = HomeCard)
+                .background(color = ContainerBlue)
         ) {
             Icon(
                 painter = painterResource(id = activity.icon),
@@ -311,8 +312,8 @@ fun ActivityCardHorizontalWide(
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
-                    containerColor = HomeCard
+                    contentColor = MidnightBlue,
+                    containerColor = ContainerBlue
                 ),
                 modifier = Modifier
                     .weight(1f)

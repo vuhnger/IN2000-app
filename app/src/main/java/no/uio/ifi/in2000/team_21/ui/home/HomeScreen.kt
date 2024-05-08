@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +31,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -122,25 +125,12 @@ fun WeatherCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Min posisjon",
+                text = cityName,
                 style = TextStyle(
                     fontSize = 25.sp,
                     lineHeight = 20.sp,
                     //fontFamily = FontFamily(Font(R.font.roboto)),
                     fontWeight = FontWeight(500),
-                    color = onContainerLight,
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.1.sp,
-                )
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = cityName,
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    lineHeight = 20.sp,
-                    //fontFamily = FontFamily(Font(R.font.roboto)),
-                    fontWeight = FontWeight(400),
                     color = onContainerLight,
                     textAlign = TextAlign.Center,
                     letterSpacing = 0.1.sp,
@@ -256,8 +246,10 @@ fun ActivityFavorites(
     ) {
 
         Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
+                .height(60.dp)
         ) {
             Text(
                 text = "Dine favoritter",
@@ -271,7 +263,8 @@ fun ActivityFavorites(
                     letterSpacing = 0.1.sp,
                 ),
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(start = 8.dp)
+                    .align(Alignment.CenterVertically)
             )
 
             Button(
@@ -283,20 +276,17 @@ fun ActivityFavorites(
                     contentColor = onContainerLight
                 ),
                 modifier = Modifier
-                    .offset(x = 200.dp)
+                    .padding(8.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Add,
+                    imageVector = Icons.Outlined.Edit,
                     contentDescription = "Favorittknapp",
                     modifier = Modifier
                         .padding(1.dp)
-                        .scale(1.5f)
                 )
             }
 
         }
-
-        Spacer(Modifier.height(8.dp))
 
         ActivityIconGridHorizontalSmall(
             navController = navController,
@@ -350,19 +340,47 @@ fun RecommendationSection(
     }
 
     Column(modifier = Modifier.padding(8.dp)) {
-        Text(
-            text = "Våre anbefalinger",
-            style = TextStyle(
-                fontSize = 20.sp,
-                lineHeight = 20.sp,
-                //fontFamily = FontFamily(Font(R.font.roboto)),
-                fontWeight = FontWeight(400),
-                color = onContainerLight,
-                textAlign = TextAlign.Center,
-                letterSpacing = 0.1.sp,
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ){
+
+            Text(
+                text = "Våre anbefalinger",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    //lineHeight = 20.sp,
+                    //fontFamily = FontFamily(Font(R.font.roboto)),
+                    fontWeight = FontWeight(400),
+                    color = onContainerLight,
+                    textAlign = TextAlign.Center,
+                    letterSpacing = 0.1.sp,
+                ),
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .align(Alignment.CenterVertically)
             )
-        )
-        Spacer(Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    // TODO: all activities screen
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Background,
+                    contentColor = onContainerLight
+                ),
+                modifier = Modifier
+                    .padding(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.List,
+                    contentDescription = "Alle aktiviteter knapp",
+                    modifier = Modifier
+                        .padding(1.dp)
+                )
+            }
+        }
 
         val activityList by activityConditionCheckerViewModel.activities.observeAsState(initial = emptyList())
         val filteredActivities = activityList.filter {
@@ -386,14 +404,13 @@ fun RecommendationSection(
                 Text(text = getRandomWeatherFact())
             }
         }else{
-            LazyRow {
+            LazyRow(
+            ) {
                 this.items(filteredActivities){ recommendation ->
                     ActivityCardSmall(
                         activity = recommendation,
                         navController = navController
                     )
-                    
-                    Spacer(modifier = Modifier.padding(16.dp))
                 }
             }
         }

@@ -6,12 +6,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -43,6 +47,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -175,8 +180,8 @@ fun ActivityCardSmall(
 ){
     Card(
         modifier = Modifier
-            .width(170.dp)
-            .height(270.dp)
+            .width(150.dp)
+            .height(260.dp)
             .padding(start = 10.dp, top = 20.dp, end = 10.dp)
             .clickable {
                 navController.navigate(
@@ -192,7 +197,7 @@ fun ActivityCardSmall(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(5.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
         ) {
             
             Spacer(modifier = Modifier.padding(top = 16.dp))
@@ -226,35 +231,36 @@ fun ActivityIconSmall(
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
 ) {
-    Column( // Use Column to stack icon and text vertically
+    Box(
         modifier = Modifier
-            .padding(15.dp)
-            .background(
-                color = Color.White,
-                shape = CircleShape
-            )
-            .clip(CircleShape)
-            .padding(15.dp)
-            .scale(2f)
-            .clickable {
-                navController.navigate(
-                    Screen.ActivityDetailScreen.withArgs(
-                        activity.activityName
-                    )
-                )
-            }
+            .padding(start = 10.dp, end = 10.dp)
     ) {
-        Icon( // Existing icon within the Column
+        Icon(
             painter = painterResource(id = activity.icon),
             contentDescription = "Icon of ${activity.activityName}",
-            modifier = Modifier.align(Alignment.CenterHorizontally) // Center icon horizontally
+            modifier = Modifier
+                .clip(shape = CircleShape)
+                .background(
+                    color = Color(0xFF7BBBE9)
+                )
+                .padding(8.dp)
+                .clickable {
+                    navController.navigate(
+                        Screen.ActivityDetailScreen.withArgs(
+                            activity.activityName
+                        )
+                    )
+                }
         )
-        Spacer(modifier = Modifier.height(8.dp)) // Add spacing between icon and text
-        Text( // Text element for activity name
+        Text(
             text = activity.activityName,
-            textAlign = TextAlign.Center, // Center text horizontally
-            color = Color.Black,
-            fontSize = 14.sp // Adjust font size as needed
+            maxLines = 1,
+            fontSize = 20.sp,
+            color = HomeFont,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .offset(y = 38.dp)
         )
     }
 }
@@ -263,7 +269,8 @@ fun ActivityIconSmall(
 @Composable
 fun ActivityCardHorizontalWide(
     activity: ActivityModel,
-    activitiesViewModel: ActivitiesViewModel
+    activitiesViewModel: ActivitiesViewModel,
+    navController: NavController
 ){
 
     // TODO: Fikse at ikon blir husket
@@ -295,16 +302,10 @@ fun ActivityCardHorizontalWide(
                 .fillMaxWidth()
                 .background(color = HomeCard)
         ) {
-            Icon(
-                painter = painterResource(id = activity.icon),
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(
-                        horizontal = 10.dp,
-                        vertical = 10.dp
-                    )
-                    .weight(1f)
-                    .scale(1.2f),
+            ActivityIconSmall(
+                activity = activity,
+                activitiesViewModel = activitiesViewModel,
+                navController = navController
             )
             Button(
                 onClick = {
@@ -349,7 +350,7 @@ fun ActivityIconGridHorizontalSmall(
     if (activitiesViewModel.activityUIstate.favorites.isEmpty()){
         Card(
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp)
+            .padding(start = 4.dp, end = 4.dp)
         ) {
             Text(
                 text = "Legg til favorittaktiviteter ved å trykke på +",
@@ -364,6 +365,7 @@ fun ActivityIconGridHorizontalSmall(
         LazyRow(
             modifier = Modifier
                 .height(84.dp)
+                .padding(start = 16.dp)
         ) {
             items(activitiesViewModel.activityUIstate.favorites) { activity ->
                 ActivityIconSmall(

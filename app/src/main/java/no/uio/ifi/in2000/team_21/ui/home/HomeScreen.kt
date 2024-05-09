@@ -3,13 +3,13 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 import android.app.TimePickerDialog
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -68,6 +69,9 @@ import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import no.uio.ifi.in2000.team_21.R
+
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -91,6 +95,22 @@ import kotlin.random.Random
 import no.uio.ifi.in2000.team_21.ui.home.ActivityIconGridHorizontalSmall
 import java.time.LocalDate
 import java.time.LocalTime
+
+
+private fun isInternetAvailable(context: Context): Boolean {
+    var result = false
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkCapabilities = connectivityManager.activeNetwork ?: return false
+    val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+    result = when {
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        else -> false
+    }
+    return result
+}
+
 
 @Composable
 fun WeatherCard(
@@ -408,12 +428,6 @@ fun HomeScreen(
     oceanForecastViewModel: OceanForecastViewModel
 ) {
 
-    val norwayZone = ZoneId.of("Europe/Oslo")
-
-    val dateFormatterBackEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
-
-    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(dateFormatterBackEnd)
-
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
     val oceanData by oceanForecastViewModel.oceanDataState.observeAsState()
@@ -426,10 +440,18 @@ fun HomeScreen(
     var selectedTime by remember { mutableStateOf(LocalTime.now()) }
     var isDatePickerOpen by remember { mutableStateOf(false) }
     var isTimePickerOpen by remember { mutableStateOf(false) }
-    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
     val dateFormatterFrontEnd = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     val timeFormatter = DateTimeFormatter.ofPattern("HH")
     val context = LocalContext.current
+
+
+    val norwayZone = ZoneId.of("Europe/Oslo")
+
+    val formatterBackEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
+
+    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatterBackEnd)
+
 
     var showNoNetworkDialog by remember {
         mutableStateOf(false)
@@ -485,7 +507,7 @@ fun HomeScreen(
         }
     }
 
-    if (showNoNetworkDialog){
+    if (!isInternetAvailable(context)){
         AlertDialog(
             onDismissRequest = {
                 showNoNetworkDialog = false
@@ -512,7 +534,9 @@ fun HomeScreen(
             title = { Text(text = "Ingen nettverksforbindelse")},
             text = { Text(text = "Vi kan ikke hente værdata, sjekk din nettverkstilkobling og prøv igjen. ")},
             buttons = {
-                Button(onClick = { showNoNetworkDialog = false }) {
+                Button(
+                    onClick = { showNoNetworkDialog = false }
+                ) {
                     Text(text = "Lukk")
                 }
             }
@@ -526,11 +550,25 @@ fun HomeScreen(
         else -> WeatherCard// Default case
     }
 
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Background)
+    ){
+        // Bakgrunnsbilde for skjermen
+        Image(
+            painter = painterResource(id = R.drawable.waterbackground),
+            contentDescription = "",
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .scale(1.2f)
+                .fillMaxWidth()
+        )
+
         Column(
             modifier = Modifier
-                .width(360.dp)
-                .height(50.dp)
-                .background(color = Background)
+                .fillMaxSize()
         ) {
             TopBarComponent(
                 navController = navController
@@ -628,7 +666,9 @@ fun HomeScreen(
                 isTimePickerOpen = false
             }
 
-            selected_time = selectedDate.atTime(selectedTime).format(dateFormatter)
+
+            selected_time = selectedDate.atTime(selectedTime).format(formatterBackEnd)
+
 
             Log.d("HS", "selected time: $selected_time")
 
@@ -645,6 +685,8 @@ fun HomeScreen(
                 navController = navController
             )
         }
+
+    }
 
 }
 

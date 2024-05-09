@@ -232,32 +232,20 @@ fun ActivityIconSmall(
 ) {
     Box(
         modifier = Modifier
-            .padding(start = 15.dp)
-            .background(
-                color = ContainerBlue,
-                shape = CircleShape
-            ) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
-            .clip(CircleShape) // Klipper ikonet til en sirkelform
-            //.border(2.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
-            .padding(25.dp) // Justering for å beholde plassering og størrelse
-            .scale(2f)
-            .clickable {
-                navController.navigate(
-                    Screen.ActivityDetailScreen.withArgs(
-                        activity.activityName
-                    )
-                )
-            }
     ) {
         Icon(
             painter = painterResource(id = activity.icon),
             contentDescription = "Icon of ${activity.activityName}",
             modifier = Modifier
-                .clip(shape = CircleShape)
+                .padding(start = 15.dp)
                 .background(
-                    color = Color(0xFF7BBBE9)
-                )
-                .padding(8.dp)
+                    color = ContainerBlue,
+                    shape = CircleShape
+                ) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
+                .clip(CircleShape) // Klipper ikonet til en sirkelform
+                //.border(2.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
+                .padding(25.dp) // Justering for å beholde plassering og størrelse
+                .scale(2f)
                 .clickable {
                     navController.navigate(
                         Screen.ActivityDetailScreen.withArgs(
@@ -276,7 +264,6 @@ fun ActivityIconSmall(
                 .align(Alignment.Center)
                 .offset(y = 38.dp)
         )
-
     }
 }
 

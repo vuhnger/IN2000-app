@@ -38,9 +38,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -273,11 +271,10 @@ fun ActivityCardHorizontalWide(
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
 ){
-    var iconClicked by remember {
-        mutableStateOf(
-            (activity in activitiesViewModel.activityUIstate.favorites)
-        )
-    }
+
+    val isFavorite by activitiesViewModel.isFavorite(activity.activityName).observeAsState(false)
+
+    var icon = if (isFavorite) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder
 
     Card(
     modifier = Modifier
@@ -310,7 +307,13 @@ fun ActivityCardHorizontalWide(
             )
             Button(
                 onClick = {
-                      activitiesViewModel.addFavorite(activity = activity)
+                    if (activitiesViewModel.favorites.value?.any { it.name == activity.activityName } == true) {
+                        activitiesViewModel.removeFavorite(activity.activityName)
+                        icon = Icons.Default.FavoriteBorder
+                    } else {
+                        activitiesViewModel.addFavorite(activity)
+                        icon = Icons.Default.Favorite
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colorScheme.primary,
@@ -320,10 +323,7 @@ fun ActivityCardHorizontalWide(
                     .weight(1f)
             ) {
                 Icon(
-                    imageVector = when (iconClicked) {
-                        true -> Icons.Outlined.Favorite
-                        false -> Icons.Outlined.FavoriteBorder
-                    },
+                    imageVector = icon,
                     contentDescription = "Knapp for å legge til i favoritter",
                     modifier = Modifier
                         .padding(
@@ -345,7 +345,9 @@ fun ActivityIconGridHorizontalSmall(
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
 ) {
-    if (activitiesViewModel.activityUIstate.favorites.isEmpty()){
+    val favorites = activitiesViewModel.favorites.observeAsState(initial = emptyList())
+
+    if (favorites.value.isEmpty()){
         Card(
         modifier = Modifier
             .padding(start = 4.dp, end = 4.dp)
@@ -365,12 +367,15 @@ fun ActivityIconGridHorizontalSmall(
                 .height(84.dp)
                 .padding(start = 16.dp)
         ) {
-            items(activitiesViewModel.activityUIstate.favorites) { activity ->
-                ActivityIconSmall(
-                    activity = activity,
-                    activitiesViewModel = activitiesViewModel,
-                    navController = navController
-                )
+            items(favorites.value) {activityEntity ->
+                val activityModel = activitiesViewModel.getActivityModelByName(activityEntity.name)
+                activityModel?.let { model ->
+                    ActivityIconSmall(
+                        activity = model,
+                        activitiesViewModel = activitiesViewModel,
+                        navController = navController
+                    )
+                }
             }
         }
     }

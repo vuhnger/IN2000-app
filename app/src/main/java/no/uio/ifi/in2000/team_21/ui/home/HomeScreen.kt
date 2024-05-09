@@ -1,7 +1,5 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-
-
 import android.app.TimePickerDialog
 import android.content.Context
 import android.net.ConnectivityManager
@@ -27,10 +25,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.Button
@@ -51,6 +49,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -61,13 +61,9 @@ import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
-
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
-
 import no.uio.ifi.in2000.team_21.ui.theme.Background
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.theme.weatherCardLight
@@ -77,7 +73,6 @@ import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.OceanForecastViewModel
 import java.time.LocalDate
 import java.time.LocalTime
-
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter

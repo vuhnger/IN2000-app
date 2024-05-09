@@ -1,6 +1,6 @@
 package no.uio.ifi.in2000.team_21
 
-import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
+import android.app.Application
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,23 +18,20 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mapbox.common.MapboxOptions
-import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
-import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import androidx.navigation.navArgument
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
-import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
-import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
-import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
-import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
+import com.mapbox.common.MapboxOptions
+import no.uio.ifi.in2000.team_21.container.ActivityViewModelFactory
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
+import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
+import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
 import no.uio.ifi.in2000.team_21.ui.home.AllActivitiesScreen
-import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
-import no.uio.ifi.in2000.team_21.ui.viewmodels.OceanForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
+import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import no.uio.ifi.in2000.team_21.ui.map.MapScreen
+import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.FriendsActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.MyActivityScreen
@@ -43,6 +40,11 @@ import no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
 import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.OceanForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 
 
@@ -104,7 +106,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -112,12 +113,16 @@ fun App(){
 
     val navController = rememberNavController()
     val locationViewModel: LocationViewModel = viewModel()
-    val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
+    //val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
     val forecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
     val alertsViewModel: AlertsViewModel = viewModel()
     val activityConditionCheckerViewModel: ActivityConditionCheckerViewModel = viewModel()
     val oceanForecastViewModel: OceanForecastViewModel = viewModel()
     val userViewModel: UserViewModel = viewModel()
+    val application = LocalContext.current.applicationContext as Application
+    val activitiesViewModel: ActivitiesViewModel = viewModel(
+        factory = ActivityViewModelFactory(application)
+    )
 
     val defaultActivity: ActivityModel = ActivityModels.FISHING
 

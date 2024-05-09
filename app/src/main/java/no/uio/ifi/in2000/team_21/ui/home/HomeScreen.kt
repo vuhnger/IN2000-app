@@ -41,6 +41,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -70,6 +71,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import no.uio.ifi.in2000.team_21.R
+
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -90,8 +92,10 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random
+import no.uio.ifi.in2000.team_21.ui.home.ActivityIconGridHorizontalSmall
 import java.time.LocalDate
 import java.time.LocalTime
+
 
 private fun isInternetAvailable(context: Context): Boolean {
     var result = false
@@ -106,6 +110,7 @@ private fun isInternetAvailable(context: Context): Boolean {
     }
     return result
 }
+
 
 @Composable
 fun WeatherCard(
@@ -435,15 +440,18 @@ fun HomeScreen(
     var selectedTime by remember { mutableStateOf(LocalTime.now()) }
     var isDatePickerOpen by remember { mutableStateOf(false) }
     var isTimePickerOpen by remember { mutableStateOf(false) }
+
     val dateFormatterFrontEnd = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     val timeFormatter = DateTimeFormatter.ofPattern("HH")
     val context = LocalContext.current
+
 
     val norwayZone = ZoneId.of("Europe/Oslo")
 
     val formatterBackEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
 
     val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatterBackEnd)
+
 
     var showNoNetworkDialog by remember {
         mutableStateOf(false)
@@ -471,7 +479,7 @@ fun HomeScreen(
         filteredFeatures?.isNotEmpty() == true
     }
 
-    LaunchedEffect(userLocation) {
+    LaunchedEffect(userLocation, selected_time) {
         if (userLocation != null) {
             alertsViewModel.fetchAndFilterAlerts(
                 AlertsInfo(),
@@ -541,6 +549,7 @@ fun HomeScreen(
         "Green" -> GreenAlert// Green
         else -> WeatherCard// Default case
     }
+
 
     Box(
         modifier = Modifier
@@ -657,7 +666,9 @@ fun HomeScreen(
                 isTimePickerOpen = false
             }
 
+
             selected_time = selectedDate.atTime(selectedTime).format(formatterBackEnd)
+
 
             Log.d("HS", "selected time: $selected_time")
 

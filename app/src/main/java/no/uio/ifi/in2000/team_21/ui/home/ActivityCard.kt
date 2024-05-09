@@ -54,9 +54,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
-import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
-import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 
 @Composable
@@ -75,7 +75,7 @@ fun ActivityCard(
     ) {
         Column(
             modifier = Modifier
-                .background(backgroundLight)
+                .background(Background)
         ) {
 
             Row(
@@ -190,7 +190,7 @@ fun ActivityCardSmall(
                 )
             },
         elevation = CardDefaults.cardElevation(2.dp),
-        colors = CardDefaults.cardColors(containerColor = HomeCard)
+        colors = CardDefaults.cardColors(containerColor = ContainerBlue)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -205,7 +205,7 @@ fun ActivityCardSmall(
                 text = activity.activityName,
                 modifier = Modifier.weight(1f),
                 style = TextStyle(
-                    color = HomeFont,
+                    color = MidnightBlue,
                     fontSize = 20.sp
                 )
             )
@@ -232,7 +232,22 @@ fun ActivityIconSmall(
 ) {
     Box(
         modifier = Modifier
-            .padding(start = 10.dp, end = 10.dp)
+            .padding(start = 15.dp)
+            .background(
+                color = ContainerBlue,
+                shape = CircleShape
+            ) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
+            .clip(CircleShape) // Klipper ikonet til en sirkelform
+            //.border(2.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
+            .padding(25.dp) // Justering for å beholde plassering og størrelse
+            .scale(2f)
+            .clickable {
+                navController.navigate(
+                    Screen.ActivityDetailScreen.withArgs(
+                        activity.activityName
+                    )
+                )
+            }
     ) {
         Icon(
             painter = painterResource(id = activity.icon),
@@ -255,15 +270,15 @@ fun ActivityIconSmall(
             text = activity.activityName,
             maxLines = 1,
             fontSize = 20.sp,
-            color = HomeFont,
+            color = MidnightBlue,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .align(Alignment.Center)
                 .offset(y = 38.dp)
         )
+
     }
 }
-
 
 @Composable
 fun ActivityCardHorizontalWide(
@@ -284,10 +299,10 @@ fun ActivityCardHorizontalWide(
             horizontal = 10.dp, vertical = 10.dp,
         )
         .background(
-            color = HomeCard
+            color = ContainerBlue
         ),
         elevation = CardDefaults.cardElevation(10.dp),
-        colors = CardDefaults.cardColors(containerColor = HomeCard)
+        colors = CardDefaults.cardColors(containerColor = ContainerBlue)
     ) {
 
         Log.d(
@@ -298,7 +313,7 @@ fun ActivityCardHorizontalWide(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = HomeCard)
+                .background(color = ContainerBlue)
         ) {
             ActivityIconSmall(
                 activity = activity,
@@ -316,8 +331,8 @@ fun ActivityCardHorizontalWide(
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
-                    containerColor = HomeCard
+                    contentColor = MidnightBlue,
+                    containerColor = ContainerBlue
                 ),
                 modifier = Modifier
                     .weight(1f)
@@ -346,28 +361,25 @@ fun ActivityIconGridHorizontalSmall(
     navController: NavController
 ) {
     val favorites = activitiesViewModel.favorites.observeAsState(initial = emptyList())
-
-    if (favorites.value.isEmpty()){
+    if (favorites.value.isEmpty()) {
         Card(
-        modifier = Modifier
-            .padding(start = 4.dp, end = 4.dp)
+            colors = CardDefaults.cardColors(ContainerBlue),
+            modifier = Modifier
+                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
         ) {
             Text(
                 text = "Legg til favorittaktiviteter ved å trykke på +",
-                modifier = Modifier
-                    .background(
-                        color = Color(0xFFC4E2F6) // denne endrer fargen på tekstbakgrunnen
-                    )
-                    .padding(16.dp)
-            )
+                color = MidnightBlue,
+
+                )
         }
-    }else{
+    } else {
         LazyRow(
             modifier = Modifier
                 .height(84.dp)
                 .padding(start = 16.dp)
         ) {
-            items(favorites.value) {activityEntity ->
+            items(favorites.value) { activityEntity ->
                 val activityModel = activitiesViewModel.getActivityModelByName(activityEntity.name)
                 activityModel?.let { model ->
                     ActivityIconSmall(
@@ -380,3 +392,5 @@ fun ActivityIconGridHorizontalSmall(
         }
     }
 }
+
+

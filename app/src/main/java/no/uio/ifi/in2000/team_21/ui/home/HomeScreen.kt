@@ -2,10 +2,6 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 
 import android.app.TimePickerDialog
-import android.content.Context
-import android.graphics.drawable.ColorDrawable
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import android.os.Build
 import android.util.Log
@@ -40,13 +36,13 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -66,6 +62,7 @@ import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -86,7 +83,8 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random
-import no.uio.ifi.in2000.team_21.ui.home.ActivityIconGridHorizontalSmall
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Composable
 fun WeatherCard(
@@ -466,17 +464,27 @@ fun HomeScreen(
     oceanForecastViewModel: OceanForecastViewModel
 ) {
 
-    val norwayZone = ZoneId.of("Europe/Oslo")
-
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
-
-    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
-
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
     val oceanData by oceanForecastViewModel.oceanDataState.observeAsState()
     val currentCityName by locationViewModel.currentCityName.collectAsState()
     val currentForcastResponse by forecastViewModel.forecast.collectAsState()
+
+    // Tidsformat: yyyy-MM-dd'T'HH
+
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var selectedTime by remember { mutableStateOf(LocalTime.now()) }
+    var isDatePickerOpen by remember { mutableStateOf(false) }
+    var isTimePickerOpen by remember { mutableStateOf(false) }
+    val dateFormatterFrontEnd = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    val timeFormatter = DateTimeFormatter.ofPattern("HH")
+    val context = LocalContext.current
+
+    val norwayZone = ZoneId.of("Europe/Oslo")
+
+    val formatterBackEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
+
+    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatterBackEnd)
 
     var showNoNetworkDialog by remember {
         mutableStateOf(false)
@@ -499,10 +507,6 @@ fun HomeScreen(
         "HOME_SCREEN",
         "oceanData: ${oceanData?.properties?.timeseries}"
     )
-
-    val currentForecast = currentForcastResponse?.properties?.timeseries?.find {
-        it.time?.contains(time) ?: false
-    }
 
     val isAlertActive = remember(filteredFeatures) {
         filteredFeatures?.isNotEmpty() == true
@@ -682,7 +686,7 @@ fun HomeScreen(
                 isTimePickerOpen = false
             }
 
-            selected_time = selectedDate.atTime(selectedTime).format(dateFormatterBackEnd)
+            selected_time = selectedDate.atTime(selectedTime).format(formatterBackEnd)
 
             Log.d("HS", "selected time: $selected_time")
 

@@ -12,30 +12,39 @@ class UserViewModel : ViewModel() {
         id = "-1",
         name = "Standardbruker",
         hobby = "Standardhobby",
-        creationDate = Date()
+        creationDate = Date(),
+        userName = "Standard brukernavn",
+        password = ("ABCDEFGH").hashCode().toString().hashCode().toString()
     )
 
     private var userCount: Int = -1
 
-    val currentUser: User = defaultUser
+    var currentUser: User = defaultUser
 
     fun createUser(
-        id: String,
         name: String,
         hobbyDescription: String,
-        creationDate: Date
+        userName: String,
+        password: String
     ){
-        _users.add(
-            User(
-                id = (userCount + 1).toString(),
-                name = name,
-                hobby = hobbyDescription,
-                creationDate = Date()
-            )
+
+        val newUser = User(
+            id = (userCount + 1).toString(),
+            name = name,
+            hobby = hobbyDescription,
+            creationDate = Date(),
+            userName = userName,
+            password = password
         )
-        userCount = userCount + 1
+        _users.add(
+            newUser
+        )
+        userCount += 1
+        currentUser = newUser
     }
 
-
+    fun logOut(){
+        currentUser = defaultUser
+    }
 
 }

@@ -10,6 +10,7 @@ data class ActivityModel(
     val windSpeedThreshold: Double,
     val airTemperatureThreshold: Double,
     val conditionStatus: ConditionStatus = ConditionStatus.NONE_MET,
+    var conditionDescription: String = "",
     val imageId: Int,
     val icon: Int
 ){
@@ -20,6 +21,19 @@ data class ActivityModel(
             ConditionStatus.SOME_MET -> R.drawable.svg_flag_orange_icon
             ConditionStatus.NONE_MET -> R.drawable.svg_red_flag_icon
         }
+    }
+    fun getFlagDescription(
+    ): String {
+        return when (conditionStatus) {
+            ConditionStatus.ALL_MET -> "Perfekt tidspunkt for ${activityName.lowercase()}"
+            ConditionStatus.SOME_MET -> "Forholdene er moderate for ${activityName.lowercase()}"
+            ConditionStatus.NONE_MET -> "Vær forsiktig og følg advarsler"
+        }
+    }
+
+    fun getFlagData(
+    ): Pair<Int, String> {
+        return Pair(getFlagColorId(), getFlagDescription())
     }
 }
 
@@ -76,7 +90,7 @@ object ActivityModels {
         waterSpeedThreshold = 3.0,
         waveHeightThreshold = 0.5,
         windSpeedThreshold = 8.0,
-        airTemperatureThreshold = 15.0,
+        airTemperatureThreshold = 5.0,
         imageId = R.drawable.padling_ai,
         icon = R.drawable.rowing_icon
     )
@@ -86,7 +100,7 @@ object ActivityModels {
         waterSpeedThreshold = Double.MAX_VALUE,
         waveHeightThreshold = 3.0,
         windSpeedThreshold = 10.0,
-        airTemperatureThreshold = 18.0,
+        airTemperatureThreshold = 8.0,
         imageId = R.drawable.surfing_ai,
         icon = R.drawable.surfing_dark
     )
@@ -96,7 +110,7 @@ object ActivityModels {
         waterSpeedThreshold = 2.0,
         waveHeightThreshold = 0.5,
         windSpeedThreshold = 5.0,
-        airTemperatureThreshold = 20.0,
+        airTemperatureThreshold = 0.0,
         imageId = R.drawable.snorkelig_ai,
         icon = R.drawable.scuba_dark
     )

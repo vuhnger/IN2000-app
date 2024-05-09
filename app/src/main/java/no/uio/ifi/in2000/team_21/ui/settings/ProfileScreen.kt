@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ButtonDefaults
@@ -29,6 +31,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
@@ -55,6 +58,8 @@ import no.uio.ifi.in2000.team_21.ui.theme.containerLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.theme.profileLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,11 +71,12 @@ fun ProfileScreen (
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
     
     val notification = rememberSaveable { mutableStateOf("") }
-    val name by rememberSaveable { mutableStateOf(userViewModel.currentUser.name) }
-    val hobby by rememberSaveable { mutableStateOf(userViewModel.currentUser.hobby) }
-    val username by rememberSaveable { mutableStateOf("Brukernavn") }
-    val password by rememberSaveable { mutableStateOf("Passord") }
+    var name by rememberSaveable { mutableStateOf(userViewModel.currentUser.name) }
+    var hobby by rememberSaveable { mutableStateOf(userViewModel.currentUser.hobby) }
+    var username by rememberSaveable { mutableStateOf("Brukernavn") }
+    var password by rememberSaveable { mutableStateOf("Passord") }
 
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     if (notification.value.isNotEmpty()) {
         Toast.makeText(LocalContext.current, notification.value, Toast.LENGTH_LONG).show()
@@ -122,15 +128,118 @@ fun ProfileScreen (
             EditProfileImage()
 
             //Editable text fields, name, hooby, usernames, password
-            EditTextField("Navn")
-            EditTextField("Hobby")
-            EditTextField("Brukernavn")
-            EditTextField("Passord")
+            OutlinedTextField(
+
+                value = name,
+                onValueChange = {
+                    name = it
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {keyboardController?.hide()}
+                ),
+                label = { Text("Navn", color = onContainerLight) }, //her endres vel variabelen her og
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = onContainerLight,
+                    unfocusedTextColor = onContainerLight,
+                    disabledTextColor = onContainerLight,
+                    unfocusedBorderColor = onContainerLight,
+                    focusedBorderColor = onContainerLight,
+                    focusedContainerColor = containerLight,
+                    unfocusedContainerColor = containerLight
+                ),
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 40.dp)
+            )
+
+            OutlinedTextField(
+                value = hobby,
+                onValueChange = {
+                    hobby = it
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {keyboardController?.hide()}
+                ),
+                label = { Text("Hobby", color = onContainerLight) }, //her endres vel variabelen her og
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = onContainerLight,
+                    unfocusedTextColor = onContainerLight,
+                    disabledTextColor = onContainerLight,
+                    unfocusedBorderColor = onContainerLight,
+                    focusedBorderColor = onContainerLight,
+                    focusedContainerColor = containerLight,
+                    unfocusedContainerColor = containerLight
+                ),
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 40.dp)
+            )
+
+            OutlinedTextField(
+
+                value = username,
+                onValueChange = {
+                    username = it
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {keyboardController?.hide()}
+                ),
+                label = { Text("Brukernavn", color = onContainerLight) }, //her endres vel variabelen her og
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = onContainerLight,
+                    unfocusedTextColor = onContainerLight,
+                    disabledTextColor = onContainerLight,
+                    unfocusedBorderColor = onContainerLight,
+                    focusedBorderColor = onContainerLight,
+                    focusedContainerColor = containerLight,
+                    unfocusedContainerColor = containerLight
+                ),
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 40.dp)
+            )
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = {
+                    password = it
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {keyboardController?.hide()}
+                ),
+                label = { Text("Passord", color = onContainerLight) }, //her endres vel variabelen her og
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = onContainerLight,
+                    unfocusedTextColor = onContainerLight,
+                    disabledTextColor = onContainerLight,
+                    unfocusedBorderColor = onContainerLight,
+                    focusedBorderColor = onContainerLight,
+                    focusedContainerColor = containerLight,
+                    unfocusedContainerColor = containerLight
+                ),
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 40.dp)
+            )
 
             //Save button
             OutlinedButton(
                 onClick = {
                     notification.value = "Profil oppdatert"
+                    userViewModel.createUser(
+                        name = name,
+                        hobbyDescription = hobby,
+                        userName = username,
+                        password = password
+                    )
                 },
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = onContainerLight,
@@ -146,7 +255,6 @@ fun ProfileScreen (
         }
     }
 }
-
 
 @Composable
 fun EditProfileImage(){
@@ -203,27 +311,7 @@ fun EditTextField(text: String) {
     var text by rememberSaveable {
         mutableStateOf(text)
     }
-    OutlinedTextField(
 
-        value = "Tekstfelt",
-        onValueChange = {
-            text = it
-        },
-        label = { Text(text, color = onContainerLight) }, //her endres vel variabelen her og
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedTextColor = onContainerLight,
-            unfocusedTextColor = onContainerLight,
-            disabledTextColor = onContainerLight,
-            unfocusedBorderColor = onContainerLight,
-            focusedBorderColor = onContainerLight,
-            focusedContainerColor = containerLight,
-            unfocusedContainerColor = containerLight
-        ),
-
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 40.dp)
-    )
 }
 
 @Preview

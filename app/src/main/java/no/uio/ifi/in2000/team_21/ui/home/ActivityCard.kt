@@ -15,12 +15,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -30,6 +33,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,6 +54,9 @@ import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
 import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
+import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
+import no.uio.ifi.in2000.team_21.ui.theme.containerLight
+import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 
 @Composable
@@ -68,7 +75,7 @@ fun ActivityCard(
     ) {
         Column(
             modifier = Modifier
-                .background(Color.White)
+                .background(backgroundLight)
         ) {
 
             Row(
@@ -205,11 +212,12 @@ fun ActivityCardSmall(
 
             Spacer(modifier = Modifier.padding(5.dp))
 
-            Icon(
-                painter = painterResource(id = activity.icon),
-                contentDescription = "Icon of ${activity.activityName}",
+            Image(
+                painter = painterResource(id = activity.imageId),
+                contentDescription = "",
                 modifier = Modifier
-                    .weight(1f)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .clip(RoundedCornerShape(size = 16.dp))
             )
         }
     }
@@ -336,11 +344,10 @@ fun ActivityCardGridHorizontalSmall(
         Card(
 
         ) {
-            Text(text = "Du har ikke valgt noen favorittaktiviteter ennå, trykk på + for å legge til en!")
+            Text(text = "Legg til favorittaktiviteter ved å trykke på +")
         }
     }else{
-        LazyHorizontalGrid(
-            rows = GridCells.Fixed(1),
+        LazyRow(
             modifier = Modifier
                 .height(84.dp)
         ) {

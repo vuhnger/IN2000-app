@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -113,7 +114,11 @@ import no.uio.ifi.in2000.team_21.ui.home.TopBarComponent
 import no.uio.ifi.in2000.team_21.ui.home.WeatherIcon
 import no.uio.ifi.in2000.team_21.ui.theme.Background
 import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+import no.uio.ifi.in2000.team_21.ui.theme.Rain
+import no.uio.ifi.in2000.team_21.ui.theme.Temperature
+import no.uio.ifi.in2000.team_21.ui.theme.Wind
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
 
@@ -219,7 +224,8 @@ fun MapboxMapView() {
                 marker = selectedMarker.value,
                 userMarkerViewModel = userMarkerViewModel
                 )
-        }
+        },
+        sheetBackgroundColor = Background,
     ) {
         Box(modifier = Modifier
             .fillMaxSize()
@@ -488,7 +494,7 @@ fun BottomSheetContent(
             val nextHoursDetails = series.data?.next_1_hours
             val next6HoursDetails = series.data?.next_6_hours
 
-            Text("Været nå:", style = MaterialTheme.typography.h6)
+            Text("Været nå:", style = MaterialTheme.typography.h6, color = MidnightBlue)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -497,20 +503,20 @@ fun BottomSheetContent(
             ) {
                 currentDetails?.let {
                     WeatherIcon(element = nextHoursDetails?.summary?.symbol_code)
-                    Text("${it.details?.air_temperature}°", color = Color.Red, fontSize = 30.sp)
+                    Text("${it.details?.air_temperature}°", color = Temperature, fontSize = 30.sp)
                     Text(buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = Color.Blue, fontSize = 30.sp)) {
+                        withStyle(style = SpanStyle(color = Rain, fontSize = 30.sp)) {
                             append("${nextHoursDetails?.details?.precipitation_amount}")
                         }
-                        withStyle(style = SpanStyle(color = Color.Blue, fontSize = 10.sp)) {
+                        withStyle(style = SpanStyle(color = Rain, fontSize = 10.sp)) {
                             append(" mm")
                         }
                     })
                     Text(buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = "#00145D".color, fontSize = 30.sp)) {
+                        withStyle(style = SpanStyle(color = Wind, fontSize = 30.sp)) {
                             append("${it.details?.wind_speed}")
                         }
-                        withStyle(style = SpanStyle(color = "#00145D".color, fontSize = 10.sp)) {
+                        withStyle(style = SpanStyle(color = Wind, fontSize = 10.sp)) {
                             append(" m/s")
                         }
                     })
@@ -519,7 +525,7 @@ fun BottomSheetContent(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text("Været neste 6 timene:", style = MaterialTheme.typography.h6)
+            Text("Været neste 6 timene:", style = MaterialTheme.typography.h6, color = MidnightBlue)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -529,25 +535,28 @@ fun BottomSheetContent(
                 next6HoursDetails?.let {
                     WeatherIcon(element = it.summary?.symbol_code)
                     Text(
-                        "${it.details?.air_temperature_min} - ${it.details?.air_temperature_max}°",
-                        color = Color.Red,
+                        "H:${it.details?.air_temperature_min?.roundToInt()}° L:${it.details?.air_temperature_max?.roundToInt()}°",
+
+                        color = Temperature,
                         fontSize = 25.sp
-                    )
+                    )/*
                     Text(buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = Color.Blue, fontSize = 25.sp)) {
+                        withStyle(style = SpanStyle(color = Rain, fontSize = 25.sp)) {
                             append("${it.details?.precipitation_amount}")
                         }
-                        withStyle(style = SpanStyle(color = Color.Blue, fontSize = 10.sp)) {
+                        withStyle(style = SpanStyle(color = Rain, fontSize = 10.sp)) {
                             append(" mm")
                         }
-                    })
+                    })*/
                     Text(buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = "#00145D".color, fontSize = 25.sp)) {
-                            append("${it.details?.probability_of_precipitation}")
+                        withStyle(style = SpanStyle(color = Rain, fontSize = 25.sp)) {
+                            append("${it.details?.probability_of_precipitation}%")
                         }
-                        withStyle(style = SpanStyle(color = "#00145D".color, fontSize = 10.sp)) {
-                            append(" %")
-                        }
+                        //test om denne er nødvendig
+                        /*
+                        withStyle(style = SpanStyle(color = Rain, fontSize = 10.sp)) {
+                            append(" sjanse for regn")
+                        }*/
                     })
                 }
             }

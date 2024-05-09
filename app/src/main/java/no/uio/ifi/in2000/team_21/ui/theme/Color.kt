@@ -30,3 +30,8 @@ val WeatherCard = Color(0xFFF8F9FB)
 val RedAlert = Color(0xFFF9DEDC)
 val YellowAlert = Color(0xFFF9F1DC)
 val GreenAlert = Color(0XFFE5F9DC)
+
+//MapScreen
+val Temperature = Color(0XFFDF1818)
+val Rain = Color(0XFF006EDB)
+val Wind = Color(0XFF000000)

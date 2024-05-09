@@ -7,6 +7,8 @@ import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeserie
 class LocationForecastDataRepository(private val dataSource: LocationForecastDataSource = LocationForecastDataSource()) {
 
 
+    val cachedResponseData: HashMap<String, LocationForecastTimeseries>? = null
+
     suspend fun fetchForecast(
         latitude: Double,
         longitude: Double
@@ -29,29 +31,6 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
             latitude = latitude,
             longitude =  longitude
         )
-    }
-
-    suspend fun fetchAllNext1HourImageIcons(
-        latitude: Double,
-        longitude: Double
-    ): ArrayList<String> {
-        val timeseries = fetchTimeseries(
-            latitude = latitude,
-            longitude = longitude
-        )
-        val icons = ArrayList<String>()
-
-        Log.d("FORECAST_REPO", "timeseries size: ${timeseries?.size}")
-
-        timeseries?.forEach { timeseries ->
-            timeseries.data?.next_1_hours?.summary?.symbol_code?.let { symbolCode ->
-                println(symbolCode)
-                // Add only if symbolCode is not null
-                icons.add(symbolCode)
-            }
-        }
-        Log.d("LOCATION_REPO","fetched ${icons.size} icons")
-        return icons
     }
 
     suspend fun fetchWeatherDataForLocation(lat: Double, lon: Double): List<LocationForecastTimeseries>? {
@@ -78,26 +57,24 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
         return dataSource.fetchLocationForecastByTime(time = time, latitude = latitude, longitude = longitude)
     }
 
-    suspend fun fetchCurrentAirTemperature(
-        latitude: Double,
-        longitude: Double
+    fun convertFromCels(
+        n: Double
     ): Double {
-        return dataSource.fetchCurrentAirTemperature(
-            latitude = latitude,
-            longitude = longitude
-        )
+        return (n - 32) * 5.0/9.0
     }
 
-    suspend fun repositoryfetchNextHourWeatherIcon(
-        time: String,
-        latitude: Double,
-        longitude: Double
-    ): String {
-        return dataSource.repositoryfetchNextHourWeatherIcon(
-            time = time,
-            latitude = latitude,
-            longitude = longitude
-        )
+    fun convertWindSpeedMpsToMph(
+        windSpeedMps: Double
+    ): Double {
+        return windSpeedMps * 2.2369
     }
+
+    fun convertPrecipitationMmToInches(
+        precipitationMm: Double
+    ): Double {
+        return precipitationMm * 0.03937
+    }
+
+
 
 }

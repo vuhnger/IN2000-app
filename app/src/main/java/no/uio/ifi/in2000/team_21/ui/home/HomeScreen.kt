@@ -2,6 +2,7 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 import android.app.TimePickerDialog
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
@@ -468,20 +469,6 @@ fun HomeScreen(
         }
     }
 
-    if (showNoNetworkDialog){
-        AlertDialog(
-            onDismissRequest = {
-                showNoNetworkDialog = false
-                               },
-            title = { Text(text = "Ingen nettverksforbindelse")},
-            text = { Text(text = "Vi kan ikke hente værdata, sjekk din nettverkstilkobling og prøv igjen. ")},
-            buttons = {
-                Button(onClick = { showNoNetworkDialog = false }) {
-                    Text(text = "Lukk")
-                }
-            }
-        )
-    }
 
     Log.d(
         "HOME_SCREEN",
@@ -518,6 +505,40 @@ fun HomeScreen(
             )
 
         }
+    }
+
+    if (showNoNetworkDialog){
+        AlertDialog(
+            onDismissRequest = {
+                showNoNetworkDialog = false
+                if (userLocation != null){
+
+                    forecastViewModel.fetchWeatherForLocation( // let him cook!
+                        lat = userLocation!!.latitude(),
+                        lon = userLocation!!.longitude()
+                    )
+
+                    oceanForecastViewModel.fetchOceanForecastByTime(
+                        latitude = userLocation!!.latitude(),
+                        longitude = userLocation!!.longitude()
+                    )
+
+                    activityConditionCheckerViewModel.checkActivityConditions(
+                        time = selected_time,
+                        latitude = userLocation!!.latitude() ,
+                        longitude = userLocation!!.longitude()
+                    )
+
+                }
+            },
+            title = { Text(text = "Ingen nettverksforbindelse")},
+            text = { Text(text = "Vi kan ikke hente værdata, sjekk din nettverkstilkobling og prøv igjen. ")},
+            buttons = {
+                Button(onClick = { showNoNetworkDialog = false }) {
+                    Text(text = "Lukk")
+                }
+            }
+        )
     }
 
     val alertColor = when (filteredFeatures?.maxByOrNull { it.properties.severity?.toIntOrNull() ?: 0 }?.properties?.riskMatrixColor) {
@@ -574,8 +595,6 @@ fun HomeScreen(
             }else{
                 showNoNetworkDialog = true
             }
-
-            // TODO: Date picker her
 
             Row(
                 horizontalArrangement = Arrangement.Center,

@@ -26,7 +26,7 @@ class UserViewModel : ViewModel() {
         hobbyDescription: String,
         userName: String,
         password: String
-    ){
+    ): User {
 
         val newUser = User(
             id = (userCount + 1).toString(),
@@ -41,10 +41,28 @@ class UserViewModel : ViewModel() {
         )
         userCount += 1
         currentUser = newUser
+
+        return newUser
     }
+
 
     fun logOut(){
         currentUser = defaultUser
+    }
+
+    fun getUsers(): MutableList<User> {
+        return _users
+    }
+
+    fun getNames(): List<String>{
+        return _users.map { user -> user.name }
+    }
+
+    fun createUsername(
+        name: String
+    ): String{
+        val primary_key: Int = userCount + 1
+        return "$name${primary_key.toString().hashCode()}"
     }
 
 }

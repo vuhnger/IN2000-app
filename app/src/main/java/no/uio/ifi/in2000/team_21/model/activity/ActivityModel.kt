@@ -45,7 +45,7 @@ enum class ConditionStatus {
 
 object ActivityModels {
     val KAYAKING = ActivityModel(
-        "Kayaking",
+        "Kajakk",
         waterTemperatureThreshold = 2.0,
         waterSpeedThreshold = 3.0,
         waveHeightThreshold = 0.5,
@@ -105,7 +105,7 @@ object ActivityModels {
         icon = R.drawable.surfing_dark
     )
     val SNORKELING = ActivityModel(
-        "Snorkling",
+        "Snorkle",
         waterTemperatureThreshold = 18.0,
         waterSpeedThreshold = 2.0,
         waveHeightThreshold = 0.5,
@@ -115,7 +115,7 @@ object ActivityModels {
         icon = R.drawable.scuba_dark
     )
     val SWIMMING = ActivityModel(
-        "Svømming",
+        "Svømme",
         waterTemperatureThreshold = 18.0,
         waterSpeedThreshold = 2.0,
         waveHeightThreshold = 0.5,

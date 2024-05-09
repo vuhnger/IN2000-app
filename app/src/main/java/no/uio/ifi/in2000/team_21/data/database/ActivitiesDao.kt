@@ -12,7 +12,7 @@ interface ActivitiesDao {
     @Query("SELECT EXISTS(SELECT 1 FROM activities WHERE name = :name)")
     suspend fun activityExists(name: String): Boolean
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE  )
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addActivity(activity: ActivityEntity)
 
     @Query("SELECT * FROM activities")
@@ -20,4 +20,7 @@ interface ActivitiesDao {
 
     @Delete
     suspend fun delete(activity: ActivityEntity)
+
+    @Query("DELETE FROM activities WHERE name = :name")
+    suspend fun deleteByName(name: String)
 }

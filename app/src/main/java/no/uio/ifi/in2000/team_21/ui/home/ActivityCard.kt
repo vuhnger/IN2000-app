@@ -38,9 +38,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -260,11 +258,10 @@ fun ActivityCardHorizontalWide(
     activity: ActivityModel,
     activitiesViewModel: ActivitiesViewModel
 ){
+    val isFavorite by activitiesViewModel.isFavorite(activity.activityName).observeAsState(false)
 
     // TODO: Fikse at ikon blir husket
-    var icon by remember {
-        mutableStateOf(Icons.Outlined.FavoriteBorder)
-    }
+    var icon = if (isFavorite) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder
 
     Card(
     modifier = Modifier
@@ -303,12 +300,12 @@ fun ActivityCardHorizontalWide(
             )
             Button(
                 onClick = {
-                    icon = if (activity in activitiesViewModel.activityUIstate.favorites){
-                        activitiesViewModel.removeFavorite(activity = activity)
-                        Icons.Default.FavoriteBorder
-                    }else{
-                        activitiesViewModel.addFavorite(activity = activity)
-                        Icons.Default.Favorite
+                    if (activitiesViewModel.favorites.value?.any { it.name == activity.activityName } == true) {
+                        activitiesViewModel.removeFavorite(activity.activityName)
+                        icon = Icons.Default.FavoriteBorder
+                    } else {
+                        activitiesViewModel.addFavorite(activity)
+                        icon = Icons.Default.Favorite
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
@@ -341,7 +338,9 @@ fun ActivityCardGridHorizontalSmall(
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
 ) {
-    if (activitiesViewModel.activityUIstate.favorites.isEmpty()){
+    val favorites = activitiesViewModel.favorites.observeAsState(initial = emptyList())
+
+    if (favorites.value.isEmpty()){
         Card(
 
         ) {
@@ -352,12 +351,15 @@ fun ActivityCardGridHorizontalSmall(
             modifier = Modifier
                 .height(84.dp)
         ) {
-            this.items(activitiesViewModel.activityUIstate.favorites){activity ->
-                ActivityIconSmall(
-                    activity = activity,
-                    activitiesViewModel = activitiesViewModel,
-                    navController = navController
-                )
+            items(favorites.value) {activityEntity ->
+                val activityModel = activitiesViewModel.getActivityModelByName(activityEntity.name)
+                activityModel?.let { model ->
+                    ActivityIconSmall(
+                        activity = model,
+                        activitiesViewModel = activitiesViewModel,
+                        navController = navController
+                    )
+                }
             }
         }
     }

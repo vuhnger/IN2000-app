@@ -57,7 +57,8 @@ fun AddFavoriteScreen(
             // Denne komponenten tegner cards på favoritt-skjermen
             ActivityCardHorizontalWide(
                 activity = activity,
-                activitiesViewModel = activitiesViewModel
+                activitiesViewModel = activitiesViewModel,
+                navController = navController
             )
             Spacer(modifier = Modifier.padding(8.dp))
         }

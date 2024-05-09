@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -26,39 +27,21 @@ import coil.compose.AsyncImage
 @Composable
 fun WeatherIcon(
     element: String?,
-    size: Int = 50 // Default size parameter allows specification of image size.
+    size: Int = 50
 ){
     Box(
         modifier = Modifier
-            .size(size.dp) // Set the size of the box to the passed size, ensuring the entire container scales.
+            .size(size.dp) // ikke fjern den linja her lmao
             .clip(CircleShape)
-            .padding(4.dp)
+            .padding(8.dp)
     ){
         AsyncImage(
             model = "https://raw.githubusercontent.com/metno/weathericons/main/weather/png/$element.png",
             contentDescription = "Icon of current weather state.",
-            contentScale = ContentScale.FillBounds, // Ensures the image fills the bounds of the container.
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .fillMaxSize() // Ensure the image fills the Box.
+                .fillMaxSize()
+                .scale(1.5f)
         )
-    }
-}
-
-
-@Composable
-fun ImageList(
-    modifier: Modifier = Modifier,
-    imageUrlList: List<String>?,
-) {
-    if (imageUrlList != null) {
-        LazyRow { // Set max width
-            items(imageUrlList) { image ->
-                WeatherIcon(
-                    element = image
-                )
-            }
-        }
-    } else {
-        Log.d("IMAGE_LIST", "icons list was null")
     }
 }

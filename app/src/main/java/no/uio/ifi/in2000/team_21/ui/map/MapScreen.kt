@@ -108,8 +108,6 @@ import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Properties
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
-import no.uio.ifi.in2000.team_21.ui.viewmodels.UserMarkerViewModel
-import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.TopBarComponent
 import no.uio.ifi.in2000.team_21.ui.home.WeatherIcon
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -117,6 +115,8 @@ import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import no.uio.ifi.in2000.team_21.ui.theme.Rain
 import no.uio.ifi.in2000.team_21.ui.theme.Temperature
 import no.uio.ifi.in2000.team_21.ui.theme.Wind
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserMarkerViewModel
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin

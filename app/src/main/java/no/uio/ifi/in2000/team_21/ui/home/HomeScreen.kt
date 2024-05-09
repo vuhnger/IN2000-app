@@ -79,7 +79,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random
-
+import no.uio.ifi.in2000.team_21.ui.home.ActivityIconGridHorizontalSmall
 
 @Composable
 fun WeatherCard(
@@ -114,19 +114,6 @@ fun WeatherCard(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "Min posisjon",
-                    style = TextStyle(
-                        fontSize = 25.sp,
-                        lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.roboto)),
-                        fontWeight = FontWeight(500),
-                        color = MidnightBlue,
-                        textAlign = TextAlign.Center,
-                        letterSpacing = 0.1.sp,
-                    )
-                )
-                Spacer(Modifier.height(4.dp))
                 Text(
                     text = cityName,
                     style = TextStyle(
@@ -286,9 +273,7 @@ fun ActivityFavorites(
 
         }
 
-        //Spacer(Modifier.height(8.dp))
-
-        ActivityCardGridHorizontalSmall(
+        ActivityIconGridHorizontalSmall(
             navController = navController,
             activitiesViewModel = viewModel
         )

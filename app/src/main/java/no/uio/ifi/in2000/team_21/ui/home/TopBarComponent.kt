@@ -40,7 +40,8 @@ fun TopBarComponent(
         title = { /**/ },
         actions = {
             Box(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 Row(
@@ -91,6 +92,7 @@ fun TopBarComponent(
                 ) {
                     Icon(painter = painterResource(id = no.uio.ifi.in2000.team_21.R.drawable.outline_settings_24), contentDescription = "Settings icon", tint = MidnightBlue)
                     }
+
             }
         },
         modifier = Modifier,
@@ -100,6 +102,7 @@ fun TopBarComponent(
             navigationIconContentColor = Color.White,
             actionIconContentColor = Color.White,
             scrolledContainerColor = ContainerBlue,
+
         )
     )
 }

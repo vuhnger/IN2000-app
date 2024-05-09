@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +35,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -45,6 +47,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -78,8 +82,6 @@ fun SettingScreen(
         "called"
     )
 
-    var checked by remember { mutableStateOf(true) } //13.03 Må flyttes til en global ui-state
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -108,12 +110,12 @@ fun SettingScreen(
         containerColor = Background,
     ){
             innerPadding->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(15.dp)
-                .padding(innerPadding)
+                .background(color = Color(0xFFEBEFFF))
         ){
+
             //Profile
             ProfileCard(
                 navController,
@@ -121,48 +123,68 @@ fun SettingScreen(
                 onClick = { navController.navigate(Screen.ProfileScreen.route)}
             )
             Spacer(modifier = Modifier.padding(6.dp))
-/*
-            //Darkmode
-            DarkModeCard(navController,
-                checked = remember {mutableStateOf(checked)}
+
+            // Bakgrunnsbilde for skjermen
+            Image(
+                painter = painterResource(id = R.drawable.waterbackground),
+                contentDescription = "",
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .scale(1.2f)
+                    .fillMaxWidth()
             )
 
- */
-            Spacer(modifier = Modifier.padding(6.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(15.dp)
+                    .padding(innerPadding)
+            ){
+                //Profile
+                ProfileCard(
+                    navController,
+                    userViewModel = userViewModel,
+                    onClick = { navController.navigate(Screen.ProfileScreen.route)}
+                )
+                Spacer(modifier = Modifier.padding(6.dp))
 
-            //All activities
-            AllSettingsCard(navController,
-                mainText = "Alle aktiviteter",
-                onClick = {
-                    navController.navigate(Screen.AllActivitiesScreen.route)
-                }
-            )
-            Spacer(modifier = Modifier.padding(6.dp))
+                //All activities
+                AllSettingsCard(navController,
+                    mainText = "Alle aktiviteter",
+                    onClick = {
+                        navController.navigate(Screen.AllActivitiesScreen.route)
+                    }
+                )
+                Spacer(modifier = Modifier.padding(6.dp))
 
-            //History
-            HistorySettings(navController)
-            Spacer(modifier = Modifier.padding(6.dp))
+                //History
+                HistorySettings(navController)
+                Spacer(modifier = Modifier.padding(6.dp))
 
-            //Settings
-            //SettingsGroupCard(navController)
-            //Spacer(modifier = Modifier.padding(6.dp))
+                //Settings
+                //SettingsGroupCard(navController)
+                //Spacer(modifier = Modifier.padding(6.dp))
 
-            AllSettingsCard(navController,
-                mainText = "Om utviklerne",
-                onClick = {
-                    navController.navigate(Screen.AboutUsScreen.route)
-                }
-            )
-            Spacer(modifier = Modifier.padding(6.dp))
-            AllSettingsCard(navController,
-                mainText = "Logg ut",
-                onClick = {
-                    // TODO: set current user to default user
-                },
-            )
+                AllSettingsCard(navController,
+                    mainText = "Om utviklerne",
+                    onClick = {
+                        navController.navigate(Screen.AboutUsScreen.route)
+                    }
+                )
+                Spacer(modifier = Modifier.padding(6.dp))
+                AllSettingsCard(navController,
+                    mainText = "Logg ut",
+                    onClick = {
+                        userViewModel.logOut()
+                    },
+                )
+            }
         }
+
     }
 }
+
+
 
 
 //Profile
@@ -227,59 +249,6 @@ fun ProfileCard(
     }
 }
 
-/*
-//DarkMode
-@Composable
-fun DarkModeCard(navController: NavController, checked: MutableState<Boolean>){
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .height(56.dp),
-        colors = CardDefaults.cardColors(containerLight)
-    ){
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 25.dp, end = 25.dp, top = 15.dp, bottom = 15.dp)
-        ){
-            Text(
-                modifier = Modifier
-                    .width(190.dp),
-                text = "Nattmodus",
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    lineHeight = 20.sp,
-                    fontWeight = FontWeight(500),
-                    color = onContainerLight,
-                    letterSpacing = 0.1.sp
-                )
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Switch(
-                checked = checked.value,
-                onCheckedChange = {
-                    checked.value = it
-                },
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = backgroundLight,
-                    checkedTrackColor = onContainerLight,
-                    //uncheckedThumbColor = onContainerLight,
-                    //uncheckedTrackColor = profileLight
-                ),
-                modifier = Modifier
-                    .width(52.dp)
-                    .height(32.dp)
-                    .background(
-                        color = onContainerLight,
-                        shape = RoundedCornerShape(size = 100.dp)
-                    )
-                    .padding(start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)
-            )
-        }
-    }
-}
-*/
-
 //All settings-cards
 @Composable
 fun AllSettingsCard(navController: NavController, mainText: String, onClick:()->Unit){
@@ -332,12 +301,6 @@ fun HistorySettings(navController: NavController){
     ){ Column (
 
     ){
-        //Friends
-        HorizontalDivider(
-            color = ContainerBlue,
-            modifier = Modifier
-                .padding(start = 25.dp, end = 25.dp)
-        )
         //Me
         AllSettingsCard(navController,
             mainText = "Historikk",

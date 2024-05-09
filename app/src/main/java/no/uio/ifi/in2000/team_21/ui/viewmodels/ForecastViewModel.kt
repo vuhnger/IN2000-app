@@ -29,7 +29,7 @@ class ForecastViewModel(
     private var _forecast = MutableStateFlow<LocationForecastResponse?>(null)
     val forecast: StateFlow<LocationForecastResponse?> = _forecast.asStateFlow()
 
-    private val TIMEOUT_MS = (30_000 * 5).toLong()
+    private val TIMEOUT_MS = (300_000).toLong() // 300k ms er 5 min
     fun continuousForecastUpdate(
         latitude: Double,
         longitude: Double

@@ -11,6 +11,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
@@ -39,11 +41,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -63,6 +67,7 @@ import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -84,6 +89,8 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random
 import no.uio.ifi.in2000.team_21.ui.home.ActivityIconGridHorizontalSmall
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Composable
 fun WeatherCard(
@@ -106,9 +113,7 @@ fun WeatherCard(
         Card(
             modifier = Modifier
                 .padding(40.dp)
-                .width(320.dp)
-                .height(280.dp)
-                .aspectRatio(1f),
+                .width(320.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
             colors = CardDefaults.cardColors(containerColor = alertColor)
         ) {
@@ -392,66 +397,6 @@ fun RecommendationSection(
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar(
-    navController: NavController
-) {
-    TopAppBar(
-        title = {  },
-        actions = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Box(Modifier.weight(1f))
-
-                Row {
-                    IconButton(
-                        onClick = {
-                                  // TODO: Tilbake navigering
-                                  },
-                        modifier = Modifier
-                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
-                    ) {
-                        Text("Hjem", style = TextStyle(
-                            fontSize = 20.sp
-                        )
-                        )
-                    }
-                    IconButton(
-                        onClick = { navController.navigate(Screen.MapScreen.route) },
-                        modifier = Modifier
-                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
-                    ) {
-                        Text("Kart", style = TextStyle(
-                            fontSize = 20.sp
-                        ))
-                    }
-                }
-
-                Box(Modifier.weight(1f)) {
-                    IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) }) {
-                        Icon(
-                            Icons.Default.Settings,
-                            contentDescription = "Account icon",
-                            modifier = Modifier.size(36.dp)
-                        )
-                    }
-                }
-            }
-        },
-        modifier = Modifier
-            .padding(top = 16.dp)
-    )
-
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -465,15 +410,26 @@ fun HomeScreen(
 
     val norwayZone = ZoneId.of("Europe/Oslo")
 
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
+    val dateFormatterBackEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
 
-    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
+    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(dateFormatterBackEnd)
 
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
     val oceanData by oceanForecastViewModel.oceanDataState.observeAsState()
     val currentCityName by locationViewModel.currentCityName.collectAsState()
     val currentForcastResponse by forecastViewModel.forecast.collectAsState()
+
+    // Tidsformat: yyyy-MM-dd'T'HH
+
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var selectedTime by remember { mutableStateOf(LocalTime.now()) }
+    var isDatePickerOpen by remember { mutableStateOf(false) }
+    var isTimePickerOpen by remember { mutableStateOf(false) }
+    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val dateFormatterFrontEnd = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    val timeFormatter = DateTimeFormatter.ofPattern("HH")
+    val context = LocalContext.current
 
     var showNoNetworkDialog by remember {
         mutableStateOf(false)
@@ -497,15 +453,11 @@ fun HomeScreen(
         "oceanData: ${oceanData?.properties?.timeseries}"
     )
 
-    val currentForecast = currentForcastResponse?.properties?.timeseries?.find {
-        it.time?.contains(time) ?: false
-    }
-
     val isAlertActive = remember(filteredFeatures) {
         filteredFeatures?.isNotEmpty() == true
     }
 
-    LaunchedEffect(userLocation) {
+    LaunchedEffect(userLocation, selected_time) {
         if (userLocation != null) {
             alertsViewModel.fetchAndFilterAlerts(
                 AlertsInfo(),
@@ -573,9 +525,6 @@ fun HomeScreen(
         "Green" -> GreenAlert// Green
         else -> WeatherCard// Default case
     }
-
-
-
 
         Column(
             modifier = Modifier
@@ -679,7 +628,7 @@ fun HomeScreen(
                 isTimePickerOpen = false
             }
 
-            selected_time = selectedDate.atTime(selectedTime).format(dateFormatterBackEnd)
+            selected_time = selectedDate.atTime(selectedTime).format(dateFormatter)
 
             Log.d("HS", "selected time: $selected_time")
 

@@ -113,17 +113,7 @@ fun SettingScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color(0xFFEBEFFF))
         ){
-
-            //Profile
-            ProfileCard(
-                navController,
-                userViewModel = userViewModel,
-                onClick = { navController.navigate(Screen.ProfileScreen.route)}
-            )
-            Spacer(modifier = Modifier.padding(6.dp))
-
             // Bakgrunnsbilde for skjermen
             Image(
                 painter = painterResource(id = R.drawable.waterbackground),

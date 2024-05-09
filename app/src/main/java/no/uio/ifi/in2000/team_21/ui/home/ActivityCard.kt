@@ -277,8 +277,8 @@ fun ActivityIconSmall(
                 .offset(y = 38.dp)
         )
 
+    }
 }
-
 
 @Composable
 fun ActivityCardHorizontalWide(
@@ -361,35 +361,36 @@ fun ActivityIconGridHorizontalSmall(
     navController: NavController
 ) {
     val favorites = activitiesViewModel.favorites.observeAsState(initial = emptyList())
-        if (favorites.value.isEmpty()){
-            Card(
-                colors = CardDefaults.cardColors(ContainerBlue),
-                modifier = Modifier
-                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
-            ) {
-                Text(
-                    text = "Legg til favorittaktiviteter ved å trykke på +",
-                    color = MidnightBlue,
+    if (favorites.value.isEmpty()) {
+        Card(
+            colors = CardDefaults.cardColors(ContainerBlue),
+            modifier = Modifier
+                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+        ) {
+            Text(
+                text = "Legg til favorittaktiviteter ved å trykke på +",
+                color = MidnightBlue,
 
                 )
-            }
-        }else{
-            LazyRow(
-                modifier = Modifier
-                    .height(84.dp)
-                    .padding(start = 16.dp)
-            ) {
-                items(favorites.value) {activityEntity ->
-                    val activityModel = activitiesViewModel.getActivityModelByName(activityEntity.name)
-                    activityModel?.let { model ->
-                        ActivityIconSmall(
-                            activity = model,
-                            activitiesViewModel = activitiesViewModel,
-                            navController = navController
-                        )
-                    }
+        }
+    } else {
+        LazyRow(
+            modifier = Modifier
+                .height(84.dp)
+                .padding(start = 16.dp)
+        ) {
+            items(favorites.value) { activityEntity ->
+                val activityModel = activitiesViewModel.getActivityModelByName(activityEntity.name)
+                activityModel?.let { model ->
+                    ActivityIconSmall(
+                        activity = model,
+                        activitiesViewModel = activitiesViewModel,
+                        navController = navController
+                    )
                 }
             }
         }
     }
 }
+
+

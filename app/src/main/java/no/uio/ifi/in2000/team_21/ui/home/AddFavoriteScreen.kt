@@ -21,6 +21,7 @@ import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.home.ActivityCardHorizontalWide
 
 @Composable
 fun AddFavoriteScreen(
@@ -53,7 +54,6 @@ fun AddFavoriteScreen(
 
         activitiesViewModel.activityUIstate.activities.forEach {
                 activity ->
-
             // Denne komponenten tegner cards på favoritt-skjermen
             ActivityCardHorizontalWide(
                 activity = activity,

@@ -1,8 +1,12 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,7 +42,8 @@ fun TopBarComponent(
         title = { /**/ },
         actions = {
             Box(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 Row(
@@ -87,17 +92,17 @@ fun TopBarComponent(
                 IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) },
                     modifier = Modifier.align(Alignment.CenterEnd)
                 ) {
-                    Icon(Icons.Default.Settings, contentDescription = "Settings icon", tint = onContainerLight)
+                    Icon(Icons.Outlined.Settings, contentDescription = "Settings icon", tint = onContainerLight)
                 }
             }
         },
         modifier = Modifier,
         colors = TopAppBarColors(
-            containerColor = containerLight,
+            containerColor = Color(0xFFC4E2F6),
             titleContentColor = Color.White,
             navigationIconContentColor = Color.White,
             actionIconContentColor = Color.White,
-            scrolledContainerColor = containerLight,
+            scrolledContainerColor = Color(0xFFC4E2F6),
         )
     )
 }

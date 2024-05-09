@@ -6,26 +6,27 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.Button
@@ -33,7 +34,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,7 +46,9 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -55,8 +57,6 @@ import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
 import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
 import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.containerLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 
 @Composable
@@ -179,8 +179,8 @@ fun ActivityCardSmall(
 ){
     Card(
         modifier = Modifier
-            .width(195.dp)
-            .height(270.dp)
+            .width(150.dp)
+            .height(260.dp)
             .padding(start = 10.dp, top = 20.dp, end = 10.dp)
             .clickable {
                 navController.navigate(
@@ -196,7 +196,7 @@ fun ActivityCardSmall(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(5.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
         ) {
             
             Spacer(modifier = Modifier.padding(top = 16.dp))
@@ -216,8 +216,9 @@ fun ActivityCardSmall(
                 painter = painterResource(id = activity.imageId),
                 contentDescription = "",
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .padding(start = 10.dp, end = 10.dp, bottom = 16.dp)
                     .clip(RoundedCornerShape(size = 16.dp))
+                    .scale(1.5f)
             )
         }
     }
@@ -228,45 +229,57 @@ fun ActivityIconSmall(
     activity: ActivityModel,
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
-){
-    Icon(
-        painter = painterResource(id = activity.icon),
-        contentDescription = "Icon of ${activity.activityName}",
+) {
+    Box(
         modifier = Modifier
-            .padding(15.dp)
-            .background(
-                color = Color.White,
-                shape = CircleShape
-            ) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
-            .clip(CircleShape) // Klipper ikonet til en sirkelform
-            //.border(2.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
-            .padding(15.dp) // Justering for å beholde plassering og størrelse
-            .scale(2f)
-            .clickable {
-                navController.navigate(
-                    Screen.ActivityDetailScreen.withArgs(
-                        activity.activityName
-                    )
+            .padding(start = 10.dp, end = 10.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = activity.icon),
+            contentDescription = "Icon of ${activity.activityName}",
+            modifier = Modifier
+                .clip(shape = CircleShape)
+                .background(
+                    color = Color(0xFF7BBBE9)
                 )
-            }
-    )
+                .padding(8.dp)
+                .clickable {
+                    navController.navigate(
+                        Screen.ActivityDetailScreen.withArgs(
+                            activity.activityName
+                        )
+                    )
+                }
+        )
+        Text(
+            text = activity.activityName,
+            maxLines = 1,
+            fontSize = 20.sp,
+            color = HomeFont,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .offset(y = 38.dp)
+        )
+    }
 }
 
 
 @Composable
 fun ActivityCardHorizontalWide(
     activity: ActivityModel,
-    activitiesViewModel: ActivitiesViewModel
+    activitiesViewModel: ActivitiesViewModel,
+    navController: NavController
 ){
+
     val isFavorite by activitiesViewModel.isFavorite(activity.activityName).observeAsState(false)
 
-    // TODO: Fikse at ikon blir husket
     var icon = if (isFavorite) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder
 
     Card(
     modifier = Modifier
         .fillMaxWidth()
-        .height(80.dp)
+        .height(140.dp)
         .padding(
             horizontal = 10.dp, vertical = 10.dp,
         )
@@ -287,16 +300,10 @@ fun ActivityCardHorizontalWide(
                 .fillMaxWidth()
                 .background(color = HomeCard)
         ) {
-            Icon(
-                painter = painterResource(id = activity.icon),
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(
-                        horizontal = 10.dp,
-                        vertical = 10.dp
-                    )
-                    .weight(1f)
-                    .scale(1.2f),
+            ActivityIconSmall(
+                activity = activity,
+                activitiesViewModel = activitiesViewModel,
+                navController = navController
             )
             Button(
                 onClick = {
@@ -334,7 +341,7 @@ fun ActivityCardHorizontalWide(
 
 */
 @Composable
-fun ActivityCardGridHorizontalSmall(
+fun ActivityIconGridHorizontalSmall(
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
 ) {
@@ -342,14 +349,23 @@ fun ActivityCardGridHorizontalSmall(
 
     if (favorites.value.isEmpty()){
         Card(
-
+        modifier = Modifier
+            .padding(start = 4.dp, end = 4.dp)
         ) {
-            Text(text = "Legg til favorittaktiviteter ved å trykke på +")
+            Text(
+                text = "Legg til favorittaktiviteter ved å trykke på +",
+                modifier = Modifier
+                    .background(
+                        color = Color(0xFFC4E2F6) // denne endrer fargen på tekstbakgrunnen
+                    )
+                    .padding(16.dp)
+            )
         }
     }else{
         LazyRow(
             modifier = Modifier
                 .height(84.dp)
+                .padding(start = 16.dp)
         ) {
             items(favorites.value) {activityEntity ->
                 val activityModel = activitiesViewModel.getActivityModelByName(activityEntity.name)

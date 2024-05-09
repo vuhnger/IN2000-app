@@ -35,8 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.Screen
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,16 +67,16 @@ fun AddActivityScreen(navController: NavController) {
                     Icon(
                         contentDescription = "Tilbake",
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                        tint = onContainerLight,
+                        tint = MidnightBlue,
                         modifier = Modifier
                             .size(30.dp)
                     )
                 }
             },
-                colors = TopAppBarDefaults.topAppBarColors(backgroundLight),
+                colors = TopAppBarDefaults.topAppBarColors(Background),
             )
         },
-        containerColor = backgroundLight,
+        containerColor = Background,
     ) {innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -90,8 +92,8 @@ fun AddActivityScreen(navController: NavController) {
                         .fillMaxWidth(),
                     //ikke optimal
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = onContainerLight,
-                        unfocusedBorderColor = onContainerLight)
+                        focusedBorderColor = ContainerBlue,
+                        unfocusedBorderColor = ContainerBlue)
                     )
                  Spacer(modifier = Modifier
                      .padding(30.dp)
@@ -111,7 +113,7 @@ fun WeatherSliders(name: String){
     Slider(
         value = sliderPosition,
         onValueChange = { sliderPosition = it },
-        colors = SliderDefaults.colors(onContainerLight),
+        colors = SliderDefaults.colors(MidnightBlue),
         steps = 4,
         valueRange = 0f..15f
     )

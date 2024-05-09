@@ -1,56 +1,51 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-import android.app.TimePickerDialog
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
+
+
 import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
+import android.os.Build
 import android.util.Log
-import androidx.compose.foundation.Image
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -61,38 +56,30 @@ import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
+
 import no.uio.ifi.in2000.team_21.ui.theme.Background
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
-import no.uio.ifi.in2000.team_21.ui.theme.weatherCardLight
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.WeatherCard
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+import no.uio.ifi.in2000.team_21.ui.theme.YellowAlert
+import no.uio.ifi.in2000.team_21.ui.theme.GreenAlert
+import no.uio.ifi.in2000.team_21.ui.theme.RedAlert
+
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.OceanForecastViewModel
-import java.time.LocalDate
-import java.time.LocalTime
+
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random
-import no.uio.ifi.in2000.team_21.R
-
-private fun isInternetAvailable(context: Context): Boolean {
-    var result = false
-    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val networkCapabilities = connectivityManager.activeNetwork ?: return false
-    val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
-    result = when {
-        actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-        actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-        actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-        else -> false
-    }
-    return result
-}
+import no.uio.ifi.in2000.team_21.ui.home.ActivityIconGridHorizontalSmall
 
 @Composable
 fun WeatherCard(
@@ -103,132 +90,136 @@ fun WeatherCard(
     icon: String,
     cloudCoverDescription: String,
     waveheight: String,
-    windSpeed: String,
-    time: String
+    windSpeed: String
 ) {
-    Card(
+
+    Row(
+        horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(start = 40.dp, end = 40.dp, top = 16.dp, bottom = 16.dp)
-            .width(320.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
-        colors = CardDefaults.cardColors(containerColor = alertColor)
-    ) {
-        Column (
+            .fillMaxWidth()
+    ){
+
+        Card(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(40.dp)
+                .width(320.dp)
+                .height(280.dp)
+                .aspectRatio(1f),
+            elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+            colors = CardDefaults.cardColors(containerColor = alertColor)
         ) {
-            Text(
-                text = cityName,
-                style = TextStyle(
-                    fontSize = 25.sp,
-                    lineHeight = 20.sp,
-                    //fontFamily = FontFamily(Font(R.font.roboto)),
-                    fontWeight = FontWeight(500),
-                    color = onContainerLight,
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.1.sp,
-                )
-            )
-            Spacer(Modifier.height(16.dp))
-            Box(
-                contentAlignment = Alignment.CenterStart,
+            Column (
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp)
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
+                Text(
+                    text = cityName,
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        lineHeight = 20.sp,
+                        //fontFamily = FontFamily(Font(R.font.roboto)),
+                        fontWeight = FontWeight(400),
+                        color = MidnightBlue,
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.1.sp,
+                    )
+                )
+                Spacer(Modifier.height(16.dp))
+                Box(
+                    contentAlignment = Alignment.CenterStart,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(start = 20.dp)
                 ) {
-                    WeatherIcon(
-                        element = icon
-                    )
-                    Spacer(modifier = Modifier.padding(12.dp))
-                    Text(
-                        text = temperature,
-                        style = TextStyle(
-                            fontSize = 70.sp,
-                            lineHeight = 16.sp,
-                            //fontFamily = FontFamily(Font(R.font.roboto)),
-                            //fontWeight = FontWeight(400),
-                            color = onContainerLight,
-                            textAlign = TextAlign.Center,
-                            letterSpacing = 0.5.sp,
-                        ),
-                    )
-                    if (isAlertActive) {
-                        Icon(
-                            imageVector = Icons.Default.Warning,
-                            contentDescription = "Alert active",
-                            modifier = Modifier
-                                .padding(start = 16.dp)
-                                .size(40.dp)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        WeatherIcon(
+                            element = icon
                         )
+                        Spacer(modifier = Modifier.padding(12.dp))
+                        Text(
+                            text = temperature,
+                            style = TextStyle(
+                                fontSize = 70.sp,
+                                lineHeight = 16.sp,
+                                //fontFamily = FontFamily(Font(R.font.roboto)),
+                                //fontWeight = FontWeight(400),
+                                color = MidnightBlue,
+                                textAlign = TextAlign.Center,
+                                letterSpacing = 0.5.sp,
+                            ),
+                        )
+                        if (isAlertActive) {
+                            Icon(
+                                imageVector = Icons.Default.Warning,
+                                contentDescription = "Alert active",
+                                modifier = Modifier
+                                    .padding(start = 16.dp)
+                                    .size(40.dp)
+                            )
+                        }
                     }
                 }
-            }
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = cloudCoverDescription,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    lineHeight = 20.sp,
-                    //fontFamily = FontFamily(Font(R.font.roboto)),
-                    fontWeight = FontWeight(400),
-                    color = onContainerLight,
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.1.sp,
-                )
-            )
-            Spacer(Modifier.height(4.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-            ) {
-
+                Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Vind: $windSpeed",
+                    text = cloudCoverDescription,
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 20.sp,
                         //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(400),
-                        color = onContainerLight,
+                        color = MidnightBlue,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.1.sp,
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
+                    )
                 )
+                Spacer(Modifier.height(4.dp))
 
-                if ( !waveheight.contains("null")){
+                Row(
+
+                ) {
+
                     Text(
-                        text = "Bølger: $waveheight",
+                        text = "Vind: " + windSpeed,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
                             //fontFamily = FontFamily(Font(R.font.roboto)),
                             fontWeight = FontWeight(400),
-                            color = onContainerLight,
+                            color = MidnightBlue,
                             textAlign = TextAlign.Center,
                             letterSpacing = 0.1.sp,
                         ),
                         modifier = Modifier
                             .weight(1f)
                     )
+
+                    if ( !waveheight.contains("null")){
+                        Text(
+                            text = "Bølger: " + waveheight,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                lineHeight = 20.sp,
+                                //fontFamily = FontFamily(Font(R.font.roboto)),
+                                fontWeight = FontWeight(400),
+                                color = MidnightBlue,
+                                textAlign = TextAlign.Center,
+                                letterSpacing = 0.1.sp,
+                            ),
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+                    }
                 }
             }
-
         }
     }
 }
-
 
 
 @Composable
@@ -242,25 +233,22 @@ fun ActivityFavorites(
     ) {
 
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
         ) {
             Text(
                 text = "Dine favoritter",
                 style = TextStyle(
                     fontSize = 20.sp,
-                    //lineHeight = 20.sp,
+                    lineHeight = 20.sp,
                     //fontFamily = FontFamily(Font(R.font.roboto)),
                     //fontWeight = FontWeight(400),
-                    color = onContainerLight,
+                    color = MidnightBlue,
                     //textAlign = TextAlign.Center,
                     letterSpacing = 0.1.sp,
                 ),
                 modifier = Modifier
-                    .padding(start = 8.dp)
-                    .align(Alignment.CenterVertically)
+                    .padding(8.dp)
             )
 
             Button(
@@ -269,16 +257,17 @@ fun ActivityFavorites(
                           },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Background,
-                    contentColor = onContainerLight
+                    contentColor = MidnightBlue
                 ),
                 modifier = Modifier
-                    .padding(end = 8.dp)
+                    .offset(x = 200.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Edit,
-                    contentDescription = "Favorittknapp",
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Button add to favorites",
                     modifier = Modifier
                         .padding(1.dp)
+                        .scale(1.5f)
                 )
             }
 
@@ -335,51 +324,21 @@ fun RecommendationSection(
         return weatherFacts[Random.nextInt(weatherFacts.size)]
     }
 
-    Column(modifier = Modifier
-        .padding(8.dp)
-        .fillMaxWidth()
-    ) {
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-        ){
-
-            Text(
-                text = "Våre anbefalinger",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    //lineHeight = 20.sp,
-                    //fontFamily = FontFamily(Font(R.font.roboto)),
-                    fontWeight = FontWeight(400),
-                    color = onContainerLight,
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.1.sp,
-                ),
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .align(Alignment.CenterVertically)
+    Column(
+         ) {
+        Text(
+            text = "Våre anbefalinger",
+            style = TextStyle(
+                fontSize = 20.sp,
+                lineHeight = 20.sp,
+                //fontFamily = FontFamily(Font(R.font.roboto)),
+                fontWeight = FontWeight(400),
+                color = MidnightBlue,
+                textAlign = TextAlign.Center,
+                letterSpacing = 0.1.sp,
             )
-
-            Button(
-                onClick = {
-                    // TODO: all activities screen
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Background,
-                    contentColor = onContainerLight
-                ),
-                modifier = Modifier
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.List,
-                    contentDescription = "Alle aktiviteter knapp",
-                    modifier = Modifier
-                        .padding(1.dp)
-                )
-            }
-        }
+        )
+        //Spacer(Modifier.height(4.dp))
 
         val activityList by activityConditionCheckerViewModel.activities.observeAsState(initial = emptyList())
         val filteredActivities = activityList.filter {
@@ -387,26 +346,37 @@ fun RecommendationSection(
         }
 
         if(filteredActivities.isEmpty()){
-            Column(
+            Card(
+                colors = CardDefaults.cardColors(ContainerBlue),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
             ) {
+
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Oi! Her var det ingen aktiviteter å anbefale. Dette kan skyldes dårlig vær eller manglende internett."
+                    text = "Ingen aktiviteter kan anbefales akkurat nå. Dette kan skyldes upassende vær eller manglende nettverkstilkobling.",
+                    color = MidnightBlue,
+
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                )
                 Text(
-                    text = "Mens du venter, her er en fakta om vær ved sjøen! "
+                    text = "Mens du venter, her er en fakta om vær ved sjøen",
+                    color = MidnightBlue,
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(text = getRandomWeatherFact())
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                )
+                Text(
+                    text = getRandomWeatherFact(),
+                    color = MidnightBlue,
+                )
             }
         }else{
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
+            LazyRow {
                 this.items(filteredActivities){ recommendation ->
                     ActivityCardSmall(
                         activity = recommendation,
@@ -418,6 +388,66 @@ fun RecommendationSection(
     }
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar(
+    navController: NavController
+) {
+    TopAppBar(
+        title = {  },
+        actions = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Box(Modifier.weight(1f))
+
+                Row {
+                    IconButton(
+                        onClick = {
+                                  // TODO: Tilbake navigering
+                                  },
+                        modifier = Modifier
+                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
+                    ) {
+                        Text("Hjem", style = TextStyle(
+                            fontSize = 20.sp
+                        )
+                        )
+                    }
+                    IconButton(
+                        onClick = { navController.navigate(Screen.MapScreen.route) },
+                        modifier = Modifier
+                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
+                    ) {
+                        Text("Kart", style = TextStyle(
+                            fontSize = 20.sp
+                        ))
+                    }
+                }
+
+                Box(Modifier.weight(1f)) {
+                    IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) }) {
+                        Icon(
+                            Icons.Default.Settings,
+                            contentDescription = "Account icon",
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
+                }
+            }
+        },
+        modifier = Modifier
+            .padding(top = 16.dp)
+    )
+
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -431,9 +461,9 @@ fun HomeScreen(
 
     val norwayZone = ZoneId.of("Europe/Oslo")
 
-    val dateFormatterBackEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
 
-    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(dateFormatterBackEnd)
+    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
 
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
@@ -441,31 +471,8 @@ fun HomeScreen(
     val currentCityName by locationViewModel.currentCityName.collectAsState()
     val currentForcastResponse by forecastViewModel.forecast.collectAsState()
 
-    // Tidsformat: yyyy-MM-dd'T'HH
-
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    var selectedTime by remember { mutableStateOf(LocalTime.now()) }
-    var isDatePickerOpen by remember { mutableStateOf(false) }
-    var isTimePickerOpen by remember { mutableStateOf(false) }
-    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val dateFormatterFrontEnd = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-    val timeFormatter = DateTimeFormatter.ofPattern("HH")
-    val context = LocalContext.current
-
     var showNoNetworkDialog by remember {
         mutableStateOf(false)
-    }
-
-    var selected_time by remember {
-        mutableStateOf(time)
-    }
-
-    val currentForecast by remember{
-        derivedStateOf {
-            currentForcastResponse?.properties?.timeseries?.find {
-                it.time?.contains(selected_time) ?: false
-            }
-        }
     }
 
     if (showNoNetworkDialog){
@@ -488,11 +495,15 @@ fun HomeScreen(
         "oceanData: ${oceanData?.properties?.timeseries}"
     )
 
+    val currentForecast = currentForcastResponse?.properties?.timeseries?.find {
+        it.time?.contains(time) ?: false
+    }
+
     val isAlertActive = remember(filteredFeatures) {
         filteredFeatures?.isNotEmpty() == true
     }
 
-    LaunchedEffect(userLocation, selected_time) {
+    LaunchedEffect(userLocation) {
         if (userLocation != null) {
             alertsViewModel.fetchAndFilterAlerts(
                 AlertsInfo(),
@@ -507,7 +518,7 @@ fun HomeScreen(
             )
 
             activityConditionCheckerViewModel.checkActivityConditions(
-                time = selected_time,
+                time = time,
                 latitude = userLocation!!.latitude() ,
                 longitude = userLocation!!.longitude()
             )
@@ -521,45 +532,36 @@ fun HomeScreen(
     }
 
     val alertColor = when (filteredFeatures?.maxByOrNull { it.properties.severity?.toIntOrNull() ?: 0 }?.properties?.riskMatrixColor) {
-        "Yellow" -> Color(0xFFF9F1DC) // Yellow
-        "Red" -> Color(0xFFF9DEDC) // Red
-        "Green" -> Color(0xFFECF9DC) // Green
-        else -> Color.White
+        "Yellow" -> YellowAlert // Yellow
+        "Red" -> RedAlert // Red
+        "Green" -> GreenAlert// Green
+        else -> WeatherCard// Default case
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                color = Color(0xFFEBEFFF)
-            )
-    ){
 
-        // Bakgrunnsbilde for skjermen
-        Image(
-            painter = painterResource(id = R.drawable.waterbackground),
-            contentDescription = "",
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .scale(1.2f)
-                .fillMaxWidth()
-        )
+
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .width(360.dp)
+                .height(50.dp)
+                .background(color = Background)
         ) {
-
             TopBarComponent(
                 navController = navController
             )
 
-            if(isInternetAvailable(context)){
+            if (currentForcastResponse != null) {
                 WeatherCard(
                     cityName = currentCityName ?: "---",
                     temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
-                        "celsius" -> "${currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()}°"
-                        else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()
+                        "celsius" -> "${
+                            currentForecast?.data?.instant?.details?.air_temperature?.toInt()
+                                .toString()
+                        }°"
+
+                        else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt()
+                            .toString()
                     },
                     alertColor = alertColor,
                     isAlertActive = isAlertActive,
@@ -567,86 +569,12 @@ fun HomeScreen(
                         currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
                     ),
                     icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
-                    waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(selected_time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
-                    windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}",
-                    time = selected_time
+                    waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(time) ?: false }?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
+                    windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}"
                 )
-            }else{
+            } else {
                 showNoNetworkDialog = true
             }
-
-            // TODO: Date picker her
-
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .padding(start = 100.dp, end = 40.dp)
-            ) {
-
-                OutlinedTextField(
-                    readOnly = true,
-                    value = selectedDate.format(dateFormatterFrontEnd),
-                    onValueChange = {},
-                    modifier = Modifier
-                        .clickable {
-                            isDatePickerOpen = true
-                            Log.d("HS", "trykket datofelt")
-                        }
-                        .width(130.dp)
-                        .height(60.dp),
-                    label = { Text("Dato") },
-                    shape = RoundedCornerShape(16.dp)
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                OutlinedTextField(
-                    readOnly = true,
-                    value = selectedTime.format(timeFormatter),
-                    onValueChange = {},
-                    modifier = Modifier
-                        .clickable { isTimePickerOpen = true }
-                        .width(66.dp)
-                        .height(60.dp),
-                    label = { Text("Tid") },
-                    shape = RoundedCornerShape(16.dp)
-                )
-
-            }
-
-            if (isDatePickerOpen) {
-                val datePickerDialog = android.app.DatePickerDialog(
-                    context,
-                    { _, year, month, dayOfMonth ->
-                        selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
-                        isDatePickerOpen = false
-                    },
-                    selectedDate.year,
-                    selectedDate.monthValue - 1,
-                    selectedDate.dayOfMonth
-                )
-                datePickerDialog.show()
-                isDatePickerOpen = false
-            }
-
-            if (isTimePickerOpen) {
-                val timePickerDialog = TimePickerDialog(
-                    context,
-                    { _, hourOfDay, minute ->
-                        selectedTime = LocalTime.of(hourOfDay, 0)
-                        isTimePickerOpen = false
-                    },
-                    selectedTime.hour,
-                    selectedTime.minute,
-                    true
-                )
-                timePickerDialog.show()
-                isTimePickerOpen = false
-            }
-
-            selected_time = selectedDate.atTime(selectedTime).format(dateFormatterBackEnd)
-
-            Log.d("HS", "selected time: $selected_time")
 
             ActivityFavorites(
                 viewModel = activitiesViewModel,
@@ -661,8 +589,6 @@ fun HomeScreen(
                 navController = navController
             )
         }
-    }
-
 
 }
 

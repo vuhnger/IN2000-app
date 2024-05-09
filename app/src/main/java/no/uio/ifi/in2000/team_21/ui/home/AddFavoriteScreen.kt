@@ -15,11 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.ui.theme.Background
-import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
-import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
-import no.uio.ifi.in2000.team_21.ui.theme.containerLight
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.home.ActivityCardHorizontalWide
 
 @Composable
 fun AddFavoriteScreen(
@@ -35,8 +37,8 @@ fun AddFavoriteScreen(
         Button(
             onClick = { navController.popBackStack() },
             colors = ButtonDefaults.buttonColors(
-                containerColor = HomeCard,
-                contentColor = HomeFont
+                containerColor = ContainerBlue,
+                contentColor = MidnightBlue
             )
         ) {
             Text(text = "Tilbake")
@@ -52,7 +54,6 @@ fun AddFavoriteScreen(
 
         activitiesViewModel.activityUIstate.activities.forEach {
                 activity ->
-
             // Denne komponenten tegner cards på favoritt-skjermen
             ActivityCardHorizontalWide(
                 activity = activity,

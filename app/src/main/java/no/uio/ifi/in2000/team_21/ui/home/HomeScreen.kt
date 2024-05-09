@@ -2,10 +2,14 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 
 import android.app.TimePickerDialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +18,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -63,6 +68,8 @@ import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -86,6 +93,20 @@ import kotlin.random.Random
 import java.time.LocalDate
 import java.time.LocalTime
 
+private fun isInternetAvailable(context: Context): Boolean {
+    var result = false
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkCapabilities = connectivityManager.activeNetwork ?: return false
+    val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+    result = when {
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        else -> false
+    }
+    return result
+}
+
 @Composable
 fun WeatherCard(
     cityName: String,
@@ -107,9 +128,7 @@ fun WeatherCard(
         Card(
             modifier = Modifier
                 .padding(40.dp)
-                .width(320.dp)
-                .height(280.dp)
-                .aspectRatio(1f),
+                .width(320.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
             colors = CardDefaults.cardColors(containerColor = alertColor)
         ) {
@@ -393,66 +412,6 @@ fun RecommendationSection(
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar(
-    navController: NavController
-) {
-    TopAppBar(
-        title = {  },
-        actions = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Box(Modifier.weight(1f))
-
-                Row {
-                    IconButton(
-                        onClick = {
-                                  // TODO: Tilbake navigering
-                                  },
-                        modifier = Modifier
-                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
-                    ) {
-                        Text("Hjem", style = TextStyle(
-                            fontSize = 20.sp
-                        )
-                        )
-                    }
-                    IconButton(
-                        onClick = { navController.navigate(Screen.MapScreen.route) },
-                        modifier = Modifier
-                            .sizeIn(minWidth = 96.dp, minHeight = 48.dp)
-                    ) {
-                        Text("Kart", style = TextStyle(
-                            fontSize = 20.sp
-                        ))
-                    }
-                }
-
-                Box(Modifier.weight(1f)) {
-                    IconButton(onClick = { navController.navigate(Screen.SettingScreen.route) }) {
-                        Icon(
-                            Icons.Default.Settings,
-                            contentDescription = "Account icon",
-                            modifier = Modifier.size(36.dp)
-                        )
-                    }
-                }
-            }
-        },
-        modifier = Modifier
-            .padding(top = 16.dp)
-    )
-
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -540,7 +499,7 @@ fun HomeScreen(
         }
     }
 
-    if (showNoNetworkDialog){
+    if (!isInternetAvailable(context)){
         AlertDialog(
             onDismissRequest = {
                 showNoNetworkDialog = false
@@ -567,7 +526,9 @@ fun HomeScreen(
             title = { Text(text = "Ingen nettverksforbindelse")},
             text = { Text(text = "Vi kan ikke hente værdata, sjekk din nettverkstilkobling og prøv igjen. ")},
             buttons = {
-                Button(onClick = { showNoNetworkDialog = false }) {
+                Button(
+                    onClick = { showNoNetworkDialog = false }
+                ) {
                     Text(text = "Lukk")
                 }
             }
@@ -581,14 +542,24 @@ fun HomeScreen(
         else -> WeatherCard// Default case
     }
 
-
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Background)
+    ){
+        // Bakgrunnsbilde for skjermen
+        Image(
+            painter = painterResource(id = R.drawable.waterbackground),
+            contentDescription = "",
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .scale(1.2f)
+                .fillMaxWidth()
+        )
 
         Column(
             modifier = Modifier
-                .width(360.dp)
-                .height(50.dp)
-                .background(color = Background)
+                .fillMaxSize()
         ) {
             TopBarComponent(
                 navController = navController
@@ -703,6 +674,8 @@ fun HomeScreen(
                 navController = navController
             )
         }
+
+    }
 
 }
 

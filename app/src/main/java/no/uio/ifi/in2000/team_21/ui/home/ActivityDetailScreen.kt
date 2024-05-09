@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
+import no.uio.ifi.in2000.team_21.ui.theme.Background
 import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
 import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
@@ -70,6 +71,7 @@ fun ActivityDetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize() // Fill entire screen (improves layout)
+            .background(Background)
     ) {
         val activity = activityConditionCheckerViewModel.get(
             activityName = activityName ?: ""
@@ -78,13 +80,13 @@ fun ActivityDetailScreen(
         var showDialog by remember{
             mutableStateOf(false)
         }
-        
+
         if (showDialog){
             AlertDialog(
                 onDismissRequest = {
                     showDialog = false
                     navController.popBackStack()
-                                   },
+                },
                 title = { Text(text = "Aktivitet loggført!")},
                 text = { Text(text = "Du finner denne i historikk.")},
                 buttons = {
@@ -110,7 +112,7 @@ fun ActivityDetailScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFEBEFFF)),// Consistent padding
+                .background(Background),// Consistent padding
 
             horizontalArrangement = Arrangement.SpaceBetween // Space buttons evenly
         ) {
@@ -119,7 +121,7 @@ fun ActivityDetailScreen(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = "Tilbakeknapp til hjemskjerm.",
 
-                )
+                    )
             }
         }
 
@@ -217,11 +219,12 @@ fun ActivityDetailScreen(
                     )
                     showDialog = true
                 },
-                colors = ButtonDefaults.buttonColors(Color(0xFF5058A4))
+                colors = ButtonDefaults.buttonColors(MidnightBlue)
             ) {
                 Text(
                     text = "Loggfør aktivitet",
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    color = Background
                 )
             }
         }

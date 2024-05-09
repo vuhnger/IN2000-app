@@ -34,6 +34,7 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -110,6 +111,8 @@ import no.uio.ifi.in2000.team_21.ui.viewmodels.UserMarkerViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.home.TopBarComponent
 import no.uio.ifi.in2000.team_21.ui.home.WeatherIcon
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import kotlin.math.cos
 import kotlin.math.sin
 import no.uio.ifi.in2000.team_21.model.Feature as MyFeature
@@ -389,6 +392,11 @@ fun RadiusSelector(radius: MutableState<Double>, onRadiusChange: (Double) -> Uni
             mapboxMap?.clearSearchArea()
         },
         valueRange = 1f..2500f,
+        colors = SliderDefaults.colors(
+            thumbColor = MidnightBlue,
+            activeTrackColor = MidnightBlue,
+            inactiveTrackColor = Background,
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp)

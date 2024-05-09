@@ -102,7 +102,7 @@ fun SettingScreen(
                                 modifier = Modifier
                                     .size(30.dp)
                             )
-                        }},
+                        } },
                 colors = TopAppBarDefaults.topAppBarColors(Background),
             )},
         containerColor = Background,

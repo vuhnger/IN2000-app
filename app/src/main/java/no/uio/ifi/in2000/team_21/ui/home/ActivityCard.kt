@@ -242,8 +242,6 @@ fun ActivityIconSmall(
             //.border(2.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
             .padding(25.dp) // Justering for å beholde plassering og størrelse
             .scale(2f)
-            .size(height = 45.dp, width = 45.dp)
-
             .clickable {
                 navController.navigate(
                     Screen.ActivityDetailScreen.withArgs(

@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,6 +60,7 @@ import androidx.compose.ui.text.input.ImeAction
 import no.uio.ifi.in2000.team_21.ui.theme.Background
 import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
 import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+import no.uio.ifi.in2000.team_21.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -144,8 +146,8 @@ fun ProfileScreen (
                     disabledTextColor = MidnightBlue,
                     unfocusedBorderColor = MidnightBlue,
                     focusedBorderColor = MidnightBlue,
-                    focusedContainerColor = ContainerBlue,
-                    unfocusedContainerColor = ContainerBlue
+                    focusedContainerColor = White,
+                    unfocusedContainerColor = White
                 ),
 
                 modifier = Modifier
@@ -169,8 +171,8 @@ fun ProfileScreen (
                     disabledTextColor = MidnightBlue,
                     unfocusedBorderColor = MidnightBlue,
                     focusedBorderColor = MidnightBlue,
-                    focusedContainerColor = ContainerBlue,
-                    unfocusedContainerColor = ContainerBlue
+                    focusedContainerColor = White,
+                    unfocusedContainerColor = White
                 ),
 
                 modifier = Modifier
@@ -195,8 +197,8 @@ fun ProfileScreen (
                     disabledTextColor = MidnightBlue,
                     unfocusedBorderColor = MidnightBlue,
                     focusedBorderColor = MidnightBlue,
-                    focusedContainerColor = ContainerBlue,
-                    unfocusedContainerColor = ContainerBlue
+                    focusedContainerColor = White,
+                    unfocusedContainerColor = White
                 ),
 
                 modifier = Modifier
@@ -220,8 +222,8 @@ fun ProfileScreen (
                     disabledTextColor = MidnightBlue,
                     unfocusedBorderColor = MidnightBlue,
                     focusedBorderColor = MidnightBlue,
-                    focusedContainerColor = ContainerBlue,
-                    unfocusedContainerColor = ContainerBlue
+                    focusedContainerColor = White,
+                    unfocusedContainerColor = White
                 ),
 
                 modifier = Modifier
@@ -241,8 +243,8 @@ fun ProfileScreen (
                     )
                 },
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MidnightBlue,
-                    containerColor = ContainerBlue,
+                    contentColor = Background,
+                    containerColor = MidnightBlue,
                     //Går ikke an å endre farge på border.
 
                 ),

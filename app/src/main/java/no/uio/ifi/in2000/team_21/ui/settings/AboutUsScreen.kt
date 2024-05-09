@@ -30,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -122,11 +123,11 @@ fun AboutUsScreen(navController: NavController) {
                                 .size(30.dp)
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(Background),
             )
         },
-        modifier = Modifier
-            .background(color = Background)
+        containerColor = Background
     ) { innerPadding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -141,6 +142,7 @@ fun AboutUsScreen(navController: NavController) {
         )
     }
 }
+
 @Composable
 fun AboutUsCard(teamMember: TeamMember){
     Log.d(

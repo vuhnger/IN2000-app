@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.Button
@@ -272,16 +273,16 @@ fun ActivityCardHorizontalWide(
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
 ){
-
-    // TODO: Fikse at ikon blir husket
-    var icon by remember {
-        mutableStateOf(Icons.Outlined.FavoriteBorder)
+    var iconClicked by remember {
+        mutableStateOf(
+            (activity in activitiesViewModel.activityUIstate.favorites)
+        )
     }
 
     Card(
     modifier = Modifier
         .fillMaxWidth()
-        .height(80.dp)
+        .height(140.dp)
         .padding(
             horizontal = 10.dp, vertical = 10.dp,
         )
@@ -309,13 +310,7 @@ fun ActivityCardHorizontalWide(
             )
             Button(
                 onClick = {
-                    icon = if (activity in activitiesViewModel.activityUIstate.favorites){
-                        activitiesViewModel.removeFavorite(activity = activity)
-                        Icons.Default.FavoriteBorder
-                    }else{
-                        activitiesViewModel.addFavorite(activity = activity)
-                        Icons.Default.Favorite
-                    }
+                      activitiesViewModel.addFavorite(activity = activity)
                 },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colorScheme.primary,
@@ -325,7 +320,10 @@ fun ActivityCardHorizontalWide(
                     .weight(1f)
             ) {
                 Icon(
-                    imageVector = icon,
+                    imageVector = when (iconClicked) {
+                        true -> Icons.Outlined.Favorite
+                        false -> Icons.Outlined.FavoriteBorder
+                    },
                     contentDescription = "Knapp for å legge til i favoritter",
                     modifier = Modifier
                         .padding(

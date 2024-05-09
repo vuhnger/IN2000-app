@@ -146,7 +146,8 @@ fun WeatherCard(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ) {
                     WeatherIcon(
                         element = icon
@@ -276,7 +277,7 @@ fun ActivityFavorites(
                     contentColor = onContainerLight
                 ),
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(end = 8.dp)
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Edit,
@@ -339,11 +340,15 @@ fun RecommendationSection(
         return weatherFacts[Random.nextInt(weatherFacts.size)]
     }
 
-    Column(modifier = Modifier.padding(8.dp)) {
+    Column(modifier = Modifier
+        .padding(8.dp)
+        .fillMaxWidth()
+    ) {
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         ){
 
             Text(
@@ -371,7 +376,6 @@ fun RecommendationSection(
                     contentColor = onContainerLight
                 ),
                 modifier = Modifier
-                    .padding(8.dp)
             ) {
                 Icon(
                     imageVector = Icons.Outlined.List,
@@ -405,6 +409,8 @@ fun RecommendationSection(
             }
         }else{
             LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
                 this.items(filteredActivities){ recommendation ->
                     ActivityCardSmall(

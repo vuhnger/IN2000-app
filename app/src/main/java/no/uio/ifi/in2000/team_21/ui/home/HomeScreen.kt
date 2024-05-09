@@ -62,6 +62,7 @@ import androidx.compose.ui.draw.scale
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 
 import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
 import no.uio.ifi.in2000.team_21.ui.theme.WeatherCard
 import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import no.uio.ifi.in2000.team_21.ui.theme.YellowAlert
@@ -338,7 +339,7 @@ fun RecommendationSection(
         return weatherFacts[Random.nextInt(weatherFacts.size)]
     }
 
-    Column(modifier = Modifier.padding(8.dp)
+    Column(
          ) {
         Text(
             text = "Våre anbefalinger",
@@ -361,19 +362,33 @@ fun RecommendationSection(
 
         if(filteredActivities.isEmpty()){
             Card(
-
+                colors = CardDefaults.cardColors(ContainerBlue),
+                modifier = Modifier
+                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
             ) {
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Ingen aktiviteter kan anbefales akkurat nå. Dette kan skyldes upassende vær eller manglende nettverkstilkobling."
+                    text = "Ingen aktiviteter kan anbefales akkurat nå. Dette kan skyldes upassende vær eller manglende nettverkstilkobling.",
+                    color = MidnightBlue,
+
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                )
                 Text(
-                    text = "Mens du venter, her er en fakta om vær ved sjøen"
+                    text = "Mens du venter, her er en fakta om vær ved sjøen",
+                    color = MidnightBlue,
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = getRandomWeatherFact())
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                )
+                Text(
+                    text = getRandomWeatherFact(),
+                    color = MidnightBlue,
+                )
             }
         }else{
             LazyRow {
@@ -538,49 +553,57 @@ fun HomeScreen(
         else -> WeatherCard// Default case
     }
 
-    Column(
-        modifier = Modifier
-            .width(360.dp)
-            .height(50.dp)
-            .background(color = Background)
-    ) {
 
-        TopBarComponent(
-            navController = navController
-        )
 
-        if(currentForcastResponse != null){
-            WeatherCard(
-                cityName = currentCityName ?: "---",
-                temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
-                    "celsius" -> "${currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()}°"
-                    else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()
-                },
-                alertColor = alertColor,
-                isAlertActive = isAlertActive,
-                cloudCoverDescription = forecastViewModel.describeCloudCover(
-                    currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
-                ),
-                icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
-                waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
-                windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}"
+
+        Column(
+            modifier = Modifier
+                .width(360.dp)
+                .height(50.dp)
+                .background(color = Background)
+        ) {
+            TopBarComponent(
+                navController = navController
             )
-        }else{
-            showNoNetworkDialog = true
+
+            if (currentForcastResponse != null) {
+                WeatherCard(
+                    cityName = currentCityName ?: "---",
+                    temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
+                        "celsius" -> "${
+                            currentForecast?.data?.instant?.details?.air_temperature?.toInt()
+                                .toString()
+                        }°"
+
+                        else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt()
+                            .toString()
+                    },
+                    alertColor = alertColor,
+                    isAlertActive = isAlertActive,
+                    cloudCoverDescription = forecastViewModel.describeCloudCover(
+                        currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
+                    ),
+                    icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
+                    waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(time) ?: false }?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
+                    windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}"
+                )
+            } else {
+                showNoNetworkDialog = true
+            }
+
+            ActivityFavorites(
+                viewModel = activitiesViewModel,
+                navController = navController,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel
+            )
+
+            RecommendationSection(
+                viewModel = activitiesViewModel,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel,
+                locationViewModel = locationViewModel,
+                navController = navController
+            )
         }
 
-        ActivityFavorites(
-            viewModel = activitiesViewModel,
-            navController = navController,
-            activityConditionCheckerViewModel = activityConditionCheckerViewModel
-        )
-
-        RecommendationSection(
-            viewModel = activitiesViewModel,
-            activityConditionCheckerViewModel = activityConditionCheckerViewModel,
-            locationViewModel = locationViewModel,
-            navController = navController
-        )
-    }
 }
 

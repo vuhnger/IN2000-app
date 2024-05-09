@@ -341,9 +341,14 @@ fun ActivityCardGridHorizontalSmall(
 ) {
     if (activitiesViewModel.activityUIstate.favorites.isEmpty()){
         Card(
-
+            colors = CardDefaults.cardColors(ContainerBlue),
+            modifier = Modifier
+                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
         ) {
-            Text(text = "Legg til favorittaktiviteter ved å trykke på +")
+            Text(
+                text = "Legg til favorittaktiviteter ved å trykke på +",
+                color = MidnightBlue,
+            )
         }
     }else{
         LazyRow(

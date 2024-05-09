@@ -1,7 +1,11 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
 
-
+import android.app.TimePickerDialog
+import android.content.Context
+import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import android.os.Build
 import android.util.Log
@@ -474,21 +478,19 @@ fun HomeScreen(
     var showNoNetworkDialog by remember {
         mutableStateOf(false)
     }
-
-    if (showNoNetworkDialog){
-        AlertDialog(
-            onDismissRequest = {
-                showNoNetworkDialog = false
-                               },
-            title = { Text(text = "Ingen nettverksforbindelse")},
-            text = { Text(text = "Vi kan ikke hente værdata, sjekk din nettverkstilkobling og prøv igjen. ")},
-            buttons = {
-                Button(onClick = { showNoNetworkDialog = false }) {
-                    Text(text = "Lukk")
-                }
-            }
-        )
+    
+    var selected_time by remember {
+        mutableStateOf(time)
     }
+
+    val currentForecast by remember{
+        derivedStateOf {
+            currentForcastResponse?.properties?.timeseries?.find {
+                it.time?.contains(selected_time) ?: false
+            }
+        }
+    }
+
 
     Log.d(
         "HOME_SCREEN",
@@ -529,6 +531,40 @@ fun HomeScreen(
             )
 
         }
+    }
+
+    if (showNoNetworkDialog){
+        AlertDialog(
+            onDismissRequest = {
+                showNoNetworkDialog = false
+                if (userLocation != null){
+
+                    forecastViewModel.fetchWeatherForLocation( // let him cook!
+                        lat = userLocation!!.latitude(),
+                        lon = userLocation!!.longitude()
+                    )
+
+                    oceanForecastViewModel.fetchOceanForecastByTime(
+                        latitude = userLocation!!.latitude(),
+                        longitude = userLocation!!.longitude()
+                    )
+
+                    activityConditionCheckerViewModel.checkActivityConditions(
+                        time = selected_time,
+                        latitude = userLocation!!.latitude() ,
+                        longitude = userLocation!!.longitude()
+                    )
+
+                }
+            },
+            title = { Text(text = "Ingen nettverksforbindelse")},
+            text = { Text(text = "Vi kan ikke hente værdata, sjekk din nettverkstilkobling og prøv igjen. ")},
+            buttons = {
+                Button(onClick = { showNoNetworkDialog = false }) {
+                    Text(text = "Lukk")
+                }
+            }
+        )
     }
 
     val alertColor = when (filteredFeatures?.maxByOrNull { it.properties.severity?.toIntOrNull() ?: 0 }?.properties?.riskMatrixColor) {
@@ -575,6 +611,77 @@ fun HomeScreen(
             } else {
                 showNoNetworkDialog = true
             }
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .padding(start = 100.dp, end = 40.dp)
+            ) {
+
+                OutlinedTextField(
+                    readOnly = true,
+                    value = selectedDate.format(dateFormatterFrontEnd),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .clickable {
+                            isDatePickerOpen = true
+                            Log.d("HS", "trykket datofelt")
+                        }
+                        .width(130.dp)
+                        .height(60.dp),
+                    label = { Text("Dato") },
+                    shape = RoundedCornerShape(16.dp)
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                OutlinedTextField(
+                    readOnly = true,
+                    value = selectedTime.format(timeFormatter),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .clickable { isTimePickerOpen = true }
+                        .width(66.dp)
+                        .height(60.dp),
+                    label = { Text("Tid") },
+                    shape = RoundedCornerShape(16.dp)
+                )
+
+            }
+
+            if (isDatePickerOpen) {
+                val datePickerDialog = android.app.DatePickerDialog(
+                    context,
+                    { _, year, month, dayOfMonth ->
+                        selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
+                        isDatePickerOpen = false
+                    },
+                    selectedDate.year,
+                    selectedDate.monthValue - 1,
+                    selectedDate.dayOfMonth
+                )
+                datePickerDialog.show()
+                isDatePickerOpen = false
+            }
+
+            if (isTimePickerOpen) {
+                val timePickerDialog = TimePickerDialog(
+                    context,
+                    { _, hourOfDay, minute ->
+                        selectedTime = LocalTime.of(hourOfDay, 0)
+                        isTimePickerOpen = false
+                    },
+                    selectedTime.hour,
+                    selectedTime.minute,
+                    true
+                )
+                timePickerDialog.show()
+                isTimePickerOpen = false
+            }
+
+            selected_time = selectedDate.atTime(selectedTime).format(dateFormatterBackEnd)
+
+            Log.d("HS", "selected time: $selected_time")
 
             ActivityFavorites(
                 viewModel = activitiesViewModel,

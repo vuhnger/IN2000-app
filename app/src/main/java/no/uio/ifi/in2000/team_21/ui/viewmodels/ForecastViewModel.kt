@@ -47,7 +47,10 @@ class ForecastViewModel(
         }
     }
 
-    fun fetchWeatherForLocation(lat: Double, lon: Double) {
+    fun fetchWeatherForLocation(
+        lat: Double,
+        lon: Double
+    ) {
         viewModelScope.launch {
             val timeseriesData = repository.fetchWeatherDataForLocation(lat, lon)
             _selectedLocationWeatherData.value = timeseriesData

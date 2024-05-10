@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,6 +10,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,6 +42,7 @@ fun AllActivitiesScreen(
     viewModel: ActivityConditionCheckerViewModel = ActivityConditionCheckerViewModel()
 ) {
     val activities by viewModel.activities.observeAsState(initial = emptyList())
+    Log.d("All_Activites_screen", "Activites: $activities")
 
     Scaffold(
         topBar = {
@@ -80,9 +83,10 @@ fun AllActivitiesScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
+                    //elevation = CardDefaults.cardElevation(10.dp),
                     shape = RoundedCornerShape(16.dp),
                     backgroundColor = ContainerBlue,
-                    border = BorderStroke(1.dp, MidnightBlue)
+                    border = BorderStroke(1.dp, MidnightBlue),
                 ) {
                     Row(
                         modifier = Modifier
@@ -122,14 +126,11 @@ fun ActivityListItem(activity: ActivityModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-            //.padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween  // Distribute evenly
     ) {
         Column {
-            //Text(text = activity.activityName, color = Color(0xFF49454F)) // White text
             Text(getActivityConditionText(activity.conditionStatus, activity.activityName), color = MidnightBlue)
         }
-        //Spacer(modifier = Modifier.width(8.dp))  // Adjust spacing as needed
     }
 }
 

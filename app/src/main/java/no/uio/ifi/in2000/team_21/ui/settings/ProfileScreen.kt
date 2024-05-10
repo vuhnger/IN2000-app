@@ -4,7 +4,6 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardDefaults.cardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,12 +29,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -45,21 +42,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.R
-import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.data.database.UserEntity
 import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
 import no.uio.ifi.in2000.team_21.ui.theme.containerLight
 import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.theme.profileLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,15 +62,22 @@ fun ProfileScreen (
     navController: NavController,
     userViewModel: UserViewModel
 ) {
+    val user by userViewModel.currentUser.observeAsState()
+    var name by rememberSaveable { mutableStateOf(user?.name ?: "") }
+    var hobby by rememberSaveable { mutableStateOf(user?.hobby ?: "") }
+    var username by rememberSaveable { mutableStateOf(user?.userName ?: "") }
+    var password by rememberSaveable { mutableStateOf("") }
+
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
-    
+
     val notification = rememberSaveable { mutableStateOf("") }
+    /*
     var name by rememberSaveable { mutableStateOf(userViewModel.currentUser.name) }
     var hobby by rememberSaveable { mutableStateOf(userViewModel.currentUser.hobby) }
     var username by rememberSaveable { mutableStateOf("Brukernavn") }
     var password by rememberSaveable { mutableStateOf("Passord") }
-
+*/
     val keyboardController = LocalSoftwareKeyboardController.current
 
     if (notification.value.isNotEmpty()) {
@@ -234,11 +236,14 @@ fun ProfileScreen (
             OutlinedButton(
                 onClick = {
                     notification.value = "Profil oppdatert"
-                    userViewModel.createUser(
-                        name = name,
-                        hobbyDescription = hobby,
-                        userName = username,
-                        password = password
+                    userViewModel.saveUser(
+                        UserEntity(
+                            name = name,
+                            hobby = hobby,
+                            userName = username,
+                            password = password,
+                            isActive = true
+                        )
                     )
                 },
                 colors = ButtonDefaults.outlinedButtonColors(

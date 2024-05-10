@@ -7,15 +7,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.data.database.ActivityEntity
 import no.uio.ifi.in2000.team_21.data.database.DatabaseBuilder
+import no.uio.ifi.in2000.team_21.data.database.UserLogEntity
 import no.uio.ifi.in2000.team_21.model.activity.ActivityLog
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 
 data class ActivitiesUIState(
@@ -23,15 +35,23 @@ data class ActivitiesUIState(
     val favorites: MutableList<ActivityModel>,
     val activityLog: MutableList<ActivityLog>
 )
-
+@OptIn(ExperimentalCoroutinesApi::class)
 class ActivitiesViewModel(application: Application) : AndroidViewModel(application) {
     private val database = DatabaseBuilder.getDatabase(application)
     private val dao = database.activitiesDao()
+    private val logDao = database.userLogDao()
+    private val userDao = database.userDao()
+    private val _userLogs = MutableLiveData<List<UserLogEntity>>()
+    private val _currentUser = userDao.getCurrentUser().asFlow()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    val userLogs: LiveData<List<UserLogEntity>> = _currentUser.flatMapLatest { user ->
+        if (user != null) {
+            logDao.getUserLogs(user.userName).asFlow()
+        } else {
+            flowOf(emptyList())
+        }
+    }.asLiveData(viewModelScope.coroutineContext)
     val favorites: LiveData<List<ActivityEntity>> = dao.getAllActivities()
-
-    init {
-        loadFavorites()
-    }
 
     var activityUIstate by mutableStateOf(
         ActivitiesUIState(
@@ -92,5 +112,34 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
 
     fun getActivityModelByName(activityName: String): ActivityModel? {
         return ActivityModels.find(activityName)
+    }
+
+    fun logActivity(username: String, activity: ActivityModel) {
+        val norwayZone = ZoneId.of("Europe/Oslo")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm").withZone(norwayZone)
+        val time = ZonedDateTime.now(norwayZone).format(formatter)
+        viewModelScope.launch {
+            val logEntry = UserLogEntity(
+                username = username,
+                activityName = activity.activityName,
+                timestamp = time
+            )
+            logDao.logActivity(logEntry)
+        }
+    }
+
+    fun getActivityLogs(username: String) {
+        viewModelScope.launch {
+            val logs = logDao.getUserLogs(username).value ?: emptyList()
+            _userLogs.postValue(logs)
+        }
+    }
+
+    fun loadUserLogs() {
+        userDao.getCurrentUser().observeForever { user ->
+            if (user != null) {
+                getActivityLogs(user.userName)
+            }
+        }
     }
 }

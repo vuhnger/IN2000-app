@@ -209,6 +209,7 @@ fun App(){
             ActivityDetailScreen(
                 activitiesViewModel = activitiesViewModel,
                 activityConditionCheckerViewModel = activityConditionCheckerViewModel,
+                userViewModel = userViewModel,
                 navController = navController,
                 activityName = entry.arguments?.getString("activityName")
             )

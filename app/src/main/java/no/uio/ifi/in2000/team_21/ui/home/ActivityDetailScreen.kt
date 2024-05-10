@@ -1,7 +1,5 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,6 +46,7 @@ import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
 import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -56,9 +56,13 @@ import java.time.format.DateTimeFormatter
 fun ActivityDetailScreen(
     activitiesViewModel: ActivitiesViewModel,
     activityConditionCheckerViewModel: ActivityConditionCheckerViewModel,
+    userViewModel: UserViewModel,
     activityName: String?,
     navController: NavController
 ) {
+    val currentUser by userViewModel.currentUser.observeAsState()
+
+
     Column(
         modifier = Modifier
             .fillMaxSize() // Fill entire screen (improves layout)
@@ -70,7 +74,7 @@ fun ActivityDetailScreen(
         var showDialog by remember{
             mutableStateOf(false)
         }
-        
+
         if (showDialog){
             AlertDialog(
                 onDismissRequest = {
@@ -203,10 +207,12 @@ fun ActivityDetailScreen(
                     val norwayZone = ZoneId.of("Europe/Oslo")
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm").withZone(norwayZone)
                     val time = ZonedDateTime.now(norwayZone).format(formatter)
-                    activitiesViewModel.log(
-                        time = time,
-                        activity = activity
-                    )
+                    currentUser?.let {
+                        activitiesViewModel.logActivity(
+                            username = it.userName,
+                            activity = activity
+                        )
+                    }
                     showDialog = true
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xFF5058A4))

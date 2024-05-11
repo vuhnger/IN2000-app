@@ -56,9 +56,9 @@ Last ned APK-fil [Herfra (finnes ikke ennå)](). Krever Android versjon 8.3.2 el
 Leveres av biblioteket [MapBox](https://developer.android.com/training/data-storage/room) versjon x. 
 
 ## Bilder
-![](https://raw.github.uio.no/IN2000-V24/team-21/d19b2798003b397f2e2a81114b98f0eba3a10458/Images/Screenshot%202024-05-11%20at%2012.36.23.png?token=AAACJCYUS5SS2O5E7AWWYE3GH5G6G)
-![](https://raw.github.uio.no/IN2000-V24/team-21/d19b2798003b397f2e2a81114b98f0eba3a10458/Images/Screenshot%202024-05-11%20at%2012.37.44.png?token=AAACJC5TAJQHQ7YCPCMKVM3GH5G6G)
-![](https://raw.github.uio.no/IN2000-V24/team-21/d19b2798003b397f2e2a81114b98f0eba3a10458/Images/Screenshot%202024-05-11%20at%2012.38.11.png?token=AAACJC6YHQMPVE6CQ6W2WADGH5G6G)
+![Hjemskjerm](https://raw.github.uio.no/IN2000-V24/team-21/d19b2798003b397f2e2a81114b98f0eba3a10458/Images/Screenshot%202024-05-11%20at%2012.36.23.png?token=AAACJCYUS5SS2O5E7AWWYE3GH5G6G)
+![Kartskjerm](https://raw.github.uio.no/IN2000-V24/team-21/d19b2798003b397f2e2a81114b98f0eba3a10458/Images/Screenshot%202024-05-11%20at%2012.37.44.png?token=AAACJC5TAJQHQ7YCPCMKVM3GH5G6G)
+![Innstillinger](https://raw.github.uio.no/IN2000-V24/team-21/d19b2798003b397f2e2a81114b98f0eba3a10458/Images/Screenshot%202024-05-11%20at%2012.38.11.png?token=AAACJC6YHQMPVE6CQ6W2WADGH5G6G)
 
 ## Om utviklerene
 

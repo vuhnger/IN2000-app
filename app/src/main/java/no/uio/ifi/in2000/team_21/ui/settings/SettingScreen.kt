@@ -1,32 +1,56 @@
 package no.uio.ifi.in2000.team_21.ui.settings
 
 import android.annotation.SuppressLint
+import android.app.Notification
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,119 +58,309 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import no.uio.ifi.in2000.team_21.R
+import no.uio.ifi.in2000.team_21.Screen
+import no.uio.ifi.in2000.team_21.model.user.User
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+import no.uio.ifi.in2000.team_21.ui.theme.White
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-fun SettingScreen(navController: NavController = rememberNavController()) {
+fun SettingScreen(
+    navController: NavController,
+    userViewModel: UserViewModel
+) {
+
+    val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
+
+    Log.d(
+        FUNCTION_NAME,
+        "called"
+    )
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Innstillinger")})},
-        modifier = Modifier
-            .width(360.dp)
-            .height(800.dp)
-            .background(color = Color(0xFFFEF7FF))
-    ){innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-        ){
-            //Spacer(modifier = Modifier.padding(29.dp))
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .width(302.dp)// skulle egt være 302 her
-                    .height(56.dp)
-                    .padding(start = 29.dp)
-                    //.padding(start = 16.dp, top = 16.dp, end = 24.dp, bottom = 16.dp)
-                    .background(
-                        color = Color(0xFFECE6F0),
-                        shape = RoundedCornerShape(size = 100.dp)
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Innstillinger",
+                        color = MidnightBlue
                     )
-            ) {
-                Text(
+                },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                navController.popBackStack()
+                            }
+                        ) {
+                            Icon(
+                                contentDescription = "Tilbake",
+                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                tint = MidnightBlue,
+                                modifier = Modifier
+                                    .size(30.dp)
+                            )
+                        } },
+                colors = TopAppBarDefaults.topAppBarColors(Background),
+            )},
+        containerColor = Background,
+    ){
+            innerPadding->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ){
+            // Bakgrunnsbilde for skjermen
+            Image(
+                painter = painterResource(id = R.drawable.waterbackground),
+                contentDescription = "",
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .scale(1.2f)
+                    .fillMaxWidth()
+            )
 
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(15.dp)
+                    .padding(innerPadding)
+            ){
+                //Profile
+                ProfileCard(
+                    navController,
+                    userViewModel = userViewModel,
+                    onClick = { navController.navigate(Screen.ProfileScreen.route)}
+                )
+                Spacer(modifier = Modifier.padding(6.dp))
+
+                //All activities
+                AllSettingsCard(navController,
+                    mainText = "Alle aktiviteter",
+                    onClick = {
+                        navController.navigate(Screen.AllActivitiesScreen.route)
+                    }
+                )
+                Spacer(modifier = Modifier.padding(6.dp))
+
+                //History
+                HistorySettings(navController)
+                Spacer(modifier = Modifier.padding(6.dp))
+
+                //Settings
+                //SettingsGroupCard(navController)
+                //Spacer(modifier = Modifier.padding(6.dp))
+
+                AllSettingsCard(navController,
+                    mainText = "Om utviklerne",
+                    onClick = {
+                        navController.navigate(Screen.AboutUsScreen.route)
+                    }
+                )
+                Spacer(modifier = Modifier.padding(6.dp))
+                AllSettingsCard(navController,
+                    mainText = "Logg ut",
+                    onClick = {
+                        userViewModel.logOut()
+                    },
+                )
+            }
+        }
+
+    }
+}
+
+
+
+
+//Profile
+@Composable
+fun ProfileCard(
+    navController: NavController,
+    onClick: () -> Unit,
+    userViewModel: UserViewModel
+){
+    Card(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp),
+        colors = CardDefaults.cardColors (White)
+
+    ){
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 25.dp, end = 25.dp, top = 10.dp, bottom = 10.dp)
+        ) {
+            ProfileImage()
+            Column {
+                //sende med navn fra profileScreen
+                Text(
                     modifier = Modifier
                         .width(190.dp)
-                        .height(20.dp)
-                        .padding(start = 16.dp),
-                    text = "Darkmode",
+                        .padding(bottom = 5.dp, start = 15.dp),
+                    text = userViewModel.currentUser.name,
 
-
-                    // M3/label/large
                     style = TextStyle(
-                        fontSize = 14.sp,
+                        fontSize = 18.sp,
                         lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(500),
-                        color = Color(0xFF49454F),
-                        letterSpacing = 0.1.sp,
-
-                        )
-                )
-                var checked by remember { mutableStateOf(true) }
-
-                Switch(
-                    checked = checked,
-                    onCheckedChange = {
-                        checked = it
-                    },
-                    modifier = Modifier
-                        .width(52.dp)
-                        .height(32.dp)
-                        .background(color = Color(0xFF6750A4), shape = RoundedCornerShape(size = 100.dp))
-                        .padding(start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)
-                )
-            }
-            Spacer(modifier = Modifier.padding(6.dp))
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .width(302.dp)// skulle egt være 302 her
-                    .height(56.dp)
-                    .padding(start = 29.dp)
-                    //.padding(start = 16.dp, top = 16.dp, end = 24.dp, bottom = 16.dp)
-                    .background(
-                        color = Color(0xFFECE6F0),
-                        shape = RoundedCornerShape(size = 100.dp)
+                        color = MidnightBlue,
+                        letterSpacing = 0.1.sp
                     )
-            ) {
+                )
+                //sende med hobby fra profileScreen
                 Text(
-
                     modifier = Modifier
-                        .width(206.dp)
-                        .height(20.dp)
-                        .padding(start = 16.dp),
-                    text = "Om oss",
-
-
-                    // M3/label/large
+                        .width(190.dp)
+                        .padding(start = 15.dp),
+                    text = userViewModel.currentUser.hobby,
                     style = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.roboto)),
-                        fontWeight = FontWeight(500),
-                        color = Color(0xFF49454F),
-                        letterSpacing = 0.1.sp,
+                        color = MidnightBlue,
+                        letterSpacing = 0.1.sp
                     )
                 )
-
-                IconButton(onClick = { navController.navigate("OmOssScreen") }) //Her vil den ikke navogate
-                {
-                    Icon(
-                        contentDescription = "Om oss",
-                        imageVector = Icons.Filled.ArrowForward
-                    )
-                }
             }
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                contentDescription = "Min profil",
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                tint = MidnightBlue
+            )
         }
     }
 }
 
+//All settings-cards
+@Composable
+fun AllSettingsCard(navController: NavController, mainText: String, onClick:()->Unit){
+    Card(
+        onClick = onClick,
+        modifier = Modifier
+            .clickable { }
+            .fillMaxWidth()
+            .height(56.dp),
+        colors = CardDefaults.cardColors(White)
+    ){
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 25.dp, end = 25.dp, top = 15.dp, bottom = 15.dp)
+        ) {
+            Text(
+                modifier = Modifier
+                    .width(190.dp),
+                text = mainText,
+                style = TextStyle(
+                    fontSize = 15.sp,
+                    lineHeight = 20.sp,
+                    fontWeight = FontWeight(500),
+                    color = MidnightBlue,
+                    letterSpacing = 0.1.sp
+                )
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                contentDescription = mainText,
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                tint = MidnightBlue
+            )
+        }
+    }
+}
+
+//History settings
+//Ikke helt happy med hvordan kortene ligge over hverandre, kommer tydelig frem når man klikker på dem
+@Composable
+fun HistorySettings(navController: NavController){
+    Card(
+        modifier = Modifier
+            //.clickable { }
+            .fillMaxWidth()
+            .height(56.dp),
+        colors = CardDefaults.cardColors(White)
+    ){ Column (
+
+    ){
+        //Me
+        AllSettingsCard(navController,
+            mainText = "Historikk",
+            onClick = {
+                navController.navigate(Screen.MyActivityScreen.route)
+            }
+        )
+        HorizontalDivider(
+            color = ContainerBlue,
+            modifier = Modifier
+                .padding(start = 25.dp, end = 25.dp)
+        )
+    }
+    }
+}
+
+
+//Other settings
+@Composable
+fun SettingsGroupCard(navController: NavController){
+    Card(
+        modifier = Modifier
+            .clickable { }
+            .fillMaxWidth()
+            .height(56.dp),
+        colors = CardDefaults.cardColors(White)
+    ){Column{
+        //Notifications
+        AllSettingsCard(navController,
+            mainText = "Varslinger",
+            onClick = {
+                navController.navigate(Screen.NotificationScreen.route)
+            }
+        )
+    } }
+}
+
+
+@Composable
+fun ProfileImage(){
+    val image = rememberSaveable {
+        mutableStateOf("")
+    }
+    val painter = if(image.value.isEmpty()){
+        painterResource(id = R.drawable.user)
+    } else{
+        painterResource(id = image.value.toInt())
+    }
+    
+    Card(
+        shape = CircleShape,
+        colors = CardDefaults.cardColors(MidnightBlue),
+        modifier = Modifier
+            .size(60.dp)
+    ){
+        Image(painter = painter,
+            contentDescription = null,
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(15.dp)
+                .size(30.dp)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
+        )
+    }
+}
+
+
 @Preview
 @Composable
 fun SettingScreenTest() {
-    SettingScreen()
+    //SettingScreen(navController = rememberNavController())
 }

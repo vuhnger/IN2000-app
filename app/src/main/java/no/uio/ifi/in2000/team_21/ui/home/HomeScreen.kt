@@ -433,30 +433,26 @@ fun HomeScreen(
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
 
-    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter)
-
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
     val oceanData by oceanForecastViewModel.oceanDataState.observeAsState()
     val currentCityName by locationViewModel.currentCityName.collectAsState()
     val currentForcastResponse by forecastViewModel.forecast.collectAsState()
+    val selected_time by forecastViewModel.selected_time.collectAsState()
+    val selectedDate by forecastViewModel.selectedDate.collectAsState()
+    val selectedTime by forecastViewModel.selectedTime.collectAsState()
 
     // Tidsformat: yyyy-MM-dd'T'HH
 
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    var selectedTime by remember { mutableStateOf(LocalTime.now()) }
+
     var isDatePickerOpen by remember { mutableStateOf(false) }
     var isTimePickerOpen by remember { mutableStateOf(false) }
-    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     val timeFormatter = DateTimeFormatter.ofPattern("HH")
     val context = LocalContext.current
 
     var showNoNetworkDialog by remember {
         mutableStateOf(isInternetAvailable(context))
-    }
-
-    var selected_time by remember {
-        mutableStateOf(time)
     }
 
     val currentForecast by remember{
@@ -467,7 +463,7 @@ fun HomeScreen(
         }
     }
 
-    if (showNoNetworkDialog){
+    if (showNoNetworkDialog && currentForcastResponse == null){
         AlertDialog(
             onDismissRequest = {
                 showNoNetworkDialog = false
@@ -573,7 +569,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .clickable {
                         isDatePickerOpen = true
-                        Log.d("HS","trykket datofelt")
+                        Log.d("HS", "trykket datofelt")
                     }
                     .width(130.dp)
                     .height(60.dp),
@@ -599,7 +595,7 @@ fun HomeScreen(
             val datePickerDialog = android.app.DatePickerDialog(
                 context,
                 { _, year, month, dayOfMonth ->
-                    selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
+                    forecastViewModel.updateSelectedDate(LocalDate.of(year, month + 1, dayOfMonth))
                     isDatePickerOpen = false
                 },
                 selectedDate.year,
@@ -614,7 +610,7 @@ fun HomeScreen(
             val timePickerDialog = TimePickerDialog(
                 context,
                 { _, hourOfDay, minute ->
-                    selectedTime = LocalTime.of(hourOfDay, 0)
+                    forecastViewModel.updateSelectedTime(LocalTime.of(hourOfDay, 0))
                     isTimePickerOpen = false
                 },
                 selectedTime.hour,
@@ -625,7 +621,9 @@ fun HomeScreen(
             isTimePickerOpen = false
         }
 
-        selected_time = selectedDate.atTime(selectedTime).format(formatter)
+        forecastViewModel.update_selected_time(
+            selectedDate, selectedTime
+        )
 
         Log.d("HS", "selected time: $selected_time")
 

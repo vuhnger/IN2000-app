@@ -221,7 +221,8 @@ fun MapboxMapView() {
                 timeseries = forecastViewModel.selectedLocationWeatherData.value,
                 annotationHelper = annotationHelper,
                 marker = selectedMarker.value,
-                userMarkerViewModel = userMarkerViewModel
+                userMarkerViewModel = userMarkerViewModel,
+                forecastViewModel = forecastViewModel
                 )
         },
         sheetBackgroundColor = Background,
@@ -476,7 +477,8 @@ fun BottomSheetContent(
     timeseries: List<LocationForecastTimeseries>?,
     marker: UserMarkerEntity?,
     annotationHelper: MapAnnotationHelper,
-    userMarkerViewModel: UserMarkerViewModel
+    userMarkerViewModel: UserMarkerViewModel,
+    forecastViewModel: ForecastViewModel
 ) {
     Column(
         modifier = Modifier

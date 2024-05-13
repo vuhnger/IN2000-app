@@ -149,6 +149,8 @@ dependencies {
     implementation("com.mapbox.search:place-autocomplete:1.2.0")
     implementation("com.mapbox.search:offline:1.2.0")
     implementation("com.mapbox.search:mapbox-search-android:1.2.0")*/
+
+    testImplementation("org.robolectric:robolectric:4.12")
 }
 
 

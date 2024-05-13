@@ -18,19 +18,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _users = mutableListOf<User>()
 
-    private val defaultUser: User = User(
-        id = "-1",
-        name = "Standardbruker",
-        hobby = "Standardhobby",
-        creationDate = Date(),
-        userName = "Standard brukernavn",
-        password = ("ABCDEFGH").hashCode().toString().hashCode().toString()
-    )
-
-    private var userCount: Int = -1
-
-    //var currentUser: User = defaultUser
-
     fun createUser(name: String, hobby: String, userName: String, password: String) {
         viewModelScope.launch {
             val newUser = UserEntity(
@@ -79,6 +66,21 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+    // FUNKSJONER FOR "TESTUSERNAMECREATION" NEDENFOR
+
+    private val defaultUser: User = User(
+        id = "-1",
+        name = "Standardbruker",
+        hobby = "Standardhobby",
+        creationDate = Date(),
+        userName = "Standard brukernavn",
+        password = ("ABCDEFGH").hashCode().toString().hashCode().toString()
+    )
+
+    private var userCount: Int = -1
+
+    //var currentUser: User = defaultUser
 
     fun testCreateUser(
         name: String,

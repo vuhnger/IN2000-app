@@ -82,7 +82,7 @@ object ActivityModels {
         windSpeedThreshold = 8.0,
         airTemperatureThreshold = 15.0,
         imageId = R.drawable.rowing_ai,
-        icon = R.drawable.rowing_dark
+        icon = R.drawable.final_rowing
     )
     val PADDLING = ActivityModel(
         "Padling",

@@ -257,7 +257,7 @@ fun ActivityIconSmall(
                 },
             tint = MidnightBlue
         )
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         Text(
             text = activity.activityName,
@@ -293,6 +293,7 @@ fun ActivityCardHorizontalWide(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp)
+            .height(100.dp)
     ) {
 
         Log.d(

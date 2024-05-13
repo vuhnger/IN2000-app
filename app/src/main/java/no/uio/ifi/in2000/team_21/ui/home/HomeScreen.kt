@@ -522,122 +522,138 @@ fun HomeScreen(
         else -> Background // Default case
     }
 
-    Column(
+    Box(
         modifier = Modifier
-            .width(360.dp)
-            .height(50.dp)
+            .fillMaxSize()
             .background(color = Background)
-    ) {
+    ){
 
-        TopBarComponent(
-            navController = navController
+        // Bakgrunnsbilde for skjermen
+        Image(
+            painter = painterResource(id = R.drawable.waterbackground),
+            contentDescription = "",
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .scale(1.2f)
+                .fillMaxWidth()
         )
 
-        if(isInternetAvailable(context)){
-            WeatherCard(
-                cityName = currentCityName ?: "---",
-                temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
-                    "celsius" -> "${currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()}°"
-                    else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()
-                },
-                alertColor = alertColor,
-                isAlertActive = isAlertActive,
-                cloudCoverDescription = forecastViewModel.describeCloudCover(
-                    currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
-                ),
-                icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
-                waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(selected_time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
-                windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}",
-                time = selected_time
-            )
-        }else{
-
-        }
-
-        // TODO: Date picker her
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
+        Column(
             modifier = Modifier
-                .padding(start = 100.dp, end = 40.dp)
+                .fillMaxSize()
         ) {
 
-            OutlinedTextField(
-                readOnly = true,
-                value = selectedDate.format(dateFormatter),
-                onValueChange = {},
+            TopBarComponent(
+                navController = navController
+            )
+
+            if(isInternetAvailable(context)){
+                WeatherCard(
+                    cityName = currentCityName ?: "---",
+                    temperature = when (currentForcastResponse?.properties?.meta?.units?.air_temperature) {
+                        "celsius" -> "${currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()}°"
+                        else -> currentForecast?.data?.instant?.details?.air_temperature?.toInt().toString()
+                    },
+                    alertColor = alertColor,
+                    isAlertActive = isAlertActive,
+                    cloudCoverDescription = forecastViewModel.describeCloudCover(
+                        currentForecast?.data?.instant?.details?.cloud_area_fraction ?: 1.1
+                    ),
+                    icon = currentForecast?.data?.next_1_hours?.summary?.symbol_code ?: "",
+                    waveheight = "${oceanData?.properties?.timeseries?.find { it.time?.contains(selected_time) ?: false}?.data?.instant?.details?.sea_surface_wave_height} ${oceanData?.properties?.meta?.units?.sea_surface_wave_height}",
+                    windSpeed = "${currentForecast?.data?.instant?.details?.wind_speed} ${currentForcastResponse?.properties?.meta?.units?.wind_speed}",
+                    time = selected_time
+                )
+            }else{
+
+            }
+
+            // TODO: Date picker her
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .clickable {
-                        isDatePickerOpen = true
-                        Log.d("HS", "trykket datofelt")
-                    }
-                    .width(130.dp)
-                    .height(60.dp),
-                label = { Text("Dato") }
+                    .padding(start = 100.dp, end = 40.dp)
+            ) {
+
+                OutlinedTextField(
+                    readOnly = true,
+                    value = selectedDate.format(dateFormatter),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .clickable {
+                            isDatePickerOpen = true
+                            Log.d("HS", "trykket datofelt")
+                        }
+                        .width(130.dp)
+                        .height(60.dp),
+                    label = { Text("Dato") }
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                OutlinedTextField(
+                    readOnly = true,
+                    value = selectedTime.format(timeFormatter),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .clickable { isTimePickerOpen = true }
+                        .width(66.dp)
+                        .height(60.dp),
+                    label = { Text("Tid") }
+                )
+
+            }
+
+            if (isDatePickerOpen) {
+                val datePickerDialog = android.app.DatePickerDialog(
+                    context,
+                    { _, year, month, dayOfMonth ->
+                        forecastViewModel.updateSelectedDate(LocalDate.of(year, month + 1, dayOfMonth))
+                        isDatePickerOpen = false
+                    },
+                    selectedDate.year,
+                    selectedDate.monthValue - 1,
+                    selectedDate.dayOfMonth
+                )
+                datePickerDialog.show()
+                isDatePickerOpen = false
+            }
+
+            if (isTimePickerOpen) {
+                val timePickerDialog = TimePickerDialog(
+                    context,
+                    { _, hourOfDay, minute ->
+                        forecastViewModel.updateSelectedTime(LocalTime.of(hourOfDay, 0))
+                        isTimePickerOpen = false
+                    },
+                    selectedTime.hour,
+                    selectedTime.minute,
+                    true
+                )
+                timePickerDialog.show()
+                isTimePickerOpen = false
+            }
+
+            forecastViewModel.update_selected_time(
+                selectedDate, selectedTime
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Log.d("HS", "selected time: $selected_time")
 
-            OutlinedTextField(
-                readOnly = true,
-                value = selectedTime.format(timeFormatter),
-                onValueChange = {},
-                modifier = Modifier
-                    .clickable { isTimePickerOpen = true }
-                    .width(66.dp)
-                    .height(60.dp),
-                label = { Text("Tid") }
+            ActivityFavorites(
+                viewModel = activitiesViewModel,
+                navController = navController,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel
             )
 
+            RecommendationSection(
+                viewModel = activitiesViewModel,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel,
+                locationViewModel = locationViewModel,
+                navController = navController
+            )
         }
-
-        if (isDatePickerOpen) {
-            val datePickerDialog = android.app.DatePickerDialog(
-                context,
-                { _, year, month, dayOfMonth ->
-                    forecastViewModel.updateSelectedDate(LocalDate.of(year, month + 1, dayOfMonth))
-                    isDatePickerOpen = false
-                },
-                selectedDate.year,
-                selectedDate.monthValue - 1,
-                selectedDate.dayOfMonth
-            )
-            datePickerDialog.show()
-            isDatePickerOpen = false
-        }
-
-        if (isTimePickerOpen) {
-            val timePickerDialog = TimePickerDialog(
-                context,
-                { _, hourOfDay, minute ->
-                    forecastViewModel.updateSelectedTime(LocalTime.of(hourOfDay, 0))
-                    isTimePickerOpen = false
-                },
-                selectedTime.hour,
-                selectedTime.minute,
-                true
-            )
-            timePickerDialog.show()
-            isTimePickerOpen = false
-        }
-
-        forecastViewModel.update_selected_time(
-            selectedDate, selectedTime
-        )
-
-        Log.d("HS", "selected time: $selected_time")
-
-        ActivityFavorites(
-            viewModel = activitiesViewModel,
-            navController = navController,
-            activityConditionCheckerViewModel = activityConditionCheckerViewModel
-        )
-
-        RecommendationSection(
-            viewModel = activitiesViewModel,
-            activityConditionCheckerViewModel = activityConditionCheckerViewModel,
-            locationViewModel = locationViewModel,
-            navController = navController
-        )
     }
+
 }

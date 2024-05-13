@@ -2,6 +2,7 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 // import androidx.compose.material.MaterialTheme
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -232,6 +233,7 @@ fun ActivityIconSmall(
 ) {
     Box(
         modifier = Modifier
+            .height(80.dp)
     ) {
         Icon(
             painter = painterResource(id = activity.icon),
@@ -252,8 +254,11 @@ fun ActivityIconSmall(
                             activity.activityName
                         )
                     )
-                }
+                },
+            tint = MidnightBlue
         )
+        Spacer(modifier = Modifier.height(30.dp))
+
         Text(
             text = activity.activityName,
             maxLines = 1,
@@ -263,7 +268,10 @@ fun ActivityIconSmall(
             modifier = Modifier
                 .align(Alignment.Center)
                 .offset(y = 38.dp)
+                .padding(10.dp)
         )
+
+
     }
 }
 
@@ -276,20 +284,16 @@ fun ActivityCardHorizontalWide(
 
     val isFavorite by activitiesViewModel.isFavorite(activity.activityName).observeAsState(false)
 
-    var icon = if (isFavorite) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder
+    var icon = if (isFavorite) true else false
 
     Card(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(140.dp)
-        .padding(
-            horizontal = 10.dp, vertical = 10.dp,
-        )
-        .background(
-            color = ContainerBlue
-        ),
-        elevation = CardDefaults.cardElevation(10.dp),
-        colors = CardDefaults.cardColors(containerColor = ContainerBlue)
+        colors = CardDefaults.cardColors(containerColor = ContainerBlue),
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, MidnightBlue),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp)
+            .height(100.dp)
     ) {
 
         Log.d(
@@ -311,10 +315,10 @@ fun ActivityCardHorizontalWide(
                 onClick = {
                     if (activitiesViewModel.favorites.value?.any { it.name == activity.activityName } == true) {
                         activitiesViewModel.removeFavorite(activity.activityName)
-                        icon = Icons.Default.FavoriteBorder
+                        icon = false
                     } else {
                         activitiesViewModel.addFavorite(activity)
-                        icon = Icons.Default.Favorite
+                        icon = true
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
@@ -324,24 +328,33 @@ fun ActivityCardHorizontalWide(
                 modifier = Modifier
                     .weight(1f)
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = "Knapp for å legge til i favoritter",
-                    modifier = Modifier
-                        .padding(
-                            horizontal = 10.dp,
-                            vertical = 10.dp
-                        )
-                        .scale(1.5f)
-                )
+                Star(icon)
             }
         }
     }
 }
 
-/*
-
-*/
+@Composable
+fun Star(icon: Boolean) {
+    if (icon) {
+        Icon(
+            painter = painterResource(id = no.uio.ifi.in2000.team_21.R.drawable.baseline_star_24),
+            contentDescription = "full stjerne",
+            tint = MidnightBlue,
+            modifier = Modifier
+                .scale(1.5f)
+        )
+    }
+    else {
+        Icon(
+            painter = painterResource(id = no.uio.ifi.in2000.team_21.R.drawable.baseline_star_outline_24),
+            contentDescription = "Settings icon",
+            tint = MidnightBlue,
+            modifier = Modifier
+                .scale(1.5f)
+        )
+    }
+}
 @Composable
 fun ActivityIconGridHorizontalSmall(
     activitiesViewModel: ActivitiesViewModel,

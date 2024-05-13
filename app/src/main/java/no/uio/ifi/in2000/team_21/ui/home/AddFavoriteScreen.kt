@@ -3,8 +3,11 @@ package no.uio.ifi.in2000.team_21.ui.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -31,8 +34,7 @@ fun AddFavoriteScreen(
 ){
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Background)
+            .fillMaxSize()
     ) {
         Button(
             onClick = { navController.popBackStack() },
@@ -51,17 +53,30 @@ fun AddFavoriteScreen(
                 text = "Legg til en aktivitet i dine favoritter for raskere tilgang. "
             )
         }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = Background)
+        ) {
 
-        activitiesViewModel.activityUIstate.activities.forEach {
-                activity ->
-            // Denne komponenten tegner cards på favoritt-skjermen
-            ActivityCardHorizontalWide(
-                activity = activity,
-                activitiesViewModel = activitiesViewModel,
-                navController = navController
-            )
-            Spacer(modifier = Modifier.padding(8.dp))
+            items(activitiesViewModel.activityUIstate.activities){activity ->
+                // Denne komponenten tegner cards på favoritt-skjermen
+                ActivityCardHorizontalWide(
+                    activity = activity,
+                    activitiesViewModel = activitiesViewModel,
+                    navController = navController
+                )
+                Spacer(modifier = Modifier.padding(8.dp))
+
+            }
+
+
         }
+
+
+
+
     }
+
 
 }

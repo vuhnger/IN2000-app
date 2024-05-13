@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.team_21
 
-import no.uio.ifi.in2000.team_21.model.user.User
 import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 import org.junit.Test
 
@@ -12,7 +11,7 @@ class TestUsernameCreation {
     val userViewModel: UserViewModel = UserViewModel()
     val name: String = "Jonas"
 
-    val testUser = userViewModel.createUser(
+    val testUser = userViewModel.testCreateUser(
         name = "Jonas",
         hobbyDescription = "Fisker",
         userName = userViewModel.createUsername("Jonas"),

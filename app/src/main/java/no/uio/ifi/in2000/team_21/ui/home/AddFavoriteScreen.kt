@@ -21,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 
@@ -81,34 +80,32 @@ fun AddFavoriteScreen(
         },
         containerColor = Background
     ) { innerPadding ->
-        Column(
+
+        Card(
+            colors = CardDefaults.cardColors(ContainerBlue)
+        ){
+            Text(
+                text = "Legg til en aktivitet i dine favoritter for raskere tilgang. ",
+                color = MidnightBlue,
+                modifier = Modifier
+                    .padding(5.dp)
+            )
+        }
+
+        LazyColumn(
             modifier = Modifier
                 .padding(16.dp)
                 .padding(innerPadding)
         ) {
-            Card(
-                colors = CardDefaults.cardColors(ContainerBlue)
-            ){
-                Text(
-                    text = "Legg til en aktivitet i dine favoritter for raskere tilgang. ",
-                    color = MidnightBlue,
-                    modifier = Modifier
-                        .padding(5.dp)
-                )
-            }
 
-            activitiesViewModel.activityUIstate.activities.forEach { activity ->
+            items(activitiesViewModel.activityUIstate.activities){activity ->
                 // Denne komponenten tegner cards på favoritt-skjermen
                 ActivityCardHorizontalWide(
                     activity = activity,
                     activitiesViewModel = activitiesViewModel,
                     navController = navController
-                )
-                //Spacer(modifier = Modifier.padding(8.dp))
-            }
-
+                )}
         }
-
     }
 
 }

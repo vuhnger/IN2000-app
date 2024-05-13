@@ -85,7 +85,6 @@ class MainActivity : ComponentActivity() {
 
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -189,7 +188,10 @@ fun App(){
         }
         
         composable(Screen.AllActivitiesScreen.route){
-            AllActivitiesScreen(navController = navController)
+            AllActivitiesScreen(
+                navController = navController,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel
+            )
         }
 
         composable(

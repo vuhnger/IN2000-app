@@ -34,6 +34,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -259,10 +261,12 @@ fun ActivityFavorites(
     activityConditionCheckerViewModel: ActivityConditionCheckerViewModel
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
 
         Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
         ) {
@@ -278,7 +282,7 @@ fun ActivityFavorites(
                     letterSpacing = 0.1.sp,
                 ),
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(start = 8.dp)
             )
 
             Button(
@@ -293,11 +297,10 @@ fun ActivityFavorites(
                     .offset(x = 200.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Add,
+                    imageVector = Icons.Outlined.Edit,
                     contentDescription = "Button add to favorites",
                     modifier = Modifier
                         .padding(1.dp)
-                        .scale(1.5f)
                 )
             }
 
@@ -307,6 +310,8 @@ fun ActivityFavorites(
             navController = navController,
             activitiesViewModel = viewModel
         )
+        
+        Spacer(modifier = Modifier.padding(bottom = 8.dp))
 
     }
 }

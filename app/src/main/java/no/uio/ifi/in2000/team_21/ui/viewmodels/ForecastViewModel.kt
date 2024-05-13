@@ -101,16 +101,16 @@ class ForecastViewModel(
 
     fun describeCloudCover(cloudAreaFraction: Double): String {
         return when(cloudAreaFraction){
-            in 0.0..10.0 -> "Skyfritt"
-            in 10.0..20.0 -> "Nesten skyfritt"
-            in 20.0..30.0 -> "Litt spredte skyer"
-            in 30.0..40.0 -> "Delvis solrikt"
-            in 40.0..50.0 -> "Mest sol, noen skyer"
-            in 50.0..60.0 -> "Halvveis skydekket, like mye sol som skyer"
-            in 60.0..70.0 -> "Lett skyet, mer skyer enn sol"
-            in 70.0..80.0 -> "Hovedsaklig skyet, lite sol"
-            in 80.0..90.0 -> "Nesten helt skydekket, knapt noe sol"
-            in 90.0..100.0 -> "Helt skydekket, ingen synlig sol."
+            in 0.0..9.999 -> "Skyfritt"
+            in 10.0..19.999 -> "Nesten skyfritt"
+            in 20.0..29.999 -> "Litt spredte skyer"
+            in 30.0..39.999 -> "Delvis solrikt"
+            in 40.0..49.999 -> "Mest sol, noen skyer"
+            in 50.0..59.999 -> "Halvveis skydekket, like mye sol som skyer"
+            in 60.0..69.999 -> "Lett skyet, mer skyer enn sol"
+            in 70.0..79.999 -> "Hovedsaklig skyet, lite sol"
+            in 80.0..89.999 -> "Nesten helt skydekket, knapt noe sol"
+            in 90.0..100.0 -> "Helt skydekket, ingen synlig sol"
             else -> {
                 "Ugyldig verdi: $cloudAreaFraction"
             }

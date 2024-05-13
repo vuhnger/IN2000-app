@@ -75,12 +75,6 @@ fun ProfileScreen (
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
 
     val notification = rememberSaveable { mutableStateOf("") }
-    /*
-    var name by rememberSaveable { mutableStateOf(userViewModel.currentUser.name) }
-    var hobby by rememberSaveable { mutableStateOf(userViewModel.currentUser.hobby) }
-    var username by rememberSaveable { mutableStateOf("Brukernavn") }
-    var password by rememberSaveable { mutableStateOf("Passord") }
-*/
     val keyboardController = LocalSoftwareKeyboardController.current
 
     if (notification.value.isNotEmpty()) {
@@ -132,7 +126,7 @@ fun ProfileScreen (
         ){
             EditProfileImage()
 
-            //Editable text fields, name, hooby, usernames, password
+
             OutlinedTextField(
 
                 value = name,
@@ -143,7 +137,7 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Navn", color = MidnightBlue) }, //her endres vel variabelen her og
+                label = { Text("Navn", color = MidnightBlue) },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = MidnightBlue,
                     unfocusedTextColor = MidnightBlue,
@@ -168,7 +162,7 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Hobby", color = MidnightBlue) }, //her endres vel variabelen her og
+                label = { Text("Hobby", color = MidnightBlue) },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = MidnightBlue,
                     unfocusedTextColor = MidnightBlue,
@@ -194,7 +188,7 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Brukernavn", color = MidnightBlue) }, //her endres vel variabelen her og
+                label = { Text("Brukernavn", color = MidnightBlue) },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = MidnightBlue,
                     unfocusedTextColor = MidnightBlue,
@@ -219,7 +213,7 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Passord", color = MidnightBlue) }, //her endres vel variabelen her og
+                label = { Text("Passord", color = MidnightBlue) },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = MidnightBlue,
                     unfocusedTextColor = MidnightBlue,
@@ -235,7 +229,7 @@ fun ProfileScreen (
                     .padding(top = 40.dp)
             )
 
-            //Save button
+
             OutlinedButton(
                 onClick = {
                     notification.value = "Profil oppdatert"
@@ -252,7 +246,6 @@ fun ProfileScreen (
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = Background,
                     containerColor = MidnightBlue,
-                    //Går ikke an å endre farge på border.
 
                 ),
                 modifier = Modifier
@@ -298,7 +291,7 @@ fun EditProfileImage(){
         ),
         modifier = Modifier
             .size(120.dp)
-            .clickable { launcher.launch("Image/*") } // når den er trykket kommer den som firkant, må endres.
+            .clickable { launcher.launch("Image/*") }
     ){
         Image(painter = painter,
             contentDescription = null,

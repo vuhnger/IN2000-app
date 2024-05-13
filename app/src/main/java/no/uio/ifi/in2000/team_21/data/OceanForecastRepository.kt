@@ -35,11 +35,6 @@ class OceanForecastRepository(
         return response
     }
 
-    suspend fun fetchOceanForecastTimeseries(latitude: Double, longitude: Double): List<Timeseries>? {
-        Log.d("OCEANFORECAST_REPO", "fetching OceanForecast timeseries...")
-        return dataSource.fetchOceanForecastTimeseries(latitude, longitude)
-    }
-
     suspend fun fetchOceanForecastTimeseriesByTime(time: String, latitude: Double, longitude: Double): Timeseries? {
 
         val cacheKey = "$time$latitude$longitude"

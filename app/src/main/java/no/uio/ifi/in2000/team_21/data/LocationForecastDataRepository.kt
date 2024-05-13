@@ -30,32 +30,8 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
         return response
     }
 
-    // Timeseries er værmeldinger
-    suspend fun fetchTimeseries(
-        latitude: Double,
-        longitude: Double
-    ): ArrayList<LocationForecastTimeseries>? {
-
-        Log.d("FORECAST_REPO","fetching timeseries.")
-
-        return dataSource.fetchLocationForecastTimeseries(
-            latitude = latitude,
-            longitude =  longitude
-        )
-    }
-
     suspend fun fetchWeatherDataForLocation(lat: Double, lon: Double): List<LocationForecastTimeseries>? {
         return dataSource.fetchLocationForecastTimeseries(lat, lon)
-    }
-
-    suspend fun fetchLocationForecastResponse(latitude: Double, longitude: Double): LocationForecastResponse? {
-        Log.d("LOCATIONFORCAST_REPO", "fetching LocationForcast responses...")
-        return dataSource.fetchLocationForecastResponse(latitude, longitude)
-    }
-
-    suspend fun fetchLocationForecastTimeseries(latitude: Double, longitude: Double): ArrayList<LocationForecastTimeseries>? {
-        Log.d("LOCATIONFORECAST_REPO", "fetching OceanForecast timeseries...")
-        return dataSource.fetchLocationForecastTimeseries(latitude, longitude)
     }
 
     suspend fun fetchLocationForecastTimeseriesByTime(time: String, latitude: Double, longitude: Double): LocationForecastTimeseries? {

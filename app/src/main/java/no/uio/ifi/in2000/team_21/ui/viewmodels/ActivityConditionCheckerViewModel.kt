@@ -99,9 +99,6 @@ open class ActivityConditionCheckerViewModel : ViewModel() {
         conditionsMet["Bølgehøyde"] = (weatherDetails.seaSurfaceWaveHeight ?: Double.MAX_VALUE) <= activity.maxWaveHeight
         conditionsMet["Lufttemperatur"] = (weatherDetails.airTemperature ?: Double.MIN_VALUE) >= (activity.minAirTemperature)
         conditionsMet["Vindhastighet"] = (weatherDetails.windSpeed ?: Double.MAX_VALUE) <= (activity.maxWindSpeed)
-
-        // Legg til flere sjekker
-
         return conditionsMet
     }
 

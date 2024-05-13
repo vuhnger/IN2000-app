@@ -66,7 +66,7 @@ fun ActivityDetailScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxSize() // Fill entire screen (improves layout)
+            .fillMaxSize()
             .background(Background)
     ) {
         val activity = activityConditionCheckerViewModel.get(
@@ -108,9 +108,9 @@ fun ActivityDetailScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Background),// Consistent padding
+                .background(Background),
 
-            horizontalArrangement = Arrangement.SpaceBetween // Space buttons evenly
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
@@ -134,10 +134,10 @@ fun ActivityDetailScreen(
                     .padding(8.dp),
                 text = activity.activityName,
                 style = TextStyle(
-                    fontSize = 28.sp, // Increase font size for title
-                    lineHeight = 28.sp, // Adjust line height for better readability
-                    fontWeight = FontWeight.Bold, // Make title bold
-                    color = MidnightBlue, // Use MaterialTheme colors
+                    fontSize = 28.sp,
+                    lineHeight = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MidnightBlue,
 
                 )
             )
@@ -165,7 +165,7 @@ fun ActivityDetailScreen(
             Row(
                 horizontalArrangement = Arrangement.Center ,
                 modifier = Modifier
-                    .fillMaxWidth() // Center contents
+                    .fillMaxWidth()
             ) {
                 Text(
                     text = activity.getFlagDescription(),
@@ -194,7 +194,7 @@ fun ActivityDetailScreen(
         }
 
 
-        Spacer(modifier = Modifier.padding(vertical = 24.dp)) // Increase bottom padding
+        Spacer(modifier = Modifier.padding(vertical = 24.dp))
 
         Row(
             modifier = Modifier

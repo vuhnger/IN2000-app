@@ -65,7 +65,7 @@ class LocationViewModel(application: Application): AndroidViewModel(application)
         if (ActivityCompat.checkSelfPermission(getApplication(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         } else {
-            // Handle permission request
+
         }
     }
 

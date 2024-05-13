@@ -41,8 +41,6 @@ fun FriendsActivityScreen(navController: NavController) {
         "called"
     )
 
-    var checked by remember { mutableStateOf(true) } //13.03 Må flyttes til en global ui-state
-
     Scaffold(
         topBar = {
             TopAppBar(

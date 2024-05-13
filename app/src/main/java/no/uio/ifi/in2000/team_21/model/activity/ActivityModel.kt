@@ -25,8 +25,8 @@ data class ActivityModel(
     fun getFlagDescription(
     ): String {
         return when (conditionStatus) {
-            ConditionStatus.ALL_MET -> "Perfekt tidspunkt for ${activityName.lowercase()}"
-            ConditionStatus.SOME_MET -> "Forholdene er moderate for ${activityName.lowercase()}"
+            ConditionStatus.ALL_MET -> "Perfekt tidspunkt for å ${activityName.lowercase()}"
+            ConditionStatus.SOME_MET -> "Forholdene er moderate for å ${activityName.lowercase()}"
             ConditionStatus.NONE_MET -> "Vær forsiktig og følg advarsler"
         }
     }
@@ -135,6 +135,8 @@ object ActivityModels {
         icon = R.drawable.waterski_icon
     )
 
+
+    // IKKe implementert
     var CUSTOM_ACTIVITY = ActivityModel(
         activityName = "",
         minWaterTemperature = 0.0,
@@ -158,7 +160,6 @@ object ActivityModels {
         WATERSKIING
     )
 
-    // Get an activity object based on its unique string identifier
     fun find(activityName: String): ActivityModel?{
         return allActivities.find { it.activityName == activityName }
     }

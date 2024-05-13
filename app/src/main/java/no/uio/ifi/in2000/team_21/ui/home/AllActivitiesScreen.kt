@@ -133,7 +133,7 @@ fun ActivityListItem(activity: ActivityModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween  // Distribute evenly
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
             Text(getActivityConditionText(activity.conditionStatus, activity.activityName), color = MidnightBlue)

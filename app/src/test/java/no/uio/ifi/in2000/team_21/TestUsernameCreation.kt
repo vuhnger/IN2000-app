@@ -6,6 +6,7 @@ import org.junit.Test
 
 // Vi skal implementere en funksjon som lager et unikt brukernavn, gitt et navn, ved bruk av f.eks primærnøkkel
 
+// Denne har vi brukt, men vi har også migrert til å lagre brukerinfo i databasen og derfor er ikke testene så nyttig lenger.
 
 
 /*

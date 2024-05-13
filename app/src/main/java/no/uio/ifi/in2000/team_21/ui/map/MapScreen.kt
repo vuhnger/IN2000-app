@@ -133,7 +133,7 @@ fun MapScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MapboxMapView() {
     val context = LocalContext.current
@@ -191,7 +191,7 @@ fun MapboxMapView() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         } else {
-            // Request permission
+
         }
     })
 
@@ -243,7 +243,7 @@ fun MapboxMapView() {
     }
     DisposableEffect(Unit) {
         onDispose {
-            // Disable the location component when the view is disposed of
+
             mapView.location.enabled = false
         }
     }
@@ -309,7 +309,7 @@ fun rememberMapViewWithLifecycle(context: Context): MapView {
     return remember { MapView(context) }
 }
 
-// Alert overlay from metAlerts
+
 fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
     val featureCollection = convertFeaturesToFeatureCollection(myFeatures)
     val sourceId = "alerts-source"
@@ -329,7 +329,7 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
         var fillLayer = style.getLayerAs<FillLayer>(fillLayerId)
         if (fillLayer == null) {
             fillLayer = FillLayer(fillLayerId, sourceId).apply {
-                fillColor("red") // Default color
+                fillColor("red")
             }
             style.addLayer(fillLayer)
         } else {
@@ -341,7 +341,7 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
                 "red" -> "rgba(202, 0, 42, 0.5)"
                 "yellow" -> "rgba(255, 176, 66, 0.5)"
                 "green" -> "rgba(85, 107, 47, 0.5)"
-                else -> "rgba(255, 176, 66, 0.5)" // Default color if riskMatrixColor not defined
+                else -> "rgba(255, 176, 66, 0.5)"
             }
             fillLayer.fillColor(Expression.literal(fillColor))
         }
@@ -430,7 +430,7 @@ fun showAlertDialog(context: Context, properties: Properties) {
 }
 
 fun createAlertMessage(title: String, properties: Properties): String {
-    val event = title.substringBefore(",") // Grab the first element in 'title' (Event)
+    val event = title.substringBefore(",")
 
     return buildString {
         append("Event: $event\n")
@@ -463,7 +463,7 @@ fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
                 onPermissionGranted()
             }
             locationPermissionState.status.shouldShowRationale -> {
-                // show a dialog or a UI element explaining why you need the location permission
+
             }
             else -> {
                 locationPermissionState.launchPermissionRequest()
@@ -652,6 +652,6 @@ fun setupLocationComponent(mapView: MapView) {
 }
 
 
-// Function to simplify the process of applying hex colors.
+
 val String.color
     get() = Color(parseColor(this))

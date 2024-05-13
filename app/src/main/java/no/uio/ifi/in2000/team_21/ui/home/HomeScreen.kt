@@ -497,10 +497,10 @@ fun HomeScreen(
     }
 
     val alertColor = when (filteredFeatures?.maxByOrNull { it.properties.severity?.toIntOrNull() ?: 0 }?.properties?.riskMatrixColor) {
-        "Yellow" -> Color(0xFFF9F1DC) // Yellow
-        "Red" -> Color(0xFFF9DEDC) // Red
-        "Green" -> Color(0xFFECF9DC) // Green
-        else -> Background // Default case
+        "Yellow" -> Color(0xFFF9F1DC)
+        "Red" -> Color(0xFFF9DEDC)
+        "Green" -> Color(0xFFECF9DC)
+        else -> Background
     }
 
     Box(
@@ -548,8 +548,6 @@ fun HomeScreen(
             }else{
 
             }
-
-            // TODO: Date picker her
 
             Row(
                 horizontalArrangement = Arrangement.Center,

@@ -31,7 +31,7 @@ fun WeatherIcon(
 ){
     Box(
         modifier = Modifier
-            .size(size.dp) // ikke fjern den linja her lmao
+            .size(size.dp)
             .clip(CircleShape)
             .padding(8.dp)
     ){

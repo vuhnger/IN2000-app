@@ -81,7 +81,7 @@ class ForecastViewModel(
                 while (true) {
                     val forecast = repository.fetchForecast(latitude, longitude)
                     emit(forecast)
-                    delay(TIMEOUT_MS) // Delay for 30 seconds
+                    delay(TIMEOUT_MS)
                 }
             }.collect { forecast ->
                 _forecast.value = forecast

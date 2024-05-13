@@ -89,7 +89,7 @@ fun AboutUsScreen(navController: NavController) {
         ),
         TeamMember(
             name = "Sebastian Hareide",
-            age = 21,
+            age = 22,
             personality = "ENFJ-T (Protagonist)",
             studyProgramme = "Informatikk: programmering og systemarkitektur"
         ),

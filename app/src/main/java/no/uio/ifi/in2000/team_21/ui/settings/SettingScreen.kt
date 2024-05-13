@@ -145,9 +145,6 @@ fun SettingScreen(
                 HistorySettings(navController)
                 Spacer(modifier = Modifier.padding(6.dp))
 
-                //Settings
-                //SettingsGroupCard(navController)
-                //Spacer(modifier = Modifier.padding(6.dp))
 
                 AllSettingsCard(navController,
                     mainText = "Om utviklerne",

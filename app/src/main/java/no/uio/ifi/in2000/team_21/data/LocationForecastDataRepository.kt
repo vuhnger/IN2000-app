@@ -7,16 +7,27 @@ import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeserie
 class LocationForecastDataRepository(private val dataSource: LocationForecastDataSource = LocationForecastDataSource()) {
 
 
-    val cachedResponseData: HashMap<String, LocationForecastTimeseries>? = null
+    val cachedResponseData: HashMap<String, LocationForecastResponse> = HashMap()
+    val cachedTimeseriesData: HashMap<String, LocationForecastTimeseries> = HashMap()
 
     suspend fun fetchForecast(
         latitude: Double,
         longitude: Double
     ): LocationForecastResponse? {
-        return dataSource.fetchLocationForecastResponse(
+
+        val cacheKey = "$latitude:$longitude"
+
+        if (cachedResponseData[cacheKey] != null) {
+            return cachedResponseData[cacheKey]
+        }
+
+        val response: LocationForecastResponse? = dataSource.fetchLocationForecastResponse(
             latitude = latitude,
             longitude = longitude
         )
+
+        response?.let { cachedResponseData[cacheKey] = it }
+        return response
     }
 
     // Timeseries er værmeldinger
@@ -49,32 +60,22 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
 
     suspend fun fetchLocationForecastTimeseriesByTime(time: String, latitude: Double, longitude: Double): LocationForecastTimeseries? {
 
+        val cacheKey = "$time$latitude$longitude"
+
+        val cachedData = cachedTimeseriesData[cacheKey]
+
+
+        if (cachedData != null) {
+            return cachedData
+        }
+
         Log.d(
             "LFC_DATA_REPO",
-            "fetch LFCTimeSeriesByTime recieved time: $time, lat: $latitude, long: $longitude"
+            "fetching LFCTimeSeriesByTime from network. time: $time, lat: $latitude, long: $longitude"
         )
-
-        return dataSource.fetchLocationForecastByTime(time = time, latitude = latitude, longitude = longitude)
+        val networkData = dataSource.fetchLocationForecastByTime(time = time, latitude = latitude, longitude = longitude)
+        networkData?.let { cachedTimeseriesData[cacheKey] = it }
+        return networkData
     }
-
-    fun convertFromCels(
-        n: Double
-    ): Double {
-        return (n - 32) * 5.0/9.0
-    }
-
-    fun convertWindSpeedMpsToMph(
-        windSpeedMps: Double
-    ): Double {
-        return windSpeedMps * 2.2369
-    }
-
-    fun convertPrecipitationMmToInches(
-        precipitationMm: Double
-    ): Double {
-        return precipitationMm * 0.03937
-    }
-
-
 
 }

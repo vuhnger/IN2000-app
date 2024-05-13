@@ -2,6 +2,7 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -80,7 +82,14 @@ fun AllActivitiesScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .clickable {
+                            navController.navigate(
+                                Screen.ActivityDetailScreen.withArgs(
+                                    activity.activityName
+                                )
+                            )
+                        },
                     //elevation = CardDefaults.cardElevation(10.dp),
                     shape = RoundedCornerShape(16.dp),
                     backgroundColor = ContainerBlue,

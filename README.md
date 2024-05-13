@@ -45,13 +45,18 @@ Last ned APK-fil [Herfra (finnes ikke ennå)](). Krever Android versjon 8.3.2 el
 - Slett og opprett ny Emulator i Android Studio.
 ## Teknologier og biblioteker
 ### App og UI
+
 [Jetpack Compose](https://developer.android.com/develop/ui/compose) brukes for komponenter i appen. Dette er et bibliotek som lar deg programmere applikasjoner deklarativt.
 [Material3 Design Kit](https://m3-material-io.translate.goog/?_x_tr_sl=en&_x_tr_tl=no&_x_tr_hl=no&_x_tr_pto=sc&_x_tr_hist=true) brukes til komponenter i appen.
+
 ### Nettverk og API-er
+
 [Ktor](https://ktor.io/docs/welcome.html) brukes for å opprette en klient som kan sende forespørsler mot Metrologisk institutt sine API-er.
 [Coil](https://coil-kt.github.io/coil/compose/) brukes for å hente bilder asynkront fra endepunkter på internett.
+
 ### Lokal database
 - [SQLite (Room Database)](https://developer.android.com/training/data-storage/room)
+
 ### Kartfunksjonalitet
 Leveres av biblioteket [MapBox](https://developer.android.com/training/data-storage/room) versjon 11. 
 

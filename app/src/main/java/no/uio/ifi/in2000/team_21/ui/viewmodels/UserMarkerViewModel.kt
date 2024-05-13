@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.team_21.ui
+package no.uio.ifi.in2000.team_21.ui.viewmodels
 
 import android.app.Application
 import android.util.Log

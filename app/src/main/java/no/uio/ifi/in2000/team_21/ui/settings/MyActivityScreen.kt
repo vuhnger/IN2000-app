@@ -3,10 +3,13 @@ package no.uio.ifi.in2000.team_21.ui.settings
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,18 +20,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
+import no.uio.ifi.in2000.team_21.data.database.UserLogEntity
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
+import no.uio.ifi.in2000.team_21.model.activity.ActivityLog
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,6 +37,7 @@ fun MyActivityScreen(
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel
 ) {
+    val logs = activitiesViewModel.userLogs.observeAsState(initial = listOf())
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
 
@@ -45,15 +46,15 @@ fun MyActivityScreen(
         "called"
     )
 
-    var checked by remember { mutableStateOf(true) } //13.03 Må flyttes til en global ui-state
+    //var checked by remember { mutableStateOf(true) } //13.03 Må flyttes til en global ui-state
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        "Min aktivitet",
-                        color = onContainerLight
+                        "Historikk",
+                        color = MidnightBlue
                     )
                 },
                 navigationIcon = {
@@ -65,34 +66,61 @@ fun MyActivityScreen(
                         Icon(
                             contentDescription = "Tilbake",
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            tint = onContainerLight,
+                            tint = MidnightBlue,
                             modifier = Modifier
                                 .size(30.dp)
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(backgroundLight),
+                colors = TopAppBarDefaults.topAppBarColors(Background),
             )
         },
-        containerColor = backgroundLight,
+        containerColor = Background,
     ){
             innerPadding->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(15.dp)
-                .padding(innerPadding)
-        ){
-            activitiesViewModel.activityUIstate.activityLog.reversed().forEach { activityLog ->
-                Row(
-                    modifier = Modifier
-                        .padding(5.dp)
-                ) {
-                    Text(
-                        text = "Bruker gjorde ${activityLog.activity.activityName} : ${activityLog.time}"
-                    )
-                }
+        Column(modifier = Modifier.padding(innerPadding)) {
+            if (logs.value.isEmpty()) {
+                EmptyLogsMessage()
+            } else {
+                LogsList(logs.value)
             }
+        }
+    }
+}
+
+@Composable
+fun ActivityLogCard(
+    userLog: UserLogEntity
+){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp),
+        elevation = 5.dp
+    ) {
+        Text(text = "Du gjennomførte ${userLog.activityName.lowercase()} : ${userLog.timestamp}")
+    }
+}
+
+@Composable
+fun EmptyLogsMessage() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .padding()
+    ) {
+        Text("Dine gjennomførte aktiviteter vises her.")
+    }
+}
+
+@Composable
+fun LogsList(logs: List<UserLogEntity>) {
+    LazyColumn(
+        modifier = Modifier.padding(8.dp)
+    ) {
+        items(logs) { log ->
+            ActivityLogCard(log)
         }
     }
 }

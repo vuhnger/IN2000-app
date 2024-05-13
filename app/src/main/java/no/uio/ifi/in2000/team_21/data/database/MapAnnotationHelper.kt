@@ -9,7 +9,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import no.uio.ifi.in2000.team_21.R
-import no.uio.ifi.in2000.team_21.ui.UserMarkerViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserMarkerViewModel
 
 class MapAnnotationHelper(private val mapView: MapView, private val context: Context, private val onClick: (UserMarkerEntity) -> Unit) {
     private var pointAnnotationManager: PointAnnotationManager? = null

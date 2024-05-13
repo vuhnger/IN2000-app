@@ -4,12 +4,13 @@ import no.uio.ifi.in2000.team_21.R
 
 data class ActivityModel(
     val activityName: String,
-    val waterTemperatureThreshold: Double,
-    val waterSpeedThreshold: Double,
-    val waveHeightThreshold: Double,
-    val windSpeedThreshold: Double,
-    val airTemperatureThreshold: Double,
+    val minWaterTemperature: Double,
+    val maxWaterSpeed: Double,
+    val maxWaveHeight: Double,
+    val maxWindSpeed: Double,
+    val minAirTemperature: Double,
     val conditionStatus: ConditionStatus = ConditionStatus.NONE_MET,
+    var conditionDescription: String = "",
     val imageId: Int,
     val icon: Int
 ){
@@ -21,6 +22,19 @@ data class ActivityModel(
             ConditionStatus.NONE_MET -> R.drawable.svg_red_flag_icon
         }
     }
+    fun getFlagDescription(
+    ): String {
+        return when (conditionStatus) {
+            ConditionStatus.ALL_MET -> "Perfekt tidspunkt for ${activityName.lowercase()}"
+            ConditionStatus.SOME_MET -> "Forholdene er moderate for ${activityName.lowercase()}"
+            ConditionStatus.NONE_MET -> "Vær forsiktig og følg advarsler"
+        }
+    }
+
+    fun getFlagData(
+    ): Pair<Int, String> {
+        return Pair(getFlagColorId(), getFlagDescription())
+    }
 }
 
 enum class ConditionStatus {
@@ -31,94 +45,105 @@ enum class ConditionStatus {
 
 object ActivityModels {
     val KAYAKING = ActivityModel(
-        "Kayaking",
-        waterTemperatureThreshold = 2.0,
-        waterSpeedThreshold = 3.0,
-        waveHeightThreshold = 0.5,
-        windSpeedThreshold = 10.0,
-        airTemperatureThreshold = 10.0,
-        imageId = R.drawable.kayak_stock,
+        "Kajakk",
+        minWaterTemperature = 2.0,
+        maxWaterSpeed = 3.0,
+        maxWaveHeight = 0.5,
+        maxWindSpeed = 10.0,
+        minAirTemperature = 10.0,
+        imageId = R.drawable.kayaking_ai,
         icon = R.drawable.kayaking_dark
     )
     val FISHING = ActivityModel(
-        "Fishing",
-        waterTemperatureThreshold = 5.0,
-        waterSpeedThreshold = 2.0,
-        waveHeightThreshold = 1.0,
-        windSpeedThreshold = 5.0,
-        airTemperatureThreshold = 15.0,
-        imageId = R.drawable.fisking_stock,
+        "Fisking",
+        minWaterTemperature = 5.0,
+        maxWaterSpeed = 2.0,
+        maxWaveHeight = 1.0,
+        maxWindSpeed = 5.0,
+        minAirTemperature = 15.0,
+        imageId = R.drawable.fishing_ai,
         icon = R.drawable.fishing_icon
     )
     val SAILING = ActivityModel(
-        "Sailing",
-        waterTemperatureThreshold = 5.0,
-        waterSpeedThreshold = 5.0,
-        waveHeightThreshold = 2.0,
-        windSpeedThreshold = 15.0,
-        airTemperatureThreshold = 20.0,
-        imageId = R.drawable.sailing_stock,
+        "Seiling",
+        minWaterTemperature = 5.0,
+        maxWaterSpeed = 5.0,
+        maxWaveHeight = 2.0,
+        maxWindSpeed = 15.0,
+        minAirTemperature = 20.0,
+        imageId = R.drawable.sailing2_ai,
         icon = R.drawable.sailing_icon
     )
     val ROWING = ActivityModel(
-        "Rowing",
-        waterTemperatureThreshold = 5.0,
-        waterSpeedThreshold = 3.0,
-        waveHeightThreshold = 0.5,
-        windSpeedThreshold = 8.0,
-        airTemperatureThreshold = 15.0,
-        imageId = R.drawable.roing_stock,
-        icon = R.drawable.rowing_dark
+        "Roing",
+        minWaterTemperature = 5.0,
+        maxWaterSpeed = 3.0,
+        maxWaveHeight = 0.5,
+        maxWindSpeed = 8.0,
+        minAirTemperature = 15.0,
+        imageId = R.drawable.rowing_ai,
+        icon = R.drawable.final_rowing
     )
     val PADDLING = ActivityModel(
-        "Paddling",
-        waterTemperatureThreshold = 5.0,
-        waterSpeedThreshold = 3.0,
-        waveHeightThreshold = 0.5,
-        windSpeedThreshold = 8.0,
-        airTemperatureThreshold = 15.0,
-        imageId = R.drawable.roing_stock,
-        icon = R.drawable.rowing_dark
+        "Padling",
+        minWaterTemperature = 5.0,
+        maxWaterSpeed = 3.0,
+        maxWaveHeight = 0.5,
+        maxWindSpeed = 8.0,
+        minAirTemperature = 5.0,
+        imageId = R.drawable.padling_ai,
+        icon = R.drawable.rowing_icon
     )
     val SURFING = ActivityModel(
         "Surfing",
-        waterTemperatureThreshold = 5.0,
-        waterSpeedThreshold = Double.MAX_VALUE,
-        waveHeightThreshold = 3.0,
-        windSpeedThreshold = 10.0,
-        airTemperatureThreshold = 18.0,
-        imageId = R.drawable.surfing_stock,
+        minWaterTemperature = 5.0,
+        maxWaterSpeed = Double.MAX_VALUE,
+        maxWaveHeight = 3.0,
+        maxWindSpeed = 10.0,
+        minAirTemperature = 8.0,
+        imageId = R.drawable.surfing_ai,
         icon = R.drawable.surfing_dark
     )
     val SNORKELING = ActivityModel(
-        "Snorkeling",
-        waterTemperatureThreshold = 18.0,
-        waterSpeedThreshold = 2.0,
-        waveHeightThreshold = 0.5,
-        windSpeedThreshold = 5.0,
-        airTemperatureThreshold = 20.0,
-        imageId = R.drawable.snorkeling_stock,
-        icon = R.drawable.scuba
+        "Snorkle",
+        minWaterTemperature = 18.0,
+        maxWaterSpeed = 2.0,
+        maxWaveHeight = 0.5,
+        maxWindSpeed = 5.0,
+        minAirTemperature = 0.0,
+        imageId = R.drawable.snorkelig_ai,
+        icon = R.drawable.scuba_dark
     )
     val SWIMMING = ActivityModel(
-        "Swimming",
-        waterTemperatureThreshold = 18.0,
-        waterSpeedThreshold = 2.0,
-        waveHeightThreshold = 0.5,
-        windSpeedThreshold = 5.0,
-        airTemperatureThreshold = 20.0,
-        imageId = R.drawable.snorkeling_stock,
+        "Svømme",
+        minWaterTemperature = 18.0,
+        maxWaterSpeed = 2.0,
+        maxWaveHeight = 0.5,
+        maxWindSpeed = 5.0,
+        minAirTemperature = 20.0,
+        imageId = R.drawable.swimming_ai,
         icon = R.drawable.swimming_dark
     )
     val WATERSKIING = ActivityModel(
         "Vannski",
-        waterTemperatureThreshold = 5.0,
-        waterSpeedThreshold = 4.0,
-        waveHeightThreshold = 0.5,
-        windSpeedThreshold = 12.0,
-        airTemperatureThreshold = 20.0,
-        imageId = R.drawable.waterski_stock,
+        minWaterTemperature = 5.0,
+        maxWaterSpeed = 4.0,
+        maxWaveHeight = 0.5,
+        maxWindSpeed = 12.0,
+        minAirTemperature = 20.0,
+        imageId = R.drawable.waterski_ai,
         icon = R.drawable.waterski_icon
+    )
+
+    var CUSTOM_ACTIVITY = ActivityModel(
+        activityName = "",
+        minWaterTemperature = 0.0,
+        maxWaterSpeed = 0.0,
+        maxWaveHeight = 0.0,
+        maxWindSpeed = 0.0,
+        minAirTemperature = 0.0,
+        imageId = R.drawable.default_img,
+        icon = R.drawable.running_icon_free_vector
     )
 
     val allActivities = listOf(
@@ -137,5 +162,4 @@ object ActivityModels {
     fun find(activityName: String): ActivityModel?{
         return allActivities.find { it.activityName == activityName }
     }
-
 }

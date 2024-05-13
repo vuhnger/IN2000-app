@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.team_21
 
+import android.app.Application
 import android.os.Build
 import android.os.Bundle
 import android.view.animation.OvershootInterpolator
@@ -31,33 +32,34 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mapbox.common.MapboxOptions
-import no.uio.ifi.in2000.team_21.ui.LocationViewModel
-import no.uio.ifi.in2000.team_21.ui.home.ActivitiesViewModel
-import no.uio.ifi.in2000.team_21.ui.home.ActivityConditionCheckerViewModel
 import androidx.navigation.navArgument
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.delay
-import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
-import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
-import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
-import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
-import no.uio.ifi.in2000.team_21.ui.map.MapboxMapView
-import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
+import com.mapbox.common.MapboxOptions
+import no.uio.ifi.in2000.team_21.container.ActivityViewModelFactory
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
-import no.uio.ifi.in2000.team_21.ui.home.ForecastViewModel
-import no.uio.ifi.in2000.team_21.ui.home.OceanForecastViewModel
-import no.uio.ifi.in2000.team_21.ui.settings.AddActivityScreen
+import no.uio.ifi.in2000.team_21.ui.home.ActivityDetailScreen
+import no.uio.ifi.in2000.team_21.ui.home.AddFavoriteScreen
+import no.uio.ifi.in2000.team_21.ui.home.AllActivitiesScreen
+import no.uio.ifi.in2000.team_21.ui.home.HomeScreen
+import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
+import no.uio.ifi.in2000.team_21.ui.map.MapScreen
+import no.uio.ifi.in2000.team_21.ui.settings.AboutUsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ContactsScreen
 import no.uio.ifi.in2000.team_21.ui.settings.FriendsActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.MyActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.NotificationScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
-import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.OceanForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
+import kotlinx.coroutines.delay
 
 
 sealed class Screen(val route: String){
@@ -99,7 +101,6 @@ class MainActivity : ComponentActivity() {
 
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -119,7 +120,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,11 +127,16 @@ fun App(){
 
     val navController = rememberNavController()
     val locationViewModel: LocationViewModel = viewModel()
-    val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
+    //val activitiesViewModel: ActivitiesViewModel = viewModel(LocalContext.current as ComponentActivity)
     val forecastViewModel: ForecastViewModel = viewModel(LocalContext.current as ComponentActivity)
     val alertsViewModel: AlertsViewModel = viewModel()
     val activityConditionCheckerViewModel: ActivityConditionCheckerViewModel = viewModel()
     val oceanForecastViewModel: OceanForecastViewModel = viewModel()
+    val userViewModel: UserViewModel = viewModel()
+    val application = LocalContext.current.applicationContext as Application
+    val activitiesViewModel: ActivitiesViewModel = viewModel(
+        factory = ActivityViewModelFactory(application)
+    )
 
     val defaultActivity: ActivityModel = ActivityModels.FISHING
 
@@ -144,7 +149,7 @@ fun App(){
             SplashScreen(navController = navController)
         }
         composable(Screen.MapScreen.route){
-            MapboxMapView()
+            MapScreen(navController = navController)
         }
 
         composable(Screen.HomeScreen.route){
@@ -160,18 +165,21 @@ fun App(){
         }
 
         composable(Screen.SettingScreen.route){
-            SettingScreen(navController = navController)
+            SettingScreen(
+                navController = navController,
+                userViewModel = userViewModel
+            )
         }
 
         composable(Screen.AboutUsScreen.route){
             AboutUsScreen(navController = navController)
         }
 
-        composable(Screen.AddActivityScreen.route){
-            AddActivityScreen(navController = navController)
-        }
         composable(Screen.ProfileScreen.route){
-            ProfileScreen(navController = navController)
+            ProfileScreen(
+                navController = navController,
+                userViewModel = userViewModel
+            )
         }
         composable(Screen.FriendsActivityScreen.route){
             FriendsActivityScreen(navController = navController)
@@ -183,9 +191,6 @@ fun App(){
             )
         }
 
-        composable(Screen.TrophyWallScreen.route){
-            TrophyWallScreen(navController = navController)
-        }
         composable(Screen.NotificationScreen.route){
             NotificationScreen(navController = navController)
         }
@@ -198,6 +203,13 @@ fun App(){
                 navController = navController,
                 forecastViewModel =  forecastViewModel,
                 activitiesViewModel = activitiesViewModel
+            )
+        }
+        
+        composable(Screen.AllActivitiesScreen.route){
+            AllActivitiesScreen(
+                navController = navController,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel
             )
         }
 
@@ -214,6 +226,7 @@ fun App(){
             ActivityDetailScreen(
                 activitiesViewModel = activitiesViewModel,
                 activityConditionCheckerViewModel = activityConditionCheckerViewModel,
+                userViewModel = userViewModel,
                 navController = navController,
                 activityName = entry.arguments?.getString("activityName")
             )

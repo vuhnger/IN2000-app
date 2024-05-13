@@ -94,11 +94,11 @@ open class ActivityConditionCheckerViewModel : ViewModel() {
     ): Map<String, Boolean> {
         val conditionsMet = mutableMapOf<String, Boolean>()
 
-        conditionsMet["Vannets temperatur"] = (weatherDetails.seaWaterTemperature ?: 0.0) >= activity.waterTemperatureThreshold
-        conditionsMet["Vannets hastighet"] = (weatherDetails.seaWaterSpeed ?: Double.MAX_VALUE) <= activity.waterSpeedThreshold
-        conditionsMet["Bølgehøyde"] = (weatherDetails.seaSurfaceWaveHeight ?: Double.MAX_VALUE) <= activity.waveHeightThreshold
-        conditionsMet["Lufttemperatur"] = (weatherDetails.airTemperature ?: Double.MIN_VALUE) >= (activity.airTemperatureThreshold)
-        conditionsMet["Vindhastighet"] = (weatherDetails.windSpeed ?: Double.MAX_VALUE) <= (activity.windSpeedThreshold)
+        conditionsMet["Vannets temperatur"] = (weatherDetails.seaWaterTemperature ?: 0.0) >= activity.minWaterTemperature
+        conditionsMet["Vannets hastighet"] = (weatherDetails.seaWaterSpeed ?: Double.MAX_VALUE) <= activity.maxWaterSpeed
+        conditionsMet["Bølgehøyde"] = (weatherDetails.seaSurfaceWaveHeight ?: Double.MAX_VALUE) <= activity.maxWaveHeight
+        conditionsMet["Lufttemperatur"] = (weatherDetails.airTemperature ?: Double.MIN_VALUE) >= (activity.minAirTemperature)
+        conditionsMet["Vindhastighet"] = (weatherDetails.windSpeed ?: Double.MAX_VALUE) <= (activity.maxWindSpeed)
 
         // Legg til flere sjekker
 

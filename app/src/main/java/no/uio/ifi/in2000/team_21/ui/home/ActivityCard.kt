@@ -311,6 +311,8 @@ fun ActivityCardHorizontalWide(
                 activitiesViewModel = activitiesViewModel,
                 navController = navController
             )
+
+            Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = {
                     if (activitiesViewModel.favorites.value?.any { it.name == activity.activityName } == true) {
@@ -326,10 +328,13 @@ fun ActivityCardHorizontalWide(
                     containerColor = ContainerBlue
                 ),
                 modifier = Modifier
-                    .weight(1f)
+                    .width(80.dp)
             ) {
                 Star(icon)
             }
+
+
+
         }
     }
 }

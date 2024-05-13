@@ -10,7 +10,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,9 +37,9 @@ import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 @Composable
 fun AllActivitiesScreen(
     navController: NavController,
-    viewModel: ActivityConditionCheckerViewModel = ActivityConditionCheckerViewModel()
+    activityConditionCheckerViewModel: ActivityConditionCheckerViewModel
 ) {
-    val activities by viewModel.activities.observeAsState(initial = emptyList())
+    val activities by activityConditionCheckerViewModel.activities.observeAsState(initial = emptyList())
     Log.d("All_Activites_screen", "Activites: $activities")
 
     Scaffold(
@@ -152,5 +150,5 @@ fun PreviewAllActivitiesScreen() {
             checkActivityConditions("2024-05-06T20", 59.0, 10.0)
         }
     }
-    AllActivitiesScreen(navController = navController, viewModel = mockViewModel)
+    AllActivitiesScreen(navController = navController, activityConditionCheckerViewModel = mockViewModel)
 }

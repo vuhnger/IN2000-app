@@ -11,10 +11,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.ui.theme.Background
@@ -47,10 +49,16 @@ fun AddFavoriteScreen(
         }
 
         Card(
-
+            colors = CardColors(
+                containerColor = ContainerBlue,
+                contentColor = MidnightBlue,
+                disabledContainerColor = Color.Gray,
+                disabledContentColor = Color.Gray
+            )
         ) {
             Text(
-                text = "Legg til en aktivitet i dine favoritter for raskere tilgang. "
+                text = "Legg til en aktivitet i dine favoritter for raskere tilgang. ",
+                color = MidnightBlue
             )
         }
         LazyColumn(

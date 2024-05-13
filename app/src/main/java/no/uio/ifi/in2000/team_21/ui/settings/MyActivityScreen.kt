@@ -25,9 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.data.database.UserLogEntity
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
+import no.uio.ifi.in2000.team_21.model.activity.ActivityLog
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +54,7 @@ fun MyActivityScreen(
                 title = {
                     Text(
                         "Historikk",
-                        color = onContainerLight
+                        color = MidnightBlue
                     )
                 },
                 navigationIcon = {
@@ -65,16 +66,16 @@ fun MyActivityScreen(
                         Icon(
                             contentDescription = "Tilbake",
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            tint = onContainerLight,
+                            tint = MidnightBlue,
                             modifier = Modifier
                                 .size(30.dp)
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(backgroundLight),
+                colors = TopAppBarDefaults.topAppBarColors(Background),
             )
         },
-        containerColor = backgroundLight,
+        containerColor = Background,
     ){
             innerPadding->
         Column(modifier = Modifier.padding(innerPadding)) {

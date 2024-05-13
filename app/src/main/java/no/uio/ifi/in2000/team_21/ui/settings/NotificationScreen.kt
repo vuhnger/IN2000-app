@@ -39,10 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.containerLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
-
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +63,7 @@ fun NotificationScreen (navController:NavController){
                 title = {
                     Text(
                         "Varslinger",
-                        color = onContainerLight
+                        color = MidnightBlue
                     )
                 },
                 navigationIcon = {
@@ -76,16 +75,16 @@ fun NotificationScreen (navController:NavController){
                         Icon(
                             contentDescription = "Tilbake",
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            tint = onContainerLight,
+                            tint = MidnightBlue,
                             modifier = Modifier
                                 .size(30.dp)
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(backgroundLight),
+                colors = TopAppBarDefaults.topAppBarColors(Background),
             )
         },
-        containerColor = backgroundLight,
+        containerColor = Background,
     ){innerPadding->
         Column(
             modifier = Modifier
@@ -102,7 +101,7 @@ fun SwitchCard(name: String,checked: MutableState<Boolean>){
             .clickable { }
             .fillMaxWidth()
             .height(56.dp),
-        colors = CardDefaults.cardColors(containerLight)
+        colors = CardDefaults.cardColors(ContainerBlue)
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -118,7 +117,7 @@ fun SwitchCard(name: String,checked: MutableState<Boolean>){
                     fontSize = 15.sp,
                     lineHeight = 20.sp,
                     fontWeight = FontWeight(500),
-                    color = onContainerLight,
+                    color = MidnightBlue,
                     letterSpacing = 0.1.sp
                 )
             )
@@ -129,8 +128,8 @@ fun SwitchCard(name: String,checked: MutableState<Boolean>){
                     checked.value = it
                 },
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = backgroundLight,
-                    checkedTrackColor = onContainerLight,
+                    checkedThumbColor = Background,
+                    checkedTrackColor = MidnightBlue,
                     //uncheckedThumbColor = onContainerLight,
                     //uncheckedTrackColor = profileLight
                 ),
@@ -138,7 +137,7 @@ fun SwitchCard(name: String,checked: MutableState<Boolean>){
                     .width(52.dp)
                     .height(32.dp)
                     .background(
-                        color = onContainerLight,
+                        color = MidnightBlue,
                         shape = RoundedCornerShape(size = 100.dp)
                     )
                     .padding(start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)

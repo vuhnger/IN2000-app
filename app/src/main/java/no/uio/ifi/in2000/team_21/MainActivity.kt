@@ -38,7 +38,6 @@ import no.uio.ifi.in2000.team_21.ui.settings.MyActivityScreen
 import no.uio.ifi.in2000.team_21.ui.settings.NotificationScreen
 import no.uio.ifi.in2000.team_21.ui.settings.ProfileScreen
 import no.uio.ifi.in2000.team_21.ui.settings.SettingScreen
-import no.uio.ifi.in2000.team_21.ui.settings.TrophyWallScreen
 import no.uio.ifi.in2000.team_21.ui.theme.Team21Theme
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
@@ -86,7 +85,6 @@ class MainActivity : ComponentActivity() {
 
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -174,9 +172,6 @@ fun App(){
             )
         }
 
-        composable(Screen.TrophyWallScreen.route){
-            TrophyWallScreen(navController = navController)
-        }
         composable(Screen.NotificationScreen.route){
             NotificationScreen(navController = navController)
         }
@@ -193,7 +188,10 @@ fun App(){
         }
         
         composable(Screen.AllActivitiesScreen.route){
-            AllActivitiesScreen(navController = navController)
+            AllActivitiesScreen(
+                navController = navController,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel
+            )
         }
 
         composable(

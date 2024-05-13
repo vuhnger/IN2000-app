@@ -2,6 +2,7 @@ package no.uio.ifi.in2000.team_21.ui.home
 
 // import androidx.compose.material.MaterialTheme
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,10 +24,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -43,10 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -54,9 +48,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
-import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
-import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 
 @Composable
@@ -75,7 +69,7 @@ fun ActivityCard(
     ) {
         Column(
             modifier = Modifier
-                .background(backgroundLight)
+                .background(Background)
         ) {
 
             Row(
@@ -190,7 +184,7 @@ fun ActivityCardSmall(
                 )
             },
         elevation = CardDefaults.cardElevation(2.dp),
-        colors = CardDefaults.cardColors(containerColor = HomeCard)
+        colors = CardDefaults.cardColors(containerColor = ContainerBlue)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -205,7 +199,7 @@ fun ActivityCardSmall(
                 text = activity.activityName,
                 modifier = Modifier.weight(1f),
                 style = TextStyle(
-                    color = HomeFont,
+                    color = MidnightBlue,
                     fontSize = 20.sp
                 )
             )
@@ -232,38 +226,47 @@ fun ActivityIconSmall(
 ) {
     Box(
         modifier = Modifier
-            .padding(start = 10.dp, end = 10.dp)
+            .height(80.dp)
     ) {
         Icon(
             painter = painterResource(id = activity.icon),
             contentDescription = "Icon of ${activity.activityName}",
             modifier = Modifier
-                .clip(shape = CircleShape)
+                .padding(start = 15.dp)
                 .background(
-                    color = Color(0xFF7BBBE9)
-                )
-                .padding(8.dp)
+                    color = ContainerBlue,
+                    shape = CircleShape
+                ) // Endre bakgrunnsfarge til hvit og bruk sirkel som form
+                .clip(CircleShape) // Klipper ikonet til en sirkelform
+                //.border(2.dp, Color.Gray, CircleShape) // Legger til en tynn grå border rundt ikonet
+                .padding(25.dp) // Justering for å beholde plassering og størrelse
+                .scale(2f)
                 .clickable {
                     navController.navigate(
                         Screen.ActivityDetailScreen.withArgs(
                             activity.activityName
                         )
                     )
-                }
+                },
+            tint = MidnightBlue
         )
+        Spacer(modifier = Modifier.height(30.dp))
+
         Text(
             text = activity.activityName,
             maxLines = 1,
             fontSize = 20.sp,
-            color = HomeFont,
+            color = MidnightBlue,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .align(Alignment.Center)
                 .offset(y = 38.dp)
+                .padding(10.dp)
         )
+
+
     }
 }
-
 
 @Composable
 fun ActivityCardHorizontalWide(
@@ -274,20 +277,16 @@ fun ActivityCardHorizontalWide(
 
     val isFavorite by activitiesViewModel.isFavorite(activity.activityName).observeAsState(false)
 
-    var icon = if (isFavorite) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder
+    var icon = if (isFavorite) true else false
 
     Card(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(140.dp)
-        .padding(
-            horizontal = 10.dp, vertical = 10.dp,
-        )
-        .background(
-            color = HomeCard
-        ),
-        elevation = CardDefaults.cardElevation(10.dp),
-        colors = CardDefaults.cardColors(containerColor = HomeCard)
+        colors = CardDefaults.cardColors(containerColor = ContainerBlue),
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, MidnightBlue),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp)
+            .height(100.dp)
     ) {
 
         Log.d(
@@ -298,76 +297,87 @@ fun ActivityCardHorizontalWide(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = HomeCard)
+                .background(color = ContainerBlue)
         ) {
             ActivityIconSmall(
                 activity = activity,
                 activitiesViewModel = activitiesViewModel,
                 navController = navController
             )
+
+            Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = {
                     if (activitiesViewModel.favorites.value?.any { it.name == activity.activityName } == true) {
                         activitiesViewModel.removeFavorite(activity.activityName)
-                        icon = Icons.Default.FavoriteBorder
+                        icon = false
                     } else {
                         activitiesViewModel.addFavorite(activity)
-                        icon = Icons.Default.Favorite
+                        icon = true
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
-                    containerColor = HomeCard
+                    contentColor = MidnightBlue,
+                    containerColor = ContainerBlue
                 ),
                 modifier = Modifier
-                    .weight(1f)
+                    .width(80.dp)
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = "Knapp for å legge til i favoritter",
-                    modifier = Modifier
-                        .padding(
-                            horizontal = 10.dp,
-                            vertical = 10.dp
-                        )
-                        .scale(1.5f)
-                )
+                Star(icon)
             }
+
+
+
         }
     }
 }
 
-/*
-
-*/
+@Composable
+fun Star(icon: Boolean) {
+    if (icon) {
+        Icon(
+            painter = painterResource(id = no.uio.ifi.in2000.team_21.R.drawable.baseline_star_24),
+            contentDescription = "full stjerne",
+            tint = MidnightBlue,
+            modifier = Modifier
+                .scale(1.5f)
+        )
+    }
+    else {
+        Icon(
+            painter = painterResource(id = no.uio.ifi.in2000.team_21.R.drawable.baseline_star_outline_24),
+            contentDescription = "Settings icon",
+            tint = MidnightBlue,
+            modifier = Modifier
+                .scale(1.5f)
+        )
+    }
+}
 @Composable
 fun ActivityIconGridHorizontalSmall(
     activitiesViewModel: ActivitiesViewModel,
     navController: NavController
 ) {
     val favorites = activitiesViewModel.favorites.observeAsState(initial = emptyList())
-
-    if (favorites.value.isEmpty()){
+    if (favorites.value.isEmpty()) {
         Card(
-        modifier = Modifier
-            .padding(start = 4.dp, end = 4.dp)
+            colors = CardDefaults.cardColors(ContainerBlue),
+            modifier = Modifier
+                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
         ) {
             Text(
                 text = "Legg til favorittaktiviteter ved å trykke på +",
-                modifier = Modifier
-                    .background(
-                        color = Color(0xFFC4E2F6) // denne endrer fargen på tekstbakgrunnen
-                    )
-                    .padding(16.dp)
-            )
+                color = MidnightBlue,
+
+                )
         }
-    }else{
+    } else {
         LazyRow(
             modifier = Modifier
                 .height(84.dp)
                 .padding(start = 16.dp)
         ) {
-            items(favorites.value) {activityEntity ->
+            items(favorites.value) { activityEntity ->
                 val activityModel = activitiesViewModel.getActivityModelByName(activityEntity.name)
                 activityModel?.let { model ->
                     ActivityIconSmall(
@@ -380,3 +390,5 @@ fun ActivityIconGridHorizontalSmall(
         }
     }
 }
+
+

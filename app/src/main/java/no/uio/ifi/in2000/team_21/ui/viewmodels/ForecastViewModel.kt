@@ -4,6 +4,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +18,12 @@ import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.team_21.data.LocationForecastDataRepository
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastResponse
 import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeseries
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 class ForecastViewModel(
@@ -30,6 +38,40 @@ class ForecastViewModel(
     val forecast: StateFlow<LocationForecastResponse?> = _forecast.asStateFlow()
 
     private val TIMEOUT_MS = (300_000).toLong() // 300k ms er 5 min
+
+    private val norwayZone = ZoneId.of("Europe/Oslo")
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
+
+    private val _selected_time = MutableStateFlow<String>(ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(formatter))
+    val selected_time: StateFlow<String> = _selected_time.asStateFlow()
+
+    private var _selectedDate = MutableStateFlow<LocalDate>(LocalDate.now())
+    private var _selectedTime = MutableStateFlow<LocalTime>(LocalTime.now())
+
+    var selectedDate: StateFlow<LocalDate> = _selectedDate.asStateFlow()
+    var selectedTime: StateFlow<LocalTime> = _selectedTime.asStateFlow()
+
+
+    fun update_selected_time(
+        selectedDate: LocalDate,
+        selectedTime: LocalTime
+    ){
+        val time = selectedDate.atTime(selectedTime).format(formatter)
+        _selected_time.value = time
+    }
+
+    fun updateSelectedTime(
+        time: LocalTime
+    ){
+        _selectedTime.value = time
+    }
+
+    fun updateSelectedDate(
+        date: LocalDate
+    ){
+        _selectedDate.value = date
+    }
+
     fun continuousForecastUpdate(
         latitude: Double,
         longitude: Double
@@ -47,7 +89,10 @@ class ForecastViewModel(
         }
     }
 
-    fun fetchWeatherForLocation(lat: Double, lon: Double) {
+    fun fetchWeatherForLocation(
+        lat: Double,
+        lon: Double
+    ) {
         viewModelScope.launch {
             val timeseriesData = repository.fetchWeatherDataForLocation(lat, lon)
             _selectedLocationWeatherData.value = timeseriesData

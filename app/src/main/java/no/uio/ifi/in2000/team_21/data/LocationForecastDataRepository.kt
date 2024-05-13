@@ -7,14 +7,27 @@ import no.uio.ifi.in2000.team_21.model.locationforcast.LocationForecastTimeserie
 class LocationForecastDataRepository(private val dataSource: LocationForecastDataSource = LocationForecastDataSource()) {
 
 
+    val cachedResponseData: HashMap<String, LocationForecastResponse> = HashMap()
+    val cachedTimeseriesData: HashMap<String, LocationForecastTimeseries> = HashMap()
+
     suspend fun fetchForecast(
         latitude: Double,
         longitude: Double
     ): LocationForecastResponse? {
-        return dataSource.fetchLocationForecastResponse(
+
+        val cacheKey = "$latitude:$longitude"
+
+        if (cachedResponseData[cacheKey] != null) {
+            return cachedResponseData[cacheKey]
+        }
+
+        val response: LocationForecastResponse? = dataSource.fetchLocationForecastResponse(
             latitude = latitude,
             longitude = longitude
         )
+
+        response?.let { cachedResponseData[cacheKey] = it }
+        return response
     }
 
     // Timeseries er værmeldinger
@@ -29,29 +42,6 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
             latitude = latitude,
             longitude =  longitude
         )
-    }
-
-    suspend fun fetchAllNext1HourImageIcons(
-        latitude: Double,
-        longitude: Double
-    ): ArrayList<String> {
-        val timeseries = fetchTimeseries(
-            latitude = latitude,
-            longitude = longitude
-        )
-        val icons = ArrayList<String>()
-
-        Log.d("FORECAST_REPO", "timeseries size: ${timeseries?.size}")
-
-        timeseries?.forEach { timeseries ->
-            timeseries.data?.next_1_hours?.summary?.symbol_code?.let { symbolCode ->
-                println(symbolCode)
-                // Add only if symbolCode is not null
-                icons.add(symbolCode)
-            }
-        }
-        Log.d("LOCATION_REPO","fetched ${icons.size} icons")
-        return icons
     }
 
     suspend fun fetchWeatherDataForLocation(lat: Double, lon: Double): List<LocationForecastTimeseries>? {
@@ -70,34 +60,22 @@ class LocationForecastDataRepository(private val dataSource: LocationForecastDat
 
     suspend fun fetchLocationForecastTimeseriesByTime(time: String, latitude: Double, longitude: Double): LocationForecastTimeseries? {
 
+        val cacheKey = "$time$latitude$longitude"
+
+        val cachedData = cachedTimeseriesData[cacheKey]
+
+
+        if (cachedData != null) {
+            return cachedData
+        }
+
         Log.d(
             "LFC_DATA_REPO",
-            "fetch LFCTimeSeriesByTime recieved time: $time, lat: $latitude, long: $longitude"
+            "fetching LFCTimeSeriesByTime from network. time: $time, lat: $latitude, long: $longitude"
         )
-
-        return dataSource.fetchLocationForecastByTime(time = time, latitude = latitude, longitude = longitude)
-    }
-
-    suspend fun fetchCurrentAirTemperature(
-        latitude: Double,
-        longitude: Double
-    ): Double {
-        return dataSource.fetchCurrentAirTemperature(
-            latitude = latitude,
-            longitude = longitude
-        )
-    }
-
-    suspend fun repositoryfetchNextHourWeatherIcon(
-        time: String,
-        latitude: Double,
-        longitude: Double
-    ): String {
-        return dataSource.repositoryfetchNextHourWeatherIcon(
-            time = time,
-            latitude = latitude,
-            longitude = longitude
-        )
+        val networkData = dataSource.fetchLocationForecastByTime(time = time, latitude = latitude, longitude = longitude)
+        networkData?.let { cachedTimeseriesData[cacheKey] = it }
+        return networkData
     }
 
 }

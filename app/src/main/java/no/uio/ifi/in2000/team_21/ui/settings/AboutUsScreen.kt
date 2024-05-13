@@ -30,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,10 +47,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.containerLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
-import no.uio.ifi.in2000.team_21.ui.theme.profileLight
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+
 
 data class TeamMember(
     val name: String,
@@ -106,7 +106,7 @@ fun AboutUsScreen(navController: NavController) {
                 title = {
                     Text(
                         "Om oss",
-                        color = onContainerLight
+                        color = MidnightBlue
                     )
                 },
                 navigationIcon = {
@@ -118,16 +118,16 @@ fun AboutUsScreen(navController: NavController) {
                         Icon(
                             contentDescription = "Tilbake",
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            tint = onContainerLight,
+                            tint = MidnightBlue,
                             modifier = Modifier
                                 .size(30.dp)
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(Background),
             )
         },
-        modifier = Modifier
-            .background(color = backgroundLight)
+        containerColor = Background
     ) { innerPadding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -142,6 +142,7 @@ fun AboutUsScreen(navController: NavController) {
         )
     }
 }
+
 @Composable
 fun AboutUsCard(teamMember: TeamMember){
     Log.d(
@@ -154,10 +155,10 @@ fun AboutUsCard(teamMember: TeamMember){
             .padding(15.dp)
             .border(
                 width = 2.dp,
-                color = profileLight,
+                color = MidnightBlue,
                 shape = RoundedCornerShape(12.dp)
             ),
-        colors = CardDefaults.cardColors(containerLight)
+        colors = CardDefaults.cardColors(MidnightBlue)
     ){
         Column(
             verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterVertically),
@@ -171,7 +172,7 @@ fun AboutUsCard(teamMember: TeamMember){
                     fontSize = 14.sp,
                     lineHeight = 16.sp,
                     fontWeight = FontWeight(500),
-                    color = onContainerLight,
+                    color = Background,
                     textAlign = TextAlign.Center,
                     letterSpacing = 0.5.sp,
                 ),
@@ -183,7 +184,7 @@ fun AboutUsCard(teamMember: TeamMember){
                 text = teamMember.age.toString() + " år",
                 style = TextStyle(
                     fontSize = 12.sp,
-                    color = onContainerLight,
+                    color = Background,
                     textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier
@@ -193,7 +194,7 @@ fun AboutUsCard(teamMember: TeamMember){
                 text = teamMember.personality,
                 style = TextStyle(
                     fontSize = 12.sp,
-                    color = onContainerLight,
+                    color = Background,
                     textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier
@@ -203,7 +204,7 @@ fun AboutUsCard(teamMember: TeamMember){
                 text = teamMember.studyProgramme,
                 style = TextStyle(
                     fontSize = 12.sp,
-                    color = onContainerLight,
+                    color = Background,
                     textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier

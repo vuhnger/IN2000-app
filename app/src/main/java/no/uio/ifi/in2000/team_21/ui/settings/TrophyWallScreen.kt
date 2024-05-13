@@ -1,3 +1,4 @@
+/*
 package no.uio.ifi.in2000.team_21.ui.settings
 
 import android.annotation.SuppressLint
@@ -86,3 +87,6 @@ fun TrophyWallScreen(navController: NavController) {
 fun TrophyWallScreenTest() {
     TrophyWallScreen(navController = rememberNavController())
 }
+
+
+ */

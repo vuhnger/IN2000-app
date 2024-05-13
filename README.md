@@ -1,107 +1,71 @@
-# Team-21
-# Gruppemedlemmer
+
+# Vannplaning
+
+![Logo av appen](https://github.uio.no/IN2000-V24/team-21/blob/main/Images/Vannplaning-logo.png?raw=true)
+## Innholdsfortegnelse
+- [[#Hva er dette prosjektet?|Hva er dette prosjektet?]]
+- [[#Oppsett og nedlasting|Oppsett og nedlasting]]
+	- [[#Oppsett og nedlasting#Forutsetninger|Forutsetninger]]
+	- [[#Oppsett og nedlasting#Kom i gang|Kom i gang]]
+		- [[#Kom i gang#Alternativ 1 - Last ned APK-fil|Alternativ 1 - Last ned APK-fil]]
+		- [[#Kom i gang#Alternativ 2 - Emuler appen med Android Studio|Alternativ 2 - Emuler appen med Android Studio]]
+	- [[#Oppsett og nedlasting#Ved problemer|Ved problemer]]
+- [[#Teknologier og biblioteker|Teknologier og biblioteker]]
+	- [[#Teknologier og biblioteker#App og UI|App og UI]]
+	- [[#Teknologier og biblioteker#Nettverk og API-er|Nettverk og API-er]]
+	- [[#Teknologier og biblioteker#Lokal database|Lokal database]]
+	- [[#Teknologier og biblioteker#Kartfunksjonalitet|Kartfunksjonalitet]]
+- [[#Bilder|Bilder]]
+- [[#Om utviklerene|Om utviklerene]]
+## Hva er dette prosjektet?
+
+Vannplaning ble utviklet som et prosjekt i emnet [IN2000 (Software Engineering med prosjektarbeid)](https://www.uio.no/studier/emner/matnat/ifi/IN2000/v24/) ved institutt for informatikk hos Universitetet i Oslo våren 2024. Emnet gir studenter praktisk erfaring med Software Engineering gjennom prosjektarbeid. Prosjektet gikk ut på å lage en applikasjon for Android-enheter som løser en problemstilling knyttet til Havvarsler. Vi brukte tre API-er fra Metrologisk institutt for å utvikle en app som gir brukere anbefalte fritidsaktiviteter på eller ved vannet. 
+
+Dette repoet inneholder kildekode og dokumentasjon av team 21 sin løsning på prosjektet.
+
+## Oppsett og nedlasting
+
+### Forutsetninger
+[Android-emulator i Android Studio med API-nivå 26 eller høyere](https://www.google.com/search?q=android+studio&oq=android+studio&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDIzMzhqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8), eller tilsvarende Android-enhet.
+### Kom i gang
+#### Alternativ 1 - Last ned APK-fil
+
+Last ned APK-fil [Herfra (finnes ikke ennå)](). Krever Android versjon 8.3.2 eller nyere.
+#### Alternativ 2 - Emuler appen med Android Studio
+
+1. Åpne en terminal
+2. Hvis du ikke har git,[ last ned git](https://git-scm.com/downloads) eller `sudo apt-get install git`
+3. Hvis du ikke har Gradle, installer med for eksempel brew: `brew install gradle`
+4. Skriv `git clone https://github.uio.no/IN2000-V24/team-21 && cd team-21`
+5. Kompiler prosjektet med ``./gradlew build``
+6. Kjør appen med Android Studio eller se [kompileringsressurser](https://developer.android.com/build/building-cmdline) ved behov.
+### Ved problemer
+- Invalidate caches i Android Studio
+- Trykk "clean build" og "rebuild project" i Android Studio.
+- Slett og opprett ny Emulator i Android Studio.
+## Teknologier og biblioteker
+### App og UI
+[Jetpack Compose](https://developer.android.com/develop/ui/compose) brukes for komponenter i appen. Dette er et bibliotek som lar deg programmere applikasjoner deklarativt.
+[Material3 Design Kit](https://m3-material-io.translate.goog/?_x_tr_sl=en&_x_tr_tl=no&_x_tr_hl=no&_x_tr_pto=sc&_x_tr_hist=true) brukes til komponenter i appen.
+### Nettverk og API-er
+[Ktor](https://ktor.io/docs/welcome.html) brukes for å opprette en klient som kan sende forespørsler mot Metrologisk institutt sine API-er.
+[Coil](https://coil-kt.github.io/coil/compose/) brukes for å hente bilder asynkront fra endepunkter på internett.
+### Lokal database
+- [SQLite (Room Database)](https://developer.android.com/training/data-storage/room)
+### Kartfunksjonalitet
+Leveres av biblioteket [MapBox](https://developer.android.com/training/data-storage/room) versjon x. 
+
+## Bilder
+![Hjemskjerm](https://raw.github.uio.no/IN2000-V24/team-21/d19b2798003b397f2e2a81114b98f0eba3a10458/Images/Screenshot%202024-05-11%20at%2012.36.23.png?token=AAACJCYUS5SS2O5E7AWWYE3GH5G6G)
+![Kartskjerm](https://raw.github.uio.no/IN2000-V24/team-21/d19b2798003b397f2e2a81114b98f0eba3a10458/Images/Screenshot%202024-05-11%20at%2012.37.44.png?token=AAACJC5TAJQHQ7YCPCMKVM3GH5G6G)
+![Innstillinger](https://raw.github.uio.no/IN2000-V24/team-21/d19b2798003b397f2e2a81114b98f0eba3a10458/Images/Screenshot%202024-05-11%20at%2012.38.11.png?token=AAACJC6YHQMPVE6CQ6W2WADGH5G6G)
+
+## Om utviklerene
+
+Utviklerteamet består av:
 1. Victor Uhnger (victou)
 2. Sebastian Hareide (sebassha) 
 3. Kaja Stenen (kajasten)
 4. Mari Stenbrenden (mastenb)
 5. Joachim Haasted (joachah)
 6. Jonas William Røed Holmboe (jwholmbo)
-___
-# Github Desktop
-## For deg som ikke er kjent med Git, eller Github fra før så anbefaler vi å ta i bruk [Github Desktop](https://desktop.github.com/).
-___
-# Git & GitHub Tutorial for Team 21
-## Innholdsfortegnelse
-
-- [Installasjons Guide](#installasjons-guide-for-å-kunne-få-tilgang-til-github-mappene)
-  - [Kloning](#kloning)
-- [Før Du Endrer i Repository](#ting-å-gjøre-før-du-endrer-i-repository)
-  - [Oppdatere Lokalfiler](#oppdatere-lokalfiler)
-- [Laste Opp/Endre Filer](#hvordan-laste-opp-nye-fileroppdatere-eksisterende-filer)
-  - [Status Oversikt](#status-oversikt)
-  - [Legge Til Filer](#legg-til-filer)
-  - [Commit](#commit)
-  - [Laste Opp Endringer](#laste-opp-endringene-din)
-- [Branching](#branching)
-  - [Bytte Branch](#bytte-fra-en-branch-til-en-annen)
-  - [Branch-struktur](#hvordan-bygge-en-branch)
-- [Slå Sammen Endringer](#hvordan-slå-sammen-endringer)
-  - [Merge med Main](#slå-sammen-kode-med-main)
-
-Vennligst husk å spørre på Slack hvis du er usikker på noe i prosessen! :)
-___
-## Installasjons guide for å kunne få tilgang til Github mappene
-### Kloning
-Hvis dette er første gangen du gjør endringer i prosjektet er det nødvendig å klone repository. Dette gjøres ved å trykke på "Code" knappen i GitHub, kopiere lenken, og taste inn denne kommandoen i terminalen:
-```git
-git clone [url]
-```
-*url* : https://github.uio.no/ditt-repository/dine-underbransjer
-___
-## Ting å gjøre FØR du endrer i repository
-### Oppdatere lokalfiler
-For at `git pull` skal fungere forventes det at du er inne i Git repository *[team-21]* mappen når kommandoene kjøres. Hvis du ikke er i et Git repository vil  du få en feilmelding **fatal: not a git repository** som betyr at du må navigere deg til Git mappen ved bruk av ```cd // cd..``` Hvis alt går som forventet vil kommandoen `git pull` oppdatere eksisterende filer, og legge til nye filer fra GitHub til din lokale mappe.
-```git
-git pull
-```
-___
-## Hvordan laste opp nye filer/oppdatere eksisterende filer
-*Disse bør følges i kronologisk rekkefølge*
-### Status oversikt
-`git status` Denne kommandoen sørger for at ditt lokale repository (din lokale mappe av prosjektet) er up to date med hva som ligger i Github. Da får du de nyeste filene, og kan gjøre de nødvendige endringene uten at det blir noe kollisjoner.
-```git
-git status
-```
-### Legg til filer
-Denne kommandoen gir deg en oversikt over redigerte filer, samt hvorvidt de er lagt til, og klar for å committes.
-```git
-git add .
-```
-`git add .` legger til ALLE filer du har endret i mappen du befinner deg i. 
-### Legg til fil
-Hvis du ønsker å tilføye èn spesifikk fil til committen din så bruker du:
- ```git
-git add *filename*
-```
-*Da er det nødvendig å bytte ut *filename* med filnavnet til den spesifikke filen du ønsker å tilføye.*
-### Commit
-```git
-git commit -m "commit message"
-```
-Denne kommandoen snapshotter alle filene som ble lagt til fra "git add" til version history. Denne fungerer ofte som siste steget før man pusher endringene sine til GitHub.
-### Laste opp endringene din
-`git push` Etter å ha brukt `git add [filer]` og deretter `git commit -m "melding"`, kan du bruke `git push` for å laste opp koden din til GitHub, slik at den er tilgjengelig for nedlasting.
-```git
-git push
-```
-___
-## Branching
-Branch-kommandoen lager en ny gren ut fra den grenen du befinner deg i.
-`git branch [branch-navn]` 
-Grener er "versjoner" av koden som er uavhengige av hverandre, men vi bruker de for å kunne jobbe på nye endringer mens vi beholder eksisterende versjoner av koden vår. `git branch -d [branch-navn]` Denne kommandoen sletter branchen du oppgir, bruk den forsiktig! Flagget -d står for "delete". `git branch --no-merged` Gir deg en liste over alle branches som ikke har blitt merget inn i HEAD-branchen. `git branch -v -a` Gir deg informasjon om _alle_ branchene dine, lokale og remote. Du kan skrive kun `git branch` for å få navnet på lokale brancher.
-### Bytte fra en branch til en annen
-`git checkout [branch-navn]` Skifter hvilken gren du er i.
-
-### Hvordan bygge en branch
-
-`main` - Dette er production-koden, kode skal *aldri* pushes til main, main er alltid en fungerende versjon av applikasjonen.
-
-`dev` - Dette er development-koden, vi brancher hovedsaklig ut herfra når vi skal jobbe med noe nytt, med mindre problemet bygger videre på en eksisterende branch.
-
-`feat` - Dette er en feature-branch, disse kan vi ha mange av! Når du skal implementere en ny funksjon kaller du branchen din f.eks `dev/feat/feat-name`, slik at vi vet hvor branchen grener ut fra.
-
-`fix` - Dersom du skal fikse noe i en eksisterende branch uten å ødelegge koden du allerede har, brancher du ut og suffikser branch-navnet med `/fix`, dersom jeg ønsker å fikse noe i `dev/feat/feat-name`, kaller jeg fix-branchen for `dev/feat/feat-name/fix`.
-___
-## Hvordan slå sammen endringer
-
-*VIKTIG: Pull Requests **må** godtas i kronologisk rekkefølge!*
-
-### Slå sammen kode med main
-1. Rydd opp i branchen du jobber på (Fjern utdaterte kommentarer, formatter koden, gjør nødvendig testing)
-2. Checkout `main` og skriv `git pull` for å hente eventuelle nylige endringer i main.
-3. Checkout din egen branch igjen og skriv `git merge main` - her merger du main inn i branchen du jobber på.
-4. Skriv `git push` for å oppdatere endringene i branchen din på GitHub.
-5. Lag en Pull Request i GitHub og forespør et review med en i teamet, avgjør her om branchen kan slettes eller burde beholdes.
-7. Er du usikker på noe i prosessen, spør på Slack før du foretar deg noe! :) 
-
-Ved sammenslåing fra en branch til f.eks `dev` gjøres benyttes samme metode som med `main`.

@@ -42,8 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
-import no.uio.ifi.in2000.team_21.ui.theme.HomeCard
-import no.uio.ifi.in2000.team_21.ui.theme.HomeFont
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
@@ -66,6 +67,7 @@ fun ActivityDetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize() // Fill entire screen (improves layout)
+            .background(Background)
     ) {
         val activity = activityConditionCheckerViewModel.get(
             activityName = activityName ?: ""
@@ -80,7 +82,7 @@ fun ActivityDetailScreen(
                 onDismissRequest = {
                     showDialog = false
                     navController.popBackStack()
-                                   },
+                },
                 title = { Text(text = "Aktivitet loggført!")},
                 text = { Text(text = "Du finner denne i historikk.")},
                 buttons = {
@@ -106,7 +108,7 @@ fun ActivityDetailScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFEBEFFF)),// Consistent padding
+                .background(Background),// Consistent padding
 
             horizontalArrangement = Arrangement.SpaceBetween // Space buttons evenly
         ) {
@@ -115,7 +117,7 @@ fun ActivityDetailScreen(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = "Tilbakeknapp til hjemskjerm.",
 
-                )
+                    )
             }
         }
 
@@ -135,7 +137,7 @@ fun ActivityDetailScreen(
                     fontSize = 28.sp, // Increase font size for title
                     lineHeight = 28.sp, // Adjust line height for better readability
                     fontWeight = FontWeight.Bold, // Make title bold
-                    color = HomeFont, // Use MaterialTheme colors
+                    color = MidnightBlue, // Use MaterialTheme colors
 
                 )
             )
@@ -171,7 +173,7 @@ fun ActivityDetailScreen(
                         fontSize = 18.sp,
                         lineHeight = 24.sp,
                         fontWeight = FontWeight.Normal,
-                        color = HomeFont
+                        color = MidnightBlue
                     ),
                     modifier = Modifier
                         .padding(end = 8.dp, bottom = 14.dp),
@@ -215,11 +217,12 @@ fun ActivityDetailScreen(
                     }
                     showDialog = true
                 },
-                colors = ButtonDefaults.buttonColors(Color(0xFF5058A4))
+                colors = ButtonDefaults.buttonColors(MidnightBlue)
             ) {
                 Text(
                     text = "Loggfør aktivitet",
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    color = Background
                 )
             }
         }
@@ -231,7 +234,7 @@ fun ConditionCard(conditionTitle: String, conditionDescription: String) {
     Card(
         modifier = Modifier
             .padding(start = 10.dp, top = 20.dp, end = 10.dp),
-        colors = CardDefaults.cardColors(containerColor = HomeCard),
+        colors = CardDefaults.cardColors(containerColor = ContainerBlue),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -241,7 +244,7 @@ fun ConditionCard(conditionTitle: String, conditionDescription: String) {
                     fontSize = 20.sp,
                     lineHeight = 24.sp,
                     fontWeight = FontWeight.Normal,
-                    color = HomeFont,
+                    color = MidnightBlue,
                     textAlign = TextAlign.Center
                 )
             )
@@ -252,7 +255,7 @@ fun ConditionCard(conditionTitle: String, conditionDescription: String) {
                     fontSize = 18.sp,
                     lineHeight = 24.sp,
                     fontWeight = FontWeight.Normal,
-                    color = HomeFont,
+                    color = MidnightBlue,
                     textAlign = TextAlign.Center
                 )
             )

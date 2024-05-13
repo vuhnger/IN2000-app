@@ -33,6 +33,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
@@ -53,10 +54,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
-import no.uio.ifi.in2000.team_21.ui.theme.backgroundLight
-import no.uio.ifi.in2000.team_21.ui.theme.containerLight
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
-import no.uio.ifi.in2000.team_21.ui.theme.profileLight
+import no.uio.ifi.in2000.team_21.model.user.User
+import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+import no.uio.ifi.in2000.team_21.ui.theme.White
 import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 
 @Composable
@@ -74,46 +76,38 @@ fun SettingScreen(
         "called"
     )
 
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         "Innstillinger",
-                        color = onContainerLight
+                        color = MidnightBlue
                     )
                 },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    ) {
-                        Icon(
-                            contentDescription = "Tilbake",
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            tint = onContainerLight,
-                            modifier = Modifier
-                                .size(30.dp)
-                        )
-                    }},
-                colors = TopAppBarColors(
-                    containerColor = Color(0xFFC4E2F6),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White,
-                    actionIconContentColor = Color.White,
-                    scrolledContainerColor = Color(0xFFC4E2F6),
-                ),
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                navController.popBackStack()
+                            }
+                        ) {
+                            Icon(
+                                contentDescription = "Tilbake",
+                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                tint = MidnightBlue,
+                                modifier = Modifier
+                                    .size(30.dp)
+                            )
+                        } },
+                colors = TopAppBarDefaults.topAppBarColors(Background),
             )},
+        containerColor = Background,
     ){
             innerPadding->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color(0xFFEBEFFF))
         ){
-
             // Bakgrunnsbilde for skjermen
             Image(
                 painter = painterResource(id = R.drawable.waterbackground),
@@ -191,7 +185,7 @@ fun ProfileCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(80.dp),
-        colors = CardDefaults.cardColors (containerLight)
+        colors = CardDefaults.cardColors (White)
 
     ){
         Row(
@@ -213,7 +207,7 @@ fun ProfileCard(
                         fontSize = 18.sp,
                         lineHeight = 20.sp,
                         fontWeight = FontWeight(500),
-                        color = onContainerLight,
+                        color = MidnightBlue,
                         letterSpacing = 0.1.sp
                     )
                 )
@@ -226,7 +220,7 @@ fun ProfileCard(
                     style = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
-                        color = onContainerLight,
+                        color = MidnightBlue,
                         letterSpacing = 0.1.sp
                     )
                 )
@@ -235,64 +229,11 @@ fun ProfileCard(
             Icon(
                 contentDescription = "Min profil",
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                tint = onContainerLight
+                tint = MidnightBlue
             )
         }
     }
 }
-
-
-//DarkMode
-@Composable
-fun DarkModeCard(navController: NavController, checked: MutableState<Boolean>){
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .height(56.dp),
-        colors = CardDefaults.cardColors(containerLight)
-    ){
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 25.dp, end = 25.dp, top = 15.dp, bottom = 15.dp)
-        ){
-            Text(
-                modifier = Modifier
-                    .width(190.dp),
-                text = "Nattmodus",
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    lineHeight = 20.sp,
-                    fontWeight = FontWeight(500),
-                    color = onContainerLight,
-                    letterSpacing = 0.1.sp
-                )
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Switch(
-                checked = checked.value,
-                onCheckedChange = {
-                    checked.value = it
-                },
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = backgroundLight,
-                    checkedTrackColor = onContainerLight,
-                    //uncheckedThumbColor = onContainerLight,
-                    //uncheckedTrackColor = profileLight
-                ),
-                modifier = Modifier
-                    .width(52.dp)
-                    .height(32.dp)
-                    .background(
-                        color = onContainerLight,
-                        shape = RoundedCornerShape(size = 100.dp)
-                    )
-                    .padding(start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)
-            )
-        }
-    }
-}
-
 
 //All settings-cards
 @Composable
@@ -303,7 +244,7 @@ fun AllSettingsCard(navController: NavController, mainText: String, onClick:()->
             .clickable { }
             .fillMaxWidth()
             .height(56.dp),
-        colors = CardDefaults.cardColors(containerLight)
+        colors = CardDefaults.cardColors(White)
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -319,7 +260,7 @@ fun AllSettingsCard(navController: NavController, mainText: String, onClick:()->
                     fontSize = 15.sp,
                     lineHeight = 20.sp,
                     fontWeight = FontWeight(500),
-                    color = onContainerLight,
+                    color = MidnightBlue,
                     letterSpacing = 0.1.sp
                 )
             )
@@ -327,11 +268,12 @@ fun AllSettingsCard(navController: NavController, mainText: String, onClick:()->
             Icon(
                 contentDescription = mainText,
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                tint = onContainerLight
+                tint = MidnightBlue
             )
         }
     }
 }
+
 //History settings
 //Ikke helt happy med hvordan kortene ligge over hverandre, kommer tydelig frem når man klikker på dem
 @Composable
@@ -341,7 +283,7 @@ fun HistorySettings(navController: NavController){
             //.clickable { }
             .fillMaxWidth()
             .height(56.dp),
-        colors = CardDefaults.cardColors(containerLight)
+        colors = CardDefaults.cardColors(White)
     ){ Column (
 
     ){
@@ -353,7 +295,7 @@ fun HistorySettings(navController: NavController){
             }
         )
         HorizontalDivider(
-            color = profileLight,
+            color = ContainerBlue,
             modifier = Modifier
                 .padding(start = 25.dp, end = 25.dp)
         )
@@ -370,7 +312,7 @@ fun SettingsGroupCard(navController: NavController){
             .clickable { }
             .fillMaxWidth()
             .height(56.dp),
-        colors = CardDefaults.cardColors(containerLight)
+        colors = CardDefaults.cardColors(White)
     ){Column{
         //Notifications
         AllSettingsCard(navController,
@@ -396,7 +338,7 @@ fun ProfileImage(){
     
     Card(
         shape = CircleShape,
-        colors = CardDefaults.cardColors(profileLight),
+        colors = CardDefaults.cardColors(MidnightBlue),
         modifier = Modifier
             .size(60.dp)
     ){

@@ -1,10 +1,10 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
+
 import android.app.TimePickerDialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,13 +23,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,7 +34,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -52,33 +47,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import no.uio.ifi.in2000.team_21.R
 import no.uio.ifi.in2000.team_21.Screen
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
-import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
+import no.uio.ifi.in2000.team_21.ui.map.AlertsViewModel
 import no.uio.ifi.in2000.team_21.ui.theme.Background
-import no.uio.ifi.in2000.team_21.ui.theme.onContainerLight
-import no.uio.ifi.in2000.team_21.ui.theme.weatherCardLight
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
+import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.OceanForecastViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import kotlin.random.Random
-import no.uio.ifi.in2000.team_21.R
+
 
 private fun isInternetAvailable(context: Context): Boolean {
     var result = false
@@ -94,6 +89,7 @@ private fun isInternetAvailable(context: Context): Boolean {
     return result
 }
 
+
 @Composable
 fun WeatherCard(
     cityName: String,
@@ -106,129 +102,132 @@ fun WeatherCard(
     windSpeed: String,
     time: String
 ) {
-    Card(
+
+    Row(
+        horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(start = 40.dp, end = 40.dp, top = 16.dp, bottom = 16.dp)
-            .width(320.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
-        colors = CardDefaults.cardColors(containerColor = alertColor)
-    ) {
-        Column (
+            .fillMaxWidth()
+    ){
+
+        Card(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(40.dp)
+                .width(320.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+            colors = CardDefaults.cardColors(containerColor = alertColor)
         ) {
-            Text(
-                text = cityName,
-                style = TextStyle(
-                    fontSize = 25.sp,
-                    lineHeight = 20.sp,
-                    //fontFamily = FontFamily(Font(R.font.roboto)),
-                    fontWeight = FontWeight(500),
-                    color = onContainerLight,
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.1.sp,
-                )
-            )
-            Spacer(Modifier.height(16.dp))
-            Box(
-                contentAlignment = Alignment.CenterStart,
+            Column (
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp)
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
+                Text(
+                    text = cityName,
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        lineHeight = 20.sp,
+                        //fontFamily = FontFamily(Font(R.font.roboto)),
+                        fontWeight = FontWeight(400),
+                        color = MidnightBlue,
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.1.sp,
+                    )
+                )
+                Spacer(Modifier.height(16.dp))
+                Box(
+                    contentAlignment = Alignment.CenterStart,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(start = 20.dp)
                 ) {
-                    WeatherIcon(
-                        element = icon
-                    )
-                    Spacer(modifier = Modifier.padding(12.dp))
-                    Text(
-                        text = temperature,
-                        style = TextStyle(
-                            fontSize = 70.sp,
-                            lineHeight = 16.sp,
-                            //fontFamily = FontFamily(Font(R.font.roboto)),
-                            //fontWeight = FontWeight(400),
-                            color = onContainerLight,
-                            textAlign = TextAlign.Center,
-                            letterSpacing = 0.5.sp,
-                        ),
-                    )
-                    if (isAlertActive) {
-                        Icon(
-                            imageVector = Icons.Default.Warning,
-                            contentDescription = "Alert active",
-                            modifier = Modifier
-                                .padding(start = 16.dp)
-                                .size(40.dp)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        WeatherIcon(
+                            element = icon
                         )
+                        Spacer(modifier = Modifier.padding(12.dp))
+                        Text(
+                            text = temperature,
+                            style = TextStyle(
+                                fontSize = 70.sp,
+                                lineHeight = 16.sp,
+                                //fontFamily = FontFamily(Font(R.font.roboto)),
+                                //fontWeight = FontWeight(400),
+                                color = MidnightBlue,
+                                textAlign = TextAlign.Center,
+                                letterSpacing = 0.5.sp,
+                            ),
+                        )
+                        if (isAlertActive) {
+                            Icon(
+                                imageVector = Icons.Default.Warning,
+                                contentDescription = "Alert active",
+                                modifier = Modifier
+                                    .padding(start = 16.dp)
+                                    .size(40.dp)
+                            )
+                        }
                     }
                 }
-            }
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = cloudCoverDescription,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    lineHeight = 20.sp,
-                    //fontFamily = FontFamily(Font(R.font.roboto)),
-                    fontWeight = FontWeight(400),
-                    color = onContainerLight,
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.1.sp,
-                )
-            )
-            Spacer(Modifier.height(4.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-            ) {
-
+                Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Vind: $windSpeed",
+                    text = cloudCoverDescription,
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 20.sp,
                         //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(400),
-                        color = onContainerLight,
+                        color = MidnightBlue,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.1.sp,
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
+                    )
                 )
+                Spacer(Modifier.height(4.dp))
 
-                if ( !waveheight.contains("null")){
+                Row(
+
+                ) {
+
                     Text(
-                        text = "Bølger: $waveheight",
+                        text = "Vind: " + windSpeed,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
                             //fontFamily = FontFamily(Font(R.font.roboto)),
                             fontWeight = FontWeight(400),
-                            color = onContainerLight,
+                            color = MidnightBlue,
                             textAlign = TextAlign.Center,
                             letterSpacing = 0.1.sp,
                         ),
                         modifier = Modifier
                             .weight(1f)
                     )
+
+                    if ( !waveheight.contains("null")){
+                        Text(
+                            text = "Bølger: " + waveheight,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                lineHeight = 20.sp,
+                                //fontFamily = FontFamily(Font(R.font.roboto)),
+                                fontWeight = FontWeight(400),
+                                color = MidnightBlue,
+                                textAlign = TextAlign.Center,
+                                letterSpacing = 0.1.sp,
+                            ),
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+                    }
                 }
             }
-
         }
     }
 }
-
 
 
 @Composable
@@ -238,29 +237,28 @@ fun ActivityFavorites(
     activityConditionCheckerViewModel: ActivityConditionCheckerViewModel
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
 
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
         ) {
             Text(
                 text = "Dine favoritter",
                 style = TextStyle(
                     fontSize = 20.sp,
-                    //lineHeight = 20.sp,
+                    lineHeight = 20.sp,
                     //fontFamily = FontFamily(Font(R.font.roboto)),
                     //fontWeight = FontWeight(400),
-                    color = onContainerLight,
+                    color = MidnightBlue,
                     //textAlign = TextAlign.Center,
                     letterSpacing = 0.1.sp,
                 ),
                 modifier = Modifier
                     .padding(start = 8.dp)
-                    .align(Alignment.CenterVertically)
             )
 
             Button(
@@ -269,14 +267,14 @@ fun ActivityFavorites(
                           },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Background,
-                    contentColor = onContainerLight
+                    contentColor = MidnightBlue
                 ),
                 modifier = Modifier
-                    .padding(end = 8.dp)
+                    .offset(x = 200.dp)
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Edit,
-                    contentDescription = "Favorittknapp",
+                    contentDescription = "Button add to favorites",
                     modifier = Modifier
                         .padding(1.dp)
                 )
@@ -288,6 +286,8 @@ fun ActivityFavorites(
             navController = navController,
             activitiesViewModel = viewModel
         )
+        
+        Spacer(modifier = Modifier.padding(bottom = 8.dp))
 
     }
 }
@@ -335,51 +335,21 @@ fun RecommendationSection(
         return weatherFacts[Random.nextInt(weatherFacts.size)]
     }
 
-    Column(modifier = Modifier
-        .padding(8.dp)
-        .fillMaxWidth()
-    ) {
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-        ){
-
-            Text(
-                text = "Våre anbefalinger",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    //lineHeight = 20.sp,
-                    //fontFamily = FontFamily(Font(R.font.roboto)),
-                    fontWeight = FontWeight(400),
-                    color = onContainerLight,
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.1.sp,
-                ),
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .align(Alignment.CenterVertically)
+    Column(
+         ) {
+        Text(
+            text = "Våre anbefalinger",
+            style = TextStyle(
+                fontSize = 20.sp,
+                lineHeight = 20.sp,
+                //fontFamily = FontFamily(Font(R.font.roboto)),
+                fontWeight = FontWeight(400),
+                color = MidnightBlue,
+                textAlign = TextAlign.Center,
+                letterSpacing = 0.1.sp,
             )
-
-            Button(
-                onClick = {
-                    // TODO: all activities screen
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Background,
-                    contentColor = onContainerLight
-                ),
-                modifier = Modifier
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.List,
-                    contentDescription = "Alle aktiviteter knapp",
-                    modifier = Modifier
-                        .padding(1.dp)
-                )
-            }
-        }
+        )
+        //Spacer(Modifier.height(4.dp))
 
         val activityList by activityConditionCheckerViewModel.activities.observeAsState(initial = emptyList())
         val filteredActivities = activityList.filter {
@@ -387,26 +357,37 @@ fun RecommendationSection(
         }
 
         if(filteredActivities.isEmpty()){
-            Column(
+            Card(
+                colors = CardDefaults.cardColors(ContainerBlue),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
             ) {
+
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Oi! Her var det ingen aktiviteter å anbefale. Dette kan skyldes dårlig vær eller manglende internett."
+                    text = "Ingen aktiviteter kan anbefales akkurat nå. Dette kan skyldes upassende vær eller manglende nettverkstilkobling.",
+                    color = MidnightBlue,
+
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                )
                 Text(
-                    text = "Mens du venter, her er en fakta om vær ved sjøen! "
+                    text = "Mens du venter, her er en fakta om vær ved sjøen",
+                    color = MidnightBlue,
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(text = getRandomWeatherFact())
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                )
+                Text(
+                    text = getRandomWeatherFact(),
+                    color = MidnightBlue,
+                )
             }
         }else{
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
+            LazyRow {
                 this.items(filteredActivities){ recommendation ->
                     ActivityCardSmall(
                         activity = recommendation,
@@ -431,33 +412,28 @@ fun HomeScreen(
 
     val norwayZone = ZoneId.of("Europe/Oslo")
 
-    val dateFormatterBackEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
-
-    val time = ZonedDateTime.now(norwayZone).truncatedTo(ChronoUnit.HOURS).format(dateFormatterBackEnd)
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH").withZone(norwayZone)
 
     val userLocation by locationViewModel.userLocation.collectAsState()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
     val oceanData by oceanForecastViewModel.oceanDataState.observeAsState()
     val currentCityName by locationViewModel.currentCityName.collectAsState()
     val currentForcastResponse by forecastViewModel.forecast.collectAsState()
+    val selected_time by forecastViewModel.selected_time.collectAsState()
+    val selectedDate by forecastViewModel.selectedDate.collectAsState()
+    val selectedTime by forecastViewModel.selectedTime.collectAsState()
 
     // Tidsformat: yyyy-MM-dd'T'HH
 
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    var selectedTime by remember { mutableStateOf(LocalTime.now()) }
+
     var isDatePickerOpen by remember { mutableStateOf(false) }
     var isTimePickerOpen by remember { mutableStateOf(false) }
-    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val dateFormatterFrontEnd = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     val timeFormatter = DateTimeFormatter.ofPattern("HH")
     val context = LocalContext.current
 
     var showNoNetworkDialog by remember {
-        mutableStateOf(false)
-    }
-
-    var selected_time by remember {
-        mutableStateOf(time)
+        mutableStateOf(isInternetAvailable(context))
     }
 
     val currentForecast by remember{
@@ -468,11 +444,11 @@ fun HomeScreen(
         }
     }
 
-    if (showNoNetworkDialog){
+    if (showNoNetworkDialog && currentForcastResponse == null){
         AlertDialog(
             onDismissRequest = {
                 showNoNetworkDialog = false
-                               },
+            },
             title = { Text(text = "Ingen nettverksforbindelse")},
             text = { Text(text = "Vi kan ikke hente værdata, sjekk din nettverkstilkobling og prøv igjen. ")},
             buttons = {
@@ -524,15 +500,13 @@ fun HomeScreen(
         "Yellow" -> Color(0xFFF9F1DC) // Yellow
         "Red" -> Color(0xFFF9DEDC) // Red
         "Green" -> Color(0xFFECF9DC) // Green
-        else -> Color.White
+        else -> Background // Default case
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                color = Color(0xFFEBEFFF)
-            )
+            .background(color = Background)
     ){
 
         // Bakgrunnsbilde for skjermen
@@ -572,7 +546,7 @@ fun HomeScreen(
                     time = selected_time
                 )
             }else{
-                showNoNetworkDialog = true
+
             }
 
             // TODO: Date picker her
@@ -585,7 +559,7 @@ fun HomeScreen(
 
                 OutlinedTextField(
                     readOnly = true,
-                    value = selectedDate.format(dateFormatterFrontEnd),
+                    value = selectedDate.format(dateFormatter),
                     onValueChange = {},
                     modifier = Modifier
                         .clickable {
@@ -594,8 +568,7 @@ fun HomeScreen(
                         }
                         .width(130.dp)
                         .height(60.dp),
-                    label = { Text("Dato") },
-                    shape = RoundedCornerShape(16.dp)
+                    label = { Text("Dato") }
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -608,8 +581,7 @@ fun HomeScreen(
                         .clickable { isTimePickerOpen = true }
                         .width(66.dp)
                         .height(60.dp),
-                    label = { Text("Tid") },
-                    shape = RoundedCornerShape(16.dp)
+                    label = { Text("Tid") }
                 )
 
             }
@@ -618,7 +590,7 @@ fun HomeScreen(
                 val datePickerDialog = android.app.DatePickerDialog(
                     context,
                     { _, year, month, dayOfMonth ->
-                        selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
+                        forecastViewModel.updateSelectedDate(LocalDate.of(year, month + 1, dayOfMonth))
                         isDatePickerOpen = false
                     },
                     selectedDate.year,
@@ -633,7 +605,7 @@ fun HomeScreen(
                 val timePickerDialog = TimePickerDialog(
                     context,
                     { _, hourOfDay, minute ->
-                        selectedTime = LocalTime.of(hourOfDay, 0)
+                        forecastViewModel.updateSelectedTime(LocalTime.of(hourOfDay, 0))
                         isTimePickerOpen = false
                     },
                     selectedTime.hour,
@@ -644,7 +616,9 @@ fun HomeScreen(
                 isTimePickerOpen = false
             }
 
-            selected_time = selectedDate.atTime(selectedTime).format(dateFormatterBackEnd)
+            forecastViewModel.update_selected_time(
+                selectedDate, selectedTime
+            )
 
             Log.d("HS", "selected time: $selected_time")
 
@@ -663,6 +637,4 @@ fun HomeScreen(
         }
     }
 
-
 }
-

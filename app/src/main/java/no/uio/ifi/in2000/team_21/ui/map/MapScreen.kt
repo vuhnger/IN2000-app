@@ -421,7 +421,7 @@ fun MapboxMap.clearSearchArea() {
 fun showAlertDialog(context: Context, properties: Properties) {
     val message = createAlertMessage(properties.title ?: "N/A", properties)
     AlertDialog.Builder(context)
-        .setTitle("Alert details")
+        .setTitle("Varseldetaljer")
         .setMessage(message)
         .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
         .create()
@@ -534,7 +534,7 @@ fun BottomSheetContent(
                 next6HoursDetails?.let {
                     WeatherIcon(element = it.summary?.symbol_code)
                     Text(
-                        "H:${it.details?.air_temperature_min?.roundToInt()}° L:${it.details?.air_temperature_max?.roundToInt()}°",
+                        "H:${it.details?.air_temperature_max?.roundToInt()}° L:${it.details?.air_temperature_min?.roundToInt()}°",
 
                         color = Temperature,
                         fontSize = 25.sp
@@ -568,7 +568,7 @@ fun BottomSheetContent(
                     },
                     modifier = Modifier.padding(top = 16.dp),
                 ) {
-                    Text("Delete Marker")
+                    Text("Slett punkt")
                 }
             }
         }
@@ -590,10 +590,10 @@ fun showSaveLocationDialog(context: Context, point: Point, viewModel: UserMarker
     )
 
     val dialog = AlertDialog.Builder(context).apply {
-        setTitle("Save Location")
+        setTitle("Lagre punkt")
         setView(dialogView)
-        setPositiveButton("Save", null)
-        setNegativeButton("Cancel", null)
+        setPositiveButton("Lagre", null)
+        setNegativeButton("Avbryt", null)
     }.create()
 
     var selectedIconResId: Int? = null

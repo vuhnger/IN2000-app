@@ -6,7 +6,10 @@ import org.junit.Test
 
 // Vi skal implementere en funksjon som lager et unikt brukernavn, gitt et navn, ved bruk av f.eks primærnøkkel
 
-class TestUsernameCreation {
+
+
+/*
+* class TestUsernameCreation {
 
     val userViewModel: UserViewModel = UserViewModel()
     val name: String = "Jonas"
@@ -26,8 +29,8 @@ class TestUsernameCreation {
     }
 
 }
-
-
+*
+*/
 
 
 

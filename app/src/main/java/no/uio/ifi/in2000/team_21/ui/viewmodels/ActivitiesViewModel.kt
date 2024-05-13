@@ -42,8 +42,11 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
     private val logDao = database.userLogDao()
     private val userDao = database.userDao()
     private val _userLogs = MutableLiveData<List<UserLogEntity>>()
+    val favorites: LiveData<List<ActivityEntity>> = dao.getAllActivities()
+
     private val _currentUser = userDao.getCurrentUser().asFlow()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
     val userLogs: LiveData<List<UserLogEntity>> = _currentUser.flatMapLatest { user ->
         if (user != null) {
             logDao.getUserLogs(user.userName).asFlow()
@@ -51,7 +54,6 @@ class ActivitiesViewModel(application: Application) : AndroidViewModel(applicati
             flowOf(emptyList())
         }
     }.asLiveData(viewModelScope.coroutineContext)
-    val favorites: LiveData<List<ActivityEntity>> = dao.getAllActivities()
 
     var activityUIstate by mutableStateOf(
         ActivitiesUIState(

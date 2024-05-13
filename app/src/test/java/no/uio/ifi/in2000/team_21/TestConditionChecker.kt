@@ -21,27 +21,27 @@ class TestConditionChecker {
     @Test
     fun testActivityListSize_ShouldContainNineActivities() {
 
-        // Arrange
+
         val expectedSize = 9
 
-        // Act
+
         val actualSize = viewModel.activities.value?.size
 
-        // Assert
+
         assertEquals(expectedSize, actualSize)
     }
 
     @Test
     fun testGetActivityByName_ShouldReturnKayakingActivity() {
 
-        // Arrange
+
         val activityName = "Kajakk"
         val expectedActivity = ActivityModels.KAYAKING
 
-        // Act
+
         val actualActivity = viewModel.get(activityName)
 
-        // Assert
+
         assertEquals(expectedActivity, actualActivity)
     }
 }

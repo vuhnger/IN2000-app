@@ -500,7 +500,7 @@ fun HomeScreen(
         "Yellow" -> Color(0xFFF9F1DC)
         "Red" -> Color(0xFFF9DEDC)
         "Green" -> Color(0xFFECF9DC)
-        else -> Background
+        else -> Color.White
     }
 
     Box(
@@ -579,7 +579,7 @@ fun HomeScreen(
                         .clickable { isTimePickerOpen = true }
                         .width(66.dp)
                         .height(60.dp),
-                    label = { Text("Tid") }
+                    label = { Text("Tid") },
                 )
 
             }

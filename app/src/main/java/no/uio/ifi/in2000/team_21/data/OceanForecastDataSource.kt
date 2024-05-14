@@ -8,14 +8,12 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.appendIfNameAbsent
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.team_21.model.oceanforecast.OceanForecastResponse
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
-import java.nio.channels.UnresolvedAddressException
 
 open class OceanForecastDataSource {
 

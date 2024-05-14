@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.team_21.data
 
 import android.util.Log
-import androidx.compose.material3.rememberDatePickerState
 import no.uio.ifi.in2000.team_21.model.oceanforecast.OceanForecastResponse
 import no.uio.ifi.in2000.team_21.model.oceanforecast.Timeseries
 

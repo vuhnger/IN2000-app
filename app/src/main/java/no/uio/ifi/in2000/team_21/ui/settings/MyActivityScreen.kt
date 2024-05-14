@@ -25,10 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.team_21.data.database.UserLogEntity
-import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
-import no.uio.ifi.in2000.team_21.model.activity.ActivityLog
 import no.uio.ifi.in2000.team_21.ui.theme.Background
+import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
 import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
+import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,13 +92,22 @@ fun MyActivityScreen(
 fun ActivityLogCard(
     userLog: UserLogEntity
 ){
+    val norwayZone = ZoneId.of("Europe/Oslo")
+    val formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy:HH:mm").withZone(norwayZone)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp),
-        elevation = 5.dp
+            .padding(10.dp),
+        elevation = 5.dp,
+        contentColor = MidnightBlue,
+        backgroundColor = ContainerBlue
     ) {
-        Text(text = "Du gjennomførte ${userLog.activityName.lowercase()} : ${userLog.timestamp}")
+        Text(
+            text = "Du gjennomførte ${userLog.activityName.lowercase()} ${userLog.timestamp.format(formatter)}",
+            modifier = Modifier
+                .padding(8.dp)
+        )
     }
 }
 

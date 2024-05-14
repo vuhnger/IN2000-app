@@ -32,7 +32,6 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -139,11 +138,8 @@ fun MapboxMapView() {
     val context = LocalContext.current
     val mapView = rememberMapViewWithLifecycle(context)
     val mapboxMap = mapView.mapboxMap
-    val mapboxMapState = remember { mutableStateOf<MapboxMap?>(null) }
-    val lifecycleOwner = LocalLifecycleOwner.current
     val alertsViewModel: AlertsViewModel = viewModel()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
-    //val annotationHelper = remember { MapAnnotationHelper(mapView) }
     val radius = remember { mutableStateOf(500.0) }
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     var userLocation by remember { mutableStateOf(Point.fromLngLat(0.0, 0.0)) }
@@ -151,7 +147,6 @@ fun MapboxMapView() {
     val selectedMarker = remember { mutableStateOf<UserMarkerEntity?>(null) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-    val selectedLocationWeatherData = remember { mutableStateOf<List<Timeseries>?>(null)}
     val forecastViewModel: ForecastViewModel = viewModel()
     val application = LocalContext.current.applicationContext as Application
     val userMarkerViewModel: UserMarkerViewModel = viewModel(factory = UserMarkerViewModelFactory(application))
@@ -169,7 +164,7 @@ fun MapboxMapView() {
 
     LocationPermissionRequest(onPermissionGranted = {
         val locationRequest = LocationRequest.create().apply {
-            interval = 10000 // Update interval in milliseconds
+            interval = 10000
             fastestInterval = 5000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
@@ -221,8 +216,7 @@ fun MapboxMapView() {
                 timeseries = forecastViewModel.selectedLocationWeatherData.value,
                 annotationHelper = annotationHelper,
                 marker = selectedMarker.value,
-                userMarkerViewModel = userMarkerViewModel,
-                forecastViewModel = forecastViewModel
+                userMarkerViewModel = userMarkerViewModel
                 )
         },
         sheetBackgroundColor = Background,
@@ -448,7 +442,6 @@ fun parseFeatureProperties(queriedRenderedFeature: QueriedRenderedFeature): Prop
     val propertiesJson = Gson().toJson(propertiesMap)
     Log.d("PARSE_PROPERTIES", "Feature Properties JSON: $propertiesJson")
 
-    // Deserialize JSON to Properties object
     return Gson().fromJson(propertiesJson, Properties::class.java)
 }
 
@@ -477,8 +470,7 @@ fun BottomSheetContent(
     timeseries: List<LocationForecastTimeseries>?,
     marker: UserMarkerEntity?,
     annotationHelper: MapAnnotationHelper,
-    userMarkerViewModel: UserMarkerViewModel,
-    forecastViewModel: ForecastViewModel
+    userMarkerViewModel: UserMarkerViewModel
 ) {
     Column(
         modifier = Modifier
@@ -540,24 +532,11 @@ fun BottomSheetContent(
 
                         color = Temperature,
                         fontSize = 25.sp
-                    )/*
-                    Text(buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = Rain, fontSize = 25.sp)) {
-                            append("${it.details?.precipitation_amount}")
-                        }
-                        withStyle(style = SpanStyle(color = Rain, fontSize = 10.sp)) {
-                            append(" mm")
-                        }
-                    })*/
+                    )
                     Text(buildAnnotatedString {
                         withStyle(style = SpanStyle(color = Rain, fontSize = 25.sp)) {
                             append("${it.details?.probability_of_precipitation}%")
                         }
-                        //test om denne er nødvendig
-                        /*
-                        withStyle(style = SpanStyle(color = Rain, fontSize = 10.sp)) {
-                            append(" sjanse for regn")
-                        }*/
                     })
                 }
             }
@@ -566,7 +545,6 @@ fun BottomSheetContent(
                     onClick = {
                         annotationHelper.deleteAnnotation(it.annotationId)
                         userMarkerViewModel.deleteUserMarker(it)
-                        // TODO: Oppdatere view
                     },
                     modifier = Modifier.padding(top = 16.dp),
                 ) {

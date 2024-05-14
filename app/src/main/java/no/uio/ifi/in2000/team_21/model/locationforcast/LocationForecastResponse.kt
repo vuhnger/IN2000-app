@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.team_21.model.locationforcast
 
-import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

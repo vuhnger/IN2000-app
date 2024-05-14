@@ -1,12 +1,30 @@
 
 # Modeling
 
-TODO: Table of contents her 
+- [[#De viktigste funksjonelle kravene til appen|De viktigste funksjonelle kravene til appen]]
+		- [[#Bruker skal kunne se oppsummering av været på et tidspunkt|Bruker skal kunne se oppsummering av været på et tidspunkt]]
+		- [[#Bruker skal kunne legge til favorittpunkt på kartet|Bruker skal kunne legge til favorittpunkt på kartet]]
+		- [[#Bruker skal få anbefalt aktiviteter for valgt tidspunkt gitt været i området|Bruker skal få anbefalt aktiviteter for valgt tidspunkt gitt været i området]]
+		- [[#Bruker skal kunne opprette en profil på appen|Bruker skal kunne opprette en profil på appen]]
+- [[#Diagrammer|Diagrammer]]
+	- [[#Diagrammer#1. Skaffe anbefalinger for nåværende posisjon|1. Skaffe anbefalinger for nåværende posisjon]]
+	- [[#Diagrammer#2. Opprette en bruker|2. Opprette en bruker]]
+	- [[#Diagrammer#3.  Bruker kunne se været på et tidspunkt|3.  Bruker kunne se været på et tidspunkt]]
+	- [[#Diagrammer#4. Favorittsted på kartet|4. Favorittsted på kartet]]
+
 
 ## De viktigste funksjonelle kravene til appen
-#### Bruker skal kunne se været på et tidspunkt x
 
-**Navn:** Bruker skal kunne se været på et tidspunkt x
+Appen har i hovedsak fire *større* funksjonaliteter som utgjør kjernen av hva appen gjør. For å oppnå disse funksjonelle kravene er det også mindre funksjonelle krav, men vi setter lys på de vi mener er viktigst og bidrar mest til forståelsen av hvordan appen fungerer i dette dokumentet. I disse diagrammene har vi forenklet flyten der det er naturlig, fordi vi har avgjort at det overordnede bildet bidrar mer til forståelse enn at sekvensen av hendelser er helt teknisk korrekt. Disse funksjonelle er:
+
+1. Bruker skal kunne se en oppsummering av været på et tidspunkt
+2. Bruker skal kunne legge til favorittsteder på kartet
+3. Bruker skal få anbefalt aktiviteter for et valgt tidspunkt gitt været i området
+4. Bruker skal kunne opprette en profil på appen
+
+#### Bruker skal kunne se oppsummering av været på et tidspunkt
+
+**Navn:** Bruker skal kunne se været på et tidspunkt
 
 **Prebetingelser:**
 
@@ -57,20 +75,17 @@ TODO: Table of contents her 
 6. Når stedet er lagret, vises det på kartet med det valgte navnet og ikonet, og blir lagret i kartet.
 7. Brukeren kan deretter enkelt se alle sine lagrede favorittpunkter på kartet.
 
-#### Bruker skal få anbefalt aktiviteter for tidspunktet nå gitt været i området
-
-#### Bruker skal få anbefalt aktiviteter for tidspunktet nå gitt været i området
+#### Bruker skal få anbefalt aktiviteter for valgt tidspunkt gitt været i området
 
 **Prebetingelser:**
-- Appen er installert og har nødvendige tillatelser til å hente lokasjon*
 - Brukeren har en aktiv gps forbindelse.
-- Appen har tilgang til en værtjeneste gjennom en API som kan levere sanntids værdata og prognoser.
+- Appen har tilgang til en værtjeneste gjennom en API som kan levere "sanntid" værdata (met apier).
 - MET-APIen kan gi data som er relevante for å foreslå aktiviteter (eks. temperatur, nedbør, vindforhold, bølgehøyde).
 
 **Postbetingelser:**
 - Brukeren har mottatt personlig tilpassede aktivitetsforslag basert på nåværende værforhold på sin lokasjon.
 - Dersom appen ikke får tilgang til lokasjon eller værdata, vises en passende feilmelding til brukeren (mangler værdata).
-- Eventuelle data spørringer og kalkulasjoner for aktivitetsanbefalinger må skje uten at det går utover appens ytelse eller brukeropplevelsen (coroutines).
+- Eventuelle data spørringer og beregninger for aktivitetsanbefalinger må skje uten at det går utover appens ytelse eller brukeropplevelsen (coroutines).
 
 **Trinn:**
 
@@ -84,39 +99,7 @@ TODO: Table of contents her 
 8. Ved feil eller manglende data returneres en feilmelding opp gjennom stakken, og appen informerer brukeren om at ingen aktivitetsforslag kan gis.
 9. Hvis værdata hentes suksessfullt, får ConditionViewModel værdata som deretter brukes til å foreslå relevante aktiviteter til brukeren.
 10. Brukeren presenteres for de anbefalte aktivitetene basert på nåværende værdata for sin lokasjon.
-
-*hmm må ikke ha dette egt
-
-#### Bruker skal få anbefalt aktiviteter for tidspunktet nå gitt været i området
-
-**Navn** Bruker skal få anbefalt aktiviteter for tidspunktet nå gitt været i området
-
-**Prebetingelser:**
-- Appen er installert og har nødvendige tillatelser til å aksessere enhetens lokasjonstjenester.
-- Brukeren har en aktiv internettforbindelse.
-- Appen har tilgang til en værtjeneste gjennom en API som kan levere sanntids værdata og prognoser.
-- Værtjeneste-APIen kan gi data som er relevante for å foreslå aktiviteter (eks. temperatur, nedbør, vindforhold).
-
-**Postbetingelser:**
-- Brukeren har mottatt personlig tilpassede aktivitetsforslag basert på nåværende værforhold på sin lokasjon.
-- Dersom appen ikke får tilgang til lokasjon eller værdata, vises en passende feilmelding til brukeren.
-- Brukerens personvern er ivaretatt ved kun å bruke lokasjonsdata til å hente nåværende værforhold.
-- Eventuelle datafetches og kalkulasjoner for aktivitetsanbefalinger må skje uten at det går utover appens ytelse eller brukeropplevelsen.
-
-**Trinn:**
-
-1. Brukeren åpner applikasjonen og interagerer for å få aktivitetsforslag basert på nåværende værforhold.
-2. Appen forespør lokasjonen fra brukerens enhet ved hjelp av FusedLocationProviderClient.
-3. Dersom lokasjonstilgang er nektet, informeres brukeren om at det ikke er mulige data å vise.
-4. Hvis lokasjonstilgang gis, sender FusedLocationProviderClient tilbake latitude og longitude (lat, long) til appen.
-5. Appen beregner aktuelle forhold ved hjelp av ConditionViewModel og henter værdata basert på lokasjonen fra ForecastRepositories.
-6. ForecastRepositories forespør værdata for lokasjon og havforhold (dersom relevant) fra ForecastDataSources.
-7. ForecastDataSources utfører API-kall til en værtjeneste og venter på respons.
-8. Ved feil eller manglende data returneres en feilmelding opp gjennom stakken, og appen informerer brukeren om at ingen aktivitetsforslag kan gis.
-9. Hvis værdata hentes suksessfullt, får ConditionViewModel værdata som deretter brukes til å foreslå relevante aktiviteter til brukeren.
-10. Brukeren presenteres for de anbefalte aktivitetene basert på nåværende værdata for sin lokasjon.
-
-#### Bruker skal kunne opprette en bruker
+#### Bruker skal kunne opprette en profil på appen
 
 
 **Prebetingelser**:
@@ -143,10 +126,7 @@ TODO: Table of contents her 
 
 **Alternativ Flyt**:
 - Hvis brukeren allerede eksisterer, blir de informert om dette.
-
-## Use-case diagrammer
-
-## Sekvensdiagrammer
+## Diagrammer
 
 ### 1. Skaffe anbefalinger for nåværende posisjon
 
@@ -414,11 +394,11 @@ K --> L[Slutt]
 
 ### 3.  Bruker kunne se været på et tidspunkt
 
-Biprodukt av diagram 1.
+Denne er et biprodukt av diagram 1. Appen henter og fremstiller været som en underprosess av å anbefale aktiviteter.
 
-### 4. Favorittpunkt på kartet
+### 4. Favorittsted på kartet
 
-```merimaid
+```mermaid
 sequenceDiagram
 
   

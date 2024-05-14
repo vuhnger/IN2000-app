@@ -14,7 +14,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +32,6 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -134,17 +132,14 @@ fun MapScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MapboxMapView() {
     val context = LocalContext.current
     val mapView = rememberMapViewWithLifecycle(context)
     val mapboxMap = mapView.mapboxMap
-    val mapboxMapState = remember { mutableStateOf<MapboxMap?>(null) }
-    val lifecycleOwner = LocalLifecycleOwner.current
     val alertsViewModel: AlertsViewModel = viewModel()
     val filteredFeatures by alertsViewModel.filteredFeatures.observeAsState()
-    //val annotationHelper = remember { MapAnnotationHelper(mapView) }
     val radius = remember { mutableStateOf(500.0) }
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     var userLocation by remember { mutableStateOf(Point.fromLngLat(0.0, 0.0)) }
@@ -152,7 +147,6 @@ fun MapboxMapView() {
     val selectedMarker = remember { mutableStateOf<UserMarkerEntity?>(null) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-    val selectedLocationWeatherData = remember { mutableStateOf<List<Timeseries>?>(null)}
     val forecastViewModel: ForecastViewModel = viewModel()
     val application = LocalContext.current.applicationContext as Application
     val userMarkerViewModel: UserMarkerViewModel = viewModel(factory = UserMarkerViewModelFactory(application))
@@ -170,7 +164,7 @@ fun MapboxMapView() {
 
     LocationPermissionRequest(onPermissionGranted = {
         val locationRequest = LocationRequest.create().apply {
-            interval = 10000 // Update interval in milliseconds
+            interval = 10000
             fastestInterval = 5000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
@@ -192,7 +186,7 @@ fun MapboxMapView() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         } else {
-            // Request permission
+
         }
     })
 
@@ -243,7 +237,7 @@ fun MapboxMapView() {
     }
     DisposableEffect(Unit) {
         onDispose {
-            // Disable the location component when the view is disposed of
+
             mapView.location.enabled = false
         }
     }
@@ -309,7 +303,7 @@ fun rememberMapViewWithLifecycle(context: Context): MapView {
     return remember { MapView(context) }
 }
 
-// Alert overlay from metAlerts
+
 fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
     val featureCollection = convertFeaturesToFeatureCollection(myFeatures)
     val sourceId = "alerts-source"
@@ -329,7 +323,7 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
         var fillLayer = style.getLayerAs<FillLayer>(fillLayerId)
         if (fillLayer == null) {
             fillLayer = FillLayer(fillLayerId, sourceId).apply {
-                fillColor("red") // Default color
+                fillColor("red")
             }
             style.addLayer(fillLayer)
         } else {
@@ -341,7 +335,7 @@ fun MapboxMap.addAlertOverlay(context: Context, myFeatures: List<MyFeature>) {
                 "red" -> "rgba(202, 0, 42, 0.5)"
                 "yellow" -> "rgba(255, 176, 66, 0.5)"
                 "green" -> "rgba(85, 107, 47, 0.5)"
-                else -> "rgba(255, 176, 66, 0.5)" // Default color if riskMatrixColor not defined
+                else -> "rgba(255, 176, 66, 0.5)"
             }
             fillLayer.fillColor(Expression.literal(fillColor))
         }
@@ -422,7 +416,7 @@ fun MapboxMap.clearSearchArea() {
 fun showAlertDialog(context: Context, properties: Properties) {
     val message = createAlertMessage(properties.title ?: "N/A", properties)
     AlertDialog.Builder(context)
-        .setTitle("Alert details")
+        .setTitle("Varseldetaljer")
         .setMessage(message)
         .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
         .create()
@@ -430,7 +424,7 @@ fun showAlertDialog(context: Context, properties: Properties) {
 }
 
 fun createAlertMessage(title: String, properties: Properties): String {
-    val event = title.substringBefore(",") // Grab the first element in 'title' (Event)
+    val event = title.substringBefore(",")
 
     return buildString {
         append("Event: $event\n")
@@ -448,7 +442,6 @@ fun parseFeatureProperties(queriedRenderedFeature: QueriedRenderedFeature): Prop
     val propertiesJson = Gson().toJson(propertiesMap)
     Log.d("PARSE_PROPERTIES", "Feature Properties JSON: $propertiesJson")
 
-    // Deserialize JSON to Properties object
     return Gson().fromJson(propertiesJson, Properties::class.java)
 }
 
@@ -463,7 +456,7 @@ fun LocationPermissionRequest(onPermissionGranted: () -> Unit) {
                 onPermissionGranted()
             }
             locationPermissionState.status.shouldShowRationale -> {
-                // show a dialog or a UI element explaining why you need the location permission
+
             }
             else -> {
                 locationPermissionState.launchPermissionRequest()
@@ -535,28 +528,15 @@ fun BottomSheetContent(
                 next6HoursDetails?.let {
                     WeatherIcon(element = it.summary?.symbol_code)
                     Text(
-                        "H:${it.details?.air_temperature_min?.roundToInt()}° L:${it.details?.air_temperature_max?.roundToInt()}°",
+                        "H:${it.details?.air_temperature_max?.roundToInt()}° L:${it.details?.air_temperature_min?.roundToInt()}°",
 
                         color = Temperature,
                         fontSize = 25.sp
-                    )/*
-                    Text(buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = Rain, fontSize = 25.sp)) {
-                            append("${it.details?.precipitation_amount}")
-                        }
-                        withStyle(style = SpanStyle(color = Rain, fontSize = 10.sp)) {
-                            append(" mm")
-                        }
-                    })*/
+                    )
                     Text(buildAnnotatedString {
                         withStyle(style = SpanStyle(color = Rain, fontSize = 25.sp)) {
                             append("${it.details?.probability_of_precipitation}%")
                         }
-                        //test om denne er nødvendig
-                        /*
-                        withStyle(style = SpanStyle(color = Rain, fontSize = 10.sp)) {
-                            append(" sjanse for regn")
-                        }*/
                     })
                 }
             }
@@ -565,11 +545,10 @@ fun BottomSheetContent(
                     onClick = {
                         annotationHelper.deleteAnnotation(it.annotationId)
                         userMarkerViewModel.deleteUserMarker(it)
-                        // TODO: Oppdatere view
                     },
                     modifier = Modifier.padding(top = 16.dp),
                 ) {
-                    Text("Delete Marker")
+                    Text("Slett punkt")
                 }
             }
         }
@@ -591,10 +570,10 @@ fun showSaveLocationDialog(context: Context, point: Point, viewModel: UserMarker
     )
 
     val dialog = AlertDialog.Builder(context).apply {
-        setTitle("Save Location")
+        setTitle("Lagre punkt")
         setView(dialogView)
-        setPositiveButton("Save", null)
-        setNegativeButton("Cancel", null)
+        setPositiveButton("Lagre", null)
+        setNegativeButton("Avbryt", null)
     }.create()
 
     var selectedIconResId: Int? = null
@@ -651,6 +630,6 @@ fun setupLocationComponent(mapView: MapView) {
 }
 
 
-// Function to simplify the process of applying hex colors.
+
 val String.color
     get() = Color(parseColor(this))

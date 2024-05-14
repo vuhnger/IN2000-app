@@ -13,7 +13,7 @@ class UserMarkerViewModel(application: Application) : AndroidViewModel(applicati
     private val dao = database.locationDao()
     private val markerMap = mutableMapOf<String, UserMarkerEntity>()
 
-    // DAO to interact with the database
+
     fun saveUserLocation(userMarkerEntity: UserMarkerEntity) {
         viewModelScope.launch {
             dao.insert(userMarkerEntity)

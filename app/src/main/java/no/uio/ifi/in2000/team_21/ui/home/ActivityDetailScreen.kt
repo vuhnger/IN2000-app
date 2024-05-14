@@ -1,7 +1,5 @@
 package no.uio.ifi.in2000.team_21.ui.home
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,12 +26,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -48,6 +46,7 @@ import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
 import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivitiesViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -57,12 +56,16 @@ import java.time.format.DateTimeFormatter
 fun ActivityDetailScreen(
     activitiesViewModel: ActivitiesViewModel,
     activityConditionCheckerViewModel: ActivityConditionCheckerViewModel,
+    userViewModel: UserViewModel,
     activityName: String?,
     navController: NavController
 ) {
+    val currentUser by userViewModel.currentUser.observeAsState()
+
+
     Column(
         modifier = Modifier
-            .fillMaxSize() // Fill entire screen (improves layout)
+            .fillMaxSize()
             .background(Background)
     ) {
         val activity = activityConditionCheckerViewModel.get(
@@ -104,9 +107,9 @@ fun ActivityDetailScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Background),// Consistent padding
+                .background(Background),
 
-            horizontalArrangement = Arrangement.SpaceBetween // Space buttons evenly
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
@@ -130,10 +133,10 @@ fun ActivityDetailScreen(
                     .padding(8.dp),
                 text = activity.activityName,
                 style = TextStyle(
-                    fontSize = 28.sp, // Increase font size for title
-                    lineHeight = 28.sp, // Adjust line height for better readability
-                    fontWeight = FontWeight.Bold, // Make title bold
-                    color = MidnightBlue, // Use MaterialTheme colors
+                    fontSize = 28.sp,
+                    lineHeight = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MidnightBlue,
 
                 )
             )
@@ -161,7 +164,7 @@ fun ActivityDetailScreen(
             Row(
                 horizontalArrangement = Arrangement.Center ,
                 modifier = Modifier
-                    .fillMaxWidth() // Center contents
+                    .fillMaxWidth()
             ) {
                 Text(
                     text = activity.getFlagDescription(),
@@ -190,7 +193,7 @@ fun ActivityDetailScreen(
         }
 
 
-        Spacer(modifier = Modifier.padding(vertical = 24.dp)) // Increase bottom padding
+        Spacer(modifier = Modifier.padding(vertical = 24.dp))
 
         Row(
             modifier = Modifier
@@ -205,10 +208,12 @@ fun ActivityDetailScreen(
                     val norwayZone = ZoneId.of("Europe/Oslo")
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm").withZone(norwayZone)
                     val time = ZonedDateTime.now(norwayZone).format(formatter)
-                    activitiesViewModel.log(
-                        time = time,
-                        activity = activity
-                    )
+                    currentUser?.let {
+                        activitiesViewModel.logActivity(
+                            username = it.userName,
+                            activity = activity
+                        )
+                    }
                     showDialog = true
                 },
                 colors = ButtonDefaults.buttonColors(MidnightBlue)

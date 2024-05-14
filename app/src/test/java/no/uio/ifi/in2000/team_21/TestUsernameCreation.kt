@@ -1,18 +1,21 @@
 package no.uio.ifi.in2000.team_21
 
-import no.uio.ifi.in2000.team_21.model.user.User
 import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 import org.junit.Test
 
 
 // Vi skal implementere en funksjon som lager et unikt brukernavn, gitt et navn, ved bruk av f.eks primærnøkkel
 
-class TestUsernameCreation {
+// Denne har vi brukt, men vi har også migrert til å lagre brukerinfo i databasen og derfor er ikke testene så nyttig lenger.
+
+
+/*
+* class TestUsernameCreation {
 
     val userViewModel: UserViewModel = UserViewModel()
     val name: String = "Jonas"
 
-    val testUser = userViewModel.createUser(
+    val testUser = userViewModel.testCreateUser(
         name = "Jonas",
         hobbyDescription = "Fisker",
         userName = userViewModel.createUsername("Jonas"),
@@ -27,8 +30,8 @@ class TestUsernameCreation {
     }
 
 }
-
-
+*
+*/
 
 
 

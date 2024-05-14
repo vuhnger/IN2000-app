@@ -3,17 +3,31 @@ package no.uio.ifi.in2000.team_21
 import android.app.Application
 import android.os.Build
 import android.os.Bundle
+import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -45,9 +59,11 @@ import no.uio.ifi.in2000.team_21.ui.viewmodels.ForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.LocationViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.OceanForecastViewModel
 import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
+import kotlinx.coroutines.delay
 
 
 sealed class Screen(val route: String){
+    object SplashScreen: Screen(route = "SplashScreen")
     object HomeScreen: Screen(route = "HomeScreen")
     object MapScreen: Screen(route = "MapScreen")
     object SettingScreen: Screen(route = "SettingScreen")
@@ -85,7 +101,6 @@ class MainActivity : ComponentActivity() {
 
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -127,9 +142,12 @@ fun App(){
 
     NavHost(
         navController = navController,
-        startDestination = Screen.HomeScreen.route
+        startDestination = Screen.SplashScreen.route
     ){
 
+        composable(Screen.SplashScreen.route){
+            SplashScreen(navController = navController)
+        }
         composable(Screen.MapScreen.route){
             MapScreen(navController = navController)
         }
@@ -189,7 +207,10 @@ fun App(){
         }
         
         composable(Screen.AllActivitiesScreen.route){
-            AllActivitiesScreen(navController = navController)
+            AllActivitiesScreen(
+                navController = navController,
+                activityConditionCheckerViewModel = activityConditionCheckerViewModel
+            )
         }
 
         composable(
@@ -205,11 +226,38 @@ fun App(){
             ActivityDetailScreen(
                 activitiesViewModel = activitiesViewModel,
                 activityConditionCheckerViewModel = activityConditionCheckerViewModel,
+                userViewModel = userViewModel,
                 navController = navController,
                 activityName = entry.arguments?.getString("activityName")
             )
         }
     }
 }
+@Composable
+fun SplashScreen(navController: NavController) {
+    val scale = remember {
+        Animatable(0f)
+    }
 
+    // AnimationEffect
+    LaunchedEffect(key1 = true) {
+        scale.animateTo(
+            targetValue = 1.0f,
+            animationSpec = tween(
+                durationMillis = 800,
+                easing = {
+                    OvershootInterpolator(4f).getInterpolation(it)
+                })
+        )
+        delay(3000L)
+        navController.navigate(Screen.HomeScreen.route)
+    }
 
+    // Image
+    Box(contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxWidth().background(color = Color(0xFFE7F3FC))) {
+        Image(painter = painterResource(id = R.drawable.prototype78),
+            contentDescription = "Logo",
+            modifier = Modifier.scale(scale.value).fillMaxWidth())
+    }
+}

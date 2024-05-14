@@ -4,15 +4,12 @@ package no.uio.ifi.in2000.team_21.data
 import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.engine.cio.endpoint
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.appendIfNameAbsent
@@ -113,67 +110,4 @@ class LocationForecastDataSource {
         return return_value
     }
 
-    suspend fun fetchForecastForLocation(lat: Double, lon: Double): LocationForecastResponse? {
-        val url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?" +
-                "lat=$lat" +
-                "&lon=$lon"
-
-        val response: HttpResponse = client.get(url)
-
-        return if (response.status.value in 200..299) {
-            response.body()
-        } else {
-            null
-        }
-    }
-
-    suspend fun fetchCurrentAirTemperature(
-        latitude: Double,
-        longitude: Double
-    ): Double {
-
-        val response: LocationForecastResponse? = fetchForecast(
-            latitude = latitude,
-            longitude = longitude
-        )
-
-        return response?.properties?.timeseries?.first()?.data?.instant?.details?.air_temperature ?: 0.0
-
-    }
-
-    suspend fun repositoryfetchNextHourWeatherIcon(
-        time: String,
-        latitude: Double,
-        longitude: Double
-    ): String {
-
-        val response: LocationForecastResponse? = fetchForecast(
-            latitude = latitude,
-            longitude = longitude
-        )
-
-        val return_value = response?.properties?.timeseries?.find {
-            it.time?.contains(time) ?: false
-        }
-
-        return return_value?.data?.next_1_hours?.summary?.symbol_code ?: ""
-
-    }
-
-        suspend fun fetchForecast(
-            latitude: Double,
-            longitude: Double
-        ): LocationForecastResponse? {
-
-            val response: HttpResponse = client.get("https://api.met.no/weatherapi/locationforecast/2.0/complete?" +
-                    "lat=$latitude" +
-                    "&lon=$longitude")
-
-            return if (response.status.value in 200..299) {
-                response.body()
-            }
-            else{
-                null
-            }
-        }
 }

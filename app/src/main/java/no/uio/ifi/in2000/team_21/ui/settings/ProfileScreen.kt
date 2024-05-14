@@ -4,10 +4,8 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +20,6 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardDefaults.cardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -32,12 +29,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -46,21 +42,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.team_21.R
-import no.uio.ifi.in2000.team_21.Screen
-import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
+import no.uio.ifi.in2000.team_21.data.database.UserEntity
 import no.uio.ifi.in2000.team_21.ui.theme.Background
-import no.uio.ifi.in2000.team_21.ui.theme.ContainerBlue
 import no.uio.ifi.in2000.team_21.ui.theme.MidnightBlue
 import no.uio.ifi.in2000.team_21.ui.theme.White
+import no.uio.ifi.in2000.team_21.ui.viewmodels.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,15 +61,16 @@ fun ProfileScreen (
     navController: NavController,
     userViewModel: UserViewModel
 ) {
+    val user by userViewModel.currentUser.observeAsState()
+    var name by rememberSaveable { mutableStateOf(user?.name ?: "") }
+    var hobby by rememberSaveable { mutableStateOf(user?.hobby ?: "") }
+    var username by rememberSaveable { mutableStateOf(user?.userName ?: "") }
+    var password by rememberSaveable { mutableStateOf("") }
+
 
     val FUNCTION_NAME = object {}.javaClass.enclosingMethod.name
-    
-    val notification = rememberSaveable { mutableStateOf("") }
-    var name by rememberSaveable { mutableStateOf(userViewModel.currentUser.name) }
-    var hobby by rememberSaveable { mutableStateOf(userViewModel.currentUser.hobby) }
-    var username by rememberSaveable { mutableStateOf("Brukernavn") }
-    var password by rememberSaveable { mutableStateOf("Passord") }
 
+    val notification = rememberSaveable { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     if (notification.value.isNotEmpty()) {
@@ -128,7 +122,7 @@ fun ProfileScreen (
         ){
             EditProfileImage()
 
-            //Editable text fields, name, hooby, usernames, password
+
             OutlinedTextField(
 
                 value = name,
@@ -139,7 +133,7 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Navn", color = MidnightBlue) }, //her endres vel variabelen her og
+                label = { Text("Navn", color = MidnightBlue) },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = MidnightBlue,
                     unfocusedTextColor = MidnightBlue,
@@ -164,7 +158,7 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Hobby", color = MidnightBlue) }, //her endres vel variabelen her og
+                label = { Text("Hobby", color = MidnightBlue) },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = MidnightBlue,
                     unfocusedTextColor = MidnightBlue,
@@ -190,7 +184,7 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Brukernavn", color = MidnightBlue) }, //her endres vel variabelen her og
+                label = { Text("Brukernavn", color = MidnightBlue) },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = MidnightBlue,
                     unfocusedTextColor = MidnightBlue,
@@ -215,7 +209,7 @@ fun ProfileScreen (
                 keyboardActions = KeyboardActions(
                     onDone = {keyboardController?.hide()}
                 ),
-                label = { Text("Passord", color = MidnightBlue) }, //her endres vel variabelen her og
+                label = { Text("Passord", color = MidnightBlue) },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = MidnightBlue,
                     unfocusedTextColor = MidnightBlue,
@@ -231,21 +225,23 @@ fun ProfileScreen (
                     .padding(top = 40.dp)
             )
 
-            //Save button
+
             OutlinedButton(
                 onClick = {
                     notification.value = "Profil oppdatert"
-                    userViewModel.createUser(
-                        name = name,
-                        hobbyDescription = hobby,
-                        userName = username,
-                        password = password
+                    userViewModel.saveUser(
+                        UserEntity(
+                            name = name,
+                            hobby = hobby,
+                            userName = username,
+                            password = password,
+                            isActive = true
+                        )
                     )
                 },
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = Background,
                     containerColor = MidnightBlue,
-                    //Går ikke an å endre farge på border.
 
                 ),
                 modifier = Modifier
@@ -291,7 +287,7 @@ fun EditProfileImage(){
         ),
         modifier = Modifier
             .size(120.dp)
-            .clickable { launcher.launch("Image/*") } // når den er trykket kommer den som firkant, må endres.
+            .clickable { launcher.launch("Image/*") }
     ){
         Image(painter = painter,
             contentDescription = null,

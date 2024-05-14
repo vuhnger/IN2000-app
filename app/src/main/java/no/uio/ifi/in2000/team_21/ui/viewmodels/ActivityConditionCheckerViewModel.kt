@@ -68,7 +68,7 @@ open class ActivityConditionCheckerViewModel : ViewModel() {
         }
     }
 
-    private data class WeatherDetails(
+    data class WeatherDetails(
         val seaWaterTemperature: Double?,
         val seaWaterSpeed: Double?,
         val seaSurfaceWaveHeight: Double?,
@@ -87,7 +87,7 @@ open class ActivityConditionCheckerViewModel : ViewModel() {
     }
 
 
-    private fun getWeatherConditionsMet(
+    internal fun getWeatherConditionsMet(
         weatherDetails: WeatherDetails,
         activity: ActivityModel
     ): Map<String, Boolean> {
@@ -101,7 +101,7 @@ open class ActivityConditionCheckerViewModel : ViewModel() {
         return conditionsMet
     }
 
-    private fun isWeatherOptimalForActivity(
+    internal fun isWeatherOptimalForActivity(
         conditionsMet: Map<String, Boolean>
     ): ConditionStatus {
         val allConditionsMet = conditionsMet.values.all { it }

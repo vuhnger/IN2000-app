@@ -1,8 +1,8 @@
 package no.uio.ifi.in2000.team_21
 
 import junit.framework.TestCase.assertEquals
-import no.uio.ifi.in2000.team_21.model.activity.ActivityModel
 import no.uio.ifi.in2000.team_21.model.activity.ActivityModels
+import no.uio.ifi.in2000.team_21.model.activity.ConditionStatus
 import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 import org.junit.Before
 import org.junit.Test
@@ -43,5 +43,50 @@ class TestConditionChecker {
 
 
         assertEquals(expectedActivity, actualActivity)
+    }
+
+    @Test
+    fun testWeatherOptimalForActivity_ShouldReturnAllMet() {
+
+
+        val activity = ActivityModels.KAYAKING
+        val allMetWeatherDetails = WeatherDetailsMockData.favorableWeather
+
+
+        val conditionsMet = viewModel.getWeatherConditionsMet(allMetWeatherDetails, activity)
+        val conditionStatus = viewModel.isWeatherOptimalForActivity(conditionsMet)
+
+
+        assertEquals(ConditionStatus.ALL_MET, conditionStatus)
+    }
+
+    @Test
+    fun testWeatherOptimalForActivity_ShouldReturnSomeMet() {
+
+
+        val activity = ActivityModels.KAYAKING
+        val someMetWeatherDetails = WeatherDetailsMockData.unfavorableWeather
+
+
+        val conditionsMet = viewModel.getWeatherConditionsMet(someMetWeatherDetails, activity)
+        val conditionStatus = viewModel.isWeatherOptimalForActivity(conditionsMet)
+
+
+        assertEquals(ConditionStatus.SOME_MET, conditionStatus)
+    }
+
+    @Test
+    fun testWeatherOptimalForActivity_ShouldReturnNoneMet() {
+
+
+        val activity = ActivityModels.KAYAKING
+        val nonMetWeatherDetails = WeatherDetailsMockData.noneMetWeather
+
+
+        val conditionsMet = viewModel.getWeatherConditionsMet(nonMetWeatherDetails, activity)
+        val conditionStatus = viewModel.isWeatherOptimalForActivity(conditionsMet)
+
+
+        assertEquals(ConditionStatus.NONE_MET, conditionStatus)
     }
 }

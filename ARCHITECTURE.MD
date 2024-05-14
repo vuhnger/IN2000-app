@@ -1,3 +1,4 @@
+
 ## Arkitektur
 Applikasjonen implementerer en **Model-View-ViewModel (MVVM)** arkitektur som er anerkjent som en best practice for å skape robuste og vedlikeholdbare applikasjoner. 
 Denne arkitekturen benytter seg av datasources, repositories, og viewmodels, som sammen støtter prinsipper som lav kobling og høy kohesjon.

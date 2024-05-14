@@ -12,7 +12,7 @@ import no.uio.ifi.in2000.team_21.model.Alert
 import no.uio.ifi.in2000.team_21.model.AlertsInfo
 import no.uio.ifi.in2000.team_21.model.Feature
 
-class AlertsViewModel(private val repository: AlertsRepository = RepositoryContainer.alertsRepository) : ViewModel() {
+class  AlertsViewModel(private val repository: AlertsRepository = RepositoryContainer.alertsRepository) : ViewModel() {
     private val _alerts = MutableLiveData<Alert?>() // GeoJSON String
     val alerts: LiveData<Alert?> = _alerts
 

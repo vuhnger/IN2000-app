@@ -3,7 +3,7 @@ import no.uio.ifi.in2000.team_21.ui.viewmodels.ActivityConditionCheckerViewModel
 
 object WeatherDetailsMockData {
 
-    // Mock data for all_met weather conditions
+
     val favorableWeather = ActivityConditionCheckerViewModel.WeatherDetails(
         seaWaterTemperature = 10.0,
         seaWaterSpeed = 2.0,
@@ -12,7 +12,7 @@ object WeatherDetailsMockData {
         windSpeed = 5.0
     )
 
-    // Mock data for some_met weather conditions
+
     val unfavorableWeather = ActivityConditionCheckerViewModel.WeatherDetails(
         seaWaterTemperature = 5.0,
         seaWaterSpeed = 4.0,
@@ -21,7 +21,7 @@ object WeatherDetailsMockData {
         windSpeed = 15.0
     )
 
-    // Mock data for non_met weather conditions
+
     val noneMetWeather = ActivityConditionCheckerViewModel.WeatherDetails(
         seaWaterTemperature = 0.0,
         seaWaterSpeed = 20.0,

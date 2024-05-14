@@ -48,45 +48,45 @@ class TestConditionChecker {
     @Test
     fun testWeatherOptimalForActivity_ShouldReturnAllMet() {
 
-        // Arrange
+
         val activity = ActivityModels.KAYAKING
         val allMetWeatherDetails = WeatherDetailsMockData.favorableWeather
 
-        // Act
+
         val conditionsMet = viewModel.getWeatherConditionsMet(allMetWeatherDetails, activity)
         val conditionStatus = viewModel.isWeatherOptimalForActivity(conditionsMet)
 
-        // Assert
+
         assertEquals(ConditionStatus.ALL_MET, conditionStatus)
     }
 
     @Test
     fun testWeatherOptimalForActivity_ShouldReturnSomeMet() {
 
-        // Arrange
+
         val activity = ActivityModels.KAYAKING
         val someMetWeatherDetails = WeatherDetailsMockData.unfavorableWeather
 
-        // Act
+
         val conditionsMet = viewModel.getWeatherConditionsMet(someMetWeatherDetails, activity)
         val conditionStatus = viewModel.isWeatherOptimalForActivity(conditionsMet)
 
-        // Assert
+
         assertEquals(ConditionStatus.SOME_MET, conditionStatus)
     }
 
     @Test
     fun testWeatherOptimalForActivity_ShouldReturnNoneMet() {
 
-        // Arrange
+
         val activity = ActivityModels.KAYAKING
         val nonMetWeatherDetails = WeatherDetailsMockData.noneMetWeather
 
-        // Act
+
         val conditionsMet = viewModel.getWeatherConditionsMet(nonMetWeatherDetails, activity)
         val conditionStatus = viewModel.isWeatherOptimalForActivity(conditionsMet)
 
-        // Assert
+
         assertEquals(ConditionStatus.NONE_MET, conditionStatus)
     }
 }

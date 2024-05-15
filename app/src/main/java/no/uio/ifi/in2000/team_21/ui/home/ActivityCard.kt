@@ -247,9 +247,8 @@ fun ActivityIconGridHorizontalSmall(
                 .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
         ) {
             Text(
-                text = "Legg til favorittaktiviteter ved å trykke på +",
+                text = "Legg til favorittaktiviteter ved å trykke på blyanten.",
                 color = MidnightBlue,
-
                 )
         }
     } else {

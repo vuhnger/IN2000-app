@@ -262,7 +262,7 @@ fun EditProfileImage(){
         mutableStateOf("")
     }
 
-    val painter = if(image.value.isEmpty()){
+    val painter = if(!image.value.lowercase().equals("null")){
         painterResource(id = R.drawable.user)
     } else{
         painterResource(id = image.value.toInt())
@@ -271,7 +271,7 @@ fun EditProfileImage(){
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        uri.let { image.value = it.toString() }
+        uri?.let { image.value = it.toString()}
     }
 
     Card(

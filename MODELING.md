@@ -294,6 +294,9 @@ sequenceDiagram
     end
 ```
 
+![Klassediagram drawio](https://media.github.uio.no/user/9355/files/de5eaac3-769a-4d1c-803f-06a2b10dc2b0)
+
+
 ### 2. Opprette en bruker
 
 ```mermaid

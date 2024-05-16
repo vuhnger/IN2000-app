@@ -1,0 +1,2381 @@
+commit 2331b42c17fb7387fca54a9d200af146ede09b57
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed May 15 23:09:29 2024 +0200
+
+    Oppdatert ARCHITECTURE.MD
+
+commit 39bdaf093f413ab527447a057f08e4cd63c2c7d6
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed May 15 21:55:57 2024 +0200
+
+    endra + til blyant
+
+commit adc92d202e1ff4044e05ec07b36cb6f67e93e8ec
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed May 15 18:04:20 2024 +0200
+
+    null-safe kall på bilde uri i profilskjerm, forhindrer krasj når bilde ikke velges
+
+commit 1efba288b60346d2f27635caca997a7760f046d0
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed May 15 14:47:25 2024 +0200
+
+    Update MODELING.md
+
+commit 4c832200c881eb3705e19c85fce6ba9f5d06224c
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed May 15 14:46:51 2024 +0200
+
+    Update MODELING.md
+
+commit 36cc05d82c3da3e75a397d5f77877d9bbf9a7b69
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 14 13:30:49 2024 +0200
+
+    Delete APKs directory
+
+commit ba6c7f0a7344e89bb9d798b30faef1b5be535af7
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 14 13:30:03 2024 +0200
+
+    APK-filder
+
+commit e8de3dc35f54ab69e17171a027a8025d05536fe8
+Merge: afb59cb 03cd3bc
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 14 13:25:10 2024 +0200
+
+    Merge pull request #74 from IN2000-V24/dev
+    
+    siste unit testene
+
+commit 03cd3bc3ca637dbd784f3f80efa5beebf32592bb
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 14 13:24:50 2024 +0200
+
+    siste modul tester
+
+commit 8690f9464f1fed8ee7505962c9cad0d4384fbcea
+Merge: d9cd131 0362587
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 14 13:23:24 2024 +0200
+
+    Merge pull request #75 from IN2000-V24/dev-activity_checker_tests
+    
+    added MockWeatherDetails and more tests
+
+commit 03625878d45440d01cf3b7ebeb975e9a0057ea5a
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Tue May 14 13:19:06 2024 +0200
+
+    added MockWeatherDetails and more tests
+
+commit d9cd13109e9efe7d97baf3d7a3870d98dc1a2d8a
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 14 12:57:36 2024 +0200
+
+    noen tester til viewmodel state
+
+commit afb59cb9c3a67b7865c55c562d9c15a58a569a46
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 14 11:39:55 2024 +0200
+
+    Update MODELING.md
+
+commit 79060d5f95f843a9b6505d78002b760c97f25300
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 14 11:39:32 2024 +0200
+
+    Update MODELING.md
+
+commit c458fa8af883d15dc301e276f01af4e307ffb084
+Merge: 017c72c 5ddb953
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 14 10:43:37 2024 +0200
+
+    Merge pull request #73 from IN2000-V24/dev
+    
+    Dev
+
+commit 5ddb95397411548b20631a7ce03294b84c9dbd37
+Merge: 499f90e 017c72c
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 14 10:43:26 2024 +0200
+
+    Merge branch 'main' into dev
+
+commit 499f90ec0fb3812ff66a0d6a56dae4d9aeef6635
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 14 10:42:51 2024 +0200
+
+    rydda imports, klar for levering
+
+commit 39232a8767d99f77caf5f341525c692b6bc17213
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Mon May 13 21:23:44 2024 +0200
+
+    polert de siste småtingene
+
+commit ebdcfac88de41a462b2a9d7fe59c8f46c88dfedc
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Mon May 13 21:07:19 2024 +0200
+
+    fjerna unødvendig kommentarer osv
+
+commit 5f81d1f5e2ce670c738fba399075802f5f9da696
+Merge: 19b2a25 d304f0d
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon May 13 20:00:17 2024 +0200
+
+    Merge pull request #72 from IN2000-V24/dev-activity_checker_tests
+    
+    added TestActivityModels and TestConditionChecker
+
+commit d304f0dccd0d1267d46004b41afb69c8aad00eb9
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Mon May 13 17:04:24 2024 +0200
+
+    added TestActivityModels and TestConditionChecker
+
+commit 017c72ca47d95eed4821d05598b52b92e30600a7
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon May 13 15:32:26 2024 +0200
+
+    Update MODELING.md
+
+commit 19b2a250285a157aa985f69b2af799f30249bff3
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 13 14:15:43 2024 +0200
+
+    bytta tilbkae til firstornull i mapscreen fordi d fucka værmeldingen
+
+commit d995191e95c56d0b112ccb5358dc7ccbb2469dd4
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 13 13:49:19 2024 +0200
+
+    oversette litt map til norsk og fikse high low temps i mapscreen
+
+commit e1c8f4f7e96aff9e4a5f270b4fb05ad18a935dcb
+Merge: a4e525c 7883844
+Author: Sebastian Sandberg Hareide <sebassha@ulrik.uio.no>
+Date:   Mon May 13 13:19:39 2024 +0200
+
+    Merge pull request #65 from IN2000-V24/dev_splashscreen
+    
+    Dev splashscreen
+
+commit 7883844423c64a1b2d2978e3458fb34e4de6dd11
+Merge: eac6297 a4e525c
+Author: Sebastian Sandberg Hareide <sebassha@ulrik.uio.no>
+Date:   Mon May 13 13:19:12 2024 +0200
+
+    Merge branch 'dev' into dev_splashscreen
+
+commit a4e525c568364c9b0c849b63b29368b1f4910ce7
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 13 13:18:31 2024 +0200
+
+    fikse utdatert test
+
+commit f2fbb711d778cc58bc783bbff858da899663f1c5
+Merge: f2a1034 25c7d5b
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon May 13 13:16:54 2024 +0200
+
+    Merge pull request #71 from IN2000-V24/dev-test/UnitTests
+    
+    unit tester for cloud conversion (disse forsvant???)
+
+commit 25c7d5b5d9bf60166f5f606a0f9ed89d5053c68e
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 13 13:16:31 2024 +0200
+
+    unit tester for cloud conversion (disse forsvant???)
+
+commit f2a10348c94407125ca033ce8fbc3ef75f29c40e
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Mon May 13 13:07:56 2024 +0200
+
+    Omrokerte på funksjoner i UserViewModel
+
+commit aad5972f3bbf7a4eeabe4e2d453809ec6f974e47
+Merge: a94c763 a10e1de
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Mon May 13 13:06:01 2024 +0200
+
+    Merge pull request #70 from IN2000-V24/dev_database
+    
+    Dev database
+
+commit a10e1de8e9df39da40bc982448a9cc0fd598cadb
+Merge: c819dec 4f432dc
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Mon May 13 13:05:12 2024 +0200
+
+    Database inn i dev
+
+commit eac6297a836e70230b610eff1c35377e34b7663a
+Author: harepus <sebastian.s.hareide@gmail.com>
+Date:   Mon May 13 13:04:53 2024 +0200
+
+    added splashscreen to mainactivity, and the png file of the splashscreen made in figma
+
+commit a94c7633436dc466b7af0a604a2c5b86aeaa1d07
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 13 12:59:49 2024 +0200
+
+    scrollable liste i alle aktiviteter
+
+commit c819dec52a9cd2a872bb90dc51bffb57f1787e58
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Mon May 13 11:38:35 2024 +0200
+
+    Bruker,- og historikk database
+
+commit 4f432dc993b7771dac7277653dc6c02240c4288d
+Merge: ba4812e 145e852
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon May 13 11:24:12 2024 +0200
+
+    Merge pull request #69 from IN2000-V24/dev-fix/activityVariables
+    
+    fikse varibaelnavn activities
+
+commit 145e852f14d2f8bfff97f99edc11ed62044eed33
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 13 11:23:38 2024 +0200
+
+    fikse varibaelnavn activities
+
+commit ba4812e31170159149c361d548d4cfea447921a8
+Merge: 48574e7 14a2c54
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Mon May 13 11:08:56 2024 +0200
+
+    merge with architecture
+
+commit 48574e7c5c5e7df929682a806d82ceafb3200a68
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Mon May 13 11:01:56 2024 +0200
+
+    ARCHITECTURE.MD
+
+commit 14a2c54bfb6527fab0a8793af298f5dd395dbf2d
+Merge: 4721e52 4f07f3e
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon May 13 10:56:02 2024 +0200
+
+    Merge pull request #68 from IN2000-V24/dev-uiutbedring5
+    
+    Dev uiutbedring5
+
+commit 4f07f3e6ff4fdefd35432785d27efc09aa138a22
+Merge: c7f2b92 4721e52
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon May 13 10:55:00 2024 +0200
+
+    Merge branch 'dev' into dev-uiutbedring5
+
+commit c7f2b92b2475fa16d0c9635a53a7f5dee9952e37
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Mon May 13 10:44:37 2024 +0200
+
+    ferdig
+    
+    ferdig
+
+commit 4721e5257e6af2c5c4281ef3397237d34eff5712
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 13 10:44:29 2024 +0200
+
+    fiksa litt småting på aktivitetsskjerm
+
+commit fd0697a12da2106198605ba722a6c300a10a8793
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 13 10:39:54 2024 +0200
+
+    scrollable fav screen
+
+commit 94a2d22ccc560621f8a49450279b63f9fc8b481a
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon May 13 10:23:21 2024 +0200
+
+    Update README.md
+
+commit 02673f2bdbc7fa9d6f9a1e581d01d0499768be8d
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 13 09:29:25 2024 +0200
+
+    legge til bilde på hjemskjerm (hvor ble d av)
+
+commit 59430670119850c36c3d58c1d518908f1cdf69f2
+Merge: 84d6ed4 b8607c9
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Sun May 12 12:28:56 2024 +0200
+
+    Merge pull request #67 from IN2000-V24/dev-feat/rememberSelectedTime
+    
+    Dev feat/remember selected time
+
+commit 84d6ed46c21429035f965678fc6dc1e3d60e53f7
+Merge: 2a00a5b 4d62603
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Sun May 12 12:28:49 2024 +0200
+
+    Merge pull request #66 from IN2000-V24/dev-feat/cacheResponseData
+    
+    Dev feat/cache response data
+
+commit b8607c9ef6856f92be0744f70a8a0952de1300c1
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Sun May 12 12:26:43 2024 +0200
+
+    fikse at tidspunkt huskes og fjerne de irriterende varslene for enttverk
+
+commit 4d6260350b16360c8bd3dd5c75a17fb2d1594440
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Sat May 11 20:18:33 2024 +0200
+
+    caching av lfc og ofc, men kan gjøre nøkkel litt vagere for sjeldnere api kall
+
+commit 3e3c015a8b1e0e422b7258002ccaf8390d076d6b
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Sat May 11 20:09:44 2024 +0200
+
+    cache data, bruke denne bransjen
+
+commit 0ef81f942ae9a08cee3f2cc8633d8791b22cc50e
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Sat May 11 13:34:18 2024 +0200
+
+    Update README.md
+    
+    mepbox versjon
+
+commit b78deb676085487a1c02660f6007c21c5e3df774
+Merge: c378cda 2a00a5b
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Sat May 11 13:08:18 2024 +0200
+
+    Merge pull request #24 from IN2000-V24/dev
+    
+    Versjon 1.0
+
+commit 2a00a5b84158588f452d3599f4f4b510a0060405
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Sat May 11 13:07:50 2024 +0200
+
+    Update README.md
+
+commit ff2cea966665bebf29fdcc501167881fb83668ca
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Sat May 11 13:06:57 2024 +0200
+
+    Update README.md
+
+commit c378cda3e239d10e057c3bfb66801d43756d69b5
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Sat May 11 13:01:02 2024 +0200
+
+    Add files via upload
+
+commit 2eaeb4d71ca69c8731f31e19687f2458c3155246
+Merge: 084075e d19b279
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Sat May 11 12:50:12 2024 +0200
+
+    Merge pull request #64 from IN2000-V24/app-bilder
+    
+    Create bilder.md
+
+commit d19b2798003b397f2e2a81114b98f0eba3a10458
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Sat May 11 12:49:51 2024 +0200
+
+    Add files via upload
+
+commit c1cfd0f9c00fb15b86c102e6beeaa8d99729b8db
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Sat May 11 12:49:10 2024 +0200
+
+    Create bilder.md
+
+commit 81c05ccda26e287db223d19b1cc870676c65228d
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Fri May 10 13:59:04 2024 +0200
+
+    la til rikit ro-ikon i activitymodel
+    
+    og litt annet puss
+
+commit c04d4221b6beede034a0c29b8443fbc126b44971
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Fri May 10 12:20:24 2024 +0200
+
+    la til rikit ro-ikon i activitymodel
+
+commit 49faad0245d2a5a9f3a9073608fe95dcf342bc78
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Fri May 10 12:17:37 2024 +0200
+
+    AllActivities er ferdig
+
+commit 343ef1bc864200c4ce5615fa92ff93afbca771dd
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Fri May 10 11:30:42 2024 +0200
+
+    Bruker database og historikk knyttet til brukernavn
+
+commit 39bc6e5726c74a2add46f1deccb9fb813ca80a53
+Merge: 40ee845 7e7dc41
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Fri May 10 11:11:08 2024 +0200
+
+    Merge pull request #62 from IN2000-V24/dev-fix-reccomendationSection
+    
+    fix at anbefalinger oppdateres ved ny time selected
+
+commit 7e7dc41fc3a6488e647c2170ab392a242edfb1f5
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Fri May 10 11:09:58 2024 +0200
+
+    fix at anbefalinger oppdateres ved ny time selected
+
+commit 40ee845781405f5f135099708f54e1013d8df417
+Merge: eab58c7 35226e6
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Thu May 9 17:42:37 2024 +0200
+
+    Merge pull request #60 from IN2000-V24/dev-sammensetting
+    
+    Dev sammensetting
+
+commit 35226e671e54cfc4ba84f45435ab3cf8efaf1673
+Merge: ec3e1f2 eab58c7
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Thu May 9 17:42:44 2024 +0200
+
+    fiksa på de små kortene
+
+commit eab58c7b5263d81b97cf71b97976a5dd9c6e38d2
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 9 17:37:11 2024 +0200
+
+    bilde osv, må fikse kortene litt
+
+commit ec3e1f23d2cc531e5a7ad3a656bc7fc1ef01dd48
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Thu May 9 17:36:46 2024 +0200
+
+    mangler bakgrunnsbilde
+
+commit 4cbea08210fb88fd8480704ca85885bbb80ab13e
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 9 16:40:41 2024 +0200
+
+    fikse date formatter i
+
+commit 344512bad94ac075ef558eba75fc732ef1397c36
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 9 16:32:52 2024 +0200
+
+    mangler noen variabler i hjemskjerm
+
+commit d283fb6cd62317e39e4448771a3802055d2ef30e
+Merge: 95dad9b 648ff93
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Thu May 9 16:30:57 2024 +0200
+
+    Merge pull request #59 from IN2000-V24/dev-sammensetting
+    
+    TDD part 1
+
+commit 648ff93234562fca3ea1f9e26439e9f696af257f
+Merge: 8568a9c 95dad9b
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Thu May 9 16:30:52 2024 +0200
+
+    Merge branch 'dev' into dev-sammensetting
+
+commit 95dad9b3d18208ca72224e633276de5a1192453d
+Merge: e64ded2 2d3838c
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Thu May 9 16:26:23 2024 +0200
+
+    Merge pull request #58 from IN2000-V24/dev--UIUtbedring-3.0
+    
+    Dev  UI utbedring 3.0
+
+commit 2d3838c7ed86df1e2f4ea75ed66f476cf7236830
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 9 16:26:09 2024 +0200
+
+    merge dev inn i ui fiksing
+
+commit cb9d4dd6d81d1dee586f92e9c0e2a9f77e7985b0
+Merge: 69eaffd e64ded2
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 9 16:13:10 2024 +0200
+
+    fiksa konflikter
+
+commit 8568a9c73eff87ef4c3b39727e0d510b21fb6d14
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 9 15:34:03 2024 +0200
+
+    TDD part 1
+
+commit 69eaffd6e6c43c2b70b01b195fc0ec74721e60d3
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Thu May 9 15:15:57 2024 +0200
+
+    revert merge forsøk
+
+commit 19fdcf084197eee31f846825b46c0601dc8af94b
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Thu May 9 15:07:17 2024 +0200
+
+    småting
+
+commit 662c5123df4aeb9da32a17593bc33bad5566299e
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Thu May 9 13:38:46 2024 +0200
+
+    Mer fargeendringer
+
+commit 018da7ec46f84e117ca4329df342f583df81d235
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Thu May 9 12:41:39 2024 +0200
+
+    fixed
+
+commit 96a0b75bbe3963ae8eafb0576163d297245bd679
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Thu May 9 11:57:27 2024 +0200
+
+    changed colors
+    
+    all colors are good
+
+commit e64ded2ecda8109771aac20d1dc250cde7f36e08
+Merge: c759278 af1e245
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Thu May 9 11:06:11 2024 +0200
+
+    Merge pull request #56 from IN2000-V24/dev-sammensetting
+    
+    Dev sammensetting
+
+commit af1e2452aa9b7c60fbe526ed380c4b65dfdc728a
+Merge: 268ce13 c759278
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 9 11:05:57 2024 +0200
+
+    merge database inn i min
+
+commit c7592788a17ebab2c39f8c773ee67c18ba44dfe2
+Merge: f347f25 721143b
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Thu May 9 10:55:50 2024 +0200
+
+    Merge pull request #57 from IN2000-V24/dev_database
+    
+    Dev database
+
+commit 721143b823802980d422fcafd790e455b24403c5
+Merge: 877f584 f347f25
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu May 9 10:55:30 2024 +0200
+
+    Merger aktivitet database inn i dev 8)
+
+commit 268ce13999cd2f532179cbad5c06291f0ef659cc
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 9 10:52:43 2024 +0200
+
+    bølger på setting skjermen
+
+commit 877f5847fa9213c0a68b534016603cae9e74885e
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu May 9 10:45:48 2024 +0200
+
+    ?
+
+commit 2f71f373575796dd4c95fd2fa851c1b4a5bb8d06
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed May 8 23:33:52 2024 +0200
+
+    fiksa litt på hjemskjermen
+
+commit a22ade02455f874a42f6b6182a21788e36a2fd5c
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed May 8 21:45:19 2024 +0200
+
+    endre litt på farger og specing + logg ut knapp (som mangler å oppdatere ui-et) + mangler at valgt værvarsel huskes
+
+commit 348f8f1dc1ecaba1e7016bf7ff692863a8968c2e
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed May 8 20:57:22 2024 +0200
+
+    legge til bilde bak alle komponenter på hjemskjerm
+
+commit bd4875ffa4a874d004582cf86054f2ed20168cc5
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Wed May 8 16:08:18 2024 +0200
+
+    Settings icon, background favorite icon
+
+commit f347f25aa55135b13bf35409e3222cac296e3c29
+Merge: df274f7 9da6516
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed May 8 13:46:28 2024 +0200
+
+    Merge pull request #55 from IN2000-V24/dev-DatoVelger
+    
+    fungerer å endre dato nå
+
+commit 9da65165b0588ceaf8fbc73770fe7e527e41cc42
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed May 8 13:45:59 2024 +0200
+
+    fungerer å endre dato nå
+
+commit df274f70d20230f2a5807dc116390cba088bb0a6
+Merge: 70e28c1 8fe2e33
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed May 8 13:45:45 2024 +0200
+
+    Merge pull request #54 from IN2000-V24/dev-DatoVelger
+    
+    Dev dato velger
+
+commit 8fe2e33d0054ebfa6df6d3c2b9c44cf38b64f2d4
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Tue May 7 19:30:15 2024 +0200
+
+    fungerer å hente tid, men composable tegnes ikke på nytt igjen
+
+commit 31c43da384e083fbb396bcc02105a054ba5be9cb
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Tue May 7 18:34:49 2024 +0200
+
+    starte på en datovelger for værapi
+
+commit 70e28c1f102360f75bb9fa492d8e8b320106948e
+Merge: fc50f90 23b8cbe
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 7 15:49:25 2024 +0200
+
+    Merge pull request #52 from IN2000-V24/dev-detail_screen
+    
+    Forbedret DetailScreen
+
+commit 23b8cbe930c733706ac1665d66d254ffd4ceb192
+Merge: 6822f3c 7066ca2
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 7 15:48:54 2024 +0200
+
+    fikse merge konflikt, merge dev inn i branch med aktivitet detaljer
+
+commit fc50f901c836dda56e3af9158cbc4f658dd575f8
+Merge: 97113ef 7066ca2
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 7 15:38:31 2024 +0200
+
+    Merge pull request #53 from IN2000-V24/dev-sammensetting
+    
+    ups committa på feil
+
+commit 7066ca2299ca7ebe4b850c08125e5504e7d07cbc
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 7 15:37:38 2024 +0200
+
+    ups committa på feil
+
+commit 97113ef655737ddb6605c31bca3f536686b154f3
+Merge: b13cddb f0522b6
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 7 15:34:06 2024 +0200
+
+    Merge pull request #51 from IN2000-V24/dev-sammensetting
+    
+    Dev sammensetting
+
+commit 4dee6cc6b70e11cc4c4e8ddc9fb18dd13c028fc0
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Tue May 7 15:31:18 2024 +0200
+
+    Fungerende activity database 8)
+
+commit f0522b63a0947e48d9edb3b6242ffce19e534c36
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 7 15:05:39 2024 +0200
+
+    ferdig logikk for user creation
+
+commit 8214cb5db07076789980a119f58b7d92bfb1b62d
+Merge: d3bdc69 6fc9ef7
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 7 14:08:09 2024 +0200
+
+    lage bruker backend, mangle oppdatering på ui knapper
+
+commit d3bdc69e40cb3625da0a9dcea7caab4b968cd797
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 7 14:07:30 2024 +0200
+
+    lage bruker backend, mangle oppdatering på ui knapper
+
+commit 276843c2bed37445a76632ecbc602de4b36104ec
+Author: harepus <sebastian.s.hareide@gmail.com>
+Date:   Tue May 7 13:07:08 2024 +0200
+
+    splash screen, can come back to it if we got time.
+
+commit bc4bf15c032569d719ad8a977265b02775192f90
+Author: harepus <sebastian.s.hareide@gmail.com>
+Date:   Tue May 7 13:06:53 2024 +0200
+
+    splash screen, can come back to it if we got time.
+
+commit 6fc9ef7fa95e6b9ab592557eb4b432a74a84229d
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Tue May 7 12:44:36 2024 +0200
+
+    Color updates
+
+commit 6822f3cbd10fe0c47b811bbdfbb261e44b138ace
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Tue May 7 11:31:37 2024 +0200
+
+    Forbedret DetailScreen
+
+commit b13cddb26c43f1e46a06bf493173e6e0c29de660
+Merge: 762cf5e f37966e
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue May 7 11:29:53 2024 +0200
+
+    Merge pull request #50 from IN2000-V24/dev-sammensetting
+    
+    Dev sammensetting
+
+commit f37966ef9051c4d49582cb74e1808b00be8bf2fe
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 7 11:29:18 2024 +0200
+
+    begynne på bruker backend
+
+commit 10559ca9d7ac2e8c2ae923430f0e7cd5a72686d5
+Merge: 072dec5 2b9c867
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 7 10:17:20 2024 +0200
+
+    Merge branch 'dev-sammensetting' of https://github.uio.no/IN2000-V24/team-21 into dev-sammensetting
+    
+    måtte pulle pga pushet fra pcen hjemme
+
+commit 072dec5b6f59e60fd8f545e647793f662c113482
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue May 7 10:17:14 2024 +0200
+
+    ui endringer til favorittskjerm
+
+commit 2b9c86776db45facde59e169c33b24fb8b50c753
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Mon May 6 21:07:29 2024 +0200
+
+    Legge til aktivitetslogg kort
+
+commit 7dcb3f68d8fbe80f89a2c1f6ef2a1953b9488ae2
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Mon May 6 20:32:09 2024 +0200
+
+    potensiell fix på feilen med dns adresse
+
+commit 73a3417a6ccecffdda569c15b061f5b6a8014020
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 6 20:23:45 2024 +0200
+
+    endre små justeringer på div skjermer, lage altert bokser om nettverk er borte, alert boks for aktivitet logg
+
+commit 7dc1ba316cbb4a9eb79e8ddcb271c3affe9b86f4
+Author: harepus <sebastian.s.hareide@gmail.com>
+Date:   Mon May 6 16:56:00 2024 +0200
+
+    added SplashScreen, minor bugs.
+
+commit be41ead23bac5f44d0a87173411bc87a67e76329
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 6 16:53:57 2024 +0200
+
+    move viewmodels into own package for maintainability
+
+commit 7b8bb42c267dfebfee2883699ef4a89a6115c745
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 6 13:06:59 2024 +0200
+
+    delete unused viewmodel class
+
+commit 762cf5e04dbafcf39732a4131e9a111384f6be24
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 6 12:21:41 2024 +0200
+
+    små UI forbedringer før presentasjon for veileder
+
+commit 02ef3c79e5b910a0b2c350bb4a89773160b81dc2
+Merge: bf1ba21 539e006
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 6 10:24:52 2024 +0200
+
+    Merge branch 'dev' of https://github.uio.no/IN2000-V24/team-21 into dev
+    
+    Merge sammensetting og dev
+
+commit 539e00629d22e2e43747da8d95ae3c860b8b530a
+Merge: 9e2ab8f b98ad89
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon May 6 10:24:14 2024 +0200
+
+    Merge pull request #49 from IN2000-V24/dev-sammensetting
+    
+    Dev sammensetting
+
+commit b98ad89c022d15137ea7f9f8ede5f3691c6031d3
+Merge: ec63e9e 9e2ab8f
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon May 6 10:24:06 2024 +0200
+
+    Merge branch 'dev' into dev-sammensetting
+
+commit ec63e9ee106648f2e7fe4e7c790636cbef399e8a
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon May 6 10:21:57 2024 +0200
+
+    minor changes
+
+commit 98b9c78d32e53c09d6b9ac4766c87212d32326d2
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Sun May 5 22:22:34 2024 +0200
+
+    forbedre tekst på anbefalinger og favoritter
+
+commit 55d68fd38f5f34677f62fc1ac18caa9347e9d11f
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Sun May 5 22:12:41 2024 +0200
+
+    Refaktorere forecastviewmodel til bedre praksis, legge til tekst på skjerm når værvasler ikke finnes
+
+commit 8e09415ab219a218533eac1171e41daef964506a
+Merge: d360d92 4b37eec
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Sun May 5 16:25:29 2024 +0200
+
+    merget topbar inn i hjemskjerm
+
+commit d360d921daad50ba772898139533b195924ea033
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Sun May 5 16:06:19 2024 +0200
+
+    pynte på hjemskjerm, fikse lokasjon på weathercard + filtrering av anbefalte aktiviteter
+
+commit 4b37eec959b90bec49e6d2edeac9494fa5736e21
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Fri May 3 20:12:36 2024 +0200
+
+    modifisert TopBarComponent
+
+commit c02b4066f72fb477c5897e37fd58198cbd472651
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Fri May 3 18:01:50 2024 +0200
+
+    added TopBarComponent, MapScreen function for layout
+
+commit 782e5de0f1627d15cbd7aa21266358175bde6da7
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Fri May 3 18:01:24 2024 +0200
+
+    added TopBarComponent, MapScreen function for layout
+
+commit bf1ba210dd10a3d2ec4a7a35a7c747889df93697
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Fri May 3 16:35:26 2024 +0200
+
+    små endringer
+
+commit 9e2ab8faf5d2682d781d6ebf427953116c73079f
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Fri May 3 11:44:10 2024 +0200
+
+    La til funksjonalitet som ble fjerna i merge
+
+commit 71a02e5764344418557c340d01f30ada8901d406
+Merge: 07c8237 b7c8218
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Fri May 3 11:39:24 2024 +0200
+
+    Resolved merge conflict
+
+commit 07c823711ab22ebc5f5e3b24a1f3ed85c9d7ebb2
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Fri May 3 11:00:02 2024 +0200
+
+    conclude merge
+
+commit b7c82181100f89773e2ce61a075375053def26c5
+Merge: a169807 ff9e20e
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Fri May 3 10:19:07 2024 +0200
+
+    Merge pull request #48 from IN2000-V24/dev-sammensetting
+    
+    fjerne api kall på init av vm
+
+commit ff9e20e1b9a9bc21ebec1ad1d231aeee862ab9b0
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Fri May 3 10:18:15 2024 +0200
+
+    fjerne api kall på init av vm
+
+commit a1698076f8e87b0ee421288e6dcec3ede0f9ef8d
+Merge: 8f00e6b 1f0c78b
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Fri May 3 09:42:38 2024 +0200
+
+    Merge pull request #47 from IN2000-V24/dev-sammensetting
+    
+    knskje bytte til activitycardGrid (originale griden) på favoritt-sele…
+
+commit 1f0c78bd55d824b200b68d1e851d0ab53540509d
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Fri May 3 09:42:11 2024 +0200
+
+    knskje bytte til activitycardGrid (originale griden) på favoritt-seleksjon skjerm
+
+commit 8f00e6bb7f524ffbe992c36d78c6db427a11099a
+Merge: d744dc5 91d1975
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Fri May 3 00:19:40 2024 +0200
+
+    Merge pull request #46 from IN2000-V24/dev_homescreen_alerts
+    
+    Dev homescreen alerts
+
+commit 91d1975f27003d136041d394bf688cd566774860
+Merge: 36bb6af d744dc5
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Fri May 3 00:17:07 2024 +0200
+
+    Resolved merge conflicts
+
+commit d744dc57ebad34a6b3244b23f486a3f0118c0465
+Merge: 19e49c2 4946d3e
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Thu May 2 23:46:43 2024 +0200
+
+    Merge pull request #45 from IN2000-V24/dev-sammensetting
+    
+    Dev sammensetting
+
+commit 36bb6afe74620475aec195efe20e8c349186ff3b
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu May 2 23:42:56 2024 +0200
+
+    Oppdatert min API og fikset småfeilen
+
+commit 07464b88cb2c18dd662644896e9c458533ce931e
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu May 2 22:25:16 2024 +0200
+
+    UI forbedringer og favoritt database, småfeil som fikses i merge
+
+commit 4946d3e025750e4480e6dd2b0d7a739ffb651556
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 2 22:17:38 2024 +0200
+
+    refactor ofc viewmodel to work
+
+commit 0d0c8174b51ad17ac7ac54c8a2b0e50abc4c9620
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 2 21:13:54 2024 +0200
+
+    fix flags in detail screen
+
+commit 06650346a6eae64e4db61ffce57d331447527c67
+Merge: 28e0ad5 754d1b1
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 2 19:28:42 2024 +0200
+
+    merge jokkis sine flagg beregninger, klar til å putte de i kortene
+
+commit 28e0ad5ee2d82f1654f79ff39c43b6b63e8e6e16
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 2 19:00:56 2024 +0200
+
+    refactor all forecast queries to use lat and long
+
+commit 754d1b144e5af66e7e7a6a638c06be006ff9dfd8
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Thu May 2 18:46:49 2024 +0200
+
+    ednringer på ActivitCondCheckerViewModel
+
+commit 7446b325e11a53f2ab91eaede0466bd1d172df5c
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 2 18:04:39 2024 +0200
+
+    before switching to navbar
+
+commit ece9b4a1da60587fae70f7a1ab5892a382b336ed
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Thu May 2 17:32:32 2024 +0200
+
+    diverse endringer på activtymodel
+
+commit 3ec15e35eedfdce228c000f05e6c64c715f670fa
+Merge: 85648e3 19e49c2
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 2 17:21:51 2024 +0200
+
+    Merge branch 'dev' into dev-sammensetting
+    
+    merge dev into sammensetting
+
+commit 85648e34368821a4f04fc72b4bdc5a6b7444e87e
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 2 17:21:23 2024 +0200
+
+    modify activity models
+
+commit 19e49c201509a59a984d60b68da1c42ea9b0ccab
+Merge: f409d49 f160a54
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Thu May 2 17:00:18 2024 +0200
+
+    Merge pull request #42 from IN2000-V24/dev_homescreen_alerts
+    
+    Dev homescreen alerts
+
+commit f160a542ee29f84e006a75c3b4d4b9b7fdd5f4a8
+Merge: 9c89eeb f409d49
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu May 2 16:59:58 2024 +0200
+
+    Resolved merge conflicts
+
+commit f409d491c7d87a6cbd59bd6cd3a0cd8bafff3839
+Merge: 0a958d4 169bf66
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Thu May 2 16:40:44 2024 +0200
+
+    Merge pull request #41 from IN2000-V24/dev-sammensetting
+    
+    Dev sammensetting
+
+commit 169bf662d9c7e43e9f2ef15e6bbe4e18e0e37f8f
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 2 16:40:12 2024 +0200
+
+    rremove dupe viewmodels etc
+
+commit 9c89eebae4d2f9479581bd2f21648c5ba814a448
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu May 2 16:29:04 2024 +0200
+
+    Revert
+
+commit 55f7618600057fa8516137d93535738b358bfb32
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu May 2 16:24:29 2024 +0200
+
+    minor changed
+
+commit 9bb25d745603fc9462210da828919e4b11515923
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu May 2 14:35:08 2024 +0200
+
+    RadiusSelector i settings (ikke ferdig)
+
+commit cd0a9dbed06f178843f50f1429181d175dbae9d6
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu May 2 13:35:24 2024 +0200
+
+    WeatherCard endringer når det er en alert innen gitt radius
+
+commit ef011827e1a86853c5dcce1828b671c7e07da3df
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Wed May 1 21:37:30 2024 +0200
+
+    store endringer på lfcvm lfcdr og lfcds, viktigste er å filtrere ut nærmeste timeseries
+
+commit fa56c48dbf8645d11869760e7c96bee9827b4d8d
+Merge: 5129a99 0a958d4
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Wed May 1 18:54:08 2024 +0200
+
+    suksess med nye viewmodels
+
+commit 5129a996e514df3b776138e4c25ddf8136177d6e
+Merge: 18eb644 c414d34
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Wed May 1 18:50:59 2024 +0200
+
+    merge dev into sammensetting
+
+commit 0a958d4917e43d5aefcdf21b46a4ef1a4bd15b6e
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed May 1 15:41:43 2024 +0200
+
+    Fjernet duplikat forecast viewmodel
+
+commit 18eb644f4f5b7707006db76ce46bdd46aac5ad57
+Merge: 8cf8ea5 2257adb
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Wed May 1 15:12:09 2024 +0200
+
+    with unmerged files
+
+commit c414d340964d790cee9485bffa6e28d0fa4f6206
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed May 1 15:10:41 2024 +0200
+
+    Fikset konflikter etter merge
+
+commit 8cf8ea576f84a2780f08de8a57d586ce7c019536
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Wed May 1 15:01:26 2024 +0200
+
+    add location getting to homescreen, visual changes to homescreen and addactivitysreen
+
+commit 6a9ccdfb0857b61be7aaf33fa9c41e28c55952a3
+Merge: 6b6e9c0 2257adb
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed May 1 12:55:24 2024 +0200
+
+    Merge pull request #39 from IN2000-V24/dev-sammensetting
+    
+    Dev sammensetting
+
+commit 2257adbac779a437c0ea4f1afc4563e38a41fb20
+Merge: 655a85a 6b6e9c0
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed May 1 12:55:15 2024 +0200
+
+    Merge branch 'dev' into dev-sammensetting
+
+commit 655a85a0577cc47f4a0c182d303f9a8c696d3148
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Wed May 1 12:51:57 2024 +0200
+
+    klar til å lage nav argumenter for activitydetailscreen
+
+commit 084075e288f31afb113e1520fc81ee2929022b0a
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed May 1 10:55:45 2024 +0200
+
+    Create MODELING.md
+
+commit fb23c7e1ae6c34c7733f528160f4b0e512d93f90
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed May 1 10:55:34 2024 +0200
+
+    Create ARCHITECTURE.MD
+
+commit eadde1d72cb18807d6ebf681d831244196292392
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed May 1 10:47:29 2024 +0200
+
+    rydde litt i hjemskjerm, klar til å lage activitydetailscreen
+
+commit 6b6e9c007244b6f910971781ce1ddda63ce4a3d2
+Merge: 1ad49cc f94f911
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Wed May 1 10:36:09 2024 +0200
+
+    Merge pull request #38 from IN2000-V24/dev_mapbox_refactor
+    
+    Dev mapbox refactor
+
+commit 89861672377f2285d8541f3cbcedaa61eec16e78
+Merge: 480eca5 5b8ecd2
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue Apr 30 16:15:57 2024 +0200
+
+    swap to activitymodel in card function signatures
+
+commit f94f911a4680777e21cbc05cce912394b880acf7
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Mon Apr 29 19:08:12 2024 +0200
+
+    fjernet kommentar som fjernet brukbar kode
+
+commit 56ff7c82ab48867a7f473328b69db82308d3c7d0
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Mon Apr 29 19:06:40 2024 +0200
+
+    Ikoner for markers og generelt bedre UI for oppretting av markers
+
+commit 480eca516e54f946556d288d549025e55a41f5d1
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 29 15:12:42 2024 +0200
+
+    begin small activity cards
+
+commit 58af9a4587e16f00c2a204da7afdc6dd69c41f1e
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Fri Apr 26 11:31:39 2024 +0200
+
+    Endret starting screen til homescreen fra settings
+
+commit afbc5cba7ba37396f484aa7c72cb75d9a85a664e
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Fri Apr 26 11:31:00 2024 +0200
+
+    minor changed
+
+commit 01a3fbe53b416af7bca539e9ef46cb01ae03eeb8
+Merge: 3771885 1ad49cc
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Fri Apr 26 11:24:34 2024 +0200
+
+    Resolved merge conflicts
+
+commit 377188512c9bbf9281307687afde033d8674a99c
+Merge: c7d9132 deaf600
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Fri Apr 26 11:04:19 2024 +0200
+
+    Resolved merge conflict
+
+commit c7d91327a4c536b5cd175a1f3492501d7a613274
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Fri Apr 26 10:54:02 2024 +0200
+
+    minor changes
+
+commit 5b8ecd2aca15b8d5d6224ce7f4c4fabf5eada542
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Fri Apr 26 10:25:21 2024 +0200
+
+    added ActivityConditonCheckerViewmodel
+
+commit e72df772b664ad051cc04a803a63d61d1638dd2b
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu Apr 25 22:29:04 2024 +0200
+
+    Annotations/markers med database
+
+commit 8d3f5a650912c32469a28d28578da5d4b170870c
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Thu Apr 25 17:08:18 2024 +0200
+
+    center a div
+
+commit 1965a17c94d3c8567111f8091e3830e896831df8
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Apr 24 20:23:12 2024 +0200
+
+    Migrert prosjektet til mapbox 11.3.0
+
+commit d05a87d47bee5fa0fdda8e653a404e186be2dce6
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Apr 24 15:00:57 2024 +0200
+
+    Database og funksjonalitet som lar bruker lagre lokasjoner (PRE-REFACTOR)
+
+commit 8eb9a991c88206fb9c9f09f38052c08acae4c6eb
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Tue Apr 23 17:01:07 2024 +0200
+
+    Database impendencies og filer
+
+commit ebb9b5f0b3f9e409499d61b5091847c49e7a17f4
+Merge: 42fef71 aa20d30
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue Apr 23 10:46:38 2024 +0200
+
+    legge til homescreen som mangler idk why
+
+commit 42fef711274ff91582d32390d651dc2b53fb4ab0
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue Apr 23 10:41:48 2024 +0200
+
+    sette sammen appen sine sider
+
+commit 58a48bc1f8aaf39a51aeed72d7f23767ee050be2
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Mon Apr 22 14:15:32 2024 +0200
+
+    Værdata representasjon
+
+commit 1ad49cc284c48fe453c0e1498a38d85034648547
+Merge: c014564 9c3adea
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Mon Apr 22 12:43:49 2024 +0200
+
+    Merge pull request #32 from IN2000-V24/dev-settings
+
+commit 9c3adead7cf1f6d379ee163e1ec3a5f490310c98
+Merge: ccc173d c014564
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Mon Apr 22 12:34:13 2024 +0200
+
+    Merge branch 'dev' into dev-settings
+
+commit ccc173d5b7a3ea79687ac2edf863c652a111c535
+Merge: 707986b c883efe
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Mon Apr 22 12:33:04 2024 +0200
+
+    Merge branch 'dev' into dev-settings
+
+commit c014564a2d89e79235a1a888c4db9d69e4970925
+Merge: c883efe 41fe0b7
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon Apr 22 12:30:46 2024 +0200
+
+    Merge pull request #30 from IN2000-V24/dev-Activities
+    
+    Dev activities
+
+commit 41fe0b7d4ee779816044e63aafa1e7665a05b57a
+Merge: 2624aa3 c883efe
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 22 12:29:57 2024 +0200
+
+    add mapscreen
+
+commit 707986b4ba780bb68c92bfc8910438f6dcac96d8
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Mon Apr 22 12:21:50 2024 +0200
+
+    fjernet duplicate
+
+commit c883efe21f887b28d73ee53c04bb638d37bdba0b
+Merge: 45a88d7 cc7df68
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon Apr 22 12:20:34 2024 +0200
+
+    Merge pull request #27 from IN2000-V24/dev-map
+    
+    added oceanforcast datasource, reop and viewmodel
+
+commit d65e7e950c2ac44000c570612a96390ab48495a2
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Mon Apr 22 11:58:02 2024 +0200
+
+    Markers og vær detaljer når man klikker på kartet.
+
+commit cc7df688e25d298416af887a4d2e5183bd807716
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 22 11:50:18 2024 +0200
+
+    fjerne oilrig-funksjoner som ikke skulle være der og ødela filen
+
+commit e8e0e23f3b2c1f100b226917d3ae2dd260d0c637
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Mon Apr 22 11:39:08 2024 +0200
+
+    Fixed spelling
+
+commit 50723e13b82970e463f6dca5c08dbcbff159b37e
+Merge: 051ae30 45a88d7
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon Apr 22 11:36:42 2024 +0200
+
+    Merge pull request #33 from IN2000-V24/dev
+    
+    remove dupe function
+
+commit 2624aa3a55366565701a6cc836626b39a0cbbdfa
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 22 11:28:16 2024 +0200
+
+    siste endringene
+
+commit 69d41672e051f79406f5ce70feafbe39494d6c07
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Sun Apr 21 21:25:50 2024 +0200
+
+    Expanded AboutUs
+    
+    Adde more details about each team-member
+
+commit c4e81d9087d72d3d8c96d20a0437873cc8d2971a
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Sun Apr 21 19:35:34 2024 +0200
+
+    More navigation in settings
+
+commit 046a01588ebfce3caae9b22e3e5d1a77bfba5d48
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Sun Apr 21 17:19:30 2024 +0200
+
+    Fixed nav for profileScreen
+    
+    Made changes in MainActivity(!!) to make navigation work for setting-screens
+
+commit e2db70d52cc9046f3d25709ea4df7d8fd0c99438
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Sat Apr 20 14:13:41 2024 +0200
+
+    added NotificationScreen and card
+    
+    Added notificationscreen and card-function. Need to add different notifications settings
+
+commit 321ef8070decabdb3a866e4e3944725c583ab392
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Fri Apr 19 18:36:56 2024 +0200
+
+    Changed code to functions
+    
+    Only thing missing is some perfection, maybe ** on password and saving the inputs
+
+commit 97c42994db08fdba353a83fd622944c4fdb53c7a
+Merge: 03790ff 051ae30
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Fri Apr 19 14:27:44 2024 +0200
+
+    Merge pull request #29 from IN2000-V24/dev-map
+    
+    Dev map
+
+commit 051ae309ef6e40009d83dfcf24d8a095ac7be142
+Merge: a7ddca0 03790ff
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Fri Apr 19 14:27:34 2024 +0200
+
+    Merge branch 'dev-Activities' into dev-map
+
+commit aa20d30536664c0cb3090ef34405ce3e6cc64d27
+Author: harepus <sebastian.s.hareide@gmail.com>
+Date:   Fri Apr 19 12:41:53 2024 +0200
+
+    added topbar implementation, tested with a floatingaction button. rowscope is unused at the moment.
+
+commit 45a88d70e9b658178c7d48b6906f2ea8a31f98ed
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Fri Apr 19 10:27:43 2024 +0200
+
+    remove dupe function
+
+commit 03790ffdef2bd6fdce614d78b54823aebfeb5d3f
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Thu Apr 18 21:29:01 2024 +0200
+
+    create small activity cards
+
+commit 3d0fa65547291fd72b4d7997775e45a35a0e0b2e
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Thu Apr 18 20:47:58 2024 +0200
+
+    pynte på kortene og lage modellklasser for aktiviteter
+
+commit a7ddca062b62389c88762c348964bf1ff1e09ead
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Thu Apr 18 20:36:00 2024 +0200
+
+    Diverse endringer på ocean og location- forecast
+
+commit 0d126cd18e3ceeb2768c935e000c7839a0d87506
+Author: harepus <sebastian.s.hareide@gmail.com>
+Date:   Thu Apr 18 15:06:58 2024 +0200
+
+    added dataclass topnavitem, topbar, and topappbar. not functional. working on making a component to be reused in all aspects of the project.
+
+commit 7912b83ce7e02a01b119d10c2cae15212c26cb35
+Author: harepus <sebastian.s.hareide@gmail.com>
+Date:   Thu Apr 18 14:43:54 2024 +0200
+
+    added activitycard component, recommendationsection
+
+commit 74d5ac7b747c844397e4917207819a015d6f279e
+Author: harepus <sebastian.s.hareide@gmail.com>
+Date:   Thu Apr 18 14:18:46 2024 +0200
+
+    added activityicon, activityfavorites, and weathercard
+
+commit f8b619234d2ac9fbe863642d07cabf99f84332a3
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Thu Apr 18 13:32:08 2024 +0200
+
+    Added topBar
+
+commit a037cfca05a6a0d2f0fdb17d24b384d6039f8400
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Thu Apr 18 13:01:43 2024 +0200
+
+    New screens
+
+commit 844c5fbd452795655d53d9e5391050773a448148
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Thu Apr 18 12:53:34 2024 +0200
+
+    Color changes
+    
+    Updated colors from hex to new theme
+
+commit fc386e144700c3435adbae1eff352bebd5d70eec
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Thu Apr 18 12:34:33 2024 +0200
+
+    Navigation
+    
+    Changes nav for IconButton "tilbake"
+
+commit e01b752ae304dafb215e79717c325f09071515b0
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Apr 17 20:27:23 2024 +0200
+
+    added distance
+
+commit 5aae82e535395f299fe14c7b2a33e506dee82417
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed Apr 17 19:57:53 2024 +0200
+
+    må begynne på nytt med dataen
+
+commit ff71f6e98159ab82698cd40404f89c071e252611
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Apr 17 19:49:16 2024 +0200
+
+    Update ProfileScreen.kt
+
+commit d1431152f1ca71c87585d2acea150c450610b947
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed Apr 17 19:46:49 2024 +0200
+
+    Revert "change activity model"
+    
+    This reverts commit 6cd08e95f243ed7d68ddc0caecaaed4812455326.
+    Denne fucka også opp alt
+
+commit 75cb28c82da9e46583110aa26f3047188f5d892f
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed Apr 17 19:30:28 2024 +0200
+
+    Revert "broke the data classes"
+    
+    This reverts commit 498ce87dc9c4cc4b14a782a34c80a7454bef13da.
+    Denne commiten fucket opp alt.
+
+commit 20efeca7e03cef0cdab862aebd75cd24a1e14106
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Apr 17 18:38:23 2024 +0200
+
+    updated profileScreen
+    
+    Added 4 outlinedtext field + savable states
+
+commit 498ce87dc9c4cc4b14a782a34c80a7454bef13da
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed Apr 17 18:20:22 2024 +0200
+
+    broke the data classes
+
+commit c957017c05e57eab204061e6885dcfd94dabc5bd
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Apr 17 18:01:18 2024 +0200
+
+    test
+
+commit e1eea0bc273a399e63b3e8c1f0956a51a3697f46
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Wed Apr 17 18:00:00 2024 +0200
+
+    Added cards to settingScreen
+    
+    Changed from row to card, implemented new function settings
+
+commit 999f68cce79604762c91ecb2aea68c3298f64ff9
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Apr 17 16:38:59 2024 +0200
+
+    edit profile picture
+    
+    la litt redigerbart profilbilde
+
+commit 6cd08e95f243ed7d68ddc0caecaaed4812455326
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Wed Apr 17 16:24:42 2024 +0200
+
+    change activity model
+
+commit 30963a9836edbe13d665d63f37fb65305bb6e921
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed Apr 17 15:50:34 2024 +0200
+
+    add missing files from last commit
+
+commit 8d85434e67042afa5cb6abd58e5d933ef3d81434
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed Apr 17 15:49:33 2024 +0200
+
+    start modelling activities
+
+commit 3f0039353489652654c48433060642ee1a4e8e27
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Wed Apr 17 13:49:20 2024 +0200
+
+    added oceanforcast assets
+
+commit 07083eb25c2763ba875aa0657bf52414516961a3
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed Apr 17 13:33:48 2024 +0200
+
+    fix duplicate function
+
+commit 8046a03232cba726b76a8a4f6ca1b0e69b1ad7b5
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Wed Apr 17 13:29:28 2024 +0200
+
+    added oceanforcast datasource, reop and viewmodel
+
+commit b1639a4b0e486e7c530353d63054fee0b0adce32
+Merge: 874e037 13e4103
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Apr 17 13:23:28 2024 +0200
+
+    Merge pull request #26 from IN2000-V24/dev
+    
+    Dev
+
+commit 13e4103cb727d86ececee6d5e97ee17ce153586f
+Merge: deaf600 874e037
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Apr 17 13:23:20 2024 +0200
+
+    Merge branch 'dev-Activities' into dev
+
+commit deaf60075559c31ec586069ab1ae44f3584f99bf
+Author: Jonas William Røed Holmboe <jonas@eduroam-193-157-191-170.wlan.uio.no>
+Date:   Wed Apr 17 12:51:49 2024 +0200
+
+    Fjernet SOS knapp
+
+commit 9c51e71ea41e9bec1510564c5d74d84bd40476cb
+Author: Jonas William Røed Holmboe <jonas@eduroam-193-157-191-170.wlan.uio.no>
+Date:   Wed Apr 17 12:46:28 2024 +0200
+
+    Fikset MapScreen
+
+commit c96d1a12e61f2501db2044a003ddc8a34756ed10
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Apr 17 12:15:41 2024 +0200
+
+    Added button and empty profile picture
+
+commit 6fd068c2155c583d1121d43fa4f66265c50459de
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Apr 17 11:00:34 2024 +0200
+
+    Added top bar in profile screen, and the skeleton to the screen
+
+commit 0f28fec981175246431a443e60bcef1a41c8e697
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Apr 17 10:35:13 2024 +0200
+
+    changed name on file added file
+    
+    aboutUs -> aboutusscreen, added profile screen
+
+commit a3d590fd4d94aa2efd0ad7ed2e2ec714f5e52439
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Apr 17 10:29:31 2024 +0200
+
+    changed name to screen on files
+    
+    ^^ and removed unused imports
+
+commit 69e55ecf41dfa2113c8934fde119eaea0dd14167
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Tue Apr 16 23:44:50 2024 +0200
+
+    Extended profileImage
+
+commit 874e0377433a2a64078bab32bddfaf6b2e1bf77b
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Tue Apr 16 17:27:45 2024 +0200
+
+    more data filtering, create cards for activities
+
+commit 884b080539d80f2b9c38630310dd39883c34318f
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Tue Apr 16 15:06:41 2024 +0200
+
+    Extended settingScreen, added implementation in gradle
+
+commit 0b5ac710541fb36a58427e5eafc4c72e22762919
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Tue Apr 16 13:29:35 2024 +0200
+
+    Added dividers
+    
+    Lagt til horizontalDividers og flere rows
+
+commit 24011f9f0346b1625110bb4db672305416e1a419
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Tue Apr 16 13:05:38 2024 +0200
+
+    added colors in color theme and settingsscreen
+    
+    ^^
+
+commit 3b970be9abb8ad180f93c2e352ebed611c95d503
+Author: Jonas William Røed Holmboe <jonas@Jonass-MacBook-Pro.local>
+Date:   Tue Apr 16 11:50:49 2024 +0200
+
+    Fikset MapScreen errors
+
+commit e5a5af45719744934be3153064d60d6cc1790dc1
+Author: harepus <sebastian.s.hareide@gmail.com>
+Date:   Tue Apr 16 11:18:11 2024 +0200
+
+    minor changes
+
+commit aa712f3f48731e8ab3e0dbdccaea7aa9425881f5
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 15 12:33:42 2024 +0200
+
+    add missing dependencies
+
+commit 4cf2412de2857f0db4cc2860e6f390a8fbd28792
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 15 12:01:13 2024 +0200
+
+    init activitycard branch
+
+commit 20e3a6b4e82ce8ff19421b267c0bc2c2c4b44aa6
+Merge: bf059b8 0042dc4
+Author: Jonas William Røed Holmboe <jonas@eduroam-193-157-205-123.wlan.uio.no>
+Date:   Mon Apr 15 11:26:01 2024 +0200
+
+    stash
+
+commit bf059b814ca0160888cae9cd8029f5d479ad4bdd
+Merge: e7a5880 5ea574d
+Author: Jonas William Røed Holmboe <jonas@eduroam-193-157-205-123.wlan.uio.no>
+Date:   Mon Apr 15 11:18:05 2024 +0200
+
+    stash
+
+commit 0042dc436358cef53956783cecc563ddcd395861
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 15 11:14:14 2024 +0200
+
+    ny gitignore
+
+commit e7a58804312ed3ce454878ac69c946b7466b0395
+Author: Jonas William Røed Holmboe <jonas@eduroam-193-157-205-123.wlan.uio.no>
+Date:   Mon Apr 15 11:13:21 2024 +0200
+
+    stash
+
+commit 5ea574dbca92da63d0c0700ede95434f1417664b
+Merge: 0606ac3 929dcf0
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon Apr 15 11:06:54 2024 +0200
+
+    Merge pull request #22 from IN2000-V24/dev-LFC
+    
+    Dev lfc
+
+commit 929dcf0d266034fb74f799ccac0e9ae6a603214c
+Merge: 0dea164 0606ac3
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon Apr 15 11:06:47 2024 +0200
+
+    Merge branch 'dev' into dev-LFC
+
+commit 0606ac3c709162f3ae84a7c2c949b13382900e0b
+Merge: f8e2ba8 d19b3aa
+Author: Sebastian Sandberg Hareide <sebassha@ulrik.uio.no>
+Date:   Mon Apr 15 10:57:09 2024 +0200
+
+    Merge pull request #23 from IN2000-V24/dev-fix-approutes
+    
+    Looking good!
+    Fix screen routes as a sealed class, which is best practice. Refactor…
+
+commit d19b3aab2a842932f60fc62a1aae54924f676864
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 15 09:45:45 2024 +0200
+
+    more named arguments
+
+commit 1b1500b3d75443472fe7f538212f2f860d73d5dc
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 15 09:40:50 2024 +0200
+
+    refactor bad code, add varargs to navigation function
+
+commit 3dbfac2c9a5bd1df029b158f8e8445c1f3bba13f
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 15 09:29:51 2024 +0200
+
+    add named arguments to use of navigate functions
+
+commit a5c52a69addb1d301cd1d90dec446b9a6ae74d9a
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 15 09:21:03 2024 +0200
+
+    swap all references to new source
+
+commit 242d3f86e62996ce9ad6061107f88b35de6cfe4a
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 15 09:14:48 2024 +0200
+
+    Fix screen routes as a sealed class, which is best practice. Refactor uses of app paths to new source
+
+commit 0dea164fa81fff8e556c5cae0eba090568393b35
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Mon Apr 15 09:07:42 2024 +0200
+
+    awaiting final refactor and integration testing
+
+commit 31d8789d9035b325f2625930e860bdfd8fafae13
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Sat Apr 13 15:57:43 2024 +0200
+
+    filter icons by 1, 6 or 12 hrs from forecast data
+
+commit da09217ae6fbaf1dff77c1e41853058e20e83f72
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed Apr 10 16:39:19 2024 +0200
+
+    hente og deserialisere LFC data, hente værikoner fra github
+
+commit 5b2d2b1c5e142743392754baaee508f054cdb789
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed Apr 10 12:43:41 2024 +0200
+
+    change LFCGeometry coords to Double data type
+
+commit f8e2ba84f2dc8dfd0f595bbb2d2bc0b2666955d7
+Author: Jonas William Røed Holmboe <jonas@eduroam-193-157-213-64.wlan.uio.no>
+Date:   Wed Apr 10 12:27:19 2024 +0200
+
+    La funksjon tilbake jeg fjernet ved feil da jeg fikset merge conflict
+
+commit f1ea8bdd5a8e996e2832f0d7a87ced7218a77f5d
+Author: vuhger <victor.uhnger@gmail.com>
+Date:   Wed Apr 10 12:23:33 2024 +0200
+
+    refactore LFC data classes into single file
+
+commit 87efb1808ac09245ac583a83d26da8ce843c4ecf
+Merge: c800e56 5b96775
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Wed Apr 10 10:56:56 2024 +0200
+
+    Merge pull request #20 from IN2000-V24/dev_metAlerts
+    
+    MAPBOX OG GEOLOCATION
+
+commit 5b967751d748479ffdf8beb6b7ffd7b31c678b94
+Merge: 681f3dc c800e56
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Wed Apr 10 10:55:11 2024 +0200
+
+    Merge branch 'dev' into dev_metAlerts
+
+commit c800e5675cb0e050dcfcb8668f4e308aace055c3
+Merge: a46125a 350a646
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Apr 10 10:43:44 2024 +0200
+
+    Merge pull request #19 from IN2000-V24/dev-navigasjon
+    
+    Dev navigasjon
+
+commit 350a6463da59ee68c7d9702bf297f7c10a6c172d
+Merge: cbfd69b 98ce587
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Wed Apr 10 10:43:38 2024 +0200
+
+    Merge pull request #21 from IN2000-V24/dev-uiUtbedring
+    
+    Dev UI utbedring
+
+commit 681f3dcb82e821c35e319afef2d38fac0c73d0c9
+Merge: 06208de a46125a
+Author: Jonas William Røed Holmboe <jwholmbo@ulrik.uio.no>
+Date:   Wed Apr 10 10:41:44 2024 +0200
+
+    Merge branch 'dev' into dev_metAlerts
+
+commit 12f8388cb9a777545fa1c56375f6e87644536a47
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Tue Apr 9 18:20:50 2024 +0200
+
+    dataklasser for locationforecast (LFC), testprogram for responsen, datasource og datarepo, reponsen er ikke deserialisert i denne versjonen
+
+commit 3dc0b6b9c2de37062c599f26850de59a3744ad68
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Tue Apr 9 17:34:19 2024 +0200
+
+    init LFC branch
+
+commit 98ce5873991d471f2e07b329ef581017acc2dec7
+Author: Kaja Stenen <kajasten@ulrik.uio.no>
+Date:   Mon Apr 8 15:17:24 2024 +0200
+
+    Lagt til textfield og slider + fikset navigasjon
+
+commit 73a9d05600f1e764eebfdc0ea944ca32b3f4dd8a
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Mon Apr 8 14:10:31 2024 +0200
+
+    Extended AddActicity with kaja
+    
+    Still under construction
+
+commit f45b1cc06ec3292386d058b3b88b463942870291
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Mon Apr 8 13:03:20 2024 +0200
+
+    under arbeid
+
+commit 06208def5d422f6477a782e904da6652c37e0703
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Sun Apr 7 00:18:20 2024 +0200
+
+    Forskjellige farger på alerts
+
+commit ae4bdd37c715b6d33073e79a826f0d889e2d33f1
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Sat Apr 6 23:43:06 2024 +0200
+
+    USERLOCATION :D
+
+commit 06fb0bed74173871bd0c8262cfbd10b32e063c5a
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Sat Apr 6 20:43:15 2024 +0200
+
+    Alert Dialog Boks (Informasjon om alert) fikset til mapbox
+
+commit 5a641dbaf6d41e4b5b1cd51f5a631b6fc9509bb3
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Fri Apr 5 10:49:25 2024 +0200
+
+    AboutUs done
+    
+    nå ser det ut sånn d skal gjøre i figma
+
+commit 77d520d5f8060c61d27ee9ca33d0bed1e101655c
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Fri Apr 5 10:21:51 2024 +0200
+
+    om oss nesten ferdig, mangler topbar
+
+commit 13ca498af67abed674f8aaa85798d7eecbb83a79
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Fri Apr 5 09:47:28 2024 +0200
+
+    Alert Details boks greier (funker ikke enda)
+
+commit 1f6af97e1381bdada2f2794f74505a8d73e72edd
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Thu Apr 4 11:23:11 2024 +0200
+
+    Update AboutUs.kt
+    
+    fått ti lfarge, riktig
+
+commit 9c38e16417d390cfe170cba30b4c078dca126de9
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Apr 3 16:54:23 2024 +0200
+
+    Søkesirkel opacity litt ned
+
+commit d9a64adc1b43742e1ac8903c5b98276a94852f63
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Apr 3 16:48:34 2024 +0200
+
+    Mapbox med varsler!
+
+commit 48be16cae7a9b2a94376a351bc633bcdee31b957
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Apr 3 16:03:03 2024 +0200
+
+    Update AboutUs.kt
+    
+    får ikke bakgrunnsfargen på kortet til å bli riktig.
+
+commit 3aaa4be5299a5002987290f12efd994e0120933b
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Apr 3 14:21:22 2024 +0200
+
+    FUNGERENDE MAPBOX (UTEN OVERLAYS)
+
+commit d64a79269c71cfc6fc25465a22eeec661ebc6bee
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Apr 3 13:35:46 2024 +0200
+
+    MapBox dependencies
+
+commit f1aa84679ed51a9bd3140ca81f105085c6080e02
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Apr 3 11:33:25 2024 +0200
+
+    GeoLocation + litt requisites til mapbox
+
+commit 4f902d3e75df5e1aa1b6281624baae2f324a2735
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Tue Apr 2 22:20:22 2024 +0200
+
+    la til addActivity, utbedret ui
+    
+    La til AddActivity, fungerer ikke som den skal enda. Utbedret grensesnitt og utseende til innstillingerskjerm.
+
+commit ae4753c2612aa28f4cd5b448a0710a397e688163
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Tue Apr 2 18:27:41 2024 +0200
+
+    Update SettingScreen.kt
+    
+    nesten ferdig, problemer med fargen på switchen.
+
+commit 1fa65784bf37ba85022afaa0e72d14c5f894cf52
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Tue Apr 2 17:45:06 2024 +0200
+
+    Update SettingScreen.kt
+    
+    utbedret noe av ui, mye for pcen, ikke ferdig
+
+commit fb15dcc3118d412311402adbe0a0f5022df3f260
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu Mar 21 15:48:02 2024 +0100
+
+    Fikset slider posisjon
+
+commit 494bf56e753f2e81bf03a93b0c1343638e08a006
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu Mar 21 14:48:02 2024 +0100
+
+    Bruker grensesnitt for bruker til å velge søkeradius for alerts. Sliderposisjon må fortsatt fikses
+
+commit afc06f730e6f8a7e129dd0de42dbaa8e44cb2b12
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Mar 20 21:00:07 2024 +0100
+
+    Nye funksjoner for å filtrere alerts på radius
+
+commit cbfd69b8ce15867d7d3ac465702aaf76d77fb51f
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Wed Mar 20 11:04:50 2024 +0100
+
+    Added names in AboutUs + refactored to english
+
+commit 980a15471b80159cb7b774b5a8d5b585660e2821
+Author: Mari Stenbrenden <mastenb@uio.no>
+Date:   Mon Mar 18 14:31:51 2024 +0100
+
+    La til tilbake knapp fra innstillinger skjerm
+
+commit c173d86bd3604f4cf335ab2caf01df74b0b03423
+Author: Jonas William Røed Holmboe <jwh@eduroam-193-157-200-62.wlan.uio.no>
+Date:   Mon Mar 18 13:37:17 2024 +0100
+
+    Oppdatert navigasjon variabler
+
+commit a46125ad671a72a14a7e80ae9c4d1ef8f33e5959
+Merge: e9ef3f6 1eef397
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon Mar 18 10:49:35 2024 +0100
+
+    Merge pull request #16 from IN2000-V24/dev-map
+    
+    Dev map
+
+commit 1eef397b44a6c2cb1651d0f1dab44a4865919cc0
+Merge: a51508e e9ef3f6
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon Mar 18 10:49:22 2024 +0100
+
+    Merge branch 'dev' into dev-map
+
+commit e9ef3f6aefbba86145485a8e453e7d66ac70c4ef
+Merge: b1017fd 1be10dd
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon Mar 18 10:35:32 2024 +0100
+
+    Merge pull request #9 from IN2000-V24/dev_metAlerts
+    
+    Serialisering av metAlerts JSON (og RepositoryContainer :))
+
+commit a51508e20e5d40089f4f8f4fb12a06cbb3690fc9
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Mon Mar 18 10:29:00 2024 +0100
+
+    Fjernet parameter for setupMapWiew
+
+commit 1be10dd39017e04ba4488709da7fb46090911e60
+Merge: 74d8e9a b1017fd
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Thu Mar 14 18:39:04 2024 +0100
+
+    Merge branch 'dev' into dev_metAlerts
+
+commit 74d8e9a11513166a542fd331ad9210708a092823
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Thu Mar 14 12:07:54 2024 +0100
+
+    Alert overlay fix, osmdroid bonuspack. Skriver over oljeriggene foreløpig..
+
+commit 9fd169ed207feb9280a9fe9926bba596e31cd04d
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Wed Mar 13 14:48:01 2024 +0100
+
+    laget en egen oilrigs fil og ordnet ting OilRigViewModel
+
+commit b1017fd49403b436cdcf3922fcc4b84190567587
+Merge: cbd9bf1 e378af4
+Author: Joachim Alexandre Haasted <joachah@ulrik.uio.no>
+Date:   Wed Mar 13 14:30:43 2024 +0100
+
+    Merge pull request #18 from IN2000-V24/dev-fixbrokenimport
+    
+    fjernet den jævla importen igjen
+
+commit e378af49d0feca9b07e0d1f08957baf86767696a
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Wed Mar 13 14:29:00 2024 +0100
+
+    fjernet den jævla importen igjen
+
+commit 5872d09255b81891774cf8d7d9dc98c8e703de04
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Mar 13 14:24:54 2024 +0100
+
+    GeometrySerializer fiks til å håndtere jsonLiteral og ny addOverlays funksjoner til å håndtere MultiPolygons
+
+commit cbd9bf17bff318b6d94a33ef6e4d53008da131ad
+Merge: 6b4d455 5c4f5af
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Mar 13 14:11:00 2024 +0100
+
+    Merge pull request #17 from IN2000-V24/dev-improveLogging
+    
+    Log statements i settings og om-oss + refaktorering
+
+commit 5c4f5af132eff0d10cb09f5b57bd988db367b787
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Wed Mar 13 12:57:35 2024 +0100
+
+    Log statements i settings og om-oss + refaktorering
+
+commit aa83add9d03c55fa86576d8f54bfbd0a569a852c
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Wed Mar 13 13:58:18 2024 +0100
+
+    Endret kart kode og logget
+
+commit 6b4d455d021235af3a694e1cc37e235d912406f7
+Merge: 924b84f 83f392b
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Mar 13 13:53:00 2024 +0100
+
+    Merge pull request #15 from IN2000-V24/main
+    
+    Oppdatere dev med logging som ble merged into main
+
+commit 924b84fb65ae6779775388ee4a681557f4c006f3
+Merge: 4d93a66 d4ec865
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Mar 13 13:50:27 2024 +0100
+
+    Merge pull request #14 from IN2000-V24/dev-improveLogging
+    
+    Merge pull request #13 from IN2000-V24/dev
+
+commit d4ec8659eef65aad8643019690025639234f8539
+Merge: 96012e0 4d93a66
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Mar 13 13:50:04 2024 +0100
+
+    Merge pull request #13 from IN2000-V24/dev
+    
+    Dev
+
+commit 83f392b5d14791b189da84fc93425a1af71c4bb8
+Merge: 84e8f81 f4cbd63
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Mar 13 13:48:46 2024 +0100
+
+    Merge pull request #12 from IN2000-V24/revert-10-dev-improveLogging
+    
+    Revert "Dev improve logging"
+
+commit f4cbd633946b2612348d2ae4e64a7c9a4a4ae929
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Mar 13 13:48:30 2024 +0100
+
+    Revert "Dev improve logging"
+
+commit 4d93a6623de05fadbd5181a5af25a4ee352b1e29
+Merge: cfc82ec e4c7628
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Mar 13 13:41:15 2024 +0100
+
+    Merge pull request #11 from IN2000-V24/revert-10-dev-improveLogging
+    
+    Revert 10 dev improve logging
+
+commit e4c762852f6cb396187686e028729adaf6acb807
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Mar 13 13:41:03 2024 +0100
+
+    Revert "Dev improve logging"
+
+commit 11001772206d178ed59eb21e6057d942957c3cb6
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Wed Mar 13 13:19:45 2024 +0100
+
+    endringer
+
+commit 84e8f81daae514ac7ca71b6a2a44bb528ad9e83d
+Merge: bd8d908 96012e0
+Author: Sebastian Sandberg Hareide <sebassha@ulrik.uio.no>
+Date:   Wed Mar 13 13:02:38 2024 +0100
+
+    Merge pull request #10 from IN2000-V24/dev-improveLogging
+    
+    Bra. Fin refaktorisering i Settings. Fint å få fjernet overflødige imports osv.
+
+commit 96012e0affa955af7b871dc5f8da7cdc39bf3475
+Author: vuhnger <victor.uhnger@gmail.com>
+Date:   Wed Mar 13 12:57:35 2024 +0100
+
+    Log statements i settings og om-oss + refaktorering
+
+commit b65c3164c48499d83c137e293769529137c811f0
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Mar 13 11:55:25 2024 +0100
+
+    Oppdatert kotlinx til å matche resten av ktor
+
+commit b2404734a44ca3bb404370d808ea7bd112fb061c
+Merge: 8484a1e d97252f
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Mar 13 11:48:12 2024 +0100
+
+    småfiks
+
+commit 8484a1e37e41a42561b75a023c0b91fa80650a63
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Mar 13 11:42:58 2024 +0100
+
+    Flyttet logging til ktor
+
+commit d97252f8211d46822a23c73260dec9379ef85abe
+Merge: d85ccc7 cfc82ec
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Mar 13 11:40:49 2024 +0100
+
+    Merge branch 'dev' into dev_metAlerts
+
+commit cfc82ecb441ddf9ee0c10571d2d6ac39144aa9ef
+Merge: bd8d908 20d209b
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Wed Mar 13 11:19:39 2024 +0100
+
+    Merge pull request #8 from IN2000-V24/dependencies-fix
+    
+    Kommenterte ut en støgg import som lagde kaos, kommentert også hvilke…
+
+commit d85ccc796eb3b50feb4c6ad440833b0cd0f6b5e1
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Wed Mar 13 10:55:51 2024 +0100
+
+    Serialisering av metAlerts JSON (og RepositoryContainer :))
+
+commit 20d209ba86dfbd2b40e2544f6d957b815c016436
+Author: victou <victou@ifi.uio.no>
+Date:   Tue Mar 12 16:17:03 2024 +0100
+
+    Kommenterte ut en støgg import som lagde kaos, kommentert også hvilke imports som gjelder osmdroid liben
+
+commit bd8d9088f206320a13bd69abaa862418faf82950
+Author: victou <victou@uio.no>
+Date:   Tue Mar 12 15:26:38 2024 +0100
+
+    Skriver over main med master
+
+commit 41f6b72cea03dee0010b15d94faa2a80fef254c0
+Merge: 549e7b9 09c9258
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue Mar 12 15:13:29 2024 +0100
+
+    Merge pull request #7 from IN2000-V24/integrer-main-master
+    
+    DataSource, DataKlasser og Repository for MetAlerts.
+
+commit 09c9258681c752301356dffa1d25da33f6f73016
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Tue Mar 12 12:20:07 2024 +0100
+
+    Jetpack Compose, Ktor, Map og Viewmodel dependencies.
+
+commit 445460d5c3175d48501824e15d0242cf40346dc1
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Tue Mar 12 12:14:07 2024 +0100
+
+    Jetpack Compose og Ktor dependencies.
+
+commit 906a7c6b601c75b1f4b58d488cda6b2f126d73ce
+Author: jwholmbo <jwholmbo@uio.no>
+Date:   Tue Mar 12 09:39:44 2024 +0100
+
+    DataSource, DataKlasser og Repository for MetAlerts.
+
+commit 549e7b9fda45b35e11d2bf3b6b3a3bc39e3bb68b
+Merge: 8a3b20c 3d965cc
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Tue Mar 12 09:38:30 2024 +0100
+
+    Merge pull request #5 from IN2000-V24/integrer-main-master
+    
+    Lagt til mari sine skjermer, jonas sine filer er laget i ritkige mapp…
+
+commit 3d965cc5003cef6c042ae3e96c0e2c8275d7e905
+Author: victou <victou@ifi.uio.no>
+Date:   Mon Mar 11 16:42:28 2024 +0100
+
+    Lagt til mari sine skjermer, jonas sine filer er laget i ritkige mapper, men inneholder ingen kode pga installasjonsproblemer. DEtte må jonas gå inn og legge til selv, men lag likevel en PR på det. DEtte er den nye main-branchen vi kan jobbe fra fremover.
+
+commit 8a3b20c343a3887b09bd1c8cf6b3b208c51a7272
+Author: victou <victou@ifi.uio.no>
+Date:   Mon Mar 11 15:55:24 2024 +0100
+
+    endret com.android.application til v8.2.2, dette var det eneste som fungerte tydeligvis
+
+commit 9e7e5bf0170748d37d17a591d6e59dce96b34213
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Mon Mar 11 15:35:27 2024 +0100
+
+    ordnet kart layout
+
+commit cc0260163941fd0181913686214b6e35dd7e82b1
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Mon Mar 11 14:52:38 2024 +0100
+
+    oppdatert map
+
+commit 651f1d6d4f8d64d76713a48f3c50b64a08cbe486
+Author: Joachah <joachah@ifi.uio.no>
+Date:   Mon Mar 11 13:43:42 2024 +0100
+
+    lagt til map filene og laget mappestruktur
+
+commit 00292ea77ccfafddb181347ead98399295e36f4a
+Author: Victor Rørslett Uhnger <victou@ulrik.uio.no>
+Date:   Mon Mar 11 13:17:46 2024 +0100
+
+    Create README.md
+
+commit a26f08465a9d5117c19dd6f0d585745323f47611
+Author: victou <victou@ifi.uio.no>
+Date:   Mon Mar 11 13:08:20 2024 +0100
+
+    Helt nytt prosjekt

@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "no.uio.ifi.in2000.team_21.app-mergeDebugResources-81:/values-h480dp-land-v13/values-h480dp-land-v13.xml",
+            "map": [
+                {
+                    "source": "/Users/vuhnger/.gradle/caches/transforms-4/e3935809c6e9719d07750815a9e3bbf0/transformed/material-1.11.0/res/values-h480dp-land-v13/values-h480dp-land-v13.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,114,170,226,293,358,413,478,547",
+                        "endColumns": "58,55,55,66,64,54,64,68,68",
+                        "endOffsets": "109,165,221,288,353,408,473,542,611"
+                    }
+                }
+            ]
+        }
+    ]
+}

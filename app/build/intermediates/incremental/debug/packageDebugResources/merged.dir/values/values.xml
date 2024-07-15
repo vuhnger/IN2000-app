@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="icon_options">
+        <item>fishing</item>
+        <item>rowing</item>
+        <item>scuba</item>
+        <item>surfing</item>
+        <item>swimming</item>
+        <item>waterski</item>
+    </string-array>
+    <color name="black">#FF000000</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="about_us_screen_route">ABOUT_US_SCREEN</string>
+    <string name="app_name">team-21</string>
+    <string name="celsius">celsius</string>
+    <string name="home_screen_route">HOME_SCREEN</string>
+    <string name="settings_screen_route">SETTINGS_SCREEN</string>
+    <style name="Theme.Team21" parent="Theme.AppCompat.Light.NoActionBar"/>
+</resources>

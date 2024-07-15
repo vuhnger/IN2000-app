@@ -1,0 +1,77 @@
+{
+    "logs": [
+        {
+            "outputFile": "no.uio.ifi.in2000.team_21.app-mergeDebugResources-81:/values-no/values-no.xml",
+            "map": [
+                {
+                    "source": "/Users/vuhnger/.gradle/caches/transforms-4/290ef8a12cccc5b467ae0fae3268c44a/transformed/jetified-android-11.3.0/res/values-no/values-no.xml",
+                    "from": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,132,209",
+                        "endColumns": "76,76,69",
+                        "endOffsets": "127,204,274"
+                    },
+                    "to": {
+                        "startLines": "10,11,12",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "855,932,1009",
+                        "endColumns": "76,76,69",
+                        "endOffsets": "927,1004,1074"
+                    }
+                },
+                {
+                    "source": "/Users/vuhnger/.gradle/caches/transforms-4/33bd48267e750ef057adb4fabd85280b/transformed/jetified-maps-logo-11.3.0/res/values-no/values-no.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "192",
+                        "endOffsets": "243"
+                    },
+                    "to": {
+                        "startLines": "14",
+                        "startColumns": "4",
+                        "startOffsets": "1301",
+                        "endColumns": "192",
+                        "endOffsets": "1489"
+                    }
+                },
+                {
+                    "source": "/Users/vuhnger/.gradle/caches/transforms-4/66156b38d272d55e9faf547b31eca916/transformed/jetified-maps-compass-11.3.0/res/values-no/values-no.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "127",
+                        "endOffsets": "178"
+                    },
+                    "to": {
+                        "startLines": "9",
+                        "startColumns": "4",
+                        "startOffsets": "727",
+                        "endColumns": "127",
+                        "endOffsets": "850"
+                    }
+                },
+                {
+                    "source": "/Users/vuhnger/.gradle/caches/transforms-4/c1748e8494530edc701b850e11345e6f/transformed/jetified-maps-attribution-11.3.0/res/values-no/values-no.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,180,335,413,492,562,646,727",
+                        "endColumns": "124,154,77,78,69,83,80,221",
+                        "endOffsets": "175,330,408,487,557,641,722,944"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,13",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,180,335,413,492,562,646,1079",
+                        "endColumns": "124,154,77,78,69,83,80,221",
+                        "endOffsets": "175,330,408,487,557,641,722,1296"
+                    }
+                }
+            ]
+        }
+    ]
+}

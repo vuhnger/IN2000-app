@@ -1,0 +1,338 @@
+[
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/layout_save_location_dialog.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/layout/save_location_dialog.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_waterski_stock.jpeg.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/waterski_stock.jpeg"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_surfing.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/surfing.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_wave_icon.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/wave_icon.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_user.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/user.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_fisking_stock.jpeg.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/fisking_stock.jpeg"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_waterski.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/waterski.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_notifications.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/notifications.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_splashscreen_1080_2340.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/splashscreen_1080_2340.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_kayaking_dark.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/kayaking_dark.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_scuba.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/scuba.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_swimming_light.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/swimming_light.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_vannplaning_splash.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/vannplaning_splash.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_kayaking_ai.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/kayaking_ai.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_kayaking_light.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/kayaking_light.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_swimming_ai.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/swimming_ai.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_fishing_icon.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/fishing_icon.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_sailing_stock.jpeg.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/sailing_stock.jpeg"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_surfing_dark.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/surfing_dark.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_waterski_icon.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/waterski_icon.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_yellow_flag_48.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/yellow_flag_48.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_fishing.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/fishing.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_svg_red_flag_icon.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/svg_red_flag_icon.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_rowing_ai.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/rowing_ai.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_rowing_icon.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/rowing_icon.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_splash_screen_1280.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/splash_screen_1280.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_sailing_icon.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/sailing_icon.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_final_rowing.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/final_rowing.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_rowing.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/rowing.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_waterski_ai.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/waterski_ai.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_oil_rig_icon.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/oil_rig_icon.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/xml_backup_rules.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_svg_flag_green_icon.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/svg_flag_green_icon.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_surfing_light.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/surfing_light.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/layout_activity_main.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/layout/activity_main.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_baseline_star_24.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/baseline_star_24.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/font_roboto.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/font/roboto.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_snorkeling_stock.jpeg.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/snorkeling_stock.jpeg"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_pointer.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/pointer.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/xml_data_extraction_rules.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_surfing_ai.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/surfing_ai.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_kiting_light.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/kiting_light.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_prototype78.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/prototype78.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_green_flag_48.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/green_flag_48.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_kiting_dark.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/kiting_dark.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_sailing2_ai.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/sailing2_ai.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_outline_settings_24.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/outline_settings_24.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_swimming.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/swimming.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_commit.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/commit.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_padling_ai.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/padling_ai.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_fishing_ai.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/fishing_ai.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_wind_icon.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/wind_icon.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_running_icon_free_vector.jpg.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/running_icon_free_vector.jpg"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_rowing_dark.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/rowing_dark.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_scuba_dark.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/scuba_dark.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_kayak_stock.jpeg.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/kayak_stock.jpeg"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_vannplaning.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/vannplaning.png"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_default_img.jpeg.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/default_img.jpeg"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_swimming_dark.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/swimming_dark.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_baseline_star_outline_24.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/baseline_star_outline_24.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_snorkelig_ai.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/snorkelig_ai.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_waterbackground.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/waterbackground.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_rowing_light.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/rowing_light.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_selected_icon_background.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/selected_icon_background.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_scuba_light.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/scuba_light.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_roing_stock.jpeg.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/roing_stock.jpeg"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_ic_launcher_background.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_svg_flag_orange_icon.xml.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/svg_flag_orange_icon.xml"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_sailing_ai.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/sailing_ai.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_surfing_stock.jpeg.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/surfing_stock.jpeg"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "no.uio.ifi.in2000.team_21.app-debug-83:/drawable_red_flag_48.png.flat",
+        "source": "no.uio.ifi.in2000.team_21.app-main-85:/drawable/red_flag_48.png"
+    }
+]

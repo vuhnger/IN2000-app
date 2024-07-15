@@ -1,0 +1,275 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="no.uio.ifi.in2000.team_21"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:5:5-67
+11-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:5:22-64
+12    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+12-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:6:5-79
+12-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:6:22-76
+13    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+13-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:7:5-81
+13-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:7:22-78
+14    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+14-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:8:5-85
+14-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:8:22-82
+15    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+15-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:9:5-76
+15-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:9:22-73
+16    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+16-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:10:5-79
+16-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:10:22-76
+17    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+17-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:11:5-81
+17-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:11:22-78
+18
+19    <uses-feature
+19-->[com.mapbox.maps:android-core:11.3.0] /Users/vuhnger/.gradle/caches/transforms-4/566bb1e770878e2a3384718ac4ac98cd/transformed/jetified-android-core-11.3.0/AndroidManifest.xml:10:5-12:35
+20        android:glEsVersion="0x00030000"
+20-->[com.mapbox.maps:android-core:11.3.0] /Users/vuhnger/.gradle/caches/transforms-4/566bb1e770878e2a3384718ac4ac98cd/transformed/jetified-android-core-11.3.0/AndroidManifest.xml:11:9-41
+21        android:required="true" />
+21-->[com.mapbox.maps:android-core:11.3.0] /Users/vuhnger/.gradle/caches/transforms-4/566bb1e770878e2a3384718ac4ac98cd/transformed/jetified-android-core-11.3.0/AndroidManifest.xml:12:9-32
+22    <uses-feature
+22-->[com.mapbox.maps:android-core:11.3.0] /Users/vuhnger/.gradle/caches/transforms-4/566bb1e770878e2a3384718ac4ac98cd/transformed/jetified-android-core-11.3.0/AndroidManifest.xml:13:5-15:36
+23        android:name="android.hardware.wifi"
+23-->[com.mapbox.maps:android-core:11.3.0] /Users/vuhnger/.gradle/caches/transforms-4/566bb1e770878e2a3384718ac4ac98cd/transformed/jetified-android-core-11.3.0/AndroidManifest.xml:14:9-45
+24        android:required="false" />
+24-->[com.mapbox.maps:android-core:11.3.0] /Users/vuhnger/.gradle/caches/transforms-4/566bb1e770878e2a3384718ac4ac98cd/transformed/jetified-android-core-11.3.0/AndroidManifest.xml:15:9-33
+25
+26    <permission
+26-->[androidx.core:core:1.12.0] /Users/vuhnger/.gradle/caches/transforms-4/3bf248bb8d2a4d55bda741a45bf527dc/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+27        android:name="no.uio.ifi.in2000.team_21.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+27-->[androidx.core:core:1.12.0] /Users/vuhnger/.gradle/caches/transforms-4/3bf248bb8d2a4d55bda741a45bf527dc/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+28        android:protectionLevel="signature" />
+28-->[androidx.core:core:1.12.0] /Users/vuhnger/.gradle/caches/transforms-4/3bf248bb8d2a4d55bda741a45bf527dc/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+29
+30    <uses-permission android:name="no.uio.ifi.in2000.team_21.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+30-->[androidx.core:core:1.12.0] /Users/vuhnger/.gradle/caches/transforms-4/3bf248bb8d2a4d55bda741a45bf527dc/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+30-->[androidx.core:core:1.12.0] /Users/vuhnger/.gradle/caches/transforms-4/3bf248bb8d2a4d55bda741a45bf527dc/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+31
+32    <supports-screens
+32-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:9:5-12:40
+33        android:anyDensity="true"
+33-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:10:9-34
+34        android:largeScreens="true"
+34-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:11:9-36
+35        android:normalScreens="true" />
+35-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:12:9-37
+36
+37    <uses-feature
+37-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:14:5-16:36
+38        android:name="android.hardware.location.network"
+38-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:15:9-57
+39        android:required="false" />
+39-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:16:9-33
+40    <uses-feature
+40-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:17:5-19:36
+41        android:name="android.hardware.location.gps"
+41-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:18:9-53
+42        android:required="false" />
+42-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:19:9-33
+43    <uses-feature
+43-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:20:5-22:36
+44        android:name="android.hardware.telephony"
+44-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:21:9-50
+45        android:required="false" />
+45-->[org.osmdroid:osmdroid-android:6.1.14] /Users/vuhnger/.gradle/caches/transforms-4/aca8cd108e94b7760b535963e9d3e690/transformed/jetified-osmdroid-android-6.1.14/AndroidManifest.xml:22:9-33
+46
+47    <application
+47-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:13:5-41:19
+48        android:allowBackup="true"
+48-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:14:9-35
+49        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+49-->[androidx.core:core:1.12.0] /Users/vuhnger/.gradle/caches/transforms-4/3bf248bb8d2a4d55bda741a45bf527dc/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+50        android:dataExtractionRules="@xml/data_extraction_rules"
+50-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:15:9-65
+51        android:debuggable="true"
+52        android:enableOnBackInvokedCallback="true"
+52-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:21:9-51
+53        android:extractNativeLibs="false"
+54        android:fullBackupContent="@xml/backup_rules"
+54-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:16:9-54
+55        android:icon="@mipmap/ic_launcher"
+55-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:17:9-43
+56        android:label="@string/app_name"
+56-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:18:9-41
+57        android:roundIcon="@mipmap/ic_launcher_round"
+57-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:19:9-54
+58        android:supportsRtl="true"
+58-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:20:9-35
+59        android:testOnly="true"
+60        android:theme="@style/Theme.Team21"
+60-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:22:9-44
+61        android:usesCleartextTraffic="true" >
+61-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:23:9-44
+62        <activity
+62-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:25:9-36:20
+63            android:name="no.uio.ifi.in2000.team_21.MainActivity"
+63-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:26:13-41
+64            android:exported="true"
+64-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:27:13-36
+65            android:label="@string/app_name"
+65-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:28:13-45
+66            android:screenOrientation="portrait"
+66-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:30:13-49
+67            android:theme="@style/Theme.Team21" >
+67-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:29:13-48
+68            <intent-filter>
+68-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:31:13-35:29
+69                <action android:name="android.intent.action.MAIN" />
+69-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:32:17-69
+69-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:32:25-66
+70
+71                <category android:name="android.intent.category.LAUNCHER" />
+71-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:34:17-77
+71-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:34:27-74
+72            </intent-filter>
+73        </activity>
+74
+75        <meta-data
+75-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:38:9-40:122
+76            android:name="com.mapbox.token"
+76-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:39:13-44
+77            android:value="sk.eyJ1Ijoiandob2xtYm8iLCJhIjoiY2x1Zmp3bHcxMXcyZTJycW56ZHpwMm1hdCJ9.YXYdwSagyX0NDSAzF4VJLQ" />
+77-->/Users/vuhnger/Developer/Projects/team-21/app/src/main/AndroidManifest.xml:40:13-119
+78
+79        <activity
+79-->[androidx.compose.ui:ui-tooling-android:1.6.4] /Users/vuhnger/.gradle/caches/transforms-4/4d8f220e70079223e535f6b453f8c22f/transformed/jetified-ui-tooling-release/AndroidManifest.xml:23:9-25:39
+80            android:name="androidx.compose.ui.tooling.PreviewActivity"
+80-->[androidx.compose.ui:ui-tooling-android:1.6.4] /Users/vuhnger/.gradle/caches/transforms-4/4d8f220e70079223e535f6b453f8c22f/transformed/jetified-ui-tooling-release/AndroidManifest.xml:24:13-71
+81            android:exported="true" />
+81-->[androidx.compose.ui:ui-tooling-android:1.6.4] /Users/vuhnger/.gradle/caches/transforms-4/4d8f220e70079223e535f6b453f8c22f/transformed/jetified-ui-tooling-release/AndroidManifest.xml:25:13-36
+82        <activity
+82-->[com.google.android.gms:play-services-base:18.0.1] /Users/vuhnger/.gradle/caches/transforms-4/9032f21d1f75486c89d297964dc15716/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
+83            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+83-->[com.google.android.gms:play-services-base:18.0.1] /Users/vuhnger/.gradle/caches/transforms-4/9032f21d1f75486c89d297964dc15716/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
+84            android:exported="false"
+84-->[com.google.android.gms:play-services-base:18.0.1] /Users/vuhnger/.gradle/caches/transforms-4/9032f21d1f75486c89d297964dc15716/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
+85            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+85-->[com.google.android.gms:play-services-base:18.0.1] /Users/vuhnger/.gradle/caches/transforms-4/9032f21d1f75486c89d297964dc15716/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
+86
+87        <meta-data
+87-->[com.google.android.gms:play-services-basement:18.0.0] /Users/vuhnger/.gradle/caches/transforms-4/5891611d05d24a00de955b59c5226ed5/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:21:9-23:69
+88            android:name="com.google.android.gms.version"
+88-->[com.google.android.gms:play-services-basement:18.0.0] /Users/vuhnger/.gradle/caches/transforms-4/5891611d05d24a00de955b59c5226ed5/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:22:13-58
+89            android:value="@integer/google_play_services_version" />
+89-->[com.google.android.gms:play-services-basement:18.0.0] /Users/vuhnger/.gradle/caches/transforms-4/5891611d05d24a00de955b59c5226ed5/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:23:13-66
+90
+91        <provider
+91-->[androidx.emoji2:emoji2:1.3.0] /Users/vuhnger/.gradle/caches/transforms-4/6367a8cd6ca6d63dfeb3f42d87808c04/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+92            android:name="androidx.startup.InitializationProvider"
+92-->[androidx.emoji2:emoji2:1.3.0] /Users/vuhnger/.gradle/caches/transforms-4/6367a8cd6ca6d63dfeb3f42d87808c04/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:25:13-67
+93            android:authorities="no.uio.ifi.in2000.team_21.androidx-startup"
+93-->[androidx.emoji2:emoji2:1.3.0] /Users/vuhnger/.gradle/caches/transforms-4/6367a8cd6ca6d63dfeb3f42d87808c04/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:26:13-68
+94            android:exported="false" >
+94-->[androidx.emoji2:emoji2:1.3.0] /Users/vuhnger/.gradle/caches/transforms-4/6367a8cd6ca6d63dfeb3f42d87808c04/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:27:13-37
+95            <meta-data
+95-->[androidx.emoji2:emoji2:1.3.0] /Users/vuhnger/.gradle/caches/transforms-4/6367a8cd6ca6d63dfeb3f42d87808c04/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+96                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+96-->[androidx.emoji2:emoji2:1.3.0] /Users/vuhnger/.gradle/caches/transforms-4/6367a8cd6ca6d63dfeb3f42d87808c04/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:30:17-75
+97                android:value="androidx.startup" />
+97-->[androidx.emoji2:emoji2:1.3.0] /Users/vuhnger/.gradle/caches/transforms-4/6367a8cd6ca6d63dfeb3f42d87808c04/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:31:17-49
+98            <meta-data
+98-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/vuhnger/.gradle/caches/transforms-4/1538aec570d1d7f9b77e135810784ecd/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+99                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+99-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/vuhnger/.gradle/caches/transforms-4/1538aec570d1d7f9b77e135810784ecd/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+100                android:value="androidx.startup" />
+100-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/vuhnger/.gradle/caches/transforms-4/1538aec570d1d7f9b77e135810784ecd/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+101            <meta-data
+101-->[com.mapbox.maps:android-core:11.3.0] /Users/vuhnger/.gradle/caches/transforms-4/566bb1e770878e2a3384718ac4ac98cd/transformed/jetified-android-core-11.3.0/AndroidManifest.xml:27:13-29:52
+102                android:name="com.mapbox.maps.loader.MapboxMapsInitializer"
+102-->[com.mapbox.maps:android-core:11.3.0] /Users/vuhnger/.gradle/caches/transforms-4/566bb1e770878e2a3384718ac4ac98cd/transformed/jetified-android-core-11.3.0/AndroidManifest.xml:28:17-76
+103                android:value="androidx.startup" /> <!-- This entry makes MapboxSDKCommonInitializer discoverable. -->
+103-->[com.mapbox.maps:android-core:11.3.0] /Users/vuhnger/.gradle/caches/transforms-4/566bb1e770878e2a3384718ac4ac98cd/transformed/jetified-android-core-11.3.0/AndroidManifest.xml:29:17-49
+104            <meta-data
+104-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:19:13-21:52
+105                android:name="com.mapbox.common.MapboxSDKCommonInitializer"
+105-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:20:17-76
+106                android:value="androidx.startup" />
+106-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:21:17-49
+107            <meta-data
+107-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+108                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+108-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+109                android:value="androidx.startup" />
+109-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+110        </provider>
+111
+112        <receiver
+112-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:24:9-31:20
+113            android:name="com.mapbox.common.location.LocationUpdatesReceiver"
+113-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:25:13-78
+114            android:enabled="true"
+114-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:26:13-35
+115            android:exported="false" >
+115-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:27:13-37
+116            <intent-filter>
+116-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:28:13-30:29
+117                <action android:name="com.mapbox.common.location.LocationUpdatesReceiver.ACTION_PROCESS_LOCATION_UPDATES" />
+117-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:29:17-125
+117-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:29:25-122
+118            </intent-filter>
+119        </receiver>
+120
+121        <service
+121-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:33:9-35:40
+122            android:name="com.mapbox.common.LifecycleService"
+122-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:34:13-62
+123            android:exported="false" />
+123-->[com.mapbox.common:common:24.3.1] /Users/vuhnger/.gradle/caches/transforms-4/9226c22d5f04bbafa561ac714e31d309/transformed/jetified-common-24.3.1/AndroidManifest.xml:35:13-37
+124        <service
+124-->[androidx.room:room-runtime:2.6.1] /Users/vuhnger/.gradle/caches/transforms-4/ee2136efc01ed389a84064bf2dc9c185/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
+125            android:name="androidx.room.MultiInstanceInvalidationService"
+125-->[androidx.room:room-runtime:2.6.1] /Users/vuhnger/.gradle/caches/transforms-4/ee2136efc01ed389a84064bf2dc9c185/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
+126            android:directBootAware="true"
+126-->[androidx.room:room-runtime:2.6.1] /Users/vuhnger/.gradle/caches/transforms-4/ee2136efc01ed389a84064bf2dc9c185/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
+127            android:exported="false" />
+127-->[androidx.room:room-runtime:2.6.1] /Users/vuhnger/.gradle/caches/transforms-4/ee2136efc01ed389a84064bf2dc9c185/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
+128
+129        <receiver
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+130            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+130-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+131            android:directBootAware="false"
+131-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+132            android:enabled="true"
+132-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+133            android:exported="true"
+133-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+134            android:permission="android.permission.DUMP" >
+134-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+135            <intent-filter>
+135-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+136                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+136-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+136-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+137            </intent-filter>
+138            <intent-filter>
+138-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+139                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+139-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+139-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+140            </intent-filter>
+141            <intent-filter>
+141-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+142                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+142-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+142-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+143            </intent-filter>
+144            <intent-filter>
+144-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+145                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+145-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+145-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/vuhnger/.gradle/caches/transforms-4/6549ae136c194f3aa600c64581781b27/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+146            </intent-filter>
+147        </receiver>
+148    </application>
+149
+150</manifest>
